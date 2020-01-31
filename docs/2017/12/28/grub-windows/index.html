@@ -1,0 +1,31 @@
+<p>grubを使ってLinuxとWindowsを選択できるようにする方法を書く。</p>
+
+<p><a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Bootloader/ja">ハンドブック</a>にはLinuxとWindowsのデュアルブートのやり方があまり書いてない。
+このやり方はマザーボードがUEFIに対応していることを前提としている。</p>
+
+<h3>必要なライブラリ</h3>
+
+<pre><code class="language-shell">### emerge --ask --newuse sys-boot/os-prober
+</code></pre>
+
+<h3>udevをマウント</h3>
+
+<p><code>udev</code> をマウントすることで別のOSの情報にアクセスできるようになるらしい。
+(これは <code>/mnt/gentoo</code> にgentooのルートをマウントしていることを前提としている。)</p>
+
+<pre><code class="language-shell">### mkdir -p /mnt/gentoo/run/udev
+### mount -o bind /run/udev /mnt/gentoo/run/udev
+### mount --make-rslave /mnt/gentoo/run/udev
+</code></pre>
+
+<h3>grubの設定ファイルを作る</h3>
+
+<pre><code class="language-shell">### grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+
+<p>これで標準出力に <code>Found windows boot manager...</code> みたいに出てきたらOK。
+rebootして、windowsが選択、起動できることをテストする。</p>
+
+<h3>参考</h3>
+
+<p><a href="https://wiki.gentoo.org/wiki/GRUB2/ja">GRUB2</a></p>

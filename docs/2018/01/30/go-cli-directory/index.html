@@ -1,0 +1,152 @@
+<h3>はじめに</h3>
+
+<p>Goはソースコードをクロスコンパイルして、各プラットフォーム向けに配布することができる。
+本エントリでは、Goの環境があるユーザに対して、goで作ったCLIツールを配布する方法を書いていく。</p>
+
+<h3>事前準備</h3>
+
+<p>ツールを使うユーザは、以下の環境変数を持っている必要がある。</p>
+
+<pre><code class="language-shell">PATH=$PATH:$GOPATH/bin
+</code></pre>
+
+<p><a href="https://golang.org/doc/code.html#GOPATH">公式</a>にもある通り。
+作りたいツールのREADMEにでも書いておくのがいいと思っている。</p>
+
+<h3>ツールの作り方</h3>
+
+<p>ディレクトリ構成を、こんな感じにしている。ここでは、 <code>hello</code> というコマンドを作るとする。</p>
+
+<pre><code class="language-go">.
+├── cmd
+│   └── hello
+│       └── main.go
+├── hello_lib.go
+├── hello_lib_test.go
+├── LICENSE
+└── README.md
+</code></pre>
+
+<h2>main.go</h2>
+
+<p>main.goはコマンドの起点となる。これは、 <code>./cmd/コマンド名/main.go</code> という名前にする。
+こんな感じで書いていく。</p>
+
+<pre><code class="language-go">package main
+
+import (
+  &quot;fmt&quot;
+  &quot;github.com/yagi5/hello_lib&quot;
+)
+
+func main() {
+  fmt.Println(hello_lib.World())
+}
+</code></pre>
+
+<p>ポイントとしては、</p>
+
+<ul>
+<li>依存ライブラリ(<code>hello_lib</code>)はgithub上のパスを書く</li>
+</ul>
+
+<p>ことです。
+次に、 <code>hello_lib</code> を書いていく。</p>
+
+<h2>hello_lib</h2>
+
+<p>hello_libはmainから呼ばれるパッケージである。</p>
+
+<pre><code class="language-go">package hello_lib
+
+func World() string {
+  return &quot;hello world&quot;
+}
+</code></pre>
+
+<h3>ダウンロード方法</h3>
+
+<p>この状態で、</p>
+
+<pre><code class="language-shell">$ hello
+</code></pre>
+
+<p>と叩いたら</p>
+
+<pre><code class="language-shell">hello world
+</code></pre>
+
+<p>と表示されるようにするには、ユーザーに以下のコマンドを叩いてもらえば良い。</p>
+
+<pre><code class="language-shell">$ go get github.com/ygnmhdtt/hello/cmd/hello
+</code></pre>
+
+<p>これで</p>
+
+<pre><code class="language-shell">$ hello
+</code></pre>
+
+<p>が叩けるようになります。</p>
+
+<h3>なぜこれだけでいいのか？</h3>
+
+<p><code>go get</code> は渡されたパスのソースをダウンロードして、ユーザのプラットフォームに合わせてビルドし、それを <code>$GOPATH/bin</code> に配置してくれる。
+この時、main.goがあるディレクトリ名(上記の例では <code>hello</code> )のバイナリになる。
+ユーザが <code>$GOPATH/bin</code> にPATHを通してくれていれば、 <code>hello</code> というバイナリを叩けるようになる。
+また、 <code>main</code> で <code>hello_lib</code> というパッケージをimportしていますが、このような依存しているパッケージも勝手に落としてくれる。</p>
+
+<h3>コマンドを増やすことができる</h3>
+
+<pre><code class="language-shell">.
+├── cmd
+│   └── hello
+│       └── main.go
+├── hello_lib.go
+├── hello_lib_test.go
+├── LICENSE
+└── README.md
+</code></pre>
+
+<p>当初の状態から</p>
+
+<pre><code class="language-shell">.
+├── cmd
+│   └── hello
+│       └── main.go
+│   └── dog
+│       └── main.go
+│   └── cat
+│       └── main.go
+├── hello_lib.go
+├── hello_lib_test.go
+├── LICENSE
+└── README.md
+</code></pre>
+
+<p>こんな風に <code>cmd</code> 配下を増やして、</p>
+
+<pre><code class="language-shell">$ go get github.com/ygnmhdtt/hello/cmd/dog
+</code></pre>
+
+<pre><code class="language-shell">$ go get github.com/ygnmhdtt/hello/cmd/cat
+</code></pre>
+
+<p>とすれば、hello_libを共通で使うようなコマンドを簡単に増やすこともできる。
+そのため、 <code>hello_lib</code> にユーティリティ的な関数を定義しておいて、それらを小さなコマンドに分割して、パイプでつないで使うような、使い方ができる。</p>
+
+<h3>ライブラリとしても使える</h3>
+
+<p>このやり方だと、 <code>hello_lib</code> をライブラリとしても提供できるようになる。
+ユーザは <code>go get github.com/ygnmhdtt/hello_lib</code>するだけでいい。</p>
+
+<h3>まとめ</h3>
+
+<p>このやり方を採用することで、</p>
+
+<ul>
+<li><code>go get</code>すれば即コマンドとして使える</li>
+<li>小さいコマンドを増やしていける</li>
+<li>ライブラリとしてGoのソースからも使える</li>
+</ul>
+
+<p>のようなメリットが有る。</p>

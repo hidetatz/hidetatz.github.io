@@ -1,0 +1,161 @@
+<h3>はじめに</h3>
+
+<p>基本的に<a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation">公式ハンドブック</a>を参照しながら進めた。</p>
+
+<h3>インストールの流れ</h3>
+
+<p>インストールの流れを示す。</p>
+
+<ol>
+<li>インストールメディアを作成する</li>
+<li>インストールメディアを起動する</li>
+<li>マシンをインターネットに繋ぐ</li>
+<li>パーティショニングして、ファイルシステムを作成する</li>
+<li>tarballをダウンロードし、展開する</li>
+<li>tarballを展開したディレクトリにchrootする</li>
+<li>portageをセットアップする</li>
+<li>カーネルをビルドする</li>
+<li>ブートローダをセットアップする</li>
+<li>Gentooが起動することを確認する</li>
+</ol>
+
+<p>このエントリーでは5まで書く。</p>
+
+<h3>1. インストールメディアを作成する</h3>
+
+<p>USBメモリにインストールメディアを作成する。
+インストールメディアの中には小さいOSが入っている。しかし、インストールメディアを起動しても、操作できるのは当然インストールメディアの中だけ。
+そこで、マシンのハードディスクをインストールメディアにマウントし、インストールメディア経由でマシンを操作する。これにより、何も入ってないマシンにGentooをインストールできる。というのが、インストールメディアが必要な理由。</p>
+
+<p>今回はUSBメモリをメディアとした。
+以下の操作はWindows上で行っている。
+<a href="http://www.system-rescue-cd.org/Download/">SystemRescueCdのISO</a>をダウンロードする。
+そして、<a href="https://rufus.akeo.ie/">Rufus</a>のexeファイルをダウンロードする。
+Rufusを起動し、ビックカメラで買ってきたUSBメモリ(16GB(たぶんこんなにいらない))をマシンに挿す。
+Rufusの画面から、パーティション構成をGPTに設定してスタートする。たぶんなにも起きないはず。</p>
+
+<h3>2. インストールメディアを起動する</h3>
+
+<p>Windows10では <code>高速スタートアップ</code> という機能があり、メディアからの起動ができないので、<a href="http://121ware.com/qasearch/1007/app/servlet/relatedqa?QID=018214">こちら</a>を参考に無効にする。
+そして、 <code>スタート</code> -&gt; 電源のマークを押す -&gt; <code>Shift</code> を押しながら再起動をクリックし、電源を切る。
+USBを挿す。
+あと、SecureBootを無効にしないといけないらしいので、UEFIの設定画面に入る。
+筆者のマシンでは、電源ボタンを押した後Enterキーを連打し、その後 <code>F1</code> を押すことで設定画面に入れたが、マシンのメーカーによって違うと思う。
+<code>SecureBoot</code> を <code>Disabled</code> にする。
+再度Rebootして、Enter連打の後 <code>F12</code> を押して、USBメモリを選択する。
+SystemRescueCD内のgrubが起動するので、一番上を選択する。
+これでインストールメディアが起動する。</p>
+
+<h3>3. インターネットに繋ぐ</h3>
+
+<p>これはハンドブックに載っていたやり方だとダメだった。
+筆者の家は有線LAN環境がないため、無線でつなぎたかったが、ハンドブックのやり方ではWEPの無線にのみ対応している。
+最近WEPとかあんまり使ってないと思う。
+WPAでのつなぎ方は<a href="https://yagi5.com/2017/12/24/wpa_supplicant/">こちら</a>に書いた。</p>
+
+<h3>4. パーティショニングして、ファイルシステムを作成する</h3>
+
+<p>パーティショニングは、ハードディスクを分割すること。
+したがって、どう分割するかを設計する必要がある。
+ディスク容量や用途にもよるので一概には言えないが、筆者は以下のように切った。</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">デバイス</th>
+<th align="left">容量</th>
+<th align="left">ファイルシステム</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">sda1</td>
+<td align="left">512MB</td>
+<td align="left">vfat</td>
+<td align="left">ブートローダ</td>
+</tr>
+
+<tr>
+<td align="left">sda2</td>
+<td align="left">1024MB</td>
+<td align="left">-</td>
+<td align="left">スワップ</td>
+</tr>
+
+<tr>
+<td align="left">sda3</td>
+<td align="left">残り全部</td>
+<td align="left">ext4</td>
+<td align="left">Gentoo</td>
+</tr>
+</tbody>
+</table>
+<p>注意点としては、</p>
+
+<ul>
+<li>物理メモリが潤沢にある環境であれば、スワップは別になくても良い</li>
+<li>sda1(ハードディスクの先頭セクタ)にブートローダが必要(ないとGentooが起動できない)</li>
+</ul>
+
+<p>など。</p>
+
+<p>後、パーティションの切り方はいろんなやり方がある。
+ググると <code>fdisk</code> <code>gdisk</code> <code>parted</code> などがあるが、結局使用目的は同じなので、どれを使っても良い。
+筆者はgdiskで切った。ツールの使い方はどうでもいいのでググってください。
+partedは変更が即反映されるのであんまりおすすめできない。
+gdiskは保存するまではなにも起きない。</p>
+
+<p>そして、ファイルシステムを作る。
+ファイルシステムがあることで、我々はデータをファイルとして認識できる。
+ポイントは、ブート用のパーティションは <code>vfat</code> で作るということ。
+Gentoo用のパーティションはよっぽどこだわりがなければext4で良いと思う。</p>
+
+<pre><code class="language-shell">### ブートパーティション
+% mkfs.vfat /dev/sda1
+
+### Gentooパーティション
+% mkfs.ext4 /dev/sda3
+
+### スワップパーティション
+% mkswap /dev/sda2
+% swapon /dev/sda2
+</code></pre>
+
+<h3>5. tarballをダウンロードし、展開する。</h3>
+
+<p>前述の通り、今はUSBメディアの中で作業している。
+しかし、Gentooをインストールしたいのはさっき切った <code>/dev/sda3</code> なので。
+USBから <code>/dev/sda3</code> を見られるようにしないといけない。なので、マウントする。</p>
+
+<pre><code class="language-shell">% mount /dev/sda3 /mnt/gentoo
+</code></pre>
+
+<p>/mnt/gentooというディレクトリが用意されているので、そこにマウントする。
+ついでに、 <code>/dev/sda1</code> もマウントしておく。
+Linuxでは <code>/boot</code> にブート用のファイルが格納されるので、</p>
+
+<pre><code class="language-shell">% mkdir /mnt/gentoo/boot
+% mount /dev/sda1 /mnt/gentoo/boot
+</code></pre>
+
+<p>のようにする。</p>
+
+<p>そしてtarballをインストールする。
+tarballは、Gentooとしての最低限のツールが入ったもの。
+SystemRescueCDには <code>links</code> コマンドがないため、以下のようにする。</p>
+
+<pre><code class="language-shell">% cd /mnt/gentoo
+% elinks https://www.gentoo.org/downloads/mirrors/
+</code></pre>
+
+<p>ミラーを選ぶ。
+筆者はIIJのサーバから、 <code>http://ftp.iij.ad.jp/pub/linux/gentoo/releases/amd64/autobuilds/20171215T184104Z/stage3-amd64-20171215T184104Z.tar.bz2</code> をもらった。</p>
+
+<p>ダウンロードが終わったら展開する。</p>
+
+<pre><code class="language-shell">% tar xvjpf stage3-*.tar.bz2 --xattrs --numeric-owner
+</code></pre>
+
+<p>続きは<a href="https://yagi5.com/2017/12/26/gentoo-install-2/">こちら</a>。</p>

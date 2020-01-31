@@ -1,0 +1,55 @@
+<p>pecoが便利すぎるので、カスタムしたスクリプトについてメモしておく。</p>
+
+<h3>pecoでディレクトリを移動する</h3>
+
+<pre><code>#!bin/bash
+function peco-lscd {
+    local dir=&quot;$( ls -1d ./* | peco )&quot;
+    if [ ! -z &quot;$dir&quot; ] ; then
+        cd &quot;$dir&quot;
+        ls -a
+    fi
+}
+</code></pre>
+
+<p>パスを通してpeco-lscd を叩くと</p>
+
+<pre><code>QUERY&gt;                                                                                                                                                                                IgnoreCase [13 (1/1)]
+./Applications
+./Desktop
+./Documents
+./Downloads
+./Dropbox
+./Library
+./Movies
+./Music
+./Pictures
+./Public
+./work
+</code></pre>
+
+<p>こういう感じで出てくるので、インクリメンタルサーチしながら移動ができる。</p>
+
+<h3>pecoでファイルをviで開く</h3>
+
+<pre><code>#!bin/bash
+function peco-vim {
+    local file=&quot;$( ls -F | grep -v / | peco )&quot;
+    if [ ! -d &quot;$file&quot; -a &quot;$file&quot; != &quot;&quot; ] ; then
+        vi &quot;$file&quot;
+    fi
+}
+</code></pre>
+
+<p>IDEとかを使わずにコーディングするときは、ファイルが多いことが多いのでけっこう使える。</p>
+
+<h3>pecoでdockerコンテナに入る</h3>
+
+<pre><code>#!/bin/bash
+
+function peco-docker-exec() {
+  docker exec -it `docker ps | peco | cut -d&quot; &quot; -f 1` /bin/bash
+}
+</code></pre>
+
+<p>通常は <code>docker exec -it xxxx /bin/bash</code> と打たなきゃいけないところを、削減できる。</p>

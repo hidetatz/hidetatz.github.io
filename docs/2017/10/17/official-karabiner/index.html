@@ -1,0 +1,78 @@
+<p>自分がkarabinerを使って実現したいのは、左右のCommandを英数/かなにするのと、SandS。
+今までは、これを参考に、本家のkarabiner-elementsをforkしたPRを使っていた。
+いつしか公式でこれらができるようになっていたのでやり方をメモしておく。</p>
+
+<h3>やり方</h3>
+
+<p>公式からDLする。(執筆時点で11.0.0)</p>
+
+<p>DLして展開したら、以下のコマンドで設定ファイルを編集する。</p>
+
+<pre><code>vi ~/.config/karabiner/karabiner.json
+</code></pre>
+
+<pre><code>&quot;manipulators&quot;: [
+  {
+      &quot;from&quot;: {
+          &quot;key_code&quot;: &quot;spacebar&quot;,
+          &quot;modifiers&quot;: {
+              &quot;optional&quot;: [
+                  &quot;any&quot;
+              ]
+          }
+      },
+      &quot;to&quot;: [
+          {
+              &quot;key_code&quot;: &quot;left_shift&quot;
+          }
+      ],
+      &quot;to_if_alone&quot;: [
+          {
+              &quot;key_code&quot;: &quot;spacebar&quot;
+          }
+      ],
+      &quot;type&quot;: &quot;basic&quot;
+  },
+  {
+      &quot;from&quot;: {
+          &quot;key_code&quot;: &quot;left_command&quot;,
+          &quot;modifiers&quot;: {
+              &quot;optional&quot;: [
+                  &quot;any&quot;
+              ]
+          }
+      },
+      &quot;to&quot;: [
+          {
+              &quot;key_code&quot;: &quot;left_command&quot;
+          }
+      ],
+      &quot;to_if_alone&quot;: [
+          {
+              &quot;key_code&quot;: &quot;japanese_eisuu&quot;
+          }
+      ],
+      &quot;type&quot;: &quot;basic&quot;
+  },
+  {
+      &quot;from&quot;: {
+          &quot;key_code&quot;: &quot;right_command&quot;,
+          &quot;modifiers&quot;: {
+              &quot;optional&quot;: [
+                  &quot;any&quot;
+              ]
+          }
+      },
+      &quot;to&quot;: [
+          {
+              &quot;key_code&quot;: &quot;right_command&quot;
+          }
+      ],
+      &quot;to_if_alone&quot;: [
+          {
+              &quot;key_code&quot;: &quot;japanese_kana&quot;
+          }
+      ],
+      &quot;type&quot;: &quot;basic&quot;
+  }
+</code></pre>

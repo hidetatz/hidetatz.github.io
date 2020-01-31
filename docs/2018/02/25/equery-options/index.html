@@ -1,0 +1,48 @@
+<p>equeryでよく使うコマンドオプションをメモっておく。</p>
+
+<h3>インストール</h3>
+
+<p>equery自体は以下のようにインストール。</p>
+
+<pre><code>$ emerge --ask app-portage/gentoolkit
+</code></pre>
+
+<p>なくてもportageは使えるが、便利なので入れるのが良いと思う。</p>
+
+<h3>ファイルがどのパッケージに入っていたのか</h3>
+
+<pre><code>$ equery belongs -e /usr/bin/glxgears
+</code></pre>
+
+<p><code>/usr/bin/glxgears</code> がどのパッケージによってインストールされたのかを検索できる。</p>
+
+<h3>パッケージが壊れていないか検査する</h3>
+
+<pre><code>$ equery check gentoolkit
+</code></pre>
+
+<h3>依存されているパッケージをリストアップ</h3>
+
+<pre><code>$ equery depends pygtk
+</code></pre>
+
+<p><em>pygtkを必要としている</em> パッケージをリストアップする。</p>
+
+<h3>依存しているパッケージをリストアップ</h3>
+
+<pre><code>$ equery depgraph mozilla-firefox
+</code></pre>
+
+<p><code>depends</code> の逆。</p>
+
+<h3>ファイルをリストアップ</h3>
+
+<pre><code>$ equery files --tree gentoolkit
+</code></pre>
+
+<h3>パッケージ自体をリストアップ</h3>
+
+<pre><code>$ equery list '*'
+</code></pre>
+
+<p>よく使う。</p>
