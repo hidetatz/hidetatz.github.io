@@ -1,0 +1,80 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>I&rsquo;ve been to Japan container days at April 19th, 2018 in Tokyo.</p>
+
+<p><a href="https://containerdays.jp/">Japan container days</a> is conference of container (almost kubernetes, k8s).</p>
+
+<p>I&rsquo;ve been there and now want to write some impressions of sessions.</p>
+
+<p>Please note that almost all sessions were spoken in Japanese.<br>
+I am not going to translate content of sessions into English, I will write only my own impressions.</p>
+
+<h3>Technology about private container foundation AKE by CyberAgent</h3>
+
+<p>original title is: サイバーエージェントにおけるプライベートコンテナ基盤AKEを支える技術</p>
+
+<p>They spoke about building kubernetes cluster using OpenStack.<br>
+They created original kubernetes as a service(kaas) on their onpremise.<br>
+And, use it at production environment.<br>
+I was surprised at creating own kaas, and using it at production.<br>
+Because, if I use k8s at production, it&rsquo;s good to use with EKS, GKE, or other services.</p>
+
+<p><a href="https://speakerdeck.com/masayaaoyama/saibaezientoniokerupuraibetokontenaji-pan-akewozhi-eruji-shu">Slide</a> (in japanese)</p>
+
+<h3>Kubernetes x Paas &ndash; Challenge for NoOps of container applications</h3>
+
+<p>original title is: Kubernetes x PaaS — コンテナアプリケーションのNoOpsへの挑戦</p>
+
+<p>NoOps means:</p>
+
+<ul>
+<li>Self healing</li>
+<li>In-Flight renewing</li>
+<li>Adaptive scale</li>
+</ul>
+
+<p>And, k8s provides features of them. But, it make application on container statefull.<br>
+Application on any container should be stateless.<br>
+For it, We should use any services provided by public cloud vendor.
+For example:</p>
+
+<ul>
+<li>Open service broker API</li>
+<li>Service Catalog</li>
+<li>Kaas (EKS, GKE, AKS)</li>
+<li>Service Mesh</li>
+<li>Istio</li>
+<li>Helm</li>
+</ul>
+
+<p>Honestly, I didn&rsquo;t even know about open service broker, service catalog, istio, helm.<br>
+I want to use it with EKS or GKE and write something about this blog.</p>
+
+<p><a href="https://www.slideshare.net/yokawasa/kubernetes-x-paas-noops">Slide</a> (in japanese)</p>
+
+<h3>Face against microservices with Istio</h3>
+
+<p>original title is: Istioと共にマイクロサービスに立ち向かえ!</p>
+
+<p>Microservices architecture is not a silver bullet.<br>
+It will cause problems like this:</p>
+
+<ul>
+<li>difficult to manage traffic between applications</li>
+<li>difficult to manage keys and certificate</li>
+<li>difficult to glasp whole systems</li>
+<li>difficult to know what will be occured at failure or incident</li>
+</ul>
+
+<p><a href="https://istio.io/">Istio</a> will help you with these annoying things.</p>
+
+<p><a href="https://speakerdeck.com/ladicle/istiotogong-nimaikurosabisunili-tixiang-kae">Slide</a> (in japanese)</p>
+
+<h3>Impressions</h3>
+
+<p>I have never operate kubernetes at production. (I only use container with AWS ECS.)<br>
+So, I was very surprised at many services are on kubernetes cluster at production environments.<br>
+I never know about many useful services around containers and k8s.<br>
+I like docker, and any other container technology and I want to use them.<br>
+Now, I want to use it and operate more simple and useful our systems.</p>
+
+<p><a href="https://medium.com/@yukotan/japan-container-days-v18-04-%E3%81%AE%E8%B3%87%E6%96%99-4f380fb7b696">Slides and entries</a></p>

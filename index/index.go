@@ -12,7 +12,7 @@ const tmpl = `<!doctype html>
   <meta name="description" content="dtyler.io">
   <meta name="author" content="SitePoint">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link href="/markdown.css" rel="stylesheet"></link>
 
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -26,8 +26,6 @@ const tmpl = `<!doctype html>
 	${another_locale}
 
     ${articles_list}
-
-  <script src="js/scripts.js"></script>
 </body>
 </html>
 `

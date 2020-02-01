@@ -16,5 +16,6 @@ func NewContents(lines []string) *Contents {
 
 func (c *Contents) ToHTML() string {
 	cts := strings.Join(c.lines, "\n")
-	return string(markdown.ToHTML([]byte(cts), nil, nil))
+	ret := string(markdown.ToHTML([]byte(cts), nil, nil))
+	return `<link href="/markdown.css" rel="stylesheet"></link>` + "\n" + ret
 }

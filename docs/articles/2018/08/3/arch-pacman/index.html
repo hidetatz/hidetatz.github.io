@@ -1,0 +1,93 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>最近はArchLinuxを使っているので、pacmanのオプションについて勉強している。
+以下にまとめておく。</p>
+
+<ul>
+<li>リポジトリの同期(emerge &ndash;sync)</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -Syy
+</code></pre>
+
+<ul>
+<li>ローカルのソフトウェアのアップデート(emerge -uDN world)</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -Syyu
+</code></pre>
+
+<ul>
+<li>ソフトウェアの検索(emerge &ndash;search)</li>
+</ul>
+
+<pre><code class="language-shell">$ pacman -Ss
+</code></pre>
+
+<ul>
+<li>ローカルのソフトウェアの検索</li>
+</ul>
+
+<pre><code class="language-shell">$ pacman -Qii
+</code></pre>
+
+<ul>
+<li>ソフトウェアのインストール(emerge)</li>
+</ul>
+
+<pre><code class="language-shell">$ pacman -S
+</code></pre>
+
+<ul>
+<li>ローカルのソフトウェアのリスト(equery list &ldquo;*&rdquo;)</li>
+</ul>
+
+<pre><code class="language-shell">$ pacman -Ql
+</code></pre>
+
+<ul>
+<li>依存関係の表示</li>
+</ul>
+
+<pre><code class="language-shell">$ pctree
+</code></pre>
+
+<ul>
+<li>orphanパッケージの表示</li>
+</ul>
+
+<pre><code class="language-shell">$ pacman -Qdt
+</code></pre>
+
+<ul>
+<li>orphanパッケージの削除(emerge &ndash;depclean)</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -Rs $(pacman -Qdtq)
+</code></pre>
+
+<ul>
+<li>パッケージ削除</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -R
+</code></pre>
+
+<ul>
+<li>依存関係も含めてパッケージ削除</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -Rs
+</code></pre>
+
+<ul>
+<li>パッケージのローカルキャッシュを削除</li>
+</ul>
+
+<pre><code class="language-shell">$ sudo pacman -Scc
+</code></pre>
+
+<ul>
+<li>その他</li>
+</ul>
+
+<p><code>/etc/pacman.conf</code> の <code>MiscOptions</code> に <code>ILoveCandy</code> を追加することで、 <code>pacman -S</code> のプログレスバーにパックマンが現れる。</p>

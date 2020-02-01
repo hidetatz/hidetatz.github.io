@@ -1,4 +1,4 @@
-Lambda Funcrion to convert PDF to Image by Node.js---2018-04-12 21:28:36
+Lambda Function to convert PDF to Image by Node.js---2018-04-12 21:28:36
 
 I've created AWS Lambda function to convert pdf to image.
 

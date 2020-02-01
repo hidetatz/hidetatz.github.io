@@ -1,0 +1,37 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>I&rsquo;ve created AWS Lambda function to convert pdf to image.</p>
+
+<p>Repository is <a href="https://github.com/ygnmhdtt/lmd_pdf2img">here</a>.<br>
+I need this function for work, but I couldn&rsquo;t find any useful libraries or examples.</p>
+
+<h3>How to use</h3>
+
+<p>First, you need to install dependencies.</p>
+
+<pre><code>$ npm install gm aws-sdk util
+</code></pre>
+
+<p>Now, I haven&rsquo;t prepared any deployment command.<br>
+You need to do it manually like this.</p>
+
+<pre><code>$ zip -r function.zip *
+</code></pre>
+
+<p>And, you need to upload zip at lambda console.<br>
+Of course, you must set function trigger <code>S3 Upload</code> .</p>
+
+<h3>Source code</h3>
+
+<p>All in <code>index.js</code> .</p>
+
+<pre><code>const srcBucket = event.Records[0].s3.bucket.name;
+const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, &quot; &quot;));
+
+const dstBucket = srcBucket;
+const dstKey = srcKey.replace('.pdf', '.png');
+</code></pre>
+
+<p>Now, destination bucket and key is same as source (extension will be <code>png</code> ).<br>
+If you want to configure it, please write your own code.</p>
+
+<p>Other configurations are written in README.</p>

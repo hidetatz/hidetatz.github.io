@@ -40,7 +40,7 @@ func gen() {
 	write(idxJA, "./docs/ja/index.html")
 
 	about := about.New()
-	write(about.ToHTML(), fmt.Sprintf("./docs/about/index.html"))
+	write(about.ToHTML(), "./docs/about/index.html")
 }
 
 func write(content, fileNameWithDir string) {

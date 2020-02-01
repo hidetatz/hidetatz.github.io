@@ -1,0 +1,262 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>gRPC越しに別のマイクロサービスをコールするクライアントの層をテストしたいことがある。
+例えば、次のようなprotoを使ってみよう。</p>
+
+<pre><code>syntax = &quot;proto3&quot;;
+
+package user.v1;
+
+service Users {
+  rpc Get(GetRequest) returns (GetResponse);
+}
+
+message GetRequest {
+  string id = 1;
+}
+
+message GetResponse {
+  User user = 1;
+}
+
+message User {
+  string id    = 1; 
+  string name  = 2;
+  string email = 3;
+}
+</code></pre>
+
+<p>UsersをGetするRPCを作っている。</p>
+
+<p>これを、 <code>protoc --go_out=plugins=grpc:pb ./users.proto</code> と実行してみる。
+すると、<a href="https://github.com/yagi5/grpc-test/blob/master/pb/users.pb.go">このような</a>ファイルが自動生成される。</p>
+
+<p>これを素朴に使ってクライアント、サーバを実装するとこんな感じになる。</p>
+
+<ul>
+<li>Server</li>
+</ul>
+
+<pre><code>package main
+
+import (
+  &quot;context&quot;
+  &quot;fmt&quot;
+  &quot;log&quot;
+  &quot;net&quot;
+
+  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+  &quot;google.golang.org/grpc&quot;
+)
+
+type server struct{}
+
+func (s *server) Get(ctx context.Context, req *userpb.GetRequest) (*userpb.GetResponse, error) {
+  if req.Id == &quot;1&quot; {
+    return &amp;userpb.GetResponse{User: &amp;userpb.User{
+      Id:    &quot;1&quot;,
+      Name:  &quot;bob&quot;,
+      Email: &quot;email@example.com&quot;,
+    }}, nil
+  }
+  return nil, fmt.Errorf(&quot;id invalid&quot;)
+}
+
+func main() {
+  listenPort, err := net.Listen(&quot;tcp&quot;, &quot;:19003&quot;)
+  if err != nil {
+    log.Fatalln(err)
+  }
+  grpcServer := grpc.NewServer()
+  userpb.RegisterUsersServer(grpcServer, &amp;server{})
+  grpcServer.Serve(listenPort)
+}
+</code></pre>
+
+<p>Getの実装はサンプルであり、実際はRDBやKVSから取得する。</p>
+
+<ul>
+<li>Client</li>
+</ul>
+
+<pre><code>package main
+
+import (
+  &quot;context&quot;
+  &quot;fmt&quot;
+
+  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+  &quot;google.golang.org/grpc&quot;
+)
+
+type user struct {
+  ID    string
+  Name  string
+  Email string
+}
+
+func main() {
+  conn, err := grpc.Dial(&quot;127.0.0.1:19003&quot;, grpc.WithInsecure())
+  if err != nil {
+    panic(err)
+  }
+  defer conn.Close()
+  client := userpb.NewUsersClient(conn)
+
+  c := usersClient{client: client}
+  res, err := c.Get(ctx, &amp;userpb.GetRequest{Id: &quot;1&quot;})
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Printf(&quot;user: %#v\n&quot;, u)
+}
+</code></pre>
+
+<p>マイクロサービスのコンテキストにおいては、このgRPCサーバーが実態としては別のマイクロサービスであるということがほとんどである。
+このとき、ユニットテストでこのサーバー(Userマイクロサービス)を実際に起動するのはなかなか実装がめんどくさい。
+telepresenceなどを使えば動作確認は可能だが、それが本番で同じようにつながる保証もないし、ユニットテストではモックするという選択を筆者はよくする。
+どうモックするかというと、userpb.UsersClientが<a href="https://github.com/yagi5/grpc-test/blob/master/pb/users.pb.go#L192-L194">interfaceになっている</a>ことを利用する。
+以下のようにリファクタする。</p>
+
+<pre><code>package main
+
+import (
+  &quot;context&quot;
+  &quot;fmt&quot;
+
+  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+  &quot;google.golang.org/grpc&quot;
+)
+
+type usersClient struct {
+  grpcClient userpb.UsersClient
+}
+
+type user struct {
+  ID    string
+  Name  string
+  Email string
+}
+
+func main() {
+  conn, err := grpc.Dial(&quot;127.0.0.1:19003&quot;, grpc.WithInsecure())
+  if err != nil {
+    panic(err)
+  }
+  defer conn.Close()
+  client := userpb.NewUsersClient(conn)
+
+  c := usersClient{grpcClient: client}
+  u, err := c.getUser(context.Background(), &quot;1&quot;)
+  if err != nil {
+    panic(err)
+  }
+
+  fmt.Printf(&quot;user: %#v\n&quot;, u)
+}
+
+func (c *usersClient) getUser(ctx context.Context, id string) (*user, error) {
+  res, err := c.grpcClient.Get(ctx, &amp;userpb.GetRequest{Id: id})
+  if err != nil {
+    return nil, err
+  }
+  return &amp;user{ID: res.User.Id, Name: res.User.Name, Email: res.User.Email}, nil
+}
+</code></pre>
+
+<p>getUser関数をusersClientのメソッドとする。usersClientは内部でuserpb.UsersClientを持つ。
+userpb.UsersClientはinterfaceになっているため、モックで差し替えて、getUser内のc.grpcClient.Get()で任意の結果を返せるようにする。</p>
+
+<p>テストコードは以下のように書ける。</p>
+
+<pre><code>package main
+
+import (
+  &quot;context&quot;
+  &quot;fmt&quot;
+  &quot;reflect&quot;
+  &quot;testing&quot;
+
+  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+  &quot;google.golang.org/grpc&quot;
+)
+
+type mockUsersClient struct {
+  MockGetFunc func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error)
+}
+
+func (c *mockUsersClient) Get(ctx context.Context, req *userpb.GetRequest, opts ...grpc.CallOption) (*userpb.GetResponse, error) {
+  return c.MockGetFunc(ctx, req, opts...)
+}
+
+func TestGetUser(t *testing.T) {
+  var tests = []struct {
+    name    string
+    getMock func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error)
+    id      string
+    wantErr bool
+    res     *user
+  }{
+    {
+      name: &quot;returns error&quot;,
+      getMock: func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error) {
+        return nil, fmt.Errorf(&quot;&quot;)
+      },
+      id:      &quot;1&quot;,
+      wantErr: true,
+    },
+    {
+      name: &quot;returns non-error&quot;,
+      getMock: func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error) {
+        return &amp;userpb.GetResponse{User: &amp;userpb.User{Id: &quot;1&quot;, Name: &quot;bob&quot;, Email: &quot;email@example.com&quot;}}, nil
+      },
+      id:  &quot;1&quot;,
+      res: nil,
+    },
+  }
+  for _, tt := range tests {
+    tt := tt
+    t.Run(tt.name, func(t *testing.T) {
+      c := &amp;mockUsersClient{MockGetFunc: tt.getMock}
+      cl := usersClient{grpcClient: c}
+      u, err := cl.getUser(context.Background(), tt.id)
+      if (err != nil) != tt.wantErr {
+        t.Fatalf(&quot;failed expected: %#v but got %#v&quot;, tt.wantErr, err)
+      }
+      if reflect.DeepEqual(tt.res, u) {
+        t.Errorf(&quot;failed expected: %#v but got %#v&quot;, tt.res, u)
+      }
+    })
+  }
+}
+</code></pre>
+
+<p>mockUsersClientを作成し、中にはモックさせる関数を持つ。
+mockUsersClientはGet()を実装しているため、userpb.UsersClientを実装していることになる。</p>
+
+<pre><code>{
+  name: &quot;returns error&quot;,
+  getMock: func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error) {
+    return nil, fmt.Errorf(&quot;&quot;)
+  },
+  id:      &quot;1&quot;,
+  wantErr: true,
+},
+</code></pre>
+
+<p>このテストは、errを返す。</p>
+
+<pre><code>{
+  name: &quot;returns non-error&quot;,
+  getMock: func(context.Context, *userpb.GetRequest, ...grpc.CallOption) (*userpb.GetResponse, error) {
+    return &amp;userpb.GetResponse{User: &amp;userpb.User{Id: &quot;1&quot;, Name: &quot;bob&quot;, Email: &quot;email@example.com&quot;}}, nil
+  },
+  id:  &quot;1&quot;,
+  res: nil,
+},
+</code></pre>
+
+<p>このテストは正しい結果を返す。
+あとはgetMockを使ってusersClientを生成し、getUserをテストできる。</p>
+
+<p>このように、mockClientを作り、そこにどのような関数を渡すかを各テストで定義するのは、特にinfraレイヤーでかなり使えるテクニックである。</p>

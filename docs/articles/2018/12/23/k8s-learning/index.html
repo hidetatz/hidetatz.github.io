@@ -1,0 +1,77 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>この記事は<a href="https://qiita.com/advent-calendar/2018/kubernetes3">Kubernetes3 Advent Calendar</a>23日目の記事です。</p>
+
+<p>筆者は、最近退っ引きならない事情でKubernetesに精通する必要性が生じて勉強中の初心者です。
+Kubernetesは世界で見ればそのコミュニティは非常に大きく、様々な勉強方法のtipsがあり、この記事で私のたどった道のりをまとめます。
+なお、読む人はDockerなどコンテナの知識を持っていることを想定しています。</p>
+
+<hr>
+
+<h2>書籍</h2>
+
+<h3>Kubernetes完全ガイド</h3>
+
+<p><a href="https://www.amazon.co.jp/dp/B07HFS7TDT">Kubernetes完全ガイド</a></p>
+
+<p>体系的な知識の構築に最も役立ったのはKubernetes完全ガイドだった。
+この本は、Kubernetesを構成する技術要素(リソースという)をひとつずつ説明している。
+また、リソース以外にも周辺のOSSやエコシステムなどにも触れられており、全体像を把握できるようになっている。
+実際プロダクションですべてのリソースを使うことはないかもしれないが、全体像を把握する上で読んでおくのがおすすめ。</p>
+
+<h3>入門Kubernetes</h3>
+
+<p><a href="https://www.amazon.co.jp/dp/4873118409">入門Kubernetes</a></p>
+
+<p>Kelsey Hightower氏の本。
+Kubernetes完全ガイドとの違いは、実際プロダクションでよく使うリソースに絞って書かれていること。
+例えば、CronJobやネットワーキングについては書かれていない。
+しかし、ReplicaSetやDeploymentなど、一般的によく使うリソースについては詳しい書かれている。
+2冊目として読むのがおすすめ。</p>
+
+<h2>実践</h2>
+
+<p>実際に動かさないと厳しいので、実際に何をしていくかを書いていく。</p>
+
+<h3>Play with Kubernetes</h3>
+
+<p><a href="https://labs.play-with-k8s.com/">Play with Kubernetes</a></p>
+
+<p>Dockerが提供する、web上からKubernetesに触れるプレイグラウンド。
+初期状態ではクラスタ自体存在しないため、kubeadmでマスターノードを構築するところから
+操作できる。
+インスタンスの台数も自分で決める。
+ローカルにファイルを持っていくことなどはできず、
+yamlはkubectl -fでURLを指定する必要がある。</p>
+
+<p>非常に便利だが、4時間でセッションが切れてすべてのリソースが削除されてしまう。
+また、単純に動作が重い(たぶん海外のVMにつないでいると思う)。</p>
+
+<h3>Kubernetes The Hard Way</h3>
+
+<p><a href="https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes The Hard Way</a></p>
+
+<p>入門Kubernetes作者のKelsey Hightower氏がGitHubで公開しているプログラム。
+GCP上で、Kubernetesクラスタをいちから作る手順が書かれている。
+kube-controller-managerやkube-proxyなども自分で構築するようになっている。
+GKEやEKSを使っていると隠蔽されている部分を自分で構築することで
+より理解が深まるため、一度やってみるといいと思う。</p>
+
+<h2>その他読んだほうがいいもの</h2>
+
+<h3>what-happens-when-k8s</h3>
+
+<p><a href="https://github.com/jamiehannaford/what-happens-when-k8s">what-happens-when-k8s</a></p>
+
+<p>kubectl runしたときに何が起こっているのかを文章で解説したドキュメント。
+The Hard Wayよりも細かい部分を解説してくれている。</p>
+
+<h3>Kubernetes at GitHub</h3>
+
+<p><a href="https://githubengineering.com/kubernetes-at-github/">Kubernetes at GitHub</a></p>
+
+<p>GitHubのKubernetesの事例。</p>
+
+<h2>まとめ</h2>
+
+<p>あまりいろいろやるのも大変なので、
+ここに書いたものを頑張るのがいい気がしている。</p>

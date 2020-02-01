@@ -1,0 +1,53 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>Skypeをインストールした。</p>
+
+<p>仕事で使うのでSkypeを導入した。<a href="https://wiki.gentoo.org/wiki/Skype">wiki</a>にある、portageのSkypeは動かなかったので、オーバーレイを使用した。</p>
+
+<h3>layman導入</h3>
+
+<p>laymanを使う。</p>
+
+<pre><code>$ emerge --ask layman
+</code></pre>
+
+<p>しかし、下記のようなエラーが出る。</p>
+
+<pre><code>ERROR: dev-python/cryptography-2.0.2-r1::gentoo failed (compile phase)
+</code></pre>
+
+<p>色々調べたところ、opensslのバージョンが1.1.0以上なら、ダウングレードしろという情報があった。
+筆者の環境は、</p>
+
+<pre><code>$ openssl version
+OpenSSL 1.1.0g  2 Nov 2017
+</code></pre>
+
+<p>だったので、ダウングレードしてみる。<br>
+<code>/etc/portage/package.mask/openssl</code> を作成し、以下のように書く。</p>
+
+<pre><code>&gt;dev-libs/openssl-1.1.0
+</code></pre>
+
+<p>これで1.1.0は強制的にマスクできるので、この状態で <code>emerge -uDN world</code> することで、1.1.0以下の最新を取ってくるようになる。</p>
+
+<p>その後、再び <code>emerge layman</code> したら通った。
+あとは<a href="https://wiki.gentoo.org/wiki/Layman">公式</a>の通り、</p>
+
+<pre><code>$ layman-updater -R
+</code></pre>
+
+<p>しておいた。</p>
+
+<h3>skypeforlinuxをインストール</h3>
+
+<p>いい感じに動いているという情報のあった、 <a href="http://gpo.zugaina.org/net-im/skypeforlinux">skypeforlinux-8.13.76.6</a> をインストールする。</p>
+
+<pre><code>$ emerge -a skypeforlinux
+</code></pre>
+
+<p>あとは</p>
+
+<pre><code>$ skypeforlinux
+</code></pre>
+
+<p>で起動する。</p>

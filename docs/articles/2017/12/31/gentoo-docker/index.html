@@ -1,0 +1,47 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>Gentooを使うにあたり、Dockerがないとなにもできない。インストールしていく。</p>
+
+<h3>dockerインストール</h3>
+
+<p>先にカーネルの設定をしてもいいが、筆者はとりあえず入れた。</p>
+
+<pre><code>$ emerge app-emulation/docker
+</code></pre>
+
+<p>筆者のUSEフラグはデフォルトのままにしてあり、なにもいじってない。
+注意点としてはファイルシステム周り。overlayを有効にすることだけ気をつければいい。
+この状態で試しに、</p>
+
+<pre><code>$ rc-service docker start
+</code></pre>
+
+<p>でdockerをスタートする。
+カーネルがいい感じに設定されていれば、これでも起動するはず。 <code>sudo docker ps</code> などして確認する。</p>
+
+<p>もし起動しなければ、カーネルの再設定が必要。必要に応じて <code>/var/log/docker.log</code> を確認しておく。</p>
+
+<h3>カーネル設定</h3>
+
+<p>カーネル設定については、<a href="https://wiki.gentoo.org/wiki/Docker">wiki</a>の通りやる。
+筆者の場合、特にモジュールを追加でロードするような設定もしなかった。
+注意点としては、このwikiはファイルシステムにoverlayを採用するようなやり方が書いてある。
+AUFSを採用する場合は<a href="https://wiki.gentoo.org/wiki/Aufs">こちら</a> を参考にパッチを当てる必要がある。
+また、AUFSを使う場合はdockerインストール時にaufsのUSEフラグを立てておくことも必要。</p>
+
+<p>カーネル設定したら <code>grub-mkconfig</code> して再起動する。</p>
+
+<h3>使用準備</h3>
+
+<p>これでdockerがちゃんと起動することを確認する。
+また、</p>
+
+<pre><code>$ rc-update add docker default
+</code></pre>
+
+<p>でdockerがOS起動時に上がってくるように設定しておく。
+最後に、</p>
+
+<pre><code>$ sudo gpasswd -a ユーザ名 docker
+</code></pre>
+
+<p>で、ユーザをdockerグループに入れておく。こうしないと、 <code>docker ps</code> すら <code>sudo</code> が必要になってしまう。</p>

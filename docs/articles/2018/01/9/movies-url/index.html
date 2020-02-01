@@ -1,0 +1,957 @@
+<link href="/markdown.css" rel="stylesheet"></link>
+<p>本エントリでは、映画が公開された際に作られる特設サイトにおけるURLについて書いていく。</p>
+
+<h3>パターン分け</h3>
+
+<p>URLについて注意深く見ていくと、いくつかのパターンがあることがわかる。</p>
+
+<h2>配給会社のドメイン + 映画名のパス</h2>
+
+<p>けっこう多いパターン。
+例としては</p>
+
+<ul>
+<li>ドクター・ストレンジ
+
+<ul>
+<li><a href="http://marvel.disney.co.jp/movie/dr-strange.html">http://marvel.disney.co.jp/movie/dr-strange.html</a></li>
+</ul></li>
+<li>レゴバットマン
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/legobatmanmovie/">http://wwws.warnerbros.co.jp/legobatmanmovie/</a></li>
+</ul></li>
+<li>サラエヴォの銃声
+
+<ul>
+<li><a href="http://www.bitters.co.jp/tanovic/sarajevo.html">http://www.bitters.co.jp/tanovic/sarajevo.html</a></li>
+</ul></li>
+</ul>
+
+<p>など。
+ディズニー、ワーナー、gagaなど、大手の会社がリリースした映画は、このパターンになることが多いと思われる。</p>
+
+<p>このパターンのメリットは、ドメインの下に映画名がぶら下がる構造となるため、ドメインの管理がしやすいこと。
+削除時はパスを削除してしまえばいいし、新たに登録したい際はパスを切ればいい。</p>
+
+<p>デメリットは、パス名の切り方を決めにくいこと。例えば、同じ名前の映画を公開したいときはどうするか？
+映画のタイトルが非常に長い場合、どのようなパス名にすればいいか？日本語タイトルは、英訳するか？など、考えることがたくさんある。
+(これはこの形式に限らないが。)</p>
+
+<h2>シリーズ名のドメイン + 年度のパス</h2>
+
+<p>あまり見ない形式だが、筆者はこれが好き。例としては、</p>
+
+<ul>
+<li>ドラえもん のび太の南極カチコチ大冒険
+
+<ul>
+<li><a href="http://doraeiga.com/2017/">http://doraeiga.com/2017/</a></li>
+</ul></li>
+</ul>
+
+<p>がある。
+このパターンは、パスの変更に強い。問題が発生するとすれば、同一年度に映画を2本作る場合どうするか？だが、
+ドラえもんはそういうことないんだと思う。</p>
+
+<h2>映画名 + movie</h2>
+
+<p>これもめちゃくちゃ多い。</p>
+
+<ul>
+<li>スノーデン
+
+<ul>
+<li><a href="http://www.snowden-movie.jp/">http://www.snowden-movie.jp/</a></li>
+</ul></li>
+<li>セル
+
+<ul>
+<li><a href="http://cell-movie.jp/">http://cell-movie.jp/</a></li>
+</ul></li>
+<li>SING
+
+<ul>
+<li><a href="http://sing-movie.jp/">http://sing-movie.jp/</a></li>
+</ul></li>
+<li>スプリット
+
+<ul>
+<li><a href="http://split-movie.jp/">http://split-movie.jp/</a></li>
+</ul></li>
+</ul>
+
+<p>など。
+このパターンは、映画のタイトルが一般名詞の場合につくのだと考えている。 <code>split.jp</code> だと、スプリットという言葉があるだけに、
+映画のURLであることが伝わりづらい、という意図ではないだろうか。</p>
+
+<p>このパターンは一見わかりやすいが、ドメインがどんどん増えていって管理が煩雑では？と筆者は考えている。新規登録もまあまあめんどうだし…</p>
+
+<h2>映画名をダイレクトにURLにするケース</h2>
+
+<ul>
+<li>コクソン
+
+<ul>
+<li><a href="http://kokuson.com/">http://kokuson.com/</a></li>
+</ul></li>
+<li>バーニングオーシャン
+
+<ul>
+<li><a href="http://burningocean.jp/">http://burningocean.jp/</a></li>
+</ul></li>
+<li>ハクソーリッジ
+
+<ul>
+<li><a href="http://hacksawridge.jp/">http://hacksawridge.jp/</a></li>
+</ul></li>
+<li>光をくれた人
+
+<ul>
+<li><a href="http://hikariwokuretahito.com/">http://hikariwokuretahito.com/</a></li>
+</ul></li>
+</ul>
+
+<p>などがある。日本語でもローマ字表記でそのままURLにしているのがポイント。
+筆者としては、 <code>-movie</code> をつけるくらいならこれでよくないか？とは思っている。</p>
+
+<h2>映画名を省略するケース</h2>
+
+<p>意外と省略パターンは多い。</p>
+
+<ul>
+<li>ゴーストインザシェル
+
+<ul>
+<li><a href="http://ghostshell.jp/">http://ghostshell.jp/</a></li>
+</ul></li>
+<li>歓びのトスカーナ
+
+<ul>
+<li><a href="http://yorokobino.com/">http://yorokobino.com/</a></li>
+</ul></li>
+<li>あさがくるまえに
+
+<ul>
+<li><a href="http://www.reallylikefilms.com/asakuru">http://www.reallylikefilms.com/asakuru</a></li>
+</ul></li>
+<li>愛を綴る女
+
+<ul>
+<li><a href="http://aiotsuzuru.com/">http://aiotsuzuru.com/</a></li>
+</ul></li>
+</ul>
+
+<p>など。タイトルが非常に長いなら仕方ない気もする。Twitterでつぶやくときのこととかも考慮しているのだと思う。</p>
+
+<h2>原題を用いているケース</h2>
+
+<p>けっこうレア。</p>
+
+<ul>
+<li>マリアンヌ
+
+<ul>
+<li><a href="http://www.alliedmovie.com/">http://www.alliedmovie.com/</a></li>
+</ul></li>
+<li>女神の見えざる手
+
+<ul>
+<li><a href="http://miss-sloane.jp/">http://miss-sloane.jp/</a></li>
+</ul></li>
+<li>メッセージ
+
+<ul>
+<li><a href="http://www.bd-dvd.sonypictures.jp/arrival/">http://www.bd-dvd.sonypictures.jp/arrival/</a></li>
+</ul></li>
+</ul>
+
+<p>原題をそのまま使っているケース。
+<code>.jp</code> ドメインのように、TLDでリージョンを分けているパターンと、完全に多言語対応していないケースがある。</p>
+
+<h2>サブドメインにしているケース</h2>
+
+<p>相当レア。</p>
+
+<ul>
+<li>ジグソウ: ソウ・レガシー
+
+<ul>
+<li><a href="http://jigsaw.asmik-ace.co.jp/">http://jigsaw.asmik-ace.co.jp/</a></li>
+</ul></li>
+<li>米軍が最も恐れた男 その名は、カメジロー
+
+<ul>
+<li><a href="http://www.kamejiro.ayapro.ne.jp/">http://www.kamejiro.ayapro.ne.jp/</a></li>
+</ul></li>
+</ul>
+
+<h2>独自のURLのケース</h2>
+
+<p>多い。省略に近いが、省略とも言い難いものとも言える。</p>
+
+<ul>
+<li>僕とカミンスキーの旅
+
+<ul>
+<li><a href="http://meandkaminski.com/">http://meandkaminski.com/</a></li>
+</ul></li>
+<li>不都合な真実2
+
+<ul>
+<li><a href="http://futsugou2.jp/">http://futsugou2.jp/</a></li>
+</ul></li>
+<li>ヒトラーへの285枚の手紙
+
+<ul>
+<li><a href="http://hitler-hagaki-movie.com/">http://hitler-hagaki-movie.com/</a></li>
+</ul></li>
+<li>ジュリーと恋と靴工場
+
+<ul>
+<li><a href="http://julie-kutsu.com/">http://julie-kutsu.com/</a></li>
+</ul></li>
+<li>メアリと魔女の花
+
+<ul>
+<li><a href="http://www.maryflower.jp/">http://www.maryflower.jp/</a></li>
+</ul></li>
+</ul>
+
+<p>映画のタイトルを若干変えて、読みやすく覚えやすくしているケースと考えている。
+個人的には、 <code>メアリと魔女の花</code> がこのパターンなのはけっこう意外だが、よく考えたらジブリじゃないしそんなもんか、と思った。
+個人的には早めにスタジオポノック配下に持っていくほうがいいと思っている。</p>
+
+<h2>シリーズの考慮がないケース</h2>
+
+<p>アニメにありがち。</p>
+
+<ul>
+<li>怪盗グルーのミニオン大脱走
+
+<ul>
+<li><a href="http://minions.jp/">http://minions.jp/</a></li>
+</ul></li>
+<li>クレヨンしんちゃん 襲来!! 宇宙人シリリ
+
+<ul>
+<li><a href="http://www.shinchan-movie.com/">http://www.shinchan-movie.com/</a></li>
+</ul></li>
+<li>名探偵コナン から紅のラブレター
+
+<ul>
+<li><a href="http://www.conan-movie.jp/">http://www.conan-movie.jp/</a></li>
+</ul></li>
+</ul>
+
+<p>この問題点は、常に最新のもののみトップに表示され、古いものについては上書きされてしまうこと。
+たぶん常に最新のものさえあればいいって考え方だと思う。</p>
+
+<h2>その他</h2>
+
+<h3>&lt;title&gt; が 絶賛公開中！になってる</h3>
+
+<ul>
+<li>パトリオットデイ
+
+<ul>
+<li><a href="http://www.patriotsday.jp/">http://www.patriotsday.jp/</a></li>
+</ul></li>
+</ul>
+
+<p>なおしたほうが良いと思う。</p>
+
+<h3>カーソルがかっこいいもの</h3>
+
+<ul>
+<li>フリーファイヤー
+
+<ul>
+<li><a href="http://freefire.jp/">http://freefire.jp/</a></li>
+</ul></li>
+</ul>
+
+<p>昔のホームページっぽい。クリックすると発砲音が鳴るのが最高。</p>
+
+<h3>ドメインは残っていても、コンテンツが削除されているもの</h3>
+
+<ul>
+<li>トンネル
+
+<ul>
+<li><a href="http://tunnel-movie.net/">http://tunnel-movie.net/</a></li>
+</ul></li>
+</ul>
+
+<p>Apacheのエラーが出る。サーバーの容量不足とかなのかな。</p>
+
+<h3>トップレベルドメイン</h3>
+
+<p><code>.jp</code> <code>.com</code> がほとんど。
+まれに <code>.info</code> <code>.asia</code> がある。</p>
+
+<ul>
+<li>バンコクナイツ
+
+<ul>
+<li><a href="http://www.bangkok-nites.asia/">http://www.bangkok-nites.asia/</a></li>
+</ul></li>
+</ul>
+
+<p>アジアっぽくて良い。</p>
+
+<h3>https対応</h3>
+
+<p>1件もなし。(静的コンテンツしかないし、ユーザーがなにか入力することも基本ないので、OKだと思う。)</p>
+
+<h3>あまり見ない文字が入っている</h3>
+
+<p>ドット</p>
+
+<ul>
+<li>ル・コルビジェとアイリーン
+
+<ul>
+<li><a href="http://www.transformer.co.jp/m/lecorbusier.eileen/">http://www.transformer.co.jp/m/lecorbusier.eileen/</a></li>
+</ul></li>
+</ul>
+
+<p>エクスクラメーション</p>
+
+<ul>
+<li>リュミエール
+
+<ul>
+<li><a href="http://gaga.ne.jp/lumiere!/">http://gaga.ne.jp/lumiere!/</a></li>
+</ul></li>
+</ul>
+
+<h3>所感</h3>
+
+<p>URL設計は難しい。<br>
+シリーズ物なら前述のドラえもんパターンが良いと思うが、それ以外だといい命名はけっこう難しそう。<br>
+加えて、映画の公開が終わってしばらくしたらサイト自体閉鎖して良いような性質のものなので、URLなんてなんでもいい、というのも少なからずあるとは思う。<br>
+映画ファンとしては、 <code>配給会社名ドメイン + 映画名のパス</code> のほうが、基本ずっと残るはずなので嬉しさはある。</p>
+
+<h2>URL一覧</h2>
+
+<p>以下に、<a href="https://yagi5.com/2018/01/03/2017-movies/">筆者が昨年映画館で見た映画</a>について、URL一覧を記す。
+なお、昨年見たとはいえ、昨年公開されたとは限らないため、特設サイトが存在しないものはスルーする。</p>
+
+<ul>
+<li>沈黙 -サイレンス-
+
+<ul>
+<li><a href="http://chinmoku.jp/">http://chinmoku.jp/</a></li>
+</ul></li>
+<li>スノーデン
+
+<ul>
+<li><a href="http://www.snowden-movie.jp/">http://www.snowden-movie.jp/</a></li>
+</ul></li>
+<li>ドクター・ストレンジ
+
+<ul>
+<li><a href="http://marvel.disney.co.jp/movie/dr-strange.html">http://marvel.disney.co.jp/movie/dr-strange.html</a></li>
+</ul></li>
+<li>マリアンヌ
+
+<ul>
+<li><a href="http://www.alliedmovie.com/">http://www.alliedmovie.com/</a></li>
+</ul></li>
+<li>セル
+
+<ul>
+<li><a href="http://cell-movie.jp/">http://cell-movie.jp/</a></li>
+</ul></li>
+<li>ララランド
+
+<ul>
+<li><a href="http://gaga.ne.jp/lalaland/">http://gaga.ne.jp/lalaland/</a></li>
+</ul></li>
+<li>素晴らしきかな、人生
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/subarashiki-movie/">http://wwws.warnerbros.co.jp/subarashiki-movie/</a></li>
+</ul></li>
+<li>We Are X
+
+<ul>
+<li><a href="http://www.wearexfilm.jp/">http://www.wearexfilm.jp/</a></li>
+</ul></li>
+<li>ドラえもん のび太の南極カチコチ大冒険
+
+<ul>
+<li><a href="http://doraeiga.com/2017/">http://doraeiga.com/2017/</a></li>
+</ul></li>
+<li>モアナと伝説の海
+
+<ul>
+<li><a href="http://www.disney.co.jp/movie/moana/about.html">http://www.disney.co.jp/movie/moana/about.html</a></li>
+</ul></li>
+<li>コクソン
+
+<ul>
+<li><a href="http://kokuson.com/">http://kokuson.com/</a></li>
+</ul></li>
+<li>SING
+
+<ul>
+<li><a href="http://sing-movie.jp/">http://sing-movie.jp/</a></li>
+</ul></li>
+<li>パッセンジャー
+
+<ul>
+<li><a href="http://www.bd-dvd.sonypictures.jp/passenger/">http://www.bd-dvd.sonypictures.jp/passenger/</a></li>
+</ul></li>
+<li>キングコング 髑髏島の巨人
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/kingkong/">http://wwws.warnerbros.co.jp/kingkong/</a></li>
+</ul></li>
+<li>ムーンライト
+
+<ul>
+<li><a href="http://moonlight-movie.jp/">http://moonlight-movie.jp/</a></li>
+</ul></li>
+<li>ジャッキー/ファーストレディ 最後の使命
+
+<ul>
+<li><a href="http://jackie-movie.jp/">http://jackie-movie.jp/</a></li>
+</ul></li>
+<li>レゴバットマン
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/legobatmanmovie/">http://wwws.warnerbros.co.jp/legobatmanmovie/</a></li>
+</ul></li>
+<li>ハードコア
+
+<ul>
+<li><a href="http://hardcore-eiga.com/">http://hardcore-eiga.com/</a></li>
+</ul></li>
+<li>ライオン
+
+<ul>
+<li><a href="http://gaga.ne.jp/lion/">http://gaga.ne.jp/lion/</a></li>
+</ul></li>
+<li>ゴーストインザシェル
+
+<ul>
+<li><a href="http://ghostshell.jp/">http://ghostshell.jp/</a></li>
+</ul></li>
+<li>グレートウォール
+
+<ul>
+<li><a href="http://greatwall-movie.jp/">http://greatwall-movie.jp/</a> (日)</li>
+</ul></li>
+<li>パージ
+
+<ul>
+<li><a href="http://purge-movie.com/">http://purge-movie.com/</a></li>
+</ul></li>
+<li>美女と野獣
+
+<ul>
+<li><a href="http://www.disney.co.jp/movie/beautyandbeast.html">http://www.disney.co.jp/movie/beautyandbeast.html</a></li>
+</ul></li>
+<li>バーニングオーシャン
+
+<ul>
+<li><a href="http://burningocean.jp/">http://burningocean.jp/</a></li>
+</ul></li>
+<li>ワイルド・スピード ICE BREAK
+
+<ul>
+<li><a href="http://wildspeed-official.jp/">http://wildspeed-official.jp/</a></li>
+</ul></li>
+<li>メットガラ ドレスをまとった美術館
+
+<ul>
+<li><a href="http://metgala-movie.com/">http://metgala-movie.com/</a></li>
+</ul></li>
+<li>汚れたミルク
+
+<ul>
+<li><a href="http://www.bitters.co.jp/tanovic/milk.html">http://www.bitters.co.jp/tanovic/milk.html</a></li>
+</ul></li>
+<li>サラエヴォの銃声
+
+<ul>
+<li><a href="http://www.bitters.co.jp/tanovic/sarajevo.html">http://www.bitters.co.jp/tanovic/sarajevo.html</a></li>
+</ul></li>
+<li>午後8時の訪問者
+
+<ul>
+<li><a href="http://www.bitters.co.jp/pm8/">http://www.bitters.co.jp/pm8/</a></li>
+</ul></li>
+<li>マイビューティフルガーデン
+
+<ul>
+<li><a href="http://my-beautiful-garden.com/">http://my-beautiful-garden.com/</a></li>
+</ul></li>
+<li>スウィート17モンスター
+
+<ul>
+<li><a href="http://www.sweet17monster.com/">http://www.sweet17monster.com/</a></li>
+</ul></li>
+<li>僕とカミンスキーの旅
+
+<ul>
+<li><a href="http://meandkaminski.com/">http://meandkaminski.com/</a></li>
+</ul></li>
+<li>フリーファイヤー
+
+<ul>
+<li><a href="http://freefire.jp/">http://freefire.jp/</a></li>
+</ul></li>
+<li>カフェソサエティ
+
+<ul>
+<li><a href="http://www.longride.jp/movie-cafesociety/">http://www.longride.jp/movie-cafesociety/</a></li>
+</ul></li>
+<li>スプリット
+
+<ul>
+<li><a href="http://split-movie.jp/">http://split-movie.jp/</a></li>
+</ul></li>
+<li>パーソナルショッパー
+
+<ul>
+<li><a href="http://personalshopper-movie.com/">http://personalshopper-movie.com/</a></li>
+</ul></li>
+<li>マンチェスターバイザシー
+
+<ul>
+<li><a href="http://manchesterbythesea.jp/">http://manchesterbythesea.jp/</a></li>
+</ul></li>
+<li>メッセージ
+
+<ul>
+<li><a href="http://www.bd-dvd.sonypictures.jp/arrival/">http://www.bd-dvd.sonypictures.jp/arrival/</a></li>
+</ul></li>
+<li>パトリオットデイ
+
+<ul>
+<li><a href="http://www.patriotsday.jp/">http://www.patriotsday.jp/</a></li>
+</ul></li>
+<li>セールスマン
+
+<ul>
+<li><a href="http://www.thesalesman.jp/">http://www.thesalesman.jp/</a></li>
+</ul></li>
+<li>レイルロードタイガー
+
+<ul>
+<li><a href="http://railroadtiger-movie.jp/">http://railroadtiger-movie.jp/</a></li>
+</ul></li>
+<li>22年目の告白
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/22-kokuhaku/">http://wwws.warnerbros.co.jp/22-kokuhaku/</a></li>
+</ul></li>
+<li>映画 山田孝之3D
+
+<ul>
+<li><a href="http://www.tv-tokyo.co.jp/yamada_cannes/smp/takayuki_yamada_the_movie_3d/">http://www.tv-tokyo.co.jp/yamada_cannes/smp/takayuki_yamada_the_movie_3d/</a></li>
+</ul></li>
+<li>TAP THE LAST SHOW
+
+<ul>
+<li><a href="http://www.tap-movie.jp/">http://www.tap-movie.jp/</a></li>
+</ul></li>
+<li>キングアーサー
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/king-arthur/">http://wwws.warnerbros.co.jp/king-arthur/</a></li>
+</ul></li>
+<li>フィフティシェイズダーカー
+
+<ul>
+<li><a href="http://fiftyshadesmovie.jp/">http://fiftyshadesmovie.jp/</a></li>
+</ul></li>
+<li>ハクソーリッジ
+
+<ul>
+<li><a href="http://hacksawridge.jp/">http://hacksawridge.jp/</a></li>
+</ul></li>
+<li>パイレーツ・オブ・カリビアン
+
+<ul>
+<li><a href="http://www.disney.co.jp/movie/pirates.html">http://www.disney.co.jp/movie/pirates.html</a></li>
+</ul></li>
+<li>ジョンウィック
+
+<ul>
+<li><a href="http://johnwick.jp/">http://johnwick.jp/</a></li>
+</ul></li>
+<li>メアリと魔女の花
+
+<ul>
+<li><a href="http://www.maryflower.jp/">http://www.maryflower.jp/</a></li>
+</ul></li>
+<li>ライフ
+
+<ul>
+<li><a href="http://www.bd-dvd.sonypictures.jp/life/">http://www.bd-dvd.sonypictures.jp/life/</a></li>
+</ul></li>
+<li>カーズ
+
+<ul>
+<li><a href="http://www.disney.co.jp/movie/cars-crossroad.html">http://www.disney.co.jp/movie/cars-crossroad.html</a></li>
+</ul></li>
+<li>パワーレンジャー
+
+<ul>
+<li><a href="http://www.power-rangers.jp/">http://www.power-rangers.jp/</a></li>
+</ul></li>
+<li>怪盗グルーのミニオン大脱走
+
+<ul>
+<li><a href="http://minions.jp/">http://minions.jp/</a></li>
+</ul></li>
+<li>ビニー
+
+<ul>
+<li><a href="http://vinny-movie.com/">http://vinny-movie.com/</a></li>
+</ul></li>
+<li>ザ・マミー
+
+<ul>
+<li><a href="http://themummy.jp/">http://themummy.jp/</a></li>
+</ul></li>
+<li>トンネル
+
+<ul>
+<li><a href="http://tunnel-movie.net/">http://tunnel-movie.net/</a></li>
+</ul></li>
+<li>ラストプリンセス
+
+<ul>
+<li><a href="http://lastprincess.info/">http://lastprincess.info/</a></li>
+</ul></li>
+<li>ディストピア パンドラの少女
+
+<ul>
+<li><a href="http://pandora-movie.jp/">http://pandora-movie.jp/</a></li>
+</ul></li>
+<li>オリーブの樹は呼んでいる
+
+<ul>
+<li><a href="http://olive-tree-jp.com/">http://olive-tree-jp.com/</a></li>
+</ul></li>
+<li>光をくれた人
+
+<ul>
+<li><a href="http://hikariwokuretahito.com/">http://hikariwokuretahito.com/</a></li>
+</ul></li>
+<li>クレヨンしんちゃん 襲来!! 宇宙人シリリ
+
+<ul>
+<li><a href="http://www.shinchan-movie.com/">http://www.shinchan-movie.com/</a></li>
+</ul></li>
+<li>名探偵コナン から紅のラブレター
+
+<ul>
+<li><a href="http://www.conan-movie.jp/">http://www.conan-movie.jp/</a></li>
+</ul></li>
+<li>ヒトラーへの285枚の手紙
+
+<ul>
+<li><a href="http://hitler-hagaki-movie.com/">http://hitler-hagaki-movie.com/</a></li>
+</ul></li>
+<li>歓びのトスカーナ
+
+<ul>
+<li><a href="http://yorokobino.com/">http://yorokobino.com/</a></li>
+</ul></li>
+<li>幸せな人生の選択
+
+<ul>
+<li><a href="http://www.finefilms.co.jp/shiawase/">http://www.finefilms.co.jp/shiawase/</a></li>
+</ul></li>
+<li>残像
+
+<ul>
+<li><a href="http://zanzou-movie.com/">http://zanzou-movie.com/</a></li>
+</ul></li>
+<li>ボンジュール、アン
+
+<ul>
+<li><a href="http://bonjour-anne.jp/">http://bonjour-anne.jp/</a></li>
+</ul></li>
+<li>わすれな草
+
+<ul>
+<li><a href="http://www.gnome15.com/wasurenagusa/">http://www.gnome15.com/wasurenagusa/</a></li>
+</ul></li>
+<li>バンコクナイツ
+
+<ul>
+<li><a href="http://www.bangkok-nites.asia/">http://www.bangkok-nites.asia/</a></li>
+</ul></li>
+<li>パターソン
+
+<ul>
+<li><a href="http://paterson-movie.com/">http://paterson-movie.com/</a></li>
+</ul></li>
+<li>アイヒマンの後継者
+
+<ul>
+<li><a href="http://next-eichmann.com/">http://next-eichmann.com/</a></li>
+</ul></li>
+<li>ファウンダー ハンバーガー帝国の秘密
+
+<ul>
+<li><a href="http://thefounder.jp/">http://thefounder.jp/</a></li>
+</ul></li>
+<li>ブランカとギター弾き
+
+<ul>
+<li><a href="http://www.transformer.co.jp/m/blanka/">http://www.transformer.co.jp/m/blanka/</a></li>
+</ul></li>
+<li>トランスフォーマー
+
+<ul>
+<li><a href="http://tf-movie.jp/">http://tf-movie.jp/</a></li>
+</ul></li>
+<li>ハイドリヒを撃て
+
+<ul>
+<li><a href="http://shoot-heydrich.com/">http://shoot-heydrich.com/</a></li>
+</ul></li>
+<li>エル ELLE
+
+<ul>
+<li><a href="http://gaga.ne.jp/elle/">http://gaga.ne.jp/elle/</a></li>
+</ul></li>
+<li>ザ・ウォール
+
+<ul>
+<li><a href="http://thewall-movie.jp/">http://thewall-movie.jp/</a></li>
+</ul></li>
+<li>スキップトレース
+
+<ul>
+<li><a href="http://skiptrace-movie.jp/">http://skiptrace-movie.jp/</a></li>
+</ul></li>
+<li>新感染
+
+<ul>
+<li><a href="http://shin-kansen.com/">http://shin-kansen.com/</a></li>
+</ul></li>
+<li>ダンケルク
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/dunkirk/">http://wwws.warnerbros.co.jp/dunkirk/</a></li>
+</ul></li>
+<li>エイリアン: コヴェナント
+
+<ul>
+<li><a href="http://www.foxmovies-jp.com/alien/">http://www.foxmovies-jp.com/alien/</a></li>
+</ul></li>
+<li>スイス・アーミーマン
+
+<ul>
+<li><a href="http://sam-movie.jp/">http://sam-movie.jp/</a></li>
+</ul></li>
+<li>アトミックブロンド
+
+<ul>
+<li><a href="http://atomic-blonde.jp/">http://atomic-blonde.jp/</a></li>
+</ul></li>
+<li>女神の見えざる手
+
+<ul>
+<li><a href="http://miss-sloane.jp/">http://miss-sloane.jp/</a></li>
+</ul></li>
+<li>ブレードランナー
+
+<ul>
+<li><a href="http://www.bladerunner2049.jp/">http://www.bladerunner2049.jp/</a></li>
+</ul></li>
+<li>ゲットアウト
+
+<ul>
+<li><a href="http://getout.jp/">http://getout.jp/</a></li>
+</ul></li>
+<li>IT
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/itthemovie/">http://wwws.warnerbros.co.jp/itthemovie/</a></li>
+</ul></li>
+<li>マイティ・ソー
+
+<ul>
+<li><a href="http://marvel.disney.co.jp/movie/thor-br.html">http://marvel.disney.co.jp/movie/thor-br.html</a></li>
+</ul></li>
+<li>ジグソウ: ソウ・レガシー
+
+<ul>
+<li><a href="http://jigsaw.asmik-ace.co.jp/">http://jigsaw.asmik-ace.co.jp/</a></li>
+</ul></li>
+<li>ローガンラッキー
+
+<ul>
+<li><a href="http://www.logan-lucky.jp/">http://www.logan-lucky.jp/</a></li>
+</ul></li>
+<li>ジャスティスリーグ
+
+<ul>
+<li><a href="http://wwws.warnerbros.co.jp/justiceleaguejp/news/news.html">http://wwws.warnerbros.co.jp/justiceleaguejp/news/news.html</a></li>
+</ul></li>
+<li>ドクターエクソシスト
+
+<ul>
+<li><a href="http://dr-exorcist.com/">http://dr-exorcist.com/</a></li>
+</ul></li>
+<li>オリエント急行殺人事件
+
+<ul>
+<li><a href="http://www.foxmovies-jp.com/orient-movie/">http://www.foxmovies-jp.com/orient-movie/</a></li>
+</ul></li>
+<li>不都合な真実2
+
+<ul>
+<li><a href="http://futsugou2.jp/">http://futsugou2.jp/</a></li>
+</ul></li>
+<li>ジュリーと恋と靴工場
+
+<ul>
+<li><a href="http://julie-kutsu.com/">http://julie-kutsu.com/</a></li>
+</ul></li>
+<li>パッションフラメンコ
+
+<ul>
+<li><a href="http://passion-flamenco.net/">http://passion-flamenco.net/</a></li>
+</ul></li>
+<li>夜明けの祈り
+
+<ul>
+<li><a href="http://yoake-inori.com/">http://yoake-inori.com/</a></li>
+</ul></li>
+<li>アメイジングジャーニー
+
+<ul>
+<li><a href="http://amazing-journey.jp/">http://amazing-journey.jp/</a></li>
+</ul></li>
+<li>静かなる情熱
+
+<ul>
+<li><a href="http://dickinson-film.jp/">http://dickinson-film.jp/</a></li>
+</ul></li>
+<li>少女ファニーと運命の旅
+
+<ul>
+<li><a href="http://shojo-fanny-movie.jp/">http://shojo-fanny-movie.jp/</a></li>
+</ul></li>
+<li>新世紀 パリ・オペラ座
+
+<ul>
+<li><a href="http://gaga.ne.jp/parisopera/">http://gaga.ne.jp/parisopera/</a></li>
+</ul></li>
+<li>愛を綴る女
+
+<ul>
+<li><a href="http://aiotsuzuru.com/">http://aiotsuzuru.com/</a></li>
+</ul></li>
+<li>米軍が最も恐れた男 その名は、カメジロー
+
+<ul>
+<li><a href="http://www.kamejiro.ayapro.ne.jp/">http://www.kamejiro.ayapro.ne.jp/</a></li>
+</ul></li>
+<li>ナインイレヴン
+
+<ul>
+<li><a href="http://nineeleven.jp/">http://nineeleven.jp/</a></li>
+</ul></li>
+<li>素敵な遺産相続
+
+<ul>
+<li><a href="http://www.finefilms.co.jp/isan/">http://www.finefilms.co.jp/isan/</a></li>
+</ul></li>
+<li>ギフテッド
+
+<ul>
+<li><a href="http://www.foxmovies-jp.com/gifted/">http://www.foxmovies-jp.com/gifted/</a></li>
+</ul></li>
+<li>はじまりの街
+
+<ul>
+<li><a href="http://www.crest-inter.co.jp/hajimarinomachi/">http://www.crest-inter.co.jp/hajimarinomachi/</a></li>
+</ul></li>
+<li>リュミエール
+
+<ul>
+<li><a href="http://gaga.ne.jp/lumiere!/">http://gaga.ne.jp/lumiere!/</a></li>
+</ul></li>
+<li>わたしたち
+
+<ul>
+<li><a href="http://www.watashitachi-movie.com/">http://www.watashitachi-movie.com/</a></li>
+</ul></li>
+<li>ネルーダ
+
+<ul>
+<li><a href="http://neruda-movie.jp/">http://neruda-movie.jp/</a></li>
+</ul></li>
+<li>セザンヌと過ごした時間
+
+<ul>
+<li><a href="http://www.cetera.co.jp/cezanne/">http://www.cetera.co.jp/cezanne/</a></li>
+</ul></li>
+<li>ハートストーン
+
+<ul>
+<li><a href="http://www.magichour.co.jp/heartstone/">http://www.magichour.co.jp/heartstone/</a></li>
+</ul></li>
+<li>皆はこう呼んだ、鋼鉄ジーグ
+
+<ul>
+<li><a href="http://www.zaziefilms.com/jeegmovie/">http://www.zaziefilms.com/jeegmovie/</a></li>
+</ul></li>
+<li>ギミーデンジャー
+
+<ul>
+<li><a href="http://movie-gimmedanger.com/">http://movie-gimmedanger.com/</a></li>
+</ul></li>
+<li>破裏拳ポリマー
+
+<ul>
+<li><a href="http://polimar.jp/">http://polimar.jp/</a></li>
+</ul></li>
+<li>ル・コルビジェとアイリーン
+
+<ul>
+<li><a href="http://www.transformer.co.jp/m/lecorbusier.eileen/">http://www.transformer.co.jp/m/lecorbusier.eileen/</a></li>
+</ul></li>
+<li>あさがくるまえに
+
+<ul>
+<li><a href="http://www.reallylikefilms.com/asakuru">http://www.reallylikefilms.com/asakuru</a></li>
+</ul></li>
+<li>笑う故郷
+
+<ul>
+<li><a href="http://www.waraukokyo.com/">http://www.waraukokyo.com/</a></li>
+</ul></li>
+<li>Avicii TRUE STORIES
+
+<ul>
+<li><a href="http://liveviewing.jp/contents/avicii/">http://liveviewing.jp/contents/avicii/</a></li>
+</ul></li>
+<li>婚約者の友人
+
+<ul>
+<li><a href="http://frantz-movie.com/">http://frantz-movie.com/</a></li>
+</ul></li>
+<li>スターウォーズ
+
+<ul>
+<li><a href="http://starwars.disney.co.jp/movie/lastjedi.html">http://starwars.disney.co.jp/movie/lastjedi.html</a></li>
+</ul></li>
+<li>フラットライナーズ
+
+<ul>
+<li><a href="http://www.flatliners.jp/">http://www.flatliners.jp/</a></li>
+</ul></li>
+</ul>

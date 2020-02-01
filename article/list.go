@@ -63,7 +63,7 @@ func NewArticles(dir string) Articles {
 		articles = append(articles, article)
 	}
 
-	sort.Slice(articles, func(i, j int) bool { return articles[i].Timestamp.Before(articles[j].Timestamp) })
+	sort.Slice(articles, func(i, j int) bool { return articles[i].Timestamp.After(articles[j].Timestamp) })
 	return articles
 }
 
