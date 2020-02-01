@@ -27,14 +27,14 @@ func gen() {
 	articleList := articles.List()
 
 	for _, a := range articles {
-		write(a.ContentsMD.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
+		write(a.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
 	}
 
 	articlesJA := article.NewArticles("./data/articles/ja")
 	articlesJAList := articlesJA.ListJA()
 
 	for _, a := range articlesJA {
-		write(a.ContentsMD.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
+		write(a.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
 	}
 
 	idx := index.New(articleList)
