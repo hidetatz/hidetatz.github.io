@@ -8,6 +8,7 @@ import (
 
 	"github.com/yagi5/blog/about"
 	"github.com/yagi5/blog/article"
+	"github.com/yagi5/blog/cname"
 	"github.com/yagi5/blog/css"
 	"github.com/yagi5/blog/index"
 )
@@ -20,6 +21,9 @@ func main() {
 }
 
 func gen() {
+	cname := cname.New()
+	write(cname, "./docs/CNAME")
+
 	css := css.New()
 	write(css, "./docs/markdown.css")
 
