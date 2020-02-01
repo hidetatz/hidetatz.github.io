@@ -34,7 +34,7 @@ func gen() {
 	}
 
 	idx := index.New(articleList)
-	idxJA := index.New(articlesJAList)
+	idxJA := index.NewJA(articlesJAList)
 
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
