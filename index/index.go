@@ -20,7 +20,7 @@ const tmpl = `<!doctype html>
 </head>
 
 <body>
-    <link href="/"><h1>dtyler.io</h1></link>
+    <a href="/"><h1>dtyler.io</h1></a>
 
     <a href="/about">About</a><br>
 	${another_locale}
