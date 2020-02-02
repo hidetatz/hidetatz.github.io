@@ -1,10 +1,15 @@
 package about
 
-import "github.com/gomarkdown/markdown"
+import (
+	"github.com/yagi5/blog/html"
+)
 
 const (
 	tmpl = `
-## About
+
+## [dtyler.io](/)
+
+# About
 
 Hidetatsu is a software engineer, currently working for [Mercari, inc.](https://about.mercari.com/en/).
 
@@ -21,6 +26,5 @@ func New() *About {
 }
 
 func (a *About) ToHTML() string {
-	ret := string(markdown.ToHTML([]byte(a.About), nil, nil))
-	return `<link href="/markdown.css" rel="stylesheet"></link>` + "\n" + ret
+	return html.Format("about", html.NewFromMarkdown(a.About))
 }

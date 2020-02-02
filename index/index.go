@@ -1,45 +1,33 @@
 package index
 
-import "strings"
+import (
+	"strings"
 
-const tmpl = `<!doctype html>
+	"github.com/yagi5/blog/html"
+)
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+const body = `
+<a href="/"><h1>dtyler.io</h1></a>
+<a href="/about">About</a><br>
+${another_locale}
 
-  <title>dtyler.io</title>
-  <meta name="description" content="dtyler.io">
-  <meta name="author" content="SitePoint">
+<hr>
 
-  <link href="/markdown.css" rel="stylesheet"></link>
-
-  <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-  <![endif]-->
-</head>
-
-<body>
-    <a href="/"><h1>dtyler.io</h1></a>
-
-    <a href="/about">About</a><br>
-	${another_locale}
-
-	<hr>
-
-    ${articles_list}
-</body>
-</html>
+${articles_list}
 `
 
 func New(articleList string) string {
-	ret := strings.Replace(tmpl, "${another_locale}", `<a href="/ja">Ja</a><br>`, -1)
-	return replaceArticleList(ret, articleList)
+	contents := strings.Replace(body, "${another_locale}", `<a href="/ja">Ja</a><br>`, -1)
+	contents = replaceArticleList(contents, articleList)
+
+	return html.Format("dtyler.io", contents)
 }
 
 func NewJA(articleList string) string {
-	ret := strings.Replace(tmpl, "${another_locale}", `<a href="/">En</a><br>`, -1)
-	return replaceArticleList(ret, articleList)
+	contents := strings.Replace(body, "${another_locale}", `<a href="/">En</a><br>`, -1)
+	contents = replaceArticleList(contents, articleList)
+
+	return html.Format("dtyler.io - ja", contents)
 }
 
 func replaceArticleList(orig, articleList string) string {

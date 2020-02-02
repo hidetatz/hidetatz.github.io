@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gomarkdown/markdown"
+	"github.com/yagi5/blog/html"
 )
 
 type Article struct {
@@ -46,13 +46,12 @@ func (a *Article) FileNameWithoutExtension() string {
 
 func (a *Article) ToHTML() string {
 	header := []string{
-		"# dtyler.io",
-		fmt.Sprintf("## [%s](/article/%s/%s/)", a.Title, a.YMD(), a.FileNameWithoutExtension()),
+		fmt.Sprintf("## [dtyler.io](/)"),
+		fmt.Sprintf("# [%s](/article/%s/%s/)", a.Title, a.YMD(), a.FileNameWithoutExtension()),
 		a.YMD(),
 	}
 
 	contents := append(header, a.ContentsMD.lines...)
-	cts := strings.Join(contents, "\n")
-	ret := string(markdown.ToHTML([]byte(cts), nil, nil))
-	return `<link href="/markdown.css" rel="stylesheet"></link>` + "\n" + ret
+	body := html.NewFromMarkdown(strings.Join(contents, "\n"))
+	return html.Format(a.Title, body)
 }
