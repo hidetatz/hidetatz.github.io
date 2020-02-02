@@ -47,7 +47,7 @@ func (a *Article) FileNameWithoutExtension() string {
 func (a *Article) ToHTML() string {
 	header := []string{
 		fmt.Sprintf("## [dtyler.io](/)"),
-		fmt.Sprintf("# [%s](/article/%s/%s/)", a.Title, a.YMD(), a.FileNameWithoutExtension()),
+		fmt.Sprintf("# [%s](/articles/%s/%s/)", a.Title, a.YMD(), a.FileNameWithoutExtension()),
 		a.YMD(),
 	}
 
