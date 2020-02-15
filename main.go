@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/yagi5/blog/about"
 	"github.com/yagi5/blog/article"
@@ -16,8 +17,25 @@ import (
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	removeAllFiles("./docs/")
-	gen()
+	cmd := os.Args[1]
+	switch {
+	case cmd == "new":
+		if len(os.Args) != 3 {
+			log.Fatalf("title is empty")
+		}
+
+		newArticle(os.Args[2])
+
+	case cmd == "gen":
+		removeAllFiles("./docs/")
+		gen()
+	}
+}
+
+func newArticle(title string) {
+	content := fmt.Sprintf(`%s---%s`, title, time.Now().Format("2006-01-02 15:04:05"))
+	write(content, fmt.Sprintf("./data/articles/%s.md", title))
+	fmt.Printf("file created: %s\n", fmt.Sprintf("./data/articles/%s.md", title))
 }
 
 func gen() {
