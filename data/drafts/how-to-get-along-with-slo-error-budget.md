@@ -26,8 +26,13 @@ SLI is a service level **indicator**. SLI is a quantitative measure which is a p
 * Error Rate - How many 5xx response is responded as a fraction
 * System throughput - Typically measured as RPS (requests per second)
 * Availability - A fraction of the time that a service can be used.
-* Durability - How it is likely that data will be retained over a long period (e.g. 1 year). This is 
-* Consistency - 
+* Durability - How it is likely that data will be retained over a long period (e.g. 1 year). This is especially used for storage system.
+* Consistency - In Microsoft Azure Cosmos DB, users can choose which consistency model they need. They provide SLA for its violation rate.[^6]
+
+Good SLI can measure what users are interested in the service directly.
+But sometimes it's difficult. In that case, using another proxy is also OK.
+
+## 
 
 ---
 
@@ -36,6 +41,7 @@ SLI is a service level **indicator**. SLI is a quantitative measure which is a p
 [^3]: [Google Cloud Platform Service Level Agreements](https://cloud.google.com/terms/sla/)
 [^4]: [Microsoft Azure Service Level Agreements](https://azure.microsoft.com/en-us/support/legal/sla/)
 [^5]: [Datadog Service Terms and Agreement](https://www.datadoghq.com/legal/terms/2014-12-31/)
+[^6]: [SLA for Azure Cosmos DB](https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/)
 
 ---
 https://landing.google.com/sre/sre-book/chapters/service-level-objectives/
