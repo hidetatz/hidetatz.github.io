@@ -2,6 +2,7 @@ package article
 
 import (
 	"fmt"
+	"net/url"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,10 +14,21 @@ type Article struct {
 	FileName   string
 	Title      string
 	Timestamp  time.Time
+	URL        *url.URL
 	ContentsMD *Contents
 }
 
 func (a *Article) Link() string {
+	if a.URL != nil {
+		// the article is external URL
+		return fmt.Sprintf(
+			`<a href="%s">%s - %s</a><br>`,
+			a.URL.String(),
+			a.Title,
+			a.Timestamp.Format("2006/01/02"),
+		)
+	}
+
 	return fmt.Sprintf(
 		`<a href="/articles/%s/%s/">%s - %s</a><br>`,
 		a.YMD(),
