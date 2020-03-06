@@ -32,7 +32,15 @@ SLI is a service level **indicator**. SLI is a quantitative measure which is a p
 Good SLI can measure what users are interested in the service directly.
 But sometimes it's difficult. In that case, using another proxy is also OK.
 
-## 
+## SLO
+
+SLO represents service level **objective**. 
+SLO usually includes SLI, which should be tracked. 
+For example, when we are building Storage system, and we think we want to provide high durability to customers, we can have an SLO that "99.999999% of objects won't be lost or compromised in the event of a failure over 1 year".
+
+Do you wonder what's the difference between SLO and SLA? Actually, they are a kind of similar.
+First, as described above, there will be refund or some other penalties if SLA is not met.
+However, 
 
 ---
 
