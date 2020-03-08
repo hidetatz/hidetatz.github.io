@@ -55,3 +55,4 @@ However,
 https://landing.google.com/sre/sre-book/chapters/service-level-objectives/
 https://landing.google.com/sre/workbook/chapters/implementing-slos/
 https://landing.google.com/sre/sre-book/chapters/embracing-risk/
+https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf
