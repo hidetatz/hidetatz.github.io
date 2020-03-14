@@ -3,8 +3,7 @@ How to get along with SLO and Error budget---2020-02-03 12:00:00
 ## Introduction
 
 I get to know SLO and error budget when reading a book "Site Reliability Engineering"[^1]. While I am building some microservices in my company, I found how SLO and error budget are such powerful tool to develop and maintain them.
-Now, I want to write an article which describes XXX.
-In this article, I will try to describe what SLO/SLA/SLI are and how 
+In this article, I will try to describe how SLO and error budget should work and why they such matters. I hope this article can help readers who are trying to understand and build their own SLO strategy.
 
 ## SLA
 
@@ -16,7 +15,7 @@ If the SLA is not met, sometimes service provider gives a refund to the customer
 For example, SLA of AWS compute service[^2] is defined as Uptime. When Uptime is under 99.99% (and above 99.0%), 10% refund can be given.
 GCP[^3], Azure[^4], Datadog[^5] and more services have SLA.
 
-Developers or SRE doesn't have to get involved in defining SLA. Because SLA is more close to business and product side. Their target is usually SLO. The relation between SLO and SLA will be described later.
+Developers or SRE don't have to get involved in defining SLA. Because SLA is more close to business and product side. Their target is usually SLO. The relation between SLO and SLA will be described later.
 
 ## SLI
 
@@ -40,9 +39,25 @@ For example, when we are building Storage system, and we think we want to provid
 
 Do you wonder what's the difference between SLO and SLA? Actually, they are a kind of similar.
 First, as described above, there will be refund or some other penalties if SLA is not met.
-However,
+However, when SLO is not met, there should be no user complaints. SLA is more for users, but SLO is for developers and SREs.
+Services can have both SLO and SLA. When they have both, usually SLO is not public to users while SLA is.
+For example, if they have an SLA that 99.9% availability must be kept, then they can have the same SLI for their SLO. But it will be more strict value (e.g. 99.95%). In this case, SLA is a promise with users, but SLO is a target for developers. When SLO is not met, there should be no user-impact, but SLO must be always met. That's why SLO must be more strict than SLA.
+
+The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
+Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 5ms when we released a new feature? Is it a problem to be fixed? What if it is 50ms?
+SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixint the problem. If SLO is still met, then keep working on feature development.
+Usually, feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from SRE prespective, they should also work on feature development.
+Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.
+
+## How to implement SLO
+
+There are some ways how to implement SLO. I just want to describe one example.
+
+### Determine SLI
 
 ---
+
+## References
 
 [^1]: [Site Reliability Engineering](https://landing.google.com/sre/books/)
 [^2]: [Amazon Compute Service Level Agreement](https://aws.amazon.com/compute/sla/)
@@ -51,8 +66,7 @@ However,
 [^5]: [Datadog Service Terms and Agreement](https://www.datadoghq.com/legal/terms/2014-12-31/)
 [^6]: [SLA for Azure Cosmos DB](https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/)
 
----
-https://landing.google.com/sre/sre-book/chapters/service-level-objectives/
-https://landing.google.com/sre/workbook/chapters/implementing-slos/
-https://landing.google.com/sre/sre-book/chapters/embracing-risk/
-https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf
+* https://landing.google.com/sre/sre-book/chapters/service-level-objectives/
+* https://landing.google.com/sre/workbook/chapters/implementing-slos/
+* https://landing.google.com/sre/sre-book/chapters/embracing-risk/
+* https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf
