@@ -46,7 +46,7 @@ For example, if they have an SLA that 99.9% availability must be kept, then they
 The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
 Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 5ms when we released a new feature? Is it a problem to be fixed? What if it is 50ms?
 SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixint the problem. If SLO is still met, then keep working on feature development.
-Usually, feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from SRE prespective, they should also work on feature development.
+Usually, feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering's perspective, they should also work on feature development.
 Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.
 
 ## How to implement SLO
@@ -54,6 +54,16 @@ Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can 
 There are some ways how to implement SLO. I just want to describe one example.
 
 ### Determine SLI
+
+First, decide what should be the indicators of the level for the service.
+Because SLO should include SLI, it's also determined based on users' interests. Good SLI can be a measurement what users are interested in.
+Choosing good SLI requires us to understand how users most interact with the service. Choosing an SLI which users don't care about doesn't make sense.
+
+Too many SLI makes it hard to track and keep paying attention. Too few is also not good because it usually cannot show system's health properly.
+
+About SLI, there is some common patterns what to be chosen by the category of the service.
+
+When 
 
 ---
 
