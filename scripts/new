@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo "create a new article"
+echo "en or ja? >"
+read lang
+
+if [ ! "$lang" = "en" -a ! "$lang" = "ja" ]; then
+    echo "lang must be 'en' or 'ja'"
+    exit 0
+fi
+
+echo "filename? >"
+read filename
+
+if [ -z "$filename" ]; then
+    echo "filename must not be empty"
+    exit 1
+fi
+
+if [ "$lang" = "en" ]; then
+    echo title of article here---$(date "+%F %T") > ./data/articles/${filename}.md
+    echo ./data/articles/${filename}.md
+else 
+    echo title of article here---$(date "+%F %T") > ./data/articles/ja/${filename}.md
+    echo ./data/articles/ja/${filename}.md
+fi
