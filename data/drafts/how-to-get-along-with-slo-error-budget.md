@@ -53,7 +53,7 @@ Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can 
 
 There are some ways how to implement SLO. I just want to describe one example.
 
-### Determine SLI
+### Determine what kind of SLI is the best for the service
 
 First, decide what should be the indicators of the level for the service.
 Because SLO should include SLI, it's also determined based on users' interests. Good SLI can be a measurement what users are interested in.
@@ -61,9 +61,30 @@ Choosing good SLI requires us to understand how users most interact with the ser
 
 Too many SLI makes it hard to track and keep paying attention. Too few is also not good because it usually cannot show system's health properly.
 
-About SLI, there is some common patterns what to be chosen by the category of the service.
+The SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide correctness as SLO.
 
-When 
+In addition, there are some common patterns what to be chosen by the category of the service.
+
+When the service is serving something to users, usually **availability**, **latency**, and **throughput** are chosen.
+When the service is storage, **latency**, **availability**, **durability** are chosen.
+When the service is batch or big data analysis platform, **throughput** (how much data can be processed) is chosen.
+
+TODO: Write types of components
+
+TODO: Write SLI Specification and implementation
+
+### Decide how to measure SLIs and measure them
+
+### Decide SLO
+
+### Decide time window
+
+### Calculate Error budgets
+
+### After SLO is defined
+* Stakeholders agreements
+* Documentation
+* Dashboards and monitors
 
 ---
 
