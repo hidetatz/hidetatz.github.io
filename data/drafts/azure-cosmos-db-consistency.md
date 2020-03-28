@@ -13,3 +13,4 @@ Azure Cosmos DB[^1] is a distributed database as a service on Microsoft Azure.
 https://docs.microsoft.com/ja-jp/azure/cosmos-db/consistency-levels
 https://azure.microsoft.com/ja-jp/services/cosmos-db/
 https://azure.microsoft.com/en-us/blog/azure-documentdb-service-level-agreements/
+https://docs.microsoft.com/en-us/azure/cosmos-db/introduction
