@@ -80,6 +80,7 @@ TODO: Write SLI Specification and implementation
 Deciding SLO consists of 2 parts; deciding SLI and deciding what number to set, e.g. 99.9%. We already decided SLI in above section, so then let's talk about its number.
 
 Originally, traditional infrastructure engineers tried to keep 100% availability. Their responsibility was monitoring systems and whenever a problem happens, fixing it, despite of how important it is.
+However, from site reliability's perspective, it is not the right direction we should go.
 ### Decide time window
 
 ### Calculate Error budgets
