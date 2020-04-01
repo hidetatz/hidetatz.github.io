@@ -81,6 +81,8 @@ Deciding SLO consists of 2 parts; deciding SLI and deciding what number to set, 
 
 Originally, traditional infrastructure engineers tried to keep 100% availability. Their responsibility was monitoring systems and whenever a problem happens, fixing it, despite of how important it is.
 However, from site reliability's perspective, it is not the right direction we should go.
+
+* 100% is TOO difficult as objective. Technically, multiple components simulataneous failure cannot be completely avoided. Design for failure, such as failover, server redunduncy, is not a sliver bullet.
 ### Decide time window
 
 ### Calculate Error budgets
