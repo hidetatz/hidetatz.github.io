@@ -83,6 +83,7 @@ Originally, traditional infrastructure engineers tried to keep 100% availability
 However, from site reliability's perspective, it is not the right direction we should go.
 
 * 100% is TOO difficult as objective. Technically, multiple components simulataneous failure cannot be completely avoided. Design for failure, such as failover, server redunduncy, is not a sliver bullet.
+* Because whole system consists of multiple unreliable factors (e.g. load balancer, network, users' device), users won't experience 100% availability. Even if one subsystem's availability is 100%, another 99% subsystems makes whole system's availability under 100.
 ### Decide time window
 
 ### Calculate Error budgets
