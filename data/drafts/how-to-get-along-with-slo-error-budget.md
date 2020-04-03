@@ -84,6 +84,7 @@ However, from site reliability's perspective, it is not the right direction we s
 
 * 100% is TOO difficult as objective. Technically, multiple components simulataneous failure cannot be completely avoided. Design for failure, such as failover, server redunduncy, is not a sliver bullet.
 * Because whole system consists of multiple unreliable factors (e.g. load balancer, network, users' device), users won't experience 100% availability. Even if one subsystem's availability is 100%, another 99% subsystems makes whole system's availability under 100.
+* If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches are very difficult. SLO is something which **must** be met. You cannot use time for product implovements; all you can do is always monitoring systems and being reactive. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.
 ### Decide time window
 
 ### Calculate Error budgets
