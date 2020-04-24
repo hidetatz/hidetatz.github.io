@@ -51,7 +51,7 @@ Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can 
 
 ## How to implement SLO
 
-There are some ways how to implement SLO. I just want to describe one example.
+There are some ways how to implement SLO. Below is just one example.
 
 ### Determine what kind of SLI is the best for the service
 
