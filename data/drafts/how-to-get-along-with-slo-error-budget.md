@@ -61,7 +61,7 @@ Choosing good SLI requires us to understand how users most interact with the ser
 
 Too many SLI makes it hard to track and keep paying attention. Too few is also not good because it usually cannot show system's health properly.
 
-The SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide correctness as SLO.
+First, the SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide correctness as SLO.
 
 In addition, there are some common patterns what to be chosen by the category of the service.
 
