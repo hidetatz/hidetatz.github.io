@@ -69,9 +69,18 @@ When the service is serving something to users, usually **availability**, **late
 When the service is storage, **latency**, **availability**, **durability** are chosen.
 When the service is batch or big data analysis platform, **throughput** (how much data can be processed) is chosen.
 
-TODO: Write types of components
+This part is important and worth to spend time to be discussed in deciding service's SLO. Without deep consideration, we tend to create SLO just following what other teams are doing; especially when the team is not familiar with working with SLO. However, it's not a good way.
+**Potentially, SLO can decide your future tasks.**
+You must be an expert of your service. So, deciding SLO requires your domain knowledge.
 
-TODO: Write SLI Specification and implementation
+For example, your service has WRITE operations, you might have take care of data write latency, message queue delay, message durability, etc.
+If your service has only READ operations (such as master-data service), you may just take care of read latency.
+
+When your application is called "microservice", one common mistake is just preparing SLI about application's health.
+Popular ones would be "availability" and "latency". However, these SLIs are based on infrastructure's health.
+If your infrastructure gets down, can your monitoring system send alert? If no, you'd better to consider adding them as your SLI.
+
+### SLI Specification and implementation
 
 ### Decide how to measure SLIs and measure them
 
@@ -84,7 +93,9 @@ However, from site reliability's perspective, it is not the right direction we s
 
 * 100% is TOO difficult as objective. Technically, multiple components simulataneous failure cannot be completely avoided. Design for failure, such as failover, server redunduncy, is not a sliver bullet.
 * Because whole system consists of multiple unreliable factors (e.g. load balancer, network, users' device), users won't experience 100% availability. Even if one subsystem's availability is 100%, another 99% subsystems makes whole system's availability under 100.
-* If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches are very difficult. SLO is something which **must** be met. You cannot use time for product implovements; all you can do is always monitoring systems and being reactive. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.
+* If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches... become very difficult. SLO is something which **must** be met. You cannot use time for product implovements; all you can do is always monitoring systems and being **reactive** - literally. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.
+
+
 
 TODO: error budget
 
