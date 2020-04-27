@@ -9,7 +9,7 @@ In this article, I will try to describe how SLO and error budget should work and
 
 Before talking about SLO, let's understand what SLA is.
 SLA is an **agreement** of service level of a system. Usually, the agreement is made between service provider and service customer.
-Under SLA, service provider and customers agree on what service level **must be** provided. Basically, they also agrees what happens when agreed service level is not met. 
+Under SLA, service provider and customers agree on what service level **must be** provided. Basically, they also agree with what happens when agreed service level is not met.
 This helps how customers should choose services. If the customer has a requirement about service level, then they can compare some services on their SLA.
 
 If the SLA is not met, sometimes service provider gives a refund to the customers. They also can take other forms.
@@ -42,7 +42,7 @@ Do you wonder what's the difference between SLO and SLA? Actually, they are a ki
 First, as described above, there will be refund or some other penalties if SLA is not met.
 However, when SLO is not met, there should be no user complaints. SLA is more for users, but SLO is for developers and SREs.
 Services can have both SLO and SLA. When they have both, usually SLO is not opened to users while SLA is.
-For example, if they have an SLA that 99.9% availability must be kept, then they can have the same SLI for their SLO. But it will be more strict value (e.g. 99.95%). In this case, SLA is a promise with users, but SLO is a target for developers. When SLO is not met, there should be no user-impact, but SLO must be always met. That's why SLO must be more strict than SLA.
+For example, if they have a SLA that 99.9% availability must be kept, then they can have the same SLI for their SLO. But it will be more strict value (e.g. 99.95%). In this case, SLA is a promise with users, but SLO is a target for developers. When SLO is not met, there should be no user-impact, but SLO must be always met. That's why SLO must be more strict than SLA.
 
 The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
 Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 30ms when we released a new feature? Is it a problem to be fixed? What if it is 15ms?
@@ -101,15 +101,15 @@ e.g.
 * Latency of an API measured by Datadog agent on server node.
 * Latency of an API measured by Datadog synthetic monitoring.
 
-To define SLI specification/implementation, first we need to understand there should be multiple measure ways of the specification. 
+To define SLI specification/implementation, first we need to understand there should be multiple measure ways of the specification.
 Let's have a question like this: what's the **latency**? Should it be on server-side? On Internet-service-provider? On real user? Defining SLI implementation will help to answer the question.
-There are no answers which measurement is "correct". It should be depending on what matters to your users.
+There are no answers which measurement is "correct". It should depend on what matters to your users.
 
 ### Decide how to measure SLIs and measure them
 
 After deciding SLI specification/implementation, now we want to talk about __how to implement SLI implementation__. If your team or company has already introduced any monitoring tool such as New Relic, Nagios, Datadog, Zabbix, etc, it's a good idea to use them for implementing SLI.
 For example, Datadog[7] has features for SLI/SLO measurement.
-It's of course OK to create a system to measure your SLI by yourself, but basically it's not recommended. 
+It's of course OK to create a system to measure your SLI by yourself, but basically it's not recommended.
 If you prepare something, you need another monitoring - **the your original monitoring system must be monitored** .
 If you can use managed monitoring system, it will be better.
 
@@ -142,7 +142,7 @@ Let's say we have below data collected in past 1 month:
 |:---|:---|
 |1,000,000|978,857|
 
-This data shows us that past 1 month availability is 97.8857%.
+This data show us that past 1 month availability is 97.8857%.
 
 First, we set lower number than the data as SLO; e.g. 97.5%. Don't choose 98%! Too strict SLO is also bad; you can adjust them later on and if you announce your service's SLO to other teams, you basically cannot lower it.
 
@@ -170,7 +170,7 @@ Google[8] recommends "4 weeks" as general-purpose time window, but it's up to yo
 ### Calculate Error budgets
 
 Finally, we are here to talk about error budget!
-SLO is target percentage, error budget is 100% - SLO.
+SLO is target percentage; error budget is 100% - SLO.
 
 Let's use the previous data for a SLO "availability, 97%".
 If we have 10,000,000 requests in 4 weeks time window, `10,000,000 * 0.03 = 300,000` so 300,000 requests can fail. This is error budget for the SLO.
@@ -200,7 +200,7 @@ After getting product managers' understanding, writing documents and visualizing
 #### Documentation
 
 After SLO is decided, they should be documented and able to be found easily from product managers and other teams.
-What to be documented are:
+What to be documented is:
 
 * Author, reviewers, approvers. Especially, who made the decision if it is fine from business perspective.
 * Edit history. It's better to leave history how SLO has been changed.
@@ -215,7 +215,7 @@ An example of SLO document is available by Google[9].
 #### Dashboards and alerts
 
 After SLO is decided, it should be visualized in dashboard and always visible.
-What to be shown are:
+What to be shown is:
 
 * SLI timeseries graph. e.g. latency, throughput.
 * SLO binary graph - OK or Not met.
@@ -237,7 +237,7 @@ At the meeting, see past SLI graph and error budget comsumption, then talk about
 ## Summary
 
 In this article, I tried to describe how to decide SLO and work with it.
-Deciding SLO is not goal; goal is **doing both, site reliability and feature development**. SLO and error budget can be a game changer if you are tired of going endless journey to 100% reliability.
+Deciding SLO is not goal; goal is **doing both site reliability and feature development**. SLO and error budget can be a game changer if you are tired of going endless journey to 100% reliability.
 I hope this article can help you to decide your own SLO.
 
 ---
