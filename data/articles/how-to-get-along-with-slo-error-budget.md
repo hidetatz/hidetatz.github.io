@@ -2,18 +2,19 @@ How to get along with SLO and Error budget---2020-04-28 12:00:00
 
 ## Introduction
 
-I get to know SLO and error budget when reading a book "Site Reliability Engineering"[1]. While I am building some microservices in my company, I found how SLO and error budget are such powerful tool to develop and maintain them.
+I get to know SLO and error budget when reading a book "Site Reliability Engineering"[1]. While I am building some microservices in my company, I found how SLO and error budget are such powerful tool and really help to develop and maintain services.
 In this article, I will try to describe how SLO and error budget should work and why they such matters. I hope this article can help readers who are trying to understand and build their own SLO strategy.
 
 ## SLA
 
-SLA is an **agreement** of service level of a system. Usually, the agreement is had between service provider and service customer.
-Under SLA, service provider and customers agrees on what service level **must be** provided. Basically, they also agrees what happens when agreed service level is not met. 
+Before talking about SLO, let's understand what SLA is.
+SLA is an **agreement** of service level of a system. Usually, the agreement is made between service provider and service customer.
+Under SLA, service provider and customers agree on what service level **must be** provided. Basically, they also agrees what happens when agreed service level is not met. 
 This helps how customers should choose services. If the customer has a requirement about service level, then they can compare some services on their SLA.
 
-If the SLA is not met, sometimes service provider gives a refund to the customer. They also can take other forms.
+If the SLA is not met, sometimes service provider gives a refund to the customers. They also can take other forms.
 For example, SLA of AWS compute service[2] is defined as Uptime. When Uptime is under 99.99% (and above 99.0%), 10% refund can be given.
-GCP[3], Azure[4], Datadog[5] and more services have SLA.
+GCP[3], Azure[4], Datadog[5] and more cloud services have SLA.
 
 Developers or SRE don't have to get involved in defining SLA. Because SLA is more close to business and product side. Their target is usually SLO. The relation between SLO and SLA will be described later.
 
@@ -35,18 +36,18 @@ But sometimes it's difficult. In that case, using another proxy is also OK.
 
 SLO represents service level **objective**.
 SLO usually includes SLI, which should be tracked.
-For example, when we are building Storage system, and we think we want to provide high durability to customers, we can have an SLO that "99.999999% of objects won't be lost or compromised in the event of a failure over 1 year".
+For example, when we are building Storage system, and we think we want to provide high durability to customers, we can have an SLO like "99.999999% of objects won't be lost or compromised in the event of a failure over 1 year".
 
 Do you wonder what's the difference between SLO and SLA? Actually, they are a kind of similar.
 First, as described above, there will be refund or some other penalties if SLA is not met.
 However, when SLO is not met, there should be no user complaints. SLA is more for users, but SLO is for developers and SREs.
-Services can have both SLO and SLA. When they have both, usually SLO is not public to users while SLA is.
+Services can have both SLO and SLA. When they have both, usually SLO is not opened to users while SLA is.
 For example, if they have an SLA that 99.9% availability must be kept, then they can have the same SLI for their SLO. But it will be more strict value (e.g. 99.95%). In this case, SLA is a promise with users, but SLO is a target for developers. When SLO is not met, there should be no user-impact, but SLO must be always met. That's why SLO must be more strict than SLA.
 
 The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
-Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 5ms when we released a new feature? Is it a problem to be fixed? What if it is 50ms?
+Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 30ms when we released a new feature? Is it a problem to be fixed? What if it is 15ms?
 SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixint the problem. If SLO is still met, then keep working on feature development.
-Usually, feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering's perspective, they should also work on feature development.
+Usually, the balance between feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering's perspective, they should also work on feature development.
 Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.
 
 ## How to implement SLO
@@ -56,22 +57,22 @@ There are some ways how to implement SLO. Below is just one example.
 ### Determine what kind of SLI is the best for the service
 
 First, decide what should be the indicators of the level for the service.
-Because SLO should include SLI, it's also determined based on users' interests. Good SLI can be a measurement what users are interested in.
-Choosing good SLI requires us to understand how users most interact with the service. Choosing an SLI which users don't care about doesn't make sense.
+Because SLO includes SLI, it's also determined based on users' interests. Good SLI can be a measurement what users are interested in directly.
+Choosing good SLI requires us to understand which part users are the most interacted on the service. Choosing an SLI which users don't care about would not be making sense.
 
 Too many SLI makes it hard to track and keep paying attention. Too few is also not good because it usually cannot show system's health properly.
 
-First, the SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide correctness as SLO.
+Usually, the SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide it as SLO.
 
 In addition, there are some common patterns what to be chosen by the category of the service.
 
-When the service is serving something to users, usually **availability**, **latency**, and **throughput** are chosen.
-When the service is storage, **latency**, **availability**, **durability** are chosen.
-When the service is batch or big data analysis platform, **throughput** (how much data can be processed) is chosen.
+* When the service is serving something to users, usually **availability**, **latency**, and **throughput** are chosen.
+* When the service is storage, **latency**, **availability**, **durability** are chosen.
+* When the service is batch or big data analysis platform, **throughput** (how much data can be processed) is chosen.
 
-This part is important and worth to spend time to be discussed in deciding service's SLO. Without deep consideration, we tend to create SLO just following what other teams are doing; especially when the team is not familiar with working with SLO. However, it's not a good way.
+This part is very important and worth to spend time on discussion in deciding service's SLO. Without deep consideration, we tend to create SLO just following what other teams are doing; especially when the team is not familiar with working with SLO. However, it's not a good way.
 **Potentially, SLO can decide your future tasks.**
-You must be an expert of your service. So, deciding SLO requires your domain knowledge.
+You must be an expert of your service. Deciding SLO requires your domain knowledge.
 
 For example, your service has WRITE operations, you might have take care of data write latency, message queue delay, message durability, etc.
 If your service has only READ operations (such as master-data service), you may just take care of read latency.
@@ -86,7 +87,7 @@ SLI can be devided into 2 parts; **specification** and **implementation**.
 
 #### SLI specification
 
-__SLI specification__ is indicator to represent what matters to users. It doesn't include how to be measured.
+__SLI specification__ is an indicator which represents what matters to users. It doesn't include how to be measured.
 e.g. **The latency of an API is less than 150ms**
 
 #### SLI implementation
@@ -101,15 +102,15 @@ e.g.
 * Latency of an API measured by Datadog synthetic monitoring.
 
 To define SLI specification/implementation, first we need to understand there should be multiple measure ways of the specification. 
-We can have a question like this: what's the **latency**? Should it be on server-side? On Internet-service-provider? On real user? Defining SLI implementation will help to answer the question.
+Let's have a question like this: what's the **latency**? Should it be on server-side? On Internet-service-provider? On real user? Defining SLI implementation will help to answer the question.
 There are no answers which measurement is "correct". It should be depending on what matters to your users.
 
 ### Decide how to measure SLIs and measure them
 
-After deciding SLI specification/implementation, now we want to talk about __how to implement SLI implementation__. If your team or company is already introduced any monitoring tool such as New Relic, Nagios, Datadog, Zabbix, etc, it's a good idea to use them for SLI.
+After deciding SLI specification/implementation, now we want to talk about __how to implement SLI implementation__. If your team or company has already introduced any monitoring tool such as New Relic, Nagios, Datadog, Zabbix, etc, it's a good idea to use them for implementing SLI.
 For example, Datadog[7] has features for SLI/SLO measurement.
 It's of course OK to create a system to measure your SLI by yourself, but basically it's not recommended. 
-If you prepare something, you need another monitoring - **the original monitoring system must be monitored** .
+If you prepare something, you need another monitoring - **the your original monitoring system must be monitored** .
 If you can use managed monitoring system, it will be better.
 
 For example, in Datadog, "95 percentile of sum of HTTP server's latency measured by Datadog agent on server node" can be written (as JSON) like this:
