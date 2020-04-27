@@ -244,16 +244,15 @@ I hope this article can help you to decide your own SLO.
 
 ## References
 
-[1]: Site Reliability Engineering [https://landing.google.com/sre/books/](https://landing.google.com/sre/books/)
-[2]: Amazon Compute Service Level Agreement [https://aws.amazon.com/compute/sla/](https://aws.amazon.com/compute/sla)
-[3]: Google Cloud Platform Service Level Agreements [https://cloud.google.com/terms/sla/](https://cloud.google.com/terms/sla/)
-[4]: Microsoft Azure Service Level Agreements [https://azure.microsoft.com/en-us/support/legal/sla/](https://azure.microsoft.com/en-us/support/legal/sla/)
-[5]: Datadog Service Terms and Agreement [https://www.datadoghq.com/legal/terms/2014-12-31/](https://www.datadoghq.com/legal/terms/2014-12-31/)
-[6]: SLA for Azure Cosmos DB [https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/](https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/)
-[7]: Track SLIs and SLOs [https://www.datadoghq.com/videos/track-sli-slo/](https://www.datadoghq.com/videos/track-sli-slo/)
-[8]: Implementing SLOs [https://landing.google.com/sre/workbook/chapters/implementing-slos/](https://landing.google.com/sre/workbook/chapters/implementing-slos/)
-[9]: Example SLO document [https://landing.google.com/sre/workbook/chapters/slo-document/](https://landing.google.com/sre/workbook/chapters/slo-document/)
-
+* [1]: Site Reliability Engineering [https://landing.google.com/sre/books/](https://landing.google.com/sre/books/)
+* [2]: Amazon Compute Service Level Agreement [https://aws.amazon.com/compute/sla/](https://aws.amazon.com/compute/sla)
+* [3]: Google Cloud Platform Service Level Agreements [https://cloud.google.com/terms/sla/](https://cloud.google.com/terms/sla/)
+* [4]: Microsoft Azure Service Level Agreements [https://azure.microsoft.com/en-us/support/legal/sla/](https://azure.microsoft.com/en-us/support/legal/sla/)
+* [5]: Datadog Service Terms and Agreement [https://www.datadoghq.com/legal/terms/2014-12-31/](https://www.datadoghq.com/legal/terms/2014-12-31/)
+* [6]: SLA for Azure Cosmos DB [https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/](https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/)
+* [7]: Track SLIs and SLOs [https://www.datadoghq.com/videos/track-sli-slo/](https://www.datadoghq.com/videos/track-sli-slo/)
+* [8]: Implementing SLOs [https://landing.google.com/sre/workbook/chapters/implementing-slos/](https://landing.google.com/sre/workbook/chapters/implementing-slos/)
+* [9]: Example SLO document [https://landing.google.com/sre/workbook/chapters/slo-document/](https://landing.google.com/sre/workbook/chapters/slo-document/)
 * https://landing.google.com/sre/sre-book/chapters/service-level-objectives/
 * https://landing.google.com/sre/sre-book/chapters/embracing-risk/
 * https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf
