@@ -13,7 +13,7 @@ const (
 
 Hidetatsu is a software engineer, currently working for [Mercari, inc.](https://about.mercari.com/en/).
 
-[GitHub](https://github.com/yagi5)
+[GitHub](https://github.com/dty1er)
 `
 )
 
