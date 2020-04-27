@@ -46,7 +46,7 @@ For example, if they have a SLA that 99.9% availability must be kept, then they 
 
 The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
 Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 30ms when we released a new feature? Is it a problem to be fixed? What if it is 15ms?
-SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixint the problem. If SLO is still met, then keep working on feature development.
+SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixing the problem. If SLO is still met, then keep working on feature development.
 Usually, the balance between feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering's perspective, they should also work on feature development.
 Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.
 
@@ -83,7 +83,7 @@ If your infrastructure gets down, can your monitoring system send alert? If no, 
 
 ### SLI Specification and implementation
 
-SLI can be devided into 2 parts; **specification** and **implementation**.
+SLI can be divided into 2 parts; **specification** and **implementation**.
 
 #### SLI specification
 
@@ -130,9 +130,9 @@ Deciding SLO consists of 2 parts; deciding SLI and deciding what number to set, 
 Originally, traditional infrastructure engineers tried to keep 100% availability. Their responsibility was monitoring systems and whenever a problem happens, fixing it, despite of how important it is.
 However, from site reliability's perspective, it is not the right direction we should go.
 
-* 100% is TOO difficult as objective. Technically, multiple components simulataneous failure cannot be completely avoided. Design for failure, such as failover, server redunduncy, is not a sliver bullet.
+* 100% is TOO difficult as objective. Technically, multiple components simultaneous failure cannot be completely avoided. Design for failure, such as failover, server redundancy, is not a sliver bullet.
 * Because whole system consists of multiple unreliable factors (e.g. load balancer, network, users' device), users won't experience 100% availability. Even if one subsystem's availability is 100%, another 99% subsystems makes whole system's availability under 100.
-* If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches... become very difficult. SLO is something which **must** be met. You cannot use time for product implovements; all you can do is always monitoring systems and being **reactive** - literally. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.
+* If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches... become very difficult. SLO is something which **must** be met. You cannot use time for product improvements; all you can do is always monitoring systems and being **reactive** - literally. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.
 
 So, if you don't choose 100%, what number is good?
 One common way to decide it is using past data.
@@ -178,7 +178,7 @@ If we have 10,000,000 requests in 4 weeks time window, `10,000,000 * 0.03 = 300,
 After error budget calculation, monitor it. When monitoring system reports error budget getting empty, we need to take some actions; typically, like below.
 
 * Developers must prioritize the highest to fix issues related to the SLO. If it's caused by logic bug, it must be resolved. If it's because of unstable infrastructure, they have to investigate the problem.
-* Developers have to try to fix the problem until SLO is met and error budget gets surplus. During the time, no new feature requests should be accpted.
+* Developers have to try to fix the problem until SLO is met and error budget gets surplus. During the time, no new feature requests should be accepted.
 * (Optional) waiting for enough error budget are saved is good idea. If bug fix contains another problem, the SLO might get much lower.
 
 I believe this is the most essential part in SLO work. Just deciding SLO is not enough. Without error budget, we cannot balance site reliability and feature development.
@@ -232,7 +232,7 @@ When and why we want to change them? There are some signs:
 When relaxing a SLO, it has to get agreed with stakeholders - product managers might say it's too low and has some drawbacks to users.
 
 Chances to review past SLO should be held periodically. When time window is 4weeks, typically once a quarter is good to see past 12 weeks SLO.
-At the meeting, see past SLI graph and error budget comsumption, then talk about making it better.
+At the meeting, see past SLI graph and error budget consumption, then talk about making it better.
 
 ## Summary
 
