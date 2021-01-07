@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>nginx学び直し</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/09/23/nginx-restudy/">nginx学び直し</a></h1>
+
+<p>2018/09/23</p>
+
+<h2>user</h2>
+
+<pre><code class="language-nginx.conf">user nobody;
+</code></pre>
+
+<p>ワーカプロセスの実行ユーザ。
+デフォルトは <code>nobody</code> 。</p>
+
+<h2>worker_processes</h2>
+
+<pre><code class="language-nginx.conf">worker_processes 1;
+</code></pre>
+
+<p>ワーカプロセス数。
+デフォルトは1。
+nginxのワーカはクライアントからの接続要求から始まる一連の処理をシングルスレッドで、イベント駆動で実行する。
+基本的にはCPUのコア数と同じにしておく。
+autoに設定する (<code>worker_processes auto</code>) ことで自動でコア数にしてくれる。
+たまに適当に <code>1024</code> とかにしているのを見ることがあるがやめておいたほうが良い。</p>
+
+<h2>worker_rlimit_nofile</h2>
+
+<pre><code class="language-nginx.conf">worker_rlimit_nofile 1024;
+</code></pre>
+
+<p>ワーカプロセスがオープン可能なファイルディスクリプタの数。
+Linuxでは、プロセスがオープンできるファイルディスクリプタの上限はデフォルトで1024。(カーネルパラメータの設定で変更可能)
+大量の静的ファイルをひã¨つのワーカが返したりするとファイルディスクリプタが枯渇し、 <code>Too many open files</code> が発生する。
+静的ファイルの配信が大量に発生し、かつ数千のコネクションを同時に処理するケースでは、設定しておくべき。</p>
+
+<h2>events</h2>
+
+<pre><code class="language-nginx.conf">events {
+}
+</code></pre>
+
+<h3>worker_connections</h3>
+
+<pre><code class="language-nginx.conf">events {
+  worker_connections 1024;
+}
+</code></pre>
+
+<p>ワーカが処理するコネクション数。
+デフォルトは512。
+<code>コネクション</code> はクライアントとの通信だけではない。(アップストリームとの通信なども含む。)
+静的ファイルの配信であれば、数倍に増やしても問題ない。</p>
+
+<h3>use</h3>
+
+<pre><code class="language-nginx.conf">events {
+  use epoll;
+}
+</code></pre>
+
+<p>コネクションの処理方式を指定する。
+nginxはデフォルトで、システムに最適なメソッドを選択してくれるので、基本的には設定不要。
+Linux2.6以上ではepollが最適。</p>
+
+<h2>keepalive_timeout</h2>
+
+<pre><code class="language-nginx.conf">keepalive_timeout 60s;
+</code></pre>
+
+<p>keepaliveのタイムアウト時間。
+デフォルトは75s。
+0にすれば常時接続を無効化できる。</p>
+
+<h2>sendfile</h2>
+
+<pre><code class="language-nginx.conf">sendfile on;
+</code></pre>
+
+<p>デフォルトはoff。
+onにすることで、ファイルの読み込みとレスポンス送信にsendfile()システムコールを使用する。
+それにより、ファイルをオープンしているファイルディスクリプタから直接クライアントにファイルを送信してくれる。
+基本onにしておく。</p>
+
+<h2>tcp_nopush</h2>
+
+<pre><code class="language-nginx.conf">tcp_nopush on;
+</code></pre>
+
+<p>デフォルトはoff。
+onにすることで、TCP_CORKオプションが使用され、最も大きなパケットサイズでレスポンスヘッダとボディを送信でき、送信するパケットを最小化できる。
+基本onにしておく。</p>
+
+<h2>open_file_cache</h2>
+
+<pre><code class="language-nginx.conf">open_file_cache max=最大エントリ数 [inactive=有効期間];
+</code></pre>
+
+<p>デフォルトはoff。
+onにすることで、一度オープンしたファイルの情報を一定期間キャッシュする。
+- ファイルのディスクリプタ、サイズ、更新日時
+- ディレクトリが存在するか
+- <code>file not found</code> <code>permission denied</code> などのエラー情報</p>
+
+<p>キャッシュアルゴリズムはLRU。</p>
+
+<h2>pcre_jit</h2>
+
+<pre><code class="language-nginx.conf">pcre_jit on;
+</code></pre>
+
+<p>デフォルトはoff。
+onにすることで、正規表現のJITコンパイルを有効にでき、正規表現の処理速度向上が見込める。
+ただし、nginxのコンパイル時にPCREライブラリを動的リンクする必要がある(<code>--enable-jit</code>)。</p>
+
+</body>
+
+</html>

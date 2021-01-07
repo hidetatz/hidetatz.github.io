@@ -1,0 +1,547 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Introduce Terraform with simple template</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/04/30/introduce-terraform/">Introduce Terraform with simple template</a></h1>
+
+<p>2018/04/30</p>
+
+<p>I have created simple terraform template for AWS.</p>
+
+<h3>At first: code is</h3>
+
+<p><a href="https://github.com/ygnmhdtt/minimal-terraform">here</a> .</p>
+
+<h3>Terraform</h3>
+
+<p>I love AWS, and use it every day at my work, or as my hobby.
+But, I always create aws resources with aws console or aws-cli or aws-shell.
+This is my first experience of terraform and I want to log it.</p>
+
+<h3>Install terraform</h3>
+
+<p>As Linux, very simple.</p>
+
+<pre><code>$ wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+$ unzip unzip terraform_0.11.7_linux_amd64.zip
+$ mv terraform /usr/local/bin # or to any your $PATH
+$ which terraform
+</code></pre>
+
+<h3>Makefile</h3>
+
+<p>I wrote Makefile like this. (I alse love Makefile)</p>
+
+<pre><code>TERRAFORM       = terraform
+
+init:
+        $(TERRAFORM) init
+
+keygen:
+        ssh-keygen -t rsa -f $(F)
+        chmod 400 $F*
+        mv $(F)* ~/.ssh/
+
+plan:
+        $(TERRAFORM) plan
+
+show:
+        $(TERRAFORM) show
+
+apply:
+        $(TERRAFORM) apply
+
+destroy:
+        $(TERRAFORM) destroy
+</code></pre>
+
+<h3>write .tf files</h3>
+
+<p>If you want to try terraform with my sample,
+only you have to do is <code>clone</code> .</p>
+
+<pre><code>$ git clone git@github.com:ygnmhdtt/minimal-terraform.git
+</code></pre>
+
+<p>and follow README.</p>
+
+<h3>init</h3>
+
+<pre><code>$ make init  
+terraform init
+Initializing modules...  
+- module.vpc
+  Getting source &quot;./modules/vpc&quot;  
+- module.subnet
+  Getting source &quot;./modules/subnet&quot;  
+- module.route_table  
+  Getting source &quot;./modules/route_table&quot;
+- module.security_group
+  Getting source &quot;./modules/security_group&quot;  
+- module.ec2  
+  Getting source &quot;./modules/ec2&quot;  
+
+Initializing provider plugins...
+- Checking for available provider plugins on https://releases.hashicorp.com...
+- Downloading plugin for provider &quot;aws&quot; (1.16.0)...
+  
+The following providers do not have any version constraints in configuration,
+so the latest version was installed.  
+  
+To prevent automatic upgrades to new major versions that may contain breaking
+changes, it is recommended to add version = &quot;...&quot; constraints to the
+corresponding provider blocks in configuration, with the constraint strings
+suggested below.
+  
+* provider.aws: version = &quot;~&gt; 1.16&quot;
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running &quot;terraform plan&quot; to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+</code></pre>
+
+<h3>plan</h3>
+
+<pre><code>$ make plan  
+terraform plan  
+Refreshing Terraform state in-memory prior to plan...  
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.  
+  
+  
+------------------------------------------------------------------------
+  
+An execution plan has been generated and is shown below.  
+Resource actions are indicated with the following symbols:  
+  + create  
+  
+Terraform will perform the following actions:  
+
+  + module.ec2.aws_instance.bastion  
+      id:                                          &lt;computed&gt;
+      ami:                                         &quot;ami-0c11b26d&quot;
+      associate_public_ip_address:                 &quot;true&quot;  
+      availability_zone:                           &lt;computed&gt;  
+      ebs_block_device.#:                          &lt;computed&gt;
+      ebs_optimized:                               &quot;false&quot;  
+      ephemeral_block_device.#:                    &lt;computed&gt;  
+      get_password_data:                           &quot;false&quot;  
+      instance_state:                              &lt;computed&gt;
+      instance_type:                               &quot;t2.micro&quot;  
+      ipv6_address_count:                          &lt;computed&gt;
+      ipv6_addresses.#:                            &lt;computed&gt;  
+      key_name:                                    &quot;tf-key&quot;  
+      monitoring:                                  &quot;false&quot;  
+      network_interface.#:                         &lt;computed&gt;
+      network_interface_id:                        &lt;computed&gt;
+      password_data:                               &lt;computed&gt;
+      placement_group:                             &lt;computed&gt;  
+      primary_network_interface_id:                &lt;computed&gt;  
+      private_dns:                                 &lt;computed&gt;  
+      private_ip:                                  &lt;computed&gt;  
+      public_dns:                                  &lt;computed&gt;  
+      public_ip:                                   &lt;computed&gt;  
+      root_block_device.#:                         &quot;1&quot;  
+      root_block_device.0.delete_on_termination:   &quot;false&quot;  
+      root_block_device.0.volume_id:               &lt;computed&gt;  
+      root_block_device.0.volume_size:             &quot;50&quot;  
+      root_block_device.0.volume_type:             &quot;standard&quot;
+      security_groups.#:                           &lt;computed&gt;
+      source_dest_check:                           &quot;true&quot;
+      subnet_id:                                   &quot;${var.subnet_id}&quot;
+      tags.%:                                      &quot;1&quot;
+      tags.Name:                                   &quot;main&quot;
+      tenancy:                                     &lt;computed&gt;
+      volume_tags.%:                               &lt;computed&gt;
+      vpc_security_group_ids.#:                    &lt;computed&gt;
+
+  + module.ec2.aws_key_pair.tf-key  
+      id:                                          &lt;computed&gt;
+      fingerprint:                                 &lt;computed&gt;
+      key_name:                                    &quot;tf-key&quot;  
+      public_key:                                  &quot;my ssh key&quot;
+  
+  + module.route_table.aws_internet_gateway.public  
+      id:                                          &lt;computed&gt;  
+      tags.%:                                      &quot;1&quot;  
+      tags.Name:                                   &quot;main&quot;  
+      vpc_id:                                      &quot;${var.vpc_id}&quot;
+  
+  + module.route_table.aws_route_table.public  
+      id:                                          &lt;computed&gt;
+      propagating_vgws.#:                          &lt;computed&gt;
+      route.#:                                     &quot;1&quot;  
+      route.~2593658367.cidr_block:                &quot;0.0.0.0/0&quot;
+      route.~2593658367.egress_only_gateway_id:    &quot;&quot;  
+      route.~2593658367.gateway_id:                &quot;${aws_internet_gateway.public.id}&quot;
+      route.~2593658367.instance_id:               &quot;&quot;  
+      route.~2593658367.ipv6_cidr_block:           &quot;&quot;  
+      route.~2593658367.nat_gateway_id:            &quot;&quot;  
+      route.~2593658367.network_interface_id:      &quot;&quot;  
+      route.~2593658367.vpc_peering_connection_id: &quot;&quot;  
+      tags.%:                                      &quot;1&quot;  
+      tags.Name:                                   &quot;main&quot;  
+      vpc_id:                                      &quot;${var.vpc_id}&quot;  
+  
+  + module.route_table.aws_route_table_association.public  
+      id:                                          &lt;computed&gt;  
+      route_table_id:                              &quot;${aws_route_table.public.id}&quot;
+      subnet_id:                                   &quot;${var.subnet_id}&quot;
+
+  + module.security_group.aws_security_group.22_pxy  
+      id:                                          &lt;computed&gt;
+      arn:                                         &lt;computed&gt;
+      description:                                 &quot;Permit ssh from proxy server.&quot;
+      egress.#:                                    &quot;1&quot;
+      egress.482069346.cidr_blocks.#:              &quot;1&quot;
+      egress.482069346.cidr_blocks.0:              &quot;0.0.0.0/0&quot;
+      egress.482069346.description:                &quot;&quot;
+      egress.482069346.from_port:                  &quot;0&quot;
+      egress.482069346.ipv6_cidr_blocks.#:         &quot;0&quot;
+      egress.482069346.prefix_list_ids.#:          &quot;0&quot;
+      egress.482069346.protocol:                   &quot;-1&quot;
+      egress.482069346.security_groups.#:          &quot;0&quot;
+      egress.482069346.self:                       &quot;false&quot;
+      egress.482069346.to_port:                    &quot;0&quot;
+      ingress.#:                                   &quot;1&quot;
+      ingress.2541437006.cidr_blocks.#:            &quot;1&quot;
+      ingress.2541437006.cidr_blocks.0:            &quot;0.0.0.0/0&quot;
+      ingress.2541437006.description:              &quot;&quot;
+      ingress.2541437006.from_port:                &quot;22&quot;
+      ingress.2541437006.ipv6_cidr_blocks.#:       &quot;0&quot;
+      ingress.2541437006.protocol:                 &quot;tcp&quot;
+      ingress.2541437006.security_groups.#:        &quot;0&quot;
+      ingress.2541437006.self:                     &quot;false&quot;
+      ingress.2541437006.to_port:                  &quot;22&quot;
+      name:                                        &quot;22_pxy&quot;
+      owner_id:                                    &lt;computed&gt;
+      revoke_rules_on_delete:                      &quot;false&quot;
+      tags.%:                                      &quot;1&quot;
+      tags.Name:                                   &quot;22_pxy&quot;
+      vpc_id:                                      &quot;${var.vpc_id}&quot;
+
+  + module.subnet.aws_subnet.public
+      id:                                          &lt;computed&gt;
+      assign_ipv6_address_on_creation:             &quot;false&quot;
+      availability_zone:                           &quot;ap-northeast-1a&quot;
+      cidr_block:                                  &quot;10.0.1.0/24&quot;
+      ipv6_cidr_block:                             &lt;computed&gt;
+      ipv6_cidr_block_association_id:              &lt;computed&gt;
+      map_public_ip_on_launch:                     &quot;false&quot;
+      tags.%:                                      &quot;1&quot;
+      tags.Name:                                   &quot;main&quot;
+
+  + module.vpc.aws_vpc.vpc  
+      id:                                          &lt;computed&gt;  
+      assign_generated_ipv6_cidr_block:            &quot;false&quot;  
+      cidr_block:                                  &quot;10.0.0.0/16&quot;
+      default_network_acl_id:                      &lt;computed&gt;
+      default_route_table_id:                      &lt;computed&gt;
+      default_security_group_id:                   &lt;computed&gt;
+      dhcp_options_id:                             &lt;computed&gt;  
+      enable_classiclink:                          &lt;computed&gt;
+      enable_classiclink_dns_support:              &lt;computed&gt;
+      enable_dns_hostnames:                        &quot;true&quot;  
+      enable_dns_support:                          &quot;true&quot;
+      instance_tenancy:                            &lt;computed&gt;
+      ipv6_association_id:                         &lt;computed&gt;
+      ipv6_cidr_block:                             &lt;computed&gt;
+      main_route_table_id:                         &lt;computed&gt;  
+      tags.%:                                      &quot;1&quot;  
+      tags.Name:                                   &quot;main&quot;  
+  
+  
+Plan: 8 to add, 0 to change, 0 to destroy.  
+  
+------------------------------------------------------------------------
+  
+Note: You didn't specify an &quot;-out&quot; parameter to save this plan, so Terraform
+can't guarantee that exactly these actions will be performed if
+&quot;terraform apply&quot; is subsequently run.
+</code></pre>
+
+<h3>create resources</h3>
+
+<pre><code>$ make apply
+
+(...)
+
+Plan: 8 to add, 0 to change, 0 to destroy.                                                                                                                               [96/1918]
+  
+Do you want to perform these actions?  
+  Terraform will perform the actions described above.  
+  Only 'yes' will be accepted to approve.  
+  
+  Enter a value: yes  
+  
+module.ec2.aws_key_pair.tf-key: Creating...  
+  fingerprint: &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  key_name:    &quot;&quot; =&gt; &quot;tf-key&quot;  
+  public_key:  &quot;&quot; =&gt; &quot;my ssh key&quot;
+module.vpc.aws_vpc.vpc: Creating...  
+  assign_generated_ipv6_cidr_block: &quot;&quot; =&gt; &quot;false&quot;  
+  cidr_block:                       &quot;&quot; =&gt; &quot;10.0.0.0/16&quot;  
+  default_network_acl_id:           &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  default_route_table_id:           &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  default_security_group_id:        &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  dhcp_options_id:                  &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  enable_classiclink:               &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  enable_classiclink_dns_support:   &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;  
+  enable_dns_hostnames:             &quot;&quot; =&gt; &quot;true&quot;  
+  enable_dns_support:               &quot;&quot; =&gt; &quot;true&quot;
+  instance_tenancy:                 &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ipv6_association_id:              &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ipv6_cidr_block:                  &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  main_route_table_id:              &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  tags.%:                           &quot;&quot; =&gt; &quot;1&quot;
+  tags.Name:                        &quot;&quot; =&gt; &quot;main&quot;
+module.ec2.aws_key_pair.tf-key: Creation complete after 0s (ID: tf-key)
+module.vpc.aws_vpc.vpc: Creation complete after 5s (ID: vpc-d724bfb0)
+module.route_table.aws_internet_gateway.public: Creating...
+  tags.%:    &quot;0&quot; =&gt; &quot;1&quot;
+  tags.Name: &quot;&quot; =&gt; &quot;main&quot;
+  vpc_id:    &quot;&quot; =&gt; &quot;vpc-d724bfb0&quot;
+module.subnet.aws_subnet.public: Creating...
+  assign_ipv6_address_on_creation: &quot;&quot; =&gt; &quot;false&quot;
+  availability_zone:               &quot;&quot; =&gt; &quot;ap-northeast-1a&quot;
+  cidr_block:                      &quot;&quot; =&gt; &quot;10.0.1.0/24&quot;
+  ipv6_cidr_block:                 &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ipv6_cidr_block_association_id:  &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  map_public_ip_on_launch:         &quot;&quot; =&gt; &quot;false&quot;
+  tags.%:                          &quot;&quot; =&gt; &quot;1&quot;
+  tags.Name:                       &quot;&quot; =&gt; &quot;main&quot;
+  vpc_id:                          &quot;&quot; =&gt; &quot;vpc-d724bfb0&quot;
+module.security_group.aws_security_group.22_pxy: Creating...  
+  arn:                                   &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  description:                           &quot;&quot; =&gt; &quot;Permit ssh from proxy server.&quot;
+  egress.#:                              &quot;&quot; =&gt; &quot;1&quot;
+  egress.482069346.cidr_blocks.#:        &quot;&quot; =&gt; &quot;1&quot;
+  egress.482069346.cidr_blocks.0:        &quot;&quot; =&gt; &quot;0.0.0.0/0&quot;
+  egress.482069346.description:          &quot;&quot; =&gt; &quot;&quot;
+  egress.482069346.from_port:            &quot;&quot; =&gt; &quot;0&quot;
+  egress.482069346.ipv6_cidr_blocks.#:   &quot;&quot; =&gt; &quot;0&quot;
+  egress.482069346.prefix_list_ids.#:    &quot;&quot; =&gt; &quot;0&quot;
+  egress.482069346.protocol:             &quot;&quot; =&gt; &quot;-1&quot;
+  egress.482069346.security_groups.#:    &quot;&quot; =&gt; &quot;0&quot;
+  egress.482069346.self:                 &quot;&quot; =&gt; &quot;false&quot;
+  egress.482069346.to_port:              &quot;&quot; =&gt; &quot;0&quot;
+  ingress.#:                             &quot;&quot; =&gt; &quot;1&quot;
+  ingress.2541437006.cidr_blocks.#:      &quot;&quot; =&gt; &quot;1&quot;
+  ingress.2541437006.cidr_blocks.0:      &quot;&quot; =&gt; &quot;0.0.0.0/0&quot;
+  ingress.2541437006.description:        &quot;&quot; =&gt; &quot;&quot;
+  ingress.2541437006.from_port:          &quot;&quot; =&gt; &quot;22&quot;
+  ingress.2541437006.ipv6_cidr_blocks.#: &quot;&quot; =&gt; &quot;0&quot;
+  ingress.2541437006.protocol:           &quot;&quot; =&gt; &quot;tcp&quot;
+  ingress.2541437006.security_groups.#:  &quot;&quot; =&gt; &quot;0&quot;
+  ingress.2541437006.self:               &quot;&quot; =&gt; &quot;false&quot;
+  ingress.2541437006.to_port:            &quot;&quot; =&gt; &quot;22&quot;
+  name:                                  &quot;&quot; =&gt; &quot;22_pxy&quot;
+  owner_id:                              &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  revoke_rules_on_delete:                &quot;&quot; =&gt; &quot;false&quot;
+  tags.%:                                &quot;&quot; =&gt; &quot;1&quot;
+  tags.Name:                             &quot;&quot; =&gt; &quot;22_pxy&quot;
+  vpc_id:                                &quot;&quot; =&gt; &quot;vpc-d724bfb0&quot;
+module.route_table.aws_internet_gateway.public: Creation complete after 1s (ID: igw-e8a5e28c)
+module.route_table.aws_route_table.public: Creating...                                                                                                                   [18/1918]
+  propagating_vgws.#:                         &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  route.#:                                    &quot;&quot; =&gt; &quot;1&quot;  
+  route.4271899941.cidr_block:                &quot;&quot; =&gt; &quot;0.0.0.0/0&quot;
+  route.4271899941.egress_only_gateway_id:    &quot;&quot; =&gt; &quot;&quot;  
+  route.4271899941.gateway_id:                &quot;&quot; =&gt; &quot;igw-e8a5e28c&quot;
+  route.4271899941.instance_id:               &quot;&quot; =&gt; &quot;&quot;  
+  route.4271899941.ipv6_cidr_block:           &quot;&quot; =&gt; &quot;&quot;  
+  route.4271899941.nat_gateway_id:            &quot;&quot; =&gt; &quot;&quot;  
+  route.4271899941.network_interface_id:      &quot;&quot; =&gt; &quot;&quot;  
+  route.4271899941.vpc_peering_connection_id: &quot;&quot; =&gt; &quot;&quot;  
+  tags.%:                                     &quot;&quot; =&gt; &quot;1&quot;  
+  tags.Name:                                  &quot;&quot; =&gt; &quot;main&quot;  
+  vpc_id:                                     &quot;&quot; =&gt; &quot;vpc-d724bfb0&quot;
+module.subnet.aws_subnet.public: Creation complete after 1s (ID: subnet-2f83b666)
+module.route_table.aws_route_table.public: Creation complete after 1s (ID: rtb-7b7f961d)
+module.route_table.aws_route_table_association.public: Creating...
+  route_table_id: &quot;&quot; =&gt; &quot;rtb-7b7f961d&quot;  
+  subnet_id:      &quot;&quot; =&gt; &quot;subnet-2f83b666&quot;  
+module.route_table.aws_route_table_association.public: Creation complete after 0s (ID: rtbassoc-eb05198d)
+module.security_group.aws_security_group.22_pxy: Creation complete after 3s (ID: sg-6de11815)
+module.ec2.aws_instance.bastion: Creating...
+  ami:                                       &quot;&quot; =&gt; &quot;ami-0c11b26d&quot;
+  associate_public_ip_address:               &quot;&quot; =&gt; &quot;true&quot;
+  availability_zone:                         &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ebs_block_device.#:                        &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ebs_optimized:                             &quot;&quot; =&gt; &quot;false&quot;
+  ephemeral_block_device.#:                  &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  get_password_data:                         &quot;&quot; =&gt; &quot;false&quot;
+  instance_state:                            &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  instance_type:                             &quot;&quot; =&gt; &quot;t2.micro&quot;
+  ipv6_address_count:                        &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  ipv6_addresses.#:                          &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  key_name:                                  &quot;&quot; =&gt; &quot;tf-key&quot;
+  monitoring:                                &quot;&quot; =&gt; &quot;false&quot;
+  network_interface.#:                       &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  network_interface_id:                      &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  password_data:                             &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  placement_group:                           &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  primary_network_interface_id:              &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  private_dns:                               &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  private_ip:                                &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  public_dns:                                &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  public_ip:                                 &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  root_block_device.#:                       &quot;&quot; =&gt; &quot;1&quot;
+  root_block_device.0.delete_on_termination: &quot;&quot; =&gt; &quot;false&quot;
+  root_block_device.0.volume_id:             &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  root_block_device.0.volume_size:           &quot;&quot; =&gt; &quot;50&quot;
+  root_block_device.0.volume_type:           &quot;&quot; =&gt; &quot;standard&quot;
+  security_groups.#:                         &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  source_dest_check:                         &quot;&quot; =&gt; &quot;true&quot;
+  subnet_id:                                 &quot;&quot; =&gt; &quot;subnet-2f83b666&quot;
+  tags.%:                                    &quot;&quot; =&gt; &quot;1&quot;
+  tags.Name:                                 &quot;&quot; =&gt; &quot;main&quot;
+  tenancy:                                   &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  volume_tags.%:                             &quot;&quot; =&gt; &quot;&lt;computed&gt;&quot;
+  vpc_security_group_ids.#:                  &quot;&quot; =&gt; &quot;1&quot;
+  vpc_security_group_ids.1189096013:         &quot;&quot; =&gt; &quot;sg-6de11815&quot;
+module.ec2.aws_instance.bastion: Still creating... (10s elapsed)
+module.ec2.aws_instance.bastion: Still creating... (20s elapsed)
+module.ec2.aws_instance.bastion: Creation complete after 23s (ID: i-00ebded5f73c9a78b)
+
+Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+</code></pre>
+
+<h3>created resources</h3>
+
+<p><img src="/images/introduce-terraform/1.png" alt="" />
+<img src="/images/introduce-terraform/2.png" alt="" />
+<img src="/images/introduce-terraform/3.png" alt="" />
+<img src="/images/introduce-terraform/4.png" alt="" />
+<img src="/images/introduce-terraform/5.png" alt="" />
+<img src="/images/introduce-terraform/6.png" alt="" /></p>
+
+<h3>login</h3>
+
+<pre><code>$ ssh ec2-user@18.182.42.233 -i ~/.ssh/tf-key
+The authenticity of host '18.182.42.233 (18.182.42.233)' can't be established.
+ECDSA key fingerprint is SHA256:PehqGCGZUEkBSHWVH5LNhUVc5rzbh9Xma+UTiz64oGk.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '18.182.42.233' (ECDSA) to the list of known hosts.
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2016.09-release-notes/
+25 package(s) needed for security, out of 74 available
+Run &quot;sudo yum update&quot; to apply all updates.
+Amazon Linux version 2018.03 is available.
+[ec2-user@ip-10-0-1-137 ~]$
+[ec2-user@ip-10-0-1-137 ~]$
+[ec2-user@ip-10-0-1-137 ~]$ whoami
+ec2-user
+</code></pre>
+
+<p>succeed login!!</p>
+
+<h3>destroy resources</h3>
+
+<pre><code>make destroy
+terraform destroy
+aws_key_pair.tf-key: Refreshing state... (ID: tf-key)
+aws_vpc.vpc: Refreshing state... (ID: vpc-d724bfb0)
+aws_security_group.22_pxy: Refreshing state... (ID: sg-6de11815)
+aws_subnet.public: Refreshing state... (ID: subnet-2f83b666)
+aws_internet_gateway.public: Refreshing state... (ID: igw-e8a5e28c)
+aws_route_table.public: Refreshing state... (ID: rtb-7b7f961d)
+aws_instance.bastion: Refreshing state... (ID: i-00ebded5f73c9a78b)
+aws_route_table_association.public: Refreshing state... (ID: rtbassoc-eb05198d)
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  - module.ec2.aws_instance.bastion
+
+  - module.ec2.aws_key_pair.tf-key
+
+  - module.route_table.aws_internet_gateway.public
+
+  - module.route_table.aws_route_table.public
+
+  - module.route_table.aws_route_table_association.public
+
+  - module.security_group.aws_security_group.22_pxy
+
+  - module.subnet.aws_subnet.public
+
+  - module.vpc.aws_vpc.vpc
+
+
+Plan: 0 to add, 0 to change, 8 to destroy.
+
+Do you really want to destroy?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+module.ec2.aws_instance.bastion: Destroying... (ID: i-00ebded5f73c9a78b)
+module.route_table.aws_route_table_association.public: Destroying... (ID: rtbassoc-eb05198d)
+module.route_table.aws_route_table_association.public: Destruction complete after 1s
+module.route_table.aws_route_table.public: Destroying... (ID: rtb-7b7f961d)
+module.route_table.aws_route_table.public: Destruction complete after 8s
+module.route_table.aws_internet_gateway.public: Destroying... (ID: igw-e8a5e28c)
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 10s elapsed)
+module.route_table.aws_internet_gateway.public: Still destroying... (ID: igw-e8a5e28c, 10s elapsed)
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 20s elapsed)
+module.route_table.aws_internet_gateway.public: Still destroying... (ID: igw-e8a5e28c, 20s elapsed)
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 30s elapsed)
+module.route_table.aws_internet_gateway.public: Still destroying... (ID: igw-e8a5e28c, 30s elapsed)
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 40s elapsed)
+module.route_table.aws_internet_gateway.public: Still destroying... (ID: igw-e8a5e28c, 40s elapsed)
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 50s elapsed)
+module.route_table.aws_internet_gateway.public: Destruction complete after 47s
+module.ec2.aws_instance.bastion: Still destroying... (ID: i-00ebded5f73c9a78b, 1m0s elapsed)
+module.ec2.aws_instance.bastion: Destruction complete after 1m2s
+module.subnet.aws_subnet.public: Destroying... (ID: subnet-2f83b666)
+module.ec2.aws_key_pair.tf-key: Destroying... (ID: tf-key)
+module.security_group.aws_security_group.22_pxy: Destroying... (ID: sg-6de11815)
+module.ec2.aws_key_pair.tf-key: Destruction complete after 0s
+module.security_group.aws_security_group.22_pxy: Destruction complete after 1s
+module.subnet.aws_subnet.public: Destruction complete after 1s
+module.vpc.aws_vpc.vpc: Destroying... (ID: vpc-d724bfb0)
+module.vpc.aws_vpc.vpc: Destruction complete after 0s
+
+Destroy complete! Resources: 8 destroyed.
+</code></pre>
+
+<ul>
+<li>Simple template will help creating aws resources with terraform</li>
+<li>template must be DRY, and small</li>
+</ul>
+
+</body>
+
+</html>

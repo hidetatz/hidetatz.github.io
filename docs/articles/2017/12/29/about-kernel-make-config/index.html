@@ -1,0 +1,102 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>カーネル構築時のオプションについて</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2017/12/29/about-kernel-make-config/">カーネル構築時のオプションについて</a></h1>
+
+<p>2017/12/29</p>
+
+<p>Gentooを普段使いしているとカーネルをビルドすることが半年に1回くらいある。
+その差異、 <code>make *config</code> を実行するが、よく調べてみると種類が多くあり、
+知らないことも多かったため、まとめた。</p>
+
+<p>以下の内容は <code>/usr/src/linux/Documentation/admin-guide/README.rst</code> にあったものを訳している。</p>
+
+<pre><code>カーネルの設定
+----------------------
+
+   このステップは、たとえマイナーバージョンのアップデートであっても省略することはできません。
+   どのリリースでも新たな設定オプションが追加されるし、もし設定ファイルが期待される通りでなければ、
+   奇妙な問題が起こるでしょう。もし最低限の手順で既存の設定を新しいバージョンに持っていきたいならば、
+   `make oldconfig` を使用します。これは、新たなカーネル設定に対する回答のみをあなたに尋ねます。
+
+ - 設定のコマンド::
+
+     &quot;make config&quot;      プレーンテキストの設定インタフェース。
+
+     &quot;make menuconfig&quot;  テキストベースの色付きのメニュー、ラジオリスト、ダイアログ。
+
+     &quot;make nconfig&quot;     改良されたテキストベースの色付きのメニュー。
+
+     &quot;make xconfig&quot;     Qtベースの設定ツール。
+
+     &quot;make gconfig&quot;     Gtk+ベースの設定ツール。
+
+     &quot;make oldconfig&quot;   全ての質問の答えを既存の `.config` ファイルのコンテンツをベースとし、
+                        新たな設定シンボルについては質問する。
+
+     &quot;make silentoldconfig&quot;
+                        上と似ているが、すでに回答済みの質問については画面に出さない。
+
+     &quot;make olddefconfig&quot;
+                        上と似ているが、新たなシンボルは自動的にそれらのデフォルトにする。
+
+     &quot;make defconfig&quot;   `arch/$ARCH/defconfig` か、 `arch/$ARCH/configs/${PLATFORM}_defconfig` のいずれかから、
+                        アーキテクチャに依存して、デフォルトのシンボルを用いて新たな `.config` ファイルを作る。
+
+     &quot;make ${PLATFORM}_defconfig&quot;
+                        `arch/$ARCH/configs/${PLATFORM}_defconfig` のデフォルト値を使って、新たな `.config` を作る。
+                        あなたのアーキテクチャで使用可能な全てのプラットフォームのリストを得るためには、
+                        `make help` を使う。
+
+     &quot;make allyesconfig&quot;
+                        可能な限り全てのシンボルを `y(カーネル組み込み)` にした `.config` を作る。
+
+     &quot;make allmodconfig&quot;
+                        可能な限り全てのシンボルを `m(カーネルモジュール)` にした `.config` を作る。
+
+     &quot;make allnoconfig&quot; 可能な限り全てのシンボルを `n(ビルドしない)` にした `.config` を作る。
+
+     &quot;make randconfig&quot;  シンボルをランダムに設定した `.config` を作る。
+
+     &quot;make localmodconfig&quot; 今の設定とロード中のモジュール(`lsmod`)をベースに設定を作る。
+                           ロード済みのモジュールに不要なオプションは無効にする。
+
+                           別のマシンのための `localmodconfig` を作るには、そのマシンの `lsmod` をファイルにして、
+                           `LSMOD` パラメータと一緒に渡す。
+
+                   target$ lsmod &gt; /tmp/mylsmod
+                   target$ scp /tmp/mylsmod host:/tmp
+
+                   host$ make LSMOD=/tmp/mylsmod localmodconfig
+
+                           これはクロスコンパイル時にも動作する。
+
+     &quot;make localyesconfig&quot; localmodconfigと似ているが、全てのモジュールオプションをカーネル組み込み(=y)とする。
+
+   Linuxカーネル設定ツールについての情報は、 `Documentation/kbuild/kconfig.txt` で参照できる。
+</code></pre>
+
+<p>普段は <code>make menuconfig</code> をよく使う。
+<code>make randconfig</code> はテスト用なのだろうか。</p>
+
+</body>
+
+</html>

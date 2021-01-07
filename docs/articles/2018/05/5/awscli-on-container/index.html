@@ -1,0 +1,79 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Run aws-cli without pip</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/05/5/awscli-on-container/">Run aws-cli without pip</a></h1>
+
+<p>2018/05/5</p>
+
+<p>Run aws command with docker.</p>
+
+<!--more-->
+
+<p>I prepared <code>aws-tools-container</code> .<br>
+Please clone <a href="https://github.com/ygnmhdtt/aws-tools-container">here</a>.</p>
+
+<h3>Credential</h3>
+
+<p>For <code>aws</code> command, we need to prepare <code>~/.aws/config</code> and <code>~/.aws/credentials</code> .<br>
+<code>aws-tools-container</code> mounts your local <code>~/.aws</code> directory to container home directory.<br>
+So, you don&rsquo;t have to fix them for aws-tools-container.</p>
+
+<h3>Usage</h3>
+
+<p>Clone repository, and</p>
+
+<pre><code>$ make build
+$ make up
+$ make login
+
+### Now, you are in container
+
+### aws s3 ls
+</code></pre>
+
+<p>Default AWS credential is set <code>default</code> .<br>
+If you want to change it, please do like this:</p>
+
+<pre><code>$ export AWS_DEFAULT_PROFILE=your-profile
+</code></pre>
+
+<p>I prepared profile list command.</p>
+
+<pre><code>$ make list
+</code></pre>
+
+<p>And, this includes <a href="https://github.com/awslabs/aws-shell">aws-shell</a> .</p>
+
+<pre><code>$ make login
+### aws-shell
+</code></pre>
+
+<p>If you want to stop container, just type this</p>
+
+<pre><code>$ make stop
+</code></pre>
+
+<p>Please use it!!
+Now we no longer need pip!!</p>
+
+</body>
+
+</html>

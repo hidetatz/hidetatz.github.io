@@ -1,0 +1,81 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Microservicesにおけるサービス間通信とService Mesh</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/11/11/microservices-service-mesh/">Microservicesにおけるサービス間通信とService Mesh</a></h1>
+
+<p>2018/11/11</p>
+
+<p>Microservicesにおいて、サービス間の通信は高速でかつ堅牢である必要がある。
+MercariのようにgRPCを採用する場合もあれば、HTTPを使う場合もある。
+また、多くの場合、<a href="http://activemq.apache.org/">ActiveMQ</a>や<a href="https://cloud.google.com/pubsub/">GCP Cloud Pub/Sub</a>、<a href="https://aws.amazon.com/jp/sqs/">AWS SQS</a>などの非同期メッセージングプロトコルも併せて採用するだろう。</p>
+
+<p>しかし、Microservicesにおけるサービス間通信には下記のような課題がある。</p>
+
+<ul>
+<li>回復性
+
+<ul>
+<li>大規模なMicroservicesでは、数百のインスタンスが存在する可能性がある。ノードレベルでの障害や、過負荷によるタイムアウトなど、様々な理由で通信が失敗する可能性がある。</li>
+<li>回復性を高めるためには リトライ、<a href="/post/2018/11/10/about-circuit-breaker/">Circuit Breaker</a> などのデザインパターンがある。</li>
+</ul></li>
+<li>Load Balancing
+
+<ul>
+<li>Kubernetesでは各サービスはPodのグループという形で抽象化される。この時、待機時間や負荷によって、負荷分散のアルゴリズムを賢くしたいケースが有る。</li>
+</ul></li>
+<li>分散トレーシング
+
+<ul>
+<li>1トランザクションで複数のサービスを(依存サービスなどの形で)利用するケースが有る。その場合、各サービスがロギングを行っても、それらを1トランザクションとして結び付けないと、人間に読むことは難しい。</li>
+</ul></li>
+<li>サービスのバージョニング
+
+<ul>
+<li>サービスをデプロイするときに、すでに流れている依存サービスへのトラフィックなどは、正しいバージョンにルーティングされなければならない。リクエストを特定のバージョンにルーティングしなければならないケースがある。</li>
+</ul></li>
+<li>TLS暗号化と認証
+
+<ul>
+<li>セキュア化のために通信内容をTLSで暗号化したいケースが有る。</li>
+</ul></li>
+</ul>
+
+<p>これらの課題に解決策を提供するのが、 <code>Service Mesh</code> である。
+KubernetesではServish Meshとして、 <a href="https://linkerd.io/">Linkerd</a>、<a href="https://istio.io/">Istio</a>を選択できる。
+これらは、各サービスの<a href="https://docs.microsoft.com/ja-jp/azure/architecture/patterns/sidecar">Side Car</a>として稼働する。</p>
+
+<p>Service Meshは以下のような機能を提供する。</p>
+
+<ul>
+<li>セッションレベルでのLoad Balancing。</li>
+<li>URL/Host Header/API VersionなどのルールベースでのL7 Load Balancing。</li>
+<li>リトライ</li>
+<li>Circuit Breaker</li>
+<li>メトリクスのキャプチャと、リクエストの各ホップを使った分散トレーシング</li>
+<li>相互TLS認証</li>
+</ul>
+
+<p>Service Meshを使用しない場合、冒頭の課題を開発者が考慮する必要がある。
+まだ枯れていない技術ではあるが、大規模な分散システム(Microservices)を設計する際には考慮したいと思う。</p>
+
+</body>
+
+</html>

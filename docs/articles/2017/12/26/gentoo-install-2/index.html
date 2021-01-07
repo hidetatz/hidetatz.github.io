@@ -1,0 +1,121 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>ThinkPadE470にGentooをインストールした その2</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2017/12/26/gentoo-install-2/">ThinkPadE470にGentooをインストールした その2</a></h1>
+
+<p>2017/12/26</p>
+
+<p>以下について書く。</p>
+
+<p>6 . tarballを展開したディレクトリにchrootする<br>
+7 . portageをセットアップする<br>
+8 . カーネルをビルドする<br>
+9 . ブートローダをセットアップする<br>
+10 . Gentooが起動することを確認する</p>
+
+<h3>6. tarballを展開したディレクトリにchrootする</h3>
+
+<pre><code class="language-shell">### /etc/resolv.confのコピー
+% cp -L /etc/resolv.conf /mnt/gentoo/etc/
+
+### 必要なファイルシステムをマウント
+% mount -t proc proc /mnt/gentoo/proc
+% mount --rbind /dev /mnt/gentoo/dev
+% mount --rbind /sys /mnt/gentoo/sys
+
+### /dev/sda3に入る
+% chroot /mnt/gentoo /bin/bash
+% source /etc/profile
+</code></pre>
+
+<h3>7. portageをセットアップする</h3>
+
+<p>portageとは、Gentooのパッケージ管理ツール。MacでいうHomebrew。
+設定の前に、コンパイルオプションを設定する。</p>
+
+<pre><code class="language-shell">% nano -w /etc/portage/make.conf
+</code></pre>
+
+<p>デフォルトに加えて、以下のように編集する。</p>
+
+<pre><code>### デフォルトに追加
+MAKEOPTS=&quot;-march=native&quot;
+
+### 行として追加
+GRUB_PLATFORMS=&quot;efi-64&quot;
+</code></pre>
+
+<p>Gentooは、基本的に全てのツールをソースコードからビルドする。その際に、ファイルをコンパイルする時のオプションをここで指定できる。と思えばOK。
+詳しくは<a href="https://wiki.gentoo.org/wiki/Safe_CFLAGS">これ</a>を見る。筆者もあまり詳しくない。</p>
+
+<p>そしてportageをセットアップする。</p>
+
+<pre><code class="language-shell">% emerge-webrsync
+% emerge --sync
+% eselect profile set 1
+</code></pre>
+
+<p>まあまあ時間がかかった気がする。</p>
+
+<h3>8. カーネルをビルドする</h3>
+
+<p>ここがけっこう大変。
+どのようにビルドするかの方針を決める必要がある。
+ここは環境に合わせるしかないので、省略する。</p>
+
+<h3>9. ブートローダをセットアップする</h3>
+
+<p>ブートローダをセットアップする。grubを使った。</p>
+
+<pre><code class="language-shell">% mkdir -p /boot/efi
+% emerge grub efibootmgr
+% grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=gentoo_grub /dev/sda
+% mkdir -p /boot/efi/boot
+% cp /boot/efi/gentoo_grub/grubx64.efi /boot/efi/boot/bootx64.efi
+% grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre>
+
+<p>筆者は、 <code>grub-install</code> のときに <code>Could not prepare Boot variable: Read-only file system</code> のエラーが出たので、<a href="https://forums.gentoo.org/viewtopic-t-1069106-start-0.html">こちら</a>を参考に以下のようにした。</p>
+
+<pre><code class="language-shell">% mount -o remount,rw /sys/firmware/efi/efivars
+</code></pre>
+
+<p>また、 <code>grub-mkconfig</code> の時のメッセージで、先程ビルドしたカーネルが認識されていることを確認すること。</p>
+
+<h3>10. Gentooが起動することを確認する</h3>
+
+<p>これでたぶんできているはず。
+以下のようにして再起動。</p>
+
+<pre><code>% exit
+
+### chrootは抜けている
+% cd
+% umount -l /mnt/gentoo/dev{/shm,/pts,}
+% umount -l /mnt/gentoo{/boot,/proc,}
+% reboot
+</code></pre>
+
+<p>Gentooが上がってきたら優勝です。</p>
+
+</body>
+
+</html>

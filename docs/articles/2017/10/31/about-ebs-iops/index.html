@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>EBSのIOPSについて学んだ</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2017/10/31/about-ebs-iops/">EBSのIOPSについて学んだ</a></h1>
+
+<p>2017/10/31</p>
+
+<p>EBSのIOとかキューとかについて調べた。</p>
+
+<h3>IOPSについて</h3>
+
+<p>SSDの場合、ひとつのIOPSで256KBのIOを処理できる。
+例えば、1024KBのIOは4とカウントされ、32KBのIOが連続して8つあった場合、ひとつのIOPSになる。</p>
+
+<h3>キュー長について</h3>
+
+<p>キュー長はデバイスに対する保留中のIOリクエストの数を意味する。</p>
+
+<h3>レイテンシーについて</h3>
+
+<p>実際にIOリクエストの操作にかかる時間がレイテンシー。
+イコール、IOをEBSに送って、完了通知が送られるまでの時間。</p>
+
+<h3>キュー長の設定</h3>
+
+<p>SSDバックドボリュームでは500IOPSごとにキュー長1が推奨されている。</p>
+
+<p>おそらく、EBSでは処理しきれないIOがキューに溜まっていくのだと思う。
+逆に言うと、500IOPSまでは待ちが発生せずに処理(IO)できるということになる。</p>
+
+</body>
+
+</html>

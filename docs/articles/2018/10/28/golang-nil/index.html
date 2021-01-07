@@ -1,0 +1,187 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Golangにおけるnilの扱い方</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/10/28/golang-nil/">Golangにおけるnilの扱い方</a></h1>
+
+<p>2018/10/28</p>
+
+<p>goにはnilが存在する。
+他の多くの言語と違って、goのnilは型情報を保持している。
+<a href="https://play.golang.org/p/mG06lmbu-Ud">以下のような</a>コードを見てみよう。</p>
+
+<pre><code class="language-go">package main
+
+type s1 struct{}
+
+type s2 struct{}
+
+func main() {
+	var x *s1 = nil
+	var y *s2 = nil
+
+	compare(x, y)
+}
+
+func compare(x, y interface{}) {
+	println(x == y)
+}
+</code></pre>
+
+<p>このコードを実行すると、 <code>false</code> が出力される。
+これは、nilがそれぞれ型情報を保持しているからである。</p>
+
+<p><a href="https://play.golang.org/p/PKaxqlYZYRJ">以下のように</a>修正してやると、trueを出力する。</p>
+
+<pre><code class="language-go">package main
+
+type s1 struct{}
+
+type s2 struct{}
+
+func main() {
+	var x *s1 = nil
+	var y *s1 = nil // 修正
+
+	compare(x, y)
+	return
+}
+
+func compare(x, y interface{}) {
+	println(x == y)
+}
+</code></pre>
+
+<p><a href="https://play.golang.org/p/rb_aEcwibhM">試しに</a>、compare関数を外してみよう。</p>
+
+<pre><code class="language-go">package main
+
+type s1 struct{}
+
+type s2 struct{}
+
+func main() {
+	var x *s1 = nil
+	var y *s2 = nil
+	println(x == y)
+}
+</code></pre>
+
+<p>前述の通り、falseが出力される。と思いきや、そうではない。
+これは実は、コンパイルエラーになる。</p>
+
+<pre><code>prog.go:10:12: invalid operation: x == y (mismatched types *s1 and *s2)
+</code></pre>
+
+<p>では、nilチェックをどのように行えばよいか？
+実は、<a href="https://play.golang.org/p/UGXSzHFenjz">nilはキャストできる。</a></p>
+
+<pre><code class="language-go">package main
+
+type s1 struct{}
+
+func main() {
+	var x *s1 = nil
+
+	isnil(x)
+	return
+}
+
+func isnil(x interface{}) {
+	println(x == nil)
+	println(x == (*s1)(nil))
+}
+</code></pre>
+
+<p>これを実行すると、</p>
+
+<pre><code>false
+true
+</code></pre>
+
+<p>と出力される。</p>
+
+<p>これらは、関数の仮引数の型をinterface{}にしていることによる。
+<a href="https://play.golang.org/p/ZsNHwWkbuWC">以下のように</a>修正すると、意図通りに動くだろう。</p>
+
+<pre><code class="language-go">package main
+
+type s1 struct{}
+
+func main() {
+	var x *s1 = nil
+
+	isnil(x)
+	return
+}
+
+func isnil(x *s1) { // 仮引数の型を修正
+	println(x == nil)
+	println(x == (*s1)(nil))
+}
+</code></pre>
+
+<p>現実的に、nilチェックを行うべきときに常にnilの型情報やキャストを意識しなければいけないのは非常に煩雑である。コードの独立性を下げることにもつながるだろう。
+これを避けるには、明示的に型情報を持たないnilリテラルを返すのが望ましい。</p>
+
+<p>つまり、</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type s1 struct{}
+
+func newS1() interface{} {
+	s := new(s1)
+	s = nil
+	return s
+}
+
+func main() {
+	s := newS1()
+	fmt.Println(s == nil)
+}
+</code></pre>
+
+<p>こうではなく、</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type s1 struct{}
+
+func newS1() interface{} {
+	_ = new(s1)
+	return nil
+}
+
+func main() {
+	s := newS1()
+	fmt.Println(s == nil)
+}
+</code></pre>
+
+<p>このように、常に <code>return nil</code> という書き方をするようにすると良い。</p>
+
+</body>
+
+</html>

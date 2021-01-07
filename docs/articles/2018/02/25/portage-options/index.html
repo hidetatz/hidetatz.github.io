@@ -1,0 +1,117 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Portageのオプション</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/02/25/portage-options/">Portageのオプション</a></h1>
+
+<p>2018/02/25</p>
+
+<p>portage操作によく使うオプションたちを覚えるためにまとめる。</p>
+
+<h3>同期</h3>
+
+<p>Portageツリーの同期。ebuildファイル(パッケージの設計書)を更新する。</p>
+
+<pre><code>### emerge --sync
+</code></pre>
+
+<h3>検索</h3>
+
+<p>パッケージを検索する。</p>
+
+<pre><code>### emerge --search &lt;pattern&gt;
+</code></pre>
+
+<p>以下でパッケージの詳細を表示する。(&ndash;pretendによりインストールは行われない)</p>
+
+<pre><code>### emerge --verbose --pretend(-p) &lt;package&gt;
+</code></pre>
+
+<h3>インストール</h3>
+
+<p>パッケージをインストールする。</p>
+
+<pre><code>### emerge --ask(-a) --verbose(-v) &lt;package&gt;
+</code></pre>
+
+<h3>更新</h3>
+
+<p>インストールした全てのパッケージを更新する。
+あんま使わない。</p>
+
+<pre><code>### emerge --update(-u) --deep(-D) world
+</code></pre>
+
+<h3>更新(&ndash;newuse)</h3>
+
+<p>USEフラグに変更があった全てのパッケージを更新する。
+よく使う。</p>
+
+<pre><code>### emerge --update --deep --newuse(-N) world
+</code></pre>
+
+<h3>アンインストール</h3>
+
+<p>指定したパッケージを削除する(依存関係は削除されない)</p>
+
+<pre><code>### emerge --unmerge(-C) &lt;package&gt;
+</code></pre>
+
+<h3>不要パッケージ削除</h3>
+
+<p>依存関係を持たないパッケージを削除する。unmergeした後はたたくのが推奨。</p>
+
+<pre><code>### emerge --depclean
+</code></pre>
+
+<h3>その他</h3>
+
+<p>Portageによって使用されている変数を確認する。</p>
+
+<pre><code>### emerge --info
+</code></pre>
+
+<p>前回のセッションを再開する。</p>
+
+<pre><code>### emerge --resume
+</code></pre>
+
+<p>最初のパッケージを飛ばして、前回のセッションを再開する。</p>
+
+<pre><code>### emerge --resume --skipfirst
+</code></pre>
+
+<p>/var/lib/portage/worldにパッケージ名の書き込みを行わない。
+ライブラリなど、依存関係でbuildされるパッケージを単独でrebuildする場合などに使う。</p>
+
+<pre><code>### emerge --oneshot(-1)
+</code></pre>
+
+<ul>
+<li>システムの再構築</li>
+</ul>
+
+<pre><code>### emerge -e system
+### emerge -e world
+</code></pre>
+
+</body>
+
+</html>

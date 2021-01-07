@@ -1,0 +1,155 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Goで使いやすいPackageを作るために知っておきたいこと</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/11/9/go-package-style/">Goで使いやすいPackageを作るために知っておきたいこと</a></h1>
+
+<p>2018/11/9</p>
+
+<p>Goのコードをいろいろと読んできて感じた、Goらしいパッケージのデザインを書いていく。</p>
+
+<h3>パッケージ</h3>
+
+<p>Goのパッケージは、ディレクトリ構造と一致する。
+ひとつのディレクトリには同じパッケージのファイルだけがある必要がある。
+また、パッケージ内には複数のGoファイルがあり、それらは <code>適切に</code> 分けられているべきだ。</p>
+
+<p>例えば、<a href="https://github.com/golang/go/tree/master/src/strings">strings</a>パッケージを見てみよう。
+stringsを操作するドメインごとにファイルが分かれている。
+とはいえ、Goではパッケージ = 名前空間なので、そんなに気にしすぎる必要はない。</p>
+
+<pre><code>builder.go
+builder_test.go
+compare.go
+compare_test.go
+example_test.go
+export_test.go
+reader.go
+reader_test.go
+replace.go
+replace_test.go
+search.go
+search_test.go
+strings.go
+strings.s
+strings_test.go
+</code></pre>
+
+<h3>doc.go</h3>
+
+<p>doc.goという文化がある。コメントでパッケージの説明を書き、最後に <code>package xxx</code> だけ書いておく、というものだ。</p>
+
+<p><a href="https://github.com/golang/go/blob/master/src/cmd/asm/doc.go">go/src/cmd/asm/doc.go</a>では、そのパッケージによって提供されるコマンドのusageを書いている。</p>
+
+<p><a href="https://github.com/golang/go/blob/master/src/runtime/race/doc.go">go/src/runtime/race/doc.go</a>では、単にパッケージの説明が書いてある。</p>
+
+<p><a href="https://github.com/golang/go/blob/master/src/net/http/doc.go">go/src/net/http/doc.go</a>では、パッケージのサンプルコードを書いている。</p>
+
+<p>書く内容は上記のように多岐にわたるのだが、ある程度規模の大きいパッケージを作るときには覚えておきたいテクニックだ。</p>
+
+<h3>型とファイルはなるべく一致させる</h3>
+
+<p>goでは、例えば<a href="https://github.com/golang/go/blob/master/src/net/http/header.go">http.Header</a> は <code>net/http/header.go</code> にあることが一般的だ。</p>
+
+<pre><code class="language-go">// Copyright 2010 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+package http
+
+import (
+	&quot;io&quot;
+	&quot;net/http/httptrace&quot;
+	&quot;net/textproto&quot;
+	&quot;sort&quot;
+	&quot;strings&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+)
+
+// A Header represents the key-value pairs in an HTTP header.
+type Header map[string][]string
+
+// Add adds the key, value pair to the header.
+// It appends to any existing values associated with key.
+// The key is case insensitive; it is canonicalized by
+// textproto.CanonicalMIMEHeaderKey.
+func (h Header) Add(key, value string) {
+	textproto.MIMEHeader(h).Add(key, value)
+}
+</code></pre>
+
+<p>このように、ファイル名と一致するstructがあり、そのメソッドが定義されている、というのは一般的だ。</p>
+
+<h3>パッケージは責務ごとに切る</h3>
+
+<p>Ruby on Railsや他のMVCフレームワークのように、 <code>model</code> や <code>controller</code> のようなパッケージはGoでは切らない。
+そうではなく、機能に紐付いた責務でパッケージを切る。</p>
+
+<p>例えば、userテーブルに紐づくuser構造体のあるべき場所は、 <code>models</code> パッケージではなく、 <code>user</code> 構造体を使用する
+ドメインのパッケージである。
+これがうまく決められない場合は、大きなひとつのmainパッケージにしても構わない。</p>
+
+<h3>godocを書く</h3>
+
+<p>すべてのGoプログラマは<a href="https://godoc.org/">godoc</a>についてよく知っているべきだ。
+godocはわざわざそのために書いているわけではなく、コードの中のコメントを勝手に読んでくれる。
+godocフレンドリーなコメントを常に書くよう心がける。</p>
+
+<h3>Exampleを書く</h3>
+
+<p>パッケージの関数の使い方を説明するために、godocに加え <code>Example</code> という手法がある。
+<a href="https://golang.org/pkg/strings/#Replace">strings.Replace</a>を見てみよう。</p>
+
+<p><img src="/images/go-package-style/1.png" alt="" /></p>
+
+<p>このように、 <code>Example</code> が表示されている。
+これはどのように生成されているかというと、 <a href="https://golang.org/src/strings/example_test.go#L200">example_test.go</a>にある。</p>
+
+<pre><code class="language-go">func ExampleReplace() {
+	fmt.Println(strings.Replace(&quot;oink oink oink&quot;, &quot;k&quot;, &quot;ky&quot;, 2))
+	fmt.Println(strings.Replace(&quot;oink oink oink&quot;, &quot;oink&quot;, &quot;moo&quot;, -1))
+	// Output:
+	// oinky oinky oink
+	// moo moo moo
+}
+</code></pre>
+
+<p>godocのExampleは、</p>
+
+<ul>
+<li>xxx_test.go に定義している(つまりgoからはテストとみなされ、普通にgo buildしてもビルド対象にはならない)</li>
+<li>ExampleXxx() という名前の関数である</li>
+</ul>
+
+<p>ときに、生成される。
+strings.Replaceのケースでは <code>example_test.go</code> にまとめてstringsパッケージのexampleが定義してあるが、
+<code>example_test</code> にしなくても動作する。</p>
+
+<p>また、上記のように <code>Output: xxx</code> と書くことで、これ自体がテストの役割を果たす。
+goから見るとExampleであってもtestとみなされ、 <code>go test</code> 時には <code>ExampleXxx</code> 関数を実行し、結果が <code>Output: xxx</code> と一致しているかを
+勝手にチェックしてくれるのだ。(すごい)</p>
+
+<p>また、関数名を工夫することで、単なる関数以外のテストもできるようになっている。
+詳しくは<a href="https://blog.golang.org/examples">Testable Examples in Go</a> を参照する。</p>
+
+</body>
+
+</html>

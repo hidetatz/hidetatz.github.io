@@ -1,0 +1,61 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>static siteをFirebaseでホストする</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/10/6/firebase-sitehosting/">static siteをFirebaseでホストする</a></h1>
+
+<p>2018/10/6</p>
+
+<p>このブログをfirebaseでホストすることにした。
+手順をdumpしておく。</p>
+
+<h3>プロジェクトの作成</h3>
+
+<p>コンソールからプロジェクトを作成する。</p>
+
+<h3>firebase cliの設定</h3>
+
+<p>firebaseはコマンドラインでデプロイできるため、ツールの設定を行う。</p>
+
+<pre><code class="language-shell">### ツールインストール
+$ sudo npm install -g firebase-tools
+
+### ログイン。URLが表示されたらコピーしてブラウザからアクセス
+$ firebase login --no-localhost
+
+### init いろいろ聞かれるので、各自の設定に合わせる
+$ firebase init
+
+### デプロイ。initで指定したディレクトリがデプロイされる
+$ firebase deploy
+</code></pre>
+
+<p>siteを更新した際は <code>firebase deploy</code> を実行すれば良い。</p>
+
+<h3>ドメインの設定</h3>
+
+<p>ProjectのコンソールからConnect Domainを選択し、ドメインを入力する。
+Aレコードに指定すべきIPアドレスが表示されるので、DNS側で設定する。</p>
+
+<p>あとはTLS証明書のプロビジョニングをしばらく待てば完了する。</p>
+
+</body>
+
+</html>

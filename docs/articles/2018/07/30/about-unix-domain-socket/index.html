@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>UNIXドメインソケットについて</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/07/30/about-unix-domain-socket/">UNIXドメインソケットについて</a></h1>
+
+<p>2018/07/30</p>
+
+<p>ISUCONの文脈で、UNIXドメインソケットという言葉がよく出てくる。
+詳しく知らなかったので、調べた。</p>
+
+<h2>Abstract</h2>
+
+<p>ISUCONの文脈では、通信をTCPからUNIXドメインソケットを利用するように切り替えることで高速化が図れる、ということを言う。
+通常、プロセス間通信はポートを通じてやり取りを行う。
+しかし、UNIXドメインソケット通信はポートを使わず、ファイルシステムを利用して通信する。</p>
+
+<h2>ファイルシステム</h2>
+
+<p>UNIXドメインソケットでは、ファイルをインタフェースに使ってプロセス間通信を行う。
+この時、実際にファイルを生成するわけではなく、ソケットファイルという特殊なファイルが使われている。</p>
+
+<h2>見る</h2>
+
+<p>以下のように確認できる。</p>
+
+<pre><code>$ netstat -lt --protocol=unix
+
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   PID/Program name     Path
+unix  2      [ ACC ]     STREAM     LISTENING     37610    2367/gnome-session-  @/tmp/.ICE-unix/2367
+unix  2      [ ACC ]     STREAM     LISTENING     29969    -                    @/tmp/.ICE-unix/1378
+unix  2      [ ACC ]     STREAM     LISTENING     14378499 -                    /run/cups/cups.sock
+unix  2      [ ]         DGRAM                    37368    2323/systemd         /run/user/1000/systemd/notify
+unix  2      [ ]         DGRAM                    29920    -                    /run/user/120/systemd/notify
+### 後略
+</code></pre>
+
+<h2>Go</h2>
+
+<p>Goでは、unixドメインソケットで使用するソケットファイルを、以下のようなコードで作ることができる。</p>
+
+<pre><code>package main
+
+import (
+  &quot;fmt&quot;
+  &quot;net&quot;
+)
+
+func main() {
+  listener, err := net.Listen(&quot;unix&quot;, &quot;socketfile&quot;)
+  if err != nil {
+    panic(err)
+  }
+  defer listener.Close()
+  _, err := listener.Accept()
+   if err != nil {
+    panic(err)
+   }  
+}  
+</code></pre>
+
+<p><code>net.Listen</code> の第一引数を <code>unix</code> にする。</p>
+
+<p>上記を <code>go run</code> して、別シェルから以下のように実行することで、ソケットファイルが作成されるのがわかる。</p>
+
+<pre><code>$ netstat -lt --protocol=unix | grep socketfile
+unix  2      [ ACC ]     STREAM     LISTENING     16241224 socketfile
+</code></pre>
+
+<p>逆に、上記で作られた <code>socketfile</code> を、使用するクライアントを作るには、 <code>net.Dial</code> を使用する。</p>
+
+<pre><code>conn, err := net.Dial(&quot;unix&quot;, &quot;socketfile&quot;)
+if err != nil {
+  panic(err)
+}
+</code></pre>
+
+<h2>使い所</h2>
+
+<p>ISUCONでは、同じインスタンス内にアプリケーションサーバとMySQLが同居している、みたいなことがある。
+そのような場合は、ひとつのOSの中なのでUNIXドメインソケット通信が使用できる。
+nginxの場合は
+<a href="https://github.com/shirokanezoo/isucon5/commit/0d0f8c6792a0289f97f778d8d1dd7b44d0c3dc48">https://github.com/shirokanezoo/isucon5/commit/0d0f8c6792a0289f97f778d8d1dd7b44d0c3dc48</a>
+な感じ、
+MySQLの場合は、my.cnfでソケットのパスを見て、アプリ側で指定する。</p>
+
+</body>
+
+</html>

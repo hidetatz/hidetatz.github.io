@@ -1,0 +1,100 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>wpa_supplicantでWPAの無線LANに繋ぐ</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2017/12/24/wpa-supplicant/">wpa_supplicantでWPAの無線LANに繋ぐ</a></h1>
+
+<p>2017/12/24</p>
+
+<h3>暗号化方式を確かめる</h3>
+
+<p>Windowsでログインして、繋がってるネットワークのプロパティからWEPなのか、WPA系なのかを確かめる。
+筆者環境の無線LANはWPA2形式で暗号化されていた。
+以下の方法はWPA系に対応した方法。</p>
+
+<h3>wpa_supplicantで繋ぐ</h3>
+
+<p>筆者はGentooインストールをSystemRescueCDからやっていたのでwpa_supplicantコマンドはデフォルトで入っていた。
+GentooのminimalCDとかには入ってないかもなので、その場合はSystemRescueCDを使うか、一回有線でつないでemergeするなどすること。</p>
+
+<p>まずは設定ファイルを作る。</p>
+
+<pre><code>% wpa_passphrase &quot;各自の無線のSSID&quot; &gt;&gt; /etc/wpa_supplicant/wpa_supplicant.conf
+
+</code></pre>
+
+<p>これで、 <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> に設定ファイルができる。
+念のため閲覧権限を与えておく。</p>
+
+<pre><code>% chmod -v 600 /etc/wpa_supplicant/wpa_supplicant.conf
+</code></pre>
+
+<p>次に、無線LANをキャッチできるドライバの名前を確かめる。</p>
+
+<pre><code>% iwconfig
+</code></pre>
+
+<p>iwconfigで、 <code>wlp...</code> みたいな名前のドライバがあると思うので、それの名前を覚えておく。
+筆者のマシン(ThinkPad E470) では <code>wlp5s0</code> だったので、その名前で説明する。</p>
+
+<p>そして、実際に繋ぐ。</p>
+
+<pre><code>% wpa_supplicant -Dnl80211,wext -iwlp5s0 -c/etc/wpa_supplicant/wpa_supplicant.conf -B
+Successfully initialized wpa_supplicant
+</code></pre>
+
+<p>そして、DHCPからIPアドレスをもらう。</p>
+
+<pre><code>% dhcpcd wlp5s0
+</code></pre>
+
+<p>確認する。</p>
+
+<pre><code>% ifconfig wlp5s0
+</code></pre>
+
+<p>これで、 IPアドレスがちゃんと振られていれば、インターネットに繋がると思う。
+pingを打つなりして確認する。</p>
+
+<h3>つながらない場合</h3>
+
+<p>もしつながらない場合はwpa_supplicantのログを出しながら繋ぐ。</p>
+
+<pre><code>% wpa_supplicant -Dnl80211,wext -iwlp5s0 -c/etc/wpa_supplicant/wpa_supplicant.conf
+</code></pre>
+
+<p>-Bオプションをなくすと、その場で繋いで、ログを出してくれるのでそれを読む。</p>
+
+<p>また、</p>
+
+<pre><code>% killall wpa_supplicant
+</code></pre>
+
+<p>で一回殺したり、</p>
+
+<pre><code>% ifconfig wlp5s0 down
+% ifconfig wlp5s0 up
+</code></pre>
+
+<p>で、ドライバをupしなおしたりするといいという情報もある。</p>
+
+</body>
+
+</html>

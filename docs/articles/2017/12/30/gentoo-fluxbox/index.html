@@ -1,0 +1,95 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>GentooにFluxboxを入れた</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2017/12/30/gentoo-fluxbox/">GentooにFluxboxを入れた</a></h1>
+
+<p>2017/12/30</p>
+
+<p>LinuxはWindowsやmacOSと異なり、GUI環境はあくまでカーネル上で動くプロセス(アプリケーション)に過ぎない。
+GUI環境を構築したい場合、最低限 <code>X</code> の導入が必要。また、多くの場合は別途ウインドウマネージャを導入することになる。
+Xとは <code>X Window System</code> のことで、サーバの役割を果たす。
+ウインドウマネージャ上でターミナルやブラウザが動作しており、その際ユーザのキーボード及びマウスからの入力を利用する。
+そこをXが中継していて、XはディスプレイやIOをウインドウマネージャに提供していることになる。</p>
+
+<h3>導入</h3>
+
+<p>まずはXを入れる。</p>
+
+<pre><code>$ emerge x11-base/xorg-server
+</code></pre>
+
+<p>起動には <code>startx</code> する。
+筆者環境ではいくつかコマンドが足りなかったので追加した。</p>
+
+<pre><code>$ emerge xclock
+$ emerge xterm
+</code></pre>
+
+<h3>ウインドウマネージャ導入</h3>
+
+<pre><code>$ emerge fluxbox
+</code></pre>
+
+<h3>設定</h3>
+
+<p>Xを上げた時に、ウインドウマネージャとしてfluxboxを使用する設定。</p>
+
+<pre><code>$ vi ~/.xinitrc
+</code></pre>
+
+<pre><code class="language-shell">exec startfluxbox
+</code></pre>
+
+<p>これで <code>startx</code> することで、fluxboxが起動する。</p>
+
+<p>次に、fluxboxのメニューを作る。
+メニューは画面上で右クリックした際に表示され、ここからアプリを立ち上げたり、Xを落としたりなどできる。</p>
+
+<pre><code>$ fluxbox-generate_menu
+</code></pre>
+
+<p>後は、 <code>~/.fluxbox/menu</code> をいじることでメニューを変えられる。</p>
+
+<p>次に、google-chromeを入れた。</p>
+
+<pre><code>$ emerge google-chrome
+</code></pre>
+
+<p>そして、fluxboxのメニューに登録する。</p>
+
+<pre><code>$ vi .fluxbox/menu
+</code></pre>
+
+<pre><code>### 好きなところに追記
+      [exec] (Google Chrome) {google-chrome-stable}
+</code></pre>
+
+<p><code>()</code> がメニュー表示文言で、 <code>{}</code> がコマンドを示している。</p>
+
+<p>chromeが起動できることを確認する。</p>
+
+<h3>終了</h3>
+
+<p>終了時は何もないところで右クリックして、 <code>Fluxbox menu</code> -&gt; <code>Exit</code> すればOK。</p>
+
+</body>
+
+</html>

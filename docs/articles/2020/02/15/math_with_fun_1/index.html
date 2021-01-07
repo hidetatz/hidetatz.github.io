@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Math with fun #1: Factorization in easy way</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2020/02/15/math_with_fun_1/">Math with fun #1: Factorization in easy way</a></h1>
+
+<p>2020/02/15</p>
+
+<p>Let&rsquo;s see next formula.</p>
+<p><span class="math display">\[
+  6x^2 + 23x - 48
+\]</span></p><p>If you are asked to factorize this formula, how will you do it?
+Because this is quadratic equation, it will be this form.</p>
+<p><span class="math display">\[
+  (ax + b)(cx + d)
+\]</span></p><p>Now, we have to know what a, b, c and d are.
+This is the result of factorization of above formula.</p>
+<p><span class="math display">\[
+  (3x + 16)(2x - 3)
+\]</span></p><p>There are some ways to solve this problem, but one popular way is writing this diagram.</p>
+
+<pre><code>3   16
+  ×
+2   -3
+</code></pre>
+
+<p>Multiply 3 and 2 is 6.
+Multiply 16 and -3 is -48.</p>
+
+<p>Now, 2 numbers arranged diagonally (3 and -3, 2 and 16) can represent 23.</p>
+<p><span class="math display">\[
+3 * -3 + 2 * 16 = 23
+\]</span></p><p>To do factorization in this way, the steps are like this:</p>
+
+<ul>
+<li>Write 2 numbers which becomes a coefficint of <span class="math inline">\(x^2\)</span> (6) if they are multiplied</li>
+<li>Write 2 numbers which becomes constant term (-48) if they are multiplied</li>
+<li>If the result of the sum of diagonal multiplication (<span class="math inline">\(3 * -3 + 2 * 16 = 23\)</span>) is the same as a coefficint of <span class="math inline">\(x\)</span> (23), then the answer is found.
+
+<ul>
+<li>If they are different, try another multiplication</li>
+</ul></li>
+</ul>
+
+<p>The problem of this solution is that we are not sure how many times we have to try.
+For example, divisors of 6 are 1, 2, 3, 6. So, this diagram can be this 2 patterns:</p>
+
+<pre><code>6
+
+1
+</code></pre>
+
+<p>or</p>
+
+<pre><code>3
+
+2
+</code></pre>
+
+<p>48 is <span class="math inline">\(2^4 * 3\)</span> . So, it has more patterns.
+<span class="math inline">\((1, 48)\)</span>, <span class="math inline">\((2, 24)\)</span>, <span class="math inline">\((3, 16)\)</span>, <span class="math inline">\((4, 12)\)</span>, <span class="math inline">\((6, 8)\)</span>.</p>
+
+<p>Because of above, this diagram can be 10 patterns (<span class="math inline">\(2 * 5\)</span>).
+Also, we have to take care of - (minus). It becomes more.
+But we can simplify this method.</p>
+
+<h2>Don&rsquo;t need to examine all the cases</h2>
+
+<p>To get straight to the point, we can find the answer by 2 times trial at most.</p>
+
+<p>First, we need to check (6, 1) can be an answer.</p>
+
+<pre><code>6
+
+1
+</code></pre>
+
+<p>Now, we don&rsquo;t need to check all the cases for -48. Only possible answer is (1, 48).</p>
+
+<pre><code>6 +-1
+
+1 -+48
+</code></pre>
+
+<p>We can ignore other cases like (2, 24). Why?</p>
+
+<p>If (6, 1) and (2, 24) works, factorized answer will be like this:</p>
+<p><span class="math display">\[
+(6x \pm 2)(x \mp 24)
+\]</span></p><p>But, this can be still factorized:</p>
+<p><span class="math display">\[
+2(3x \pm 1)(x \mp 24)
+\]</span></p><p>If this can be an answer, given formula must be able to be factorized by 2. However, it&rsquo;s obviously impossible.
+In other words, left number and right number must be <em>coprime</em>. In this case, 6 and 2 is not coprime. So it never gets an answer.</p>
+
+<pre><code>6 +-1
+
+1 -+48
+</code></pre>
+
+<p>This also looks not leading us to an answer. So, let&rsquo;s see next case (3, 2).</p>
+
+<pre><code>3
+
+2
+</code></pre>
+
+<p>48 is composed of <span class="math inline">\(2 * 2 * 2 * 2 * 3\)</span>. 6 is <span class="math inline">\(2 * 3\)</span>.
+To make them coprime, only possible answer is (16, 3).</p>
+
+<pre><code>3 +-16
+
+2 -+3
+</code></pre>
+
+<p>Now, we only need to take care about sign.</p>
+
+</body>
+
+</html>

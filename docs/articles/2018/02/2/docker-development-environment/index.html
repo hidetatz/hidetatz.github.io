@@ -1,0 +1,121 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Dockerを使った開発環境</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body>
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/02/2/docker-development-environment/">Dockerを使った開発環境</a></h1>
+
+<p>2018/02/2</p>
+
+<p>自分のdockerの使い方について書いていく。</p>
+
+<p>筆者はコマンドラインツールをGoやRubyで書くことが多い。
+しかし、Rubyは実行にRubyが必要だ。Goはバイナリひとつで動かせるが、
+バイナリのビルドには結局Goが必要になる。
+しかし、ローカルにRubyやGoはなるべく入れたくないと思っている。
+これは単に潔癖なのではなく、実行環境のポータブル化を意識している。</p>
+
+<h2>手順</h2>
+
+<p>筆者は、何かコードを書き始めるときはまずDockerfileから書く。
+例として、nodeが動く環境を作りたいときは、自分はこんな感じで書いている。</p>
+
+<h3>Dockerfileを書く</h3>
+
+<p>Dockerfileは、あまり書いたことがない頃は悩みながら書いていたが、慣れてくると、全然難しくないことがわかる。
+とにかくnodeさえ動けばいいので、これだけ書く。</p>
+
+<pre><code>FROM node:8.9
+WORKDIR /app
+</code></pre>
+
+<p><code>/app</code> については後述する。
+FROMにはRubyならruby、Nodeならnodeを書けばいい。
+汎用的なものを作りたいなら、 <code>Ubuntu</code> とかを書けばいい。
+自分は、 <code>node docker</code> と検索して出て来る<a href="https://hub.docker.com/_/node/">Docker Hub</a>のページを見て、
+バージョンを選んでいる。</p>
+
+<h3>docker-compose.ymlを書く</h3>
+
+<p>docker-composeは絶対書かないといけないものではない(基本は複数コンテナのオーケストレーションに使うものなので。)が、
+自分は書くことが多い。</p>
+
+<pre><code>version: '2.2'
+services:
+  app:
+    build: .
+    command: 'tail -f /dev/null'
+    volumes:
+      - .:/app
+</code></pre>
+
+<p>上記例では、 <code>app</code> という識別子で、 <code>.</code> (カレントディレクトリ)のDockerfileを基に コンテナを作ります、ということを示している。</p>
+
+<p><code>command</code> は、本来コンテナ起動時に行うべき処理を書く。(例えば、Railsコンテナを立ち上げた際に <code>rails s</code> するなど。)
+が、ちょっと言語が動く環境を作りたいだけなので、起動時の処理は特にないことが多い。
+commandはなんでもいい(書かなくてもだぶん大丈夫)だが、自分はコンテナに入りたいことがある(デバッグなどのために)ので、
+そういうときは <code>tail -f /deb/null</code> を書いておくと何も起きないので便利。
+というのは、ここに <code>echo 'Hello World'</code> とかを書くと、echoした後にコンテナが停止してしまうので。</p>
+
+<p>また、 <code>volumes</code> で ホスト側の <code>.</code> (カレントディレクトリ)とコンテナ側の <code>/app</code> をマウントしている。
+これにより、ホストでコードを書いて、それを即コンテナで実行、とできるようになる。
+前述の <code>WORKDIR /app</code> のおかげで、コンテナ側のカレントディレクトリが <code>/app</code> になるので、実行ファイルのディレクトリも意識する必要はない。</p>
+
+<p>これらの処理は、docker-composeなしで(docker単体で)もできる。が、実行がちょっとめんどくさい。
+dockerのみだと、</p>
+
+<pre><code>$ docker build . -t nodeapp
+$ docker run -d --name nodeapp \
+  -w /app \
+  -v `pwd`:/app \
+  nodeapp tail -f /dev/null
+</code></pre>
+
+<p>こんな感じで、実行時のオプションをたくさん渡す必要がありめんどくさい。
+docker-composeだと、簡単にできる。</p>
+
+<pre><code>$ docker-compose build
+$ docker-compose up
+</code></pre>
+
+<h3>コードを実行</h3>
+
+<p>コードの実行もdocker-composeだと簡単で、</p>
+
+<pre><code>docker-compose run app node main.js
+</code></pre>
+
+<p>みたいに実行が可能。
+ホスト側のセットアップ済みのvimで開発し、実行はコンテナでできる。</p>
+
+<h3>tips</h3>
+
+<p>筆者は以下のように設定して、ちょっと楽にしている。</p>
+
+<pre><code>alias dr='docker'
+alias drc='docker-compose'
+</code></pre>
+
+<h3>まとめ</h3>
+
+<p>dockerがないと開発がつらい。</p>
+
+</body>
+
+</html>
