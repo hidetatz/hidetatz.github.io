@@ -121,6 +121,7 @@ asynchronous preemptionの導入によってスケジューリングがプリエ
 * [runtime: non-cooperative goroutine preemption](https://github.com/golang/go/issues/24543)
 * [runtime: tight loops should be preemptible](https://github.com/golang/go/issues/10958)
 * [runtime: golang scheduler is not preemptive - it's cooperative?](https://github.com/golang/go/issues/11462)
+* [Source file src/runtime/preempt.go](https://golang.org/src/runtime/preempt.go)
 * [Goroutine preemptive scheduling with new features of go 1.14](https://developpaper.com/goroutine-preemptive-scheduling-with-new-features-of-go-1-14/)
 * [Go: Goroutine and Preemption](https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7)
 * [At which point a goroutine can yield?](https://stackoverflow.com/questions/64113394/at-which-point-a-goroutine-can-yield)
