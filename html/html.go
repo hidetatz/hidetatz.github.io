@@ -23,7 +23,7 @@ const (
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="author" content="Hidetatsu Yaginuma">
 
-  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css" rel="stylesheet"></link>
   <script type="text/javascript" async
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
   </script>
@@ -31,7 +31,7 @@ const (
 `
 
 	Body = `
-<body>
+<body class="markdown-body">
 %s
 </body>
 `
