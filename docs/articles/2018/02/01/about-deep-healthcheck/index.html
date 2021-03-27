@@ -1,0 +1,42 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Deep Healthcheckについて</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+
+  <link href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<h2><a href="/">dtyler.io</a></h2>
+
+<h1><a href="/articles/2018/02/01/about-deep-healthcheck/">Deep Healthcheckについて</a></h1>
+
+<p>2018/02/01</p>
+
+<p>Deep Healthcheckパターンとは、<a href="http://aws.clouddesignpattern.org/index.php/CDP:Deep_Health_Check%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3">こちら</a>で紹介されている
+クラウドアーキテクチャのデザインパターンである。</p>
+
+<p>一般的にELBを使ったヘルスチェックでは、HTTPステータスコード200を返すだけの小さな処理のみを行うエンドポイントを用意するのが定石だ。
+しかし、これのデメリットは、後ろにあるDBサーバへの接続確認ができないことである。
+これを解決するために、単に200を返すのではなく、そのエンドポイントの処理の中でDB接続を発行し、
+DB接続観点でのヘルスチェックも一緒に見てしまう、というのが <strong>Deep Healthcheck</strong> パターンだと理解している。</p>
+
+<p>このパターンを採用するメリットは言うまでもなく、DBにもし繋げなければ5xxを返すなどすることで、DB接続失敗時にもヘルスチェック失敗にすることができることだ。</p>
+
+<p>しかし、以下のようなデメリットを抱えている。それは、ヘルスチェック自体が負荷になる可能性があることだ。
+ELBはデフォルトでヘルスチェックを15秒ごとに実行するので、15秒ごとに両系のサーバからDBへのコネクションが張られることになる。
+これが負荷にならないかはよくテストする必要がある。</p>
+
+</body>
+
+</html>

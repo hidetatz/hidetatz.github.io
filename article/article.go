@@ -44,11 +44,17 @@ func (a *Article) YMD() string {
 	if month < 10 {
 		smonth = fmt.Sprintf("0%d", month)
 	}
+
+	day := a.Timestamp.Day()
+	sday := fmt.Sprintf("%d", day)
+	if day < 10 {
+		sday = fmt.Sprintf("0%d", day)
+	}
 	return fmt.Sprintf(
-		"%d/%s/%d",
+		"%d/%s/%s",
 		a.Timestamp.Year(),
 		smonth,
-		a.Timestamp.Day(),
+		sday,
 	)
 }
 
