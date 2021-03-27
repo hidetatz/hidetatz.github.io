@@ -40,7 +40,7 @@ const indexPageMD = `
 `
 
 const jaIndexPageMD = `
-## [dtyler.io](/)
+# [dtyler.io](/)
 
 [About](/about)
 
