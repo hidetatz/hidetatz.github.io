@@ -20,11 +20,9 @@ const timeformat = "2006/01/02"
 const articlePageMD = `
 # [dtyler.io](/)
 
----
-
 # %s
 
-%s
+#### %s
 
 %s
 

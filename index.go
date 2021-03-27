@@ -28,7 +28,7 @@ import (
 // `
 
 const indexPageMD = `
-## [dtyler.io](/)
+# [dtyler.io](/)
 
 ---
 
