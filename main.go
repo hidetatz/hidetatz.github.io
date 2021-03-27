@@ -39,7 +39,7 @@ func gen() {
 	}
 
 	idx := GenerateIndexPageHTML(strings.Join(articleList, "\n"))
-	idxJA := GenerateIndexPageHTML(strings.Join(articlesJAList, "\n"))
+	idxJA := GenerateJaIndexPageHTML(strings.Join(articlesJAList, "\n"))
 
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")

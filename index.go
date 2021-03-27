@@ -30,8 +30,6 @@ import (
 const indexPageMD = `
 # [dtyler.io](/)
 
----
-
 [About](/about)
 
 [Ja](/ja)
@@ -43,8 +41,6 @@ const indexPageMD = `
 
 const jaIndexPageMD = `
 ## [dtyler.io](/)
-
----
 
 [About](/about)
 
