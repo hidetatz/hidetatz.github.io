@@ -16,7 +16,7 @@ import (
 
 const timeformat = "2006/01/02"
 
-// title, url, datetime, content
+// title, datetime, content
 const articlePageMD = `
 # [dtyler.io](/)
 
@@ -165,5 +165,5 @@ func (a *Article) FormatTime() string {
 }
 
 func GenerateArticlePageHTML(a *Article) string {
-	return GenerateHTMLPage(a.Title, fmt.Sprintf(articlePageMD, a.Title, fmt.Sprintf("/articles/%s/%s/", a.FormatTime(), a.FileNameWithoutExtension()), a.FormatTime(), strings.Join(a.ContentsMD, "\n")))
+	return GenerateHTMLPage(a.Title, fmt.Sprintf(articlePageMD, a.Title, a.FormatTime(), strings.Join(a.ContentsMD, "\n")))
 }
