@@ -18,13 +18,19 @@ const timeformat = "2006/01/02"
 
 // title, url, datetime, content
 const articlePageMD = `
-## [dtyler.io](/)
+# [dtyler.io](/)
 
-# [%s](%s)
+---
+
+# %s
 
 %s
 
 %s
+
+---
+
+[home](/)
 `
 
 type Article struct {
