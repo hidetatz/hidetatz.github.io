@@ -1,4 +1,4 @@
-package html
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	HTML = `
+	Page = `
 <!doctype html>
 <html lang="en">
 %s
@@ -37,20 +37,11 @@ const (
 `
 )
 
-func NewBody(contents string) string {
-	return fmt.Sprintf(Body, contents)
-}
+func GenerateHTMLPage(title, contentsMarkdown string) string {
+	head := fmt.Sprintf(Head, title)
 
-func NewHead(title string) string {
-	return fmt.Sprintf(Head, title)
-}
+	bodyHTML := string(markdown.ToHTML([]byte(contentsMarkdown), nil, nil))
+	body := fmt.Sprintf(Body, bodyHTML)
 
-func Format(title, contents string) string {
-	head := NewHead(title)
-	body := NewBody(contents)
-	return fmt.Sprintf(HTML, head, body)
-}
-
-func NewFromMarkdown(md string) string {
-	return string(markdown.ToHTML([]byte(md), nil, nil))
+	return fmt.Sprintf(Page, head, body)
 }

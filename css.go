@@ -1,7 +1,6 @@
-package css
+package main
 
-func New() string {
-	return `
+const css = `
 html {
   font-size: 100%;
   overflow-y: scroll;
@@ -301,4 +300,3 @@ td {
   }
 }
 	`
-}

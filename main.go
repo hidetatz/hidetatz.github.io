@@ -5,68 +5,45 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"time"
+	"strings"
+)
 
-	"github.com/yagi5/blog/about"
-	"github.com/yagi5/blog/article"
-	"github.com/yagi5/blog/cname"
-	"github.com/yagi5/blog/css"
-	"github.com/yagi5/blog/index"
+const (
+	cname = "dtyler.io"
 )
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	cmd := os.Args[1]
-	switch {
-	case cmd == "new":
-		if len(os.Args) != 3 {
-			log.Fatalf("title is empty")
-		}
-
-		newArticle(os.Args[2])
-
-	case cmd == "gen":
-		removeAllFiles("./docs/")
-		gen()
-	}
-}
-
-func newArticle(title string) {
-	content := fmt.Sprintf(`%s---%s`, title, time.Now().Format("2006-01-02 15:04:05"))
-	write(content, fmt.Sprintf("./data/articles/%s.md", title))
-	fmt.Printf("file created: %s\n", fmt.Sprintf("./data/articles/%s.md", title))
+	removeAllFiles("./docs/")
+	gen()
 }
 
 func gen() {
-	cname := cname.New()
-	write(cname, "./docs/CNAME")
-
-	css := css.New()
+	write(cname, "./docs/CNAME") // required for GitHub pages
 	write(css, "./docs/markdown.css")
+	write(GenerateHTMLPage("about", About), "./docs/about/index.html")
 
-	articles := article.NewArticles("./data/articles")
-	articleList := articles.List()
+	articles := ReadArticles("./data/articles")
+	articleList := ListArticlesHref(articles)
 
 	for _, a := range articles {
-		write(a.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
+		write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
 	}
 
-	articlesJA := article.NewArticles("./data/articles/ja")
-	articlesJAList := articlesJA.ListJA()
+	articlesJA := ReadArticles("./data/articles/ja")
+	articlesJAList := ListArticlesHref(articlesJA)
 
 	for _, a := range articlesJA {
-		write(a.ToHTML(), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.YMD(), a.FileNameWithoutExtension()))
+		write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
 	}
 
-	idx := index.New(articleList)
-	idxJA := index.NewJA(articlesJAList)
+	idx := GenerateIndexPageHTML(strings.Join(articleList, "\n"))
+	idxJA := GenerateIndexPageHTML(strings.Join(articlesJAList, "\n"))
 
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
 
-	about := about.New()
-	write(about.ToHTML(), "./docs/about/index.html")
 }
 
 func write(content, fileNameWithDir string) {
