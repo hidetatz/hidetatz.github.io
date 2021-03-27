@@ -28,14 +28,19 @@ func gen() {
 	articleList := ListArticlesHref(articles)
 
 	for _, a := range articles {
-		write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+		// if url != nil, no need to generate the page because it is linked from nowhere
+		if a.URL == nil {
+			write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+		}
 	}
 
 	articlesJA := ReadArticles("./data/articles/ja")
 	articlesJAList := ListArticlesHref(articlesJA)
 
 	for _, a := range articlesJA {
-		write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+		if a.URL == nil {
+			write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+		}
 	}
 
 	idx := GenerateIndexPageHTML(strings.Join(articleList, "\n"))
