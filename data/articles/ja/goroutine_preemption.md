@@ -105,6 +105,8 @@ Go1.14で導入されたnon-cooperative preemptionによって、Goroutineのス
 まず、sysmonは今まで通り、10ms以上動き続けているG (goroutine)を検知する。すると、sysmonはそのGを動かしているスレッド (P) にシグナル (SIGURG) を送信する。
 Goのsignal handlerはシグナルをハンドリングするためにそのPに対して `gsignal` という別のgoroutineを起動し、それまで実行していたGの代わりにMと対応付け、gsignalにシグナルを確認させる。gsignalはプリエンプションが命じられたことをわかり、それまで実行していたGを停止する。
 
+すなわち、Go1.13までは関数コールがないと仕組み上プリエンプションしなかったが、Go1.14では明示的なシグナルの送信によってプリエンプションが実行されるようになった。言い換えると、プリエンプションをgoroutine自身でなくシグナルを契機とした外的要因で実行できるようになったのだ。
+
 この、シグナルを用いた非同期のプリエンプションの仕組みによって、先述のコードは期待通り動くようになった。それでも、 `GODEBUG=asyncpreemptoff=1` にすることでasynchrnous preemptionはオフにすることが可能だ。
 
 ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 ([参考](https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations))
