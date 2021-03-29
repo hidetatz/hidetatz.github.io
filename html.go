@@ -44,6 +44,8 @@ const (
 <body class="markdown-body">
 %s
 
+<hr>
+
 <footer>
 <p style="text-align:center">© 2017-2021 Hidetatsu Yaginuma</p>
 </footer>
