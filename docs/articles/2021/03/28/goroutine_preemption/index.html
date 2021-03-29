@@ -116,7 +116,7 @@ func main() {
 sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。MとかPとかは様々な解説記事 (<a href="https://developpaper.com/gmp-principle-and-scheduling-analysis-of-golang-scheduler/">これ</a>とか) を参照することをお薦めする。</p>
 
 <p>sysmonはMが同じG (Goroutine) を10ms以上実行し続けているのを見つけると、そのGの内部パラメータである <code>preempt</code> フラグをtrueにする。その後、そのGが関数コールした際のfunction prologueで、Gは自身の <code>preempt</code> フラグを確認し、trueだった場合は自身をMから切り離し、グローバルキューというキューにプッシュする。すなわち、無事プリエンプションが実行されたというわけだ。
-グローバルキューとはPが持つGのキュー (=ローカルキュー) とは異なるキューである。グローバルキューの目的はいくつかある。</p>
+ちなみに、グローバルキューとはPが持つGのキュー (=ローカルキュー) とは異なるキューである。グローバルキューの目的はいくつかある。</p>
 
 <ul>
 <li>ローカルキューはキャパシティが256であり、それを超えるGを格納するため</li>
@@ -124,7 +124,7 @@ sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。
 <li>preemptフラグで切り離されたGを格納するため</li>
 </ul>
 
-<p>ここまでがGo1.13までの実装である (はず) だが、ここまでを理解すれば前述の無限ループするコードが何故期待通りに動かなかったのかがわかるだろう。 <code>for {}</code> は単なるビジーループなので、先に書いたようなgoroutineのスイッチの契機には特にならない。「10ms以上実行されているからsysmonによってpreemptフラグが立てられるのでは？」と思うが、 <strong>preemptフラグが立っても関数コールがなければそのフラグのチェックが発生しない</strong> のである。先に書いたように、preemptフラグのチェックはfunction prologueで起こるから、何の処理もしないビジーループではプリエンプションの実行まで到達できなかったのである。</p>
+<p>ここまでがGo1.13までの実装であるが、ここまでを理解すれば前述の無限ループするコードが何故期待通りに動かなかったのかがわかるだろう。 <code>for {}</code> は単なるビジーループなので、先に書いたようなgoroutineのスイッチの契機には特にならない。「10ms以上実行されているからsysmonによってpreemptフラグが立てられるのでは？」と思うが、 <strong>preemptフラグが立っても関数コールがなければそのフラグのチェックが発生しない</strong> のである。先に書いたように、preemptフラグのチェックはfunction prologueで起こるから、何の処理もしないビジーループではプリエンプションの実行まで到達できなかったのである。</p>
 
 <p>そして、Go1.14で導入された &ldquo;non-cooperative preemption&rdquo; (asynchronous preemption) によって、この挙動は変わった。</p>
 
