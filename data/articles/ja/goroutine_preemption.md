@@ -61,7 +61,7 @@ $ GOMAXPROCS=1 GODEBUG=asyncpreemptoff=1 go run main.go
 ```
 
 `runtime.Gosched()` は、POSIXの [`sched_yield`](https://man7.org/linux/man-pages/man2/sched_yield.2.html) のようなもの (たぶん) だ。 `sched_yield` は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 `Gosched` という名前なのかと思われる (これは予想) 。
-すなわち、 `runtime.Gosched()` を明示的にコールすることで強制的にgoroutineの再スケジュールが行われることで、別のgoroutineにスイッチされることを期待できる。
+すなわち、 `runtime.Gosched()` を明示的にコールすることで強制的にgoroutineの再スケジュールが行われ、別のgoroutineにスイッチされることを期待できる。
 
 また、[GOEXPERIMENT=preemptibleloops](https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257)を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。
 

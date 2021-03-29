@@ -89,7 +89,7 @@ func main() {
 </code></pre>
 
 <p><code>runtime.Gosched()</code> は、POSIXの <a href="https://man7.org/linux/man-pages/man2/sched_yield.2.html"><code>sched_yield</code></a> のようなもの (たぶん) だ。 <code>sched_yield</code> は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 <code>Gosched</code> という名前なのかと思われる (これは予想) 。
-すなわち、 <code>runtime.Gosched()</code> を明示的にコールすることで強制的にgoroutineの再スケジュールが行われることで、別のgoroutineにスイッチされることを期待できる。</p>
+すなわち、 <code>runtime.Gosched()</code> を明示的にコールすることで強制的にgoroutineの再スケジュールが行われ、別のgoroutineにスイッチされることを期待できる。</p>
 
 <p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
 
