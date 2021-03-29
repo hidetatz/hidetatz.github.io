@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -22,6 +23,7 @@ func main() {
 func gen() {
 	write(cname, "./docs/CNAME") // required for GitHub pages
 	write(css, "./docs/markdown.css")
+	cp("favicon.ico", "./docs/favicon.ico")
 	write(GenerateHTMLPage("about", About), "./docs/about/index.html")
 
 	articles := ReadArticles("./data/articles")
@@ -49,6 +51,25 @@ func gen() {
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
 
+}
+
+func cp(src, dst string) {
+	in, err := os.Open(src)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func write(content, fileNameWithDir string) {
