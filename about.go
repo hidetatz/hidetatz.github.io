@@ -14,6 +14,8 @@ Hidetatsu loves infrastructure, database, transaction, concurrent programming, d
 
 ---
 
-[home](/)
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
 `
 )
