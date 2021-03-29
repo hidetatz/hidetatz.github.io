@@ -43,6 +43,10 @@ const (
 	Body = `
 <body class="markdown-body">
 %s
+
+<footer>
+  <p>© 2017-2021 Hidetatsu Yaginuma</p>
+</footer>
 </body>
 `
 )
