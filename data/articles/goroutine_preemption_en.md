@@ -121,8 +121,6 @@ Although the introduction of asynchronous preemption made scheduling more preemp
 
 ## References
 
-## 参考
-
 * [Proposal: Non-cooperative goroutine preemption](https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md)
 * [runtime: non-cooperative goroutine preemption](https://github.com/golang/go/issues/24543)
 * [runtime: tight loops should be preemptible](https://github.com/golang/go/issues/10958)
