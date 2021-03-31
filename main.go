@@ -1,12 +1,19 @@
 package main
 
 import (
+	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"log"
+	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
+
+	"github.com/atotto/clipboard"
 )
 
 const (
@@ -16,8 +23,94 @@ const (
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	removeAllFiles("./docs/")
-	gen()
+	g := flag.Bool("gen", false, "generate static site from markdown articles")
+	n := flag.Bool("new", false, "generate a new article file template")
+
+	flag.Parse()
+
+	switch {
+	case *g:
+		removeAllFiles("./docs/")
+		gen()
+	case *n:
+		newFile()
+	default:
+		runServer()
+	}
+}
+
+func newFile() {
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Println("en or ja?")
+	lang, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	lang = strings.TrimSpace(lang)
+	if lang != "en" && lang != "ja" {
+		log.Fatal("lang must either en or ja")
+	}
+
+	fmt.Println("filename?")
+	filename, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	filename = strings.TrimSpace(filename)
+	if filename == "" {
+		log.Fatal("file must not be empty")
+	}
+
+	fmt.Println("url? (just hit enter if not an external URL)")
+	url, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	url = strings.TrimSpace(url)
+	templateContent := fmt.Sprintf("title of article here---%s", time.Now().Format("2006-01-02 15:04:05"))
+	if url != "" {
+		templateContent += fmt.Sprintf("---%s", url)
+	}
+
+	if lang == "en" {
+		write(templateContent, fmt.Sprintf("./data/articles/%s.md", filename))
+	} else {
+		write(templateContent, fmt.Sprintf("./data/articles/ja/%s.md", filename))
+	}
+}
+
+func runServer() {
+	port := "8080"
+	directory := "./docs"
+	ip := getLocalIP()
+
+	http.Handle("/", http.FileServer(http.Dir(directory)))
+
+	fmt.Printf("Serving at %s:%s (the address is automatically copied into the clipboard)\n", ip, port)
+
+	clipboard.WriteAll(fmt.Sprintf("%s:%s", ip, port))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func getLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		panic(err)
+	}
+
+	for _, a := range addrs {
+		if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String()
+			}
+		}
+	}
+
+	return ""
 }
 
 func gen() {
