@@ -2,14 +2,22 @@
 
 https://dtyler.io
 
+## Run blog on local HTTP server
+
+```shell
+make
+```
+
+then, access the url copied into the clipboard
+
 ## How to write Article
 
 ```shell
-./scripts/new
+make new
 ```
 
 ## How to generate blog
 
 ```shell
-./scripts/gen
+make gen
 ```
