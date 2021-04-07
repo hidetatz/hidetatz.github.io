@@ -24,8 +24,17 @@ const (
 )
 
 var (
-	//go:embed markdown.css
-	css string
+	//go:embed assets/favicon.ico
+	favicon string
+
+	//go:embed assets/markdown.css
+	markdownCSS string
+
+	//go:embed assets/syntax.css
+	syntaxCSS string
+
+	//go:embed assets/highlight.pack.js
+	syntaxJS string
 
 	//go:embed data/about.md
 	about string
@@ -173,9 +182,14 @@ func getLocalIP() string {
 }
 
 func gen() {
-	write(cname, "./docs/CNAME") // required for GitHub pages
-	write(css, "./docs/markdown.css")
-	cp("favicon.ico", "./docs/favicon.ico")
+	// required for GitHub pages
+	write(cname, "./docs/CNAME")
+
+	// assets
+	write(markdownCSS, "./docs/markdown.css")
+	write(syntaxCSS, "./docs/syntax.css")
+	write(syntaxJS, "./docs/syntax.js")
+	write(favicon, "./docs/favicon.ico")
 	write(GenerateHTMLPage("about", about), "./docs/about/index.html")
 
 	articles := ReadArticles("./data/articles")
