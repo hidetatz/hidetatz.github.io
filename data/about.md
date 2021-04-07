@@ -1,8 +1,3 @@
-package main
-
-const (
-	About = `
-
 # [dtyler.io](/)
 
 # About
@@ -17,5 +12,4 @@ Hidetatsu loves infrastructure, database, transaction, concurrent programming, d
 <div style="text-align: center;">
   <a href="/">home</a>
 </div>
-`
-)
+

@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	_ "embed"
 	"flag"
 	"fmt"
 	"io"
@@ -20,6 +21,14 @@ import (
 
 const (
 	cname = "dtyler.io"
+)
+
+var (
+	//go:embed markdown.css
+	css string
+
+	//go:embed data/about.md
+	about string
 )
 
 func main() {
@@ -167,7 +176,7 @@ func gen() {
 	write(cname, "./docs/CNAME") // required for GitHub pages
 	write(css, "./docs/markdown.css")
 	cp("favicon.ico", "./docs/favicon.ico")
-	write(GenerateHTMLPage("about", About), "./docs/about/index.html")
+	write(GenerateHTMLPage("about", about), "./docs/about/index.html")
 
 	articles := ReadArticles("./data/articles")
 	articleList := ListArticlesHref(articles)

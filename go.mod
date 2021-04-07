@@ -1,6 +1,6 @@
 module github.com/yagi5/blog
 
-go 1.13
+go 1.16
 
 require (
 	github.com/atotto/clipboard v0.1.4
