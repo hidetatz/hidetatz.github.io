@@ -2,7 +2,7 @@ Mutex starvation in Go---2021-04-07 18:00:00
 
 ## Introduction
 
-Mutex is one of the synchronization primitives in multi-threaded programming. A mutex object usually has a `Lock()` `Unlock()` interface and can lock/unlock itself. Also, it guarantees that it cannot be locked by multiple threads at the same time. If the user program always acquires a lock before entering a critical section, and releases the lock as soon as the critical section is over, exclusions can be performed even in a multi-threaded environment.
+Mutex is one of the synchronization primitives in multi-threaded programming. A mutex object usually has a `Lock()` `Unlock()` interface and can lock/unlock itself. Also, it guarantees that it cannot be locked by multiple threads at the same time. If the user program always acquires a lock before entering a critical section, and releases the lock as soon as the critical section is over, "mutual exclusions" can be performed even in a multi-threaded environment.
 
 Since mutex is a very simple locking mechanism, there are many variations in its algorithm. However, if the algorithm is not carefully chosen, it can sometimes cause "starvation", resulting in reduced throughput and even system stop.
 In this article, we will discuss the mutex algorithm that causes starvation in certain situations that existed up to Go 1.8. We will use actual programs as examples to gain a better understanding of the mutex behavior, starvation, and locking algorithms. Then, we will look at the changes that Go has made in 1.9 to make situation better.
@@ -49,7 +49,7 @@ func main() {
 }
 ```
 
-This program starts one goroutine (*goroutine 1*), and inside it, it starts a for-loop. In the loop, it locks the mutex, sleeps for 100µs, and then release of the lock.
+This program starts one goroutine (*goroutine 1*), and inside it, it starts a for-loop. In the loop, it locks the mutex, sleeps for 100µs, and then releases the lock.
 In another goroutine (*goroutine 2*), it starts a for-loop that runs only 10 times, and in the loop, it sleeps for 100µs, then acquires the lock, and immediately unlocks it.
 
 Now let's think about how this program will work. My guess is: "goroutine2 will eventually acquire the lock 10 times, but in the meantime, goroutine1 will also acquire the lock several times, and the program will terminate normally soon, probably in no longer than 1 or 2 seconds".
