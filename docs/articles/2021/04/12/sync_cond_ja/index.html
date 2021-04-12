@@ -259,7 +259,7 @@ func (s *SizeLimitedQueue) Pop() int {
 
 <ul>
 <li>条件変数 <code>s.cond</code> : <code>s.nonEmptyCond</code> に変更し、「空だったキューが空でなくなったときに通知する」ように修正。これは <code>Pop()</code> の中の <code>Wait()</code> の際に使用する。</li>
-<li>新条件変数 <code>s.nonFullCond</code> : 新たに定義。「満杯だったキューが満杯でなくなったときに通知する」ように修正。これは <code>Push()</code> の中の <code>Wait()</code> の際に使用する。</li>
+<li>新条件変数 <code>s.nonFullCond</code> : 新たに定義。「満杯だったキューが満杯でなくなったときに通知する」ようにする。これは <code>Push()</code> の中の <code>Wait()</code> の際に使用する。</li>
 </ul>
 
 <p>この修正により、「単にキュー長が変わっただけなのにすべてのgoroutineが起こされる」だった実装が「各goroutineが自分が関心のあるキュー長の変更の時にのみ起こされる」に変わった。</p>
