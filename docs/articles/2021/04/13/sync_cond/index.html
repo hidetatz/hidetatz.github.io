@@ -1,0 +1,485 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>What's the "sync.Cond"</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<h1>What&rsquo;s the &ldquo;sync.Cond&rdquo;</h1>
+
+<h4>2021/04/13</h4>
+
+<h2>Introduction</h2>
+
+<p>Go&rsquo;s <code>sync.Cond</code> is a synchronization primitive for multithreaded (goroutine, to be precise) programming.
+Compared to mutexes, sync.Cond has limited use cases, and its usage seems to be rather complicated. Also, I don&rsquo;t see enough explanations or examples of it.
+In this article, I will explain sync.Cond systematically to the best of my ability, not just as a reference for its usage. In addition, I will further explain and to get deep understanding of sync.Cond based on a subject that can be programmed in a better way using sync, and is likely to be found in the real world.</p>
+
+<h2>What is sync.Cond?</h2>
+
+<p>In a nutshell, sync.Cond is a mechanism to use &ldquo;<strong>condition variables</strong>&rdquo; in Go programs.
+First of all, <a href="https://golang.org/pkg/sync/#Cond">sync.Cond&rsquo;s godoc</a> says the following.</p>
+
+<pre><code>Cond implements a condition variable, a rendezvous point for 
+goroutines waiting for or announcing the occurrence of an event.
+</code></pre>
+
+<p>Again, the word <code>condition variable</code> appears.</p>
+
+<p>Condition variables is not a Go-specific term, but (if I understand it correctly) a POSIX term. In fact, there is an interface to manipulate condition variables for <a href="https://linux.die.net/man/3/pthread_cond_init">pthread</a>.
+There are also interfaces to manipulate condition variables for <a href="https://en.cppreference.com/w/cpp/thread/condition_variable">c++</a>, <a href="https://doc.rust-lang.org/std/sync/struct.Condvar.html">Rust</a>, <a href="https://docs.ruby-lang.org/ja/2.0.0/class/ConditionVariable.html">Ruby</a>, and various other languages.
+Also, as you can see from the reference of each language, the interface is almost the same in all languages. ( <code>wait</code> , <code>signal (or notify_one)</code> , <code>broadcast (or notify_all)</code> )</p>
+
+<p>&ldquo;Condition variables&rdquo; is a synchronization primitives in multithreaded programming, like semaphores and mutexes. In other words, it is a mechanism to avoid concurrent access to shared resources.
+However, while semaphores and mutexes work as synchronous primitives on their own, condition variables are used in combination with mutexes. It never is used alone.
+While mutexes are very simple and easy to understand as synchronization primitives, condition variables are a bit more complicated. In this article, let&rsquo;s deepen the understanding of condition variables by comparing it with mutexes.</p>
+
+<h3>Difference between condition variables and mutexes</h3>
+
+<p>A mutex is a very simple mechanism to guarantee that only one thread can enter a critical section.
+The situation where you want to use a mutex is when you want to perform exclusion control. In other words, you may want to use mutexes when you want to guarantee that only one thread has access to a critical section.</p>
+
+<p>Condition variables appends a point to the above &ldquo;I want to access a critical section&rdquo; situation. The point is &ldquo;I want to access a critical section, but I don&rsquo;t want to access it <strong>until a condition xxx is met</strong>&rdquo;. This might sound difficult to understand because it is written in a rather abstract way, but I will explain it later with a concrete example.</p>
+
+<p>In order to achieve the above in mutex, it is generally necessary to implement it as a busy weight. Let&rsquo;s take a look at the following pseudo code.</p>
+
+<pre><code>mutex_lock(); // Lock the critical section
+for (!condition) { // Spin until the condition gets true (busy wait)
+    mutex_unlock();
+    sched_yield();
+    mutex_lock();
+}
+do_something();
+mutex_unlock();
+</code></pre>
+
+<p>First, protect the critical section with a lock, then it checks the &ldquo;condition&rdquo; and continues to check it while looping infinitely until the condition is satisfied. In the loop, the lock is released once for other threads, and when the lock is obtained again, it returns to the head of the loop.</p>
+
+<p>Busy waiting is basically an implementation that should be avoided in normal application programming because it wastes CPU resources.
+With condition variables, this can be written without any spin.</p>
+
+<pre><code>mutex_lock();
+for (!condition) {
+  cond_wait(); // internally, it unlocks and locks the mutex
+}
+do_something();
+cond_notify_all();
+mutex_unlock();
+</code></pre>
+
+<p>It might look a bit confusing because it&rsquo;s pseudo-code (a working program in Go is described later), but <code>cond_wait</code> works internally as follows:</p>
+
+<ul>
+<li>Unlock locked mutex.</li>
+<li>Suspend its own thread and wait for notification on condition variables.</li>
+<li>Acquire a lock on the mutex when the notification arrives.</li>
+</ul>
+
+<p>(See Go&rsquo;s <a href="https://golang.org/src/sync/cond.go?s=1353:1374#L42">Implementation of <code>sync.Cond.Wait()</code></a> for more clarification.)</p>
+
+<p>When the lock is acquired, check the condition, and if true, exit the for-loop and do some processing in the critical section. Then it calls notify_all. This will wake up all other waiting threads.</p>
+
+<p>Instead of <code>notify_all</code>, there is an interface <code>notify_one</code>, which wakes up not all threads but only one.</p>
+
+<p>The difference between mutexes and condition variables is that mutexes need to be spun to &ldquo;check conditions&rdquo;, while condition variables can wait for an explicit notification to be sent by an event-like mechanism.</p>
+
+<p>This is similar to a situation like: a client is waiting for the success of some process on the server side, where <strong>it is more efficient to have an event sent when the process succeeds, rather than polling the status of the process periodically</strong>. If you take a look at the source code described below, you will see that condition variables can be used like publish-subscribe model in messaging models, as <strong>&ldquo;publish an event when a condition changes, and subscribe to it when threads want to observe the condition change&rdquo;</strong>.</p>
+
+<p>In the mutex implementation, sched_yield is called to allow other threads to run, but with condition variables, the condition variable itself does this on its own.</p>
+
+<p>Next, we will look at an example program that uses sync.Cond.</p>
+
+<h2>sync.Cond in Real World</h2>
+
+<p>As an example, we will try to successfully implement a multi-threaded queue using sync.Cond. Since a simple queue does not require any condition variables, we will follow the special specification below:</p>
+
+<ul>
+<li>Only int type values are stored.</li>
+<li>There must be a maximum length, and no more than the maximum number of elements must be stored.</li>
+<li>Pushing an element beyond the maximum length will <strong>block</strong>.</li>
+<li>Popping an element on the empty queue will <strong>block</strong>.</li>
+</ul>
+
+<p>Note that this example is based on <a href="http://joeduffyblog.com/2009/07/13/a-simple-condition-variable-primitive/">A simple condition variable primitive</a>.</p>
+
+<h3>Implementation with mutexes</h3>
+
+<p>First, let&rsquo;s take a look at the implementation using mutexes. This source code can be found on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go">dty1er/size-limited-queue/mutex_slqueue.go</a></p>
+
+<pre><code class="language-go">type MutexQueue struct {
+	mu       sync.Mutex
+	capacity int
+	queue    []int
+}
+
+func NewMutexQueue(capacity int) *MutexQueue {
+	return &amp;MutexQueue{
+		capacity: capacity,
+		queue:    []int{},
+	}
+}
+
+func (s *MutexQueue) Push(i int) {
+	s.mu.Lock()
+	for len(s.queue) == s.capacity {
+		s.mu.Unlock()
+		runtime.Gosched()
+		s.mu.Lock()
+	}
+
+	s.queue = append(s.queue, i)
+	s.mu.Unlock()
+}
+
+func (s *MutexQueue) Pop() int {
+	s.mu.Lock()
+	for len(s.queue) == 0 {
+		s.mu.Unlock()
+		runtime.Gosched()
+		s.mu.Lock()
+	}
+
+	ret := s.queue[0]
+	s.queue = s.queue[1:]
+	s.mu.Unlock()
+
+	return ret
+}
+</code></pre>
+
+<p>Let&rsquo;s start with <code>Push()</code>. This program must work correctly in a multi-threaded (goroutine) environment. Also, as mentioned above, the queue has a maximum length. In other words, the confirmation of the queue length and the addition of elements must be atomic. The mutex is used to ensure the atomicity.</p>
+
+<p>Because it must block if a threads try to push an element to the full queue, first make sure that the slice does not exceed the capacity, and if it does, then start spin releasing the lock until it gets a space in the queue.</p>
+
+<p><code>Pop()</code> is almost the same, atomically checking the queue length and popping the element. If the queue is empty, it blocks while spinning until an element is added (= until it can be popped).</p>
+
+<p>This is exactly the &ldquo;spin until a specific condition is met&rdquo; described above, which is an inefficient implementation. Let&rsquo;s rewrite this using condition variables.</p>
+
+<h3>Implementation using condition variables</h3>
+
+<p>The implementation using condition variables looks like this. You can find it on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go">dty1er/size-limited-queue/slqueue.go</a></p>
+
+<pre><code class="language-go">type SizeLimitedQueue struct {
+	cond     *sync.Cond
+	capacity int
+	queue    []int
+}
+
+func New(capacity int) *SizeLimitedQueue {
+	return &amp;SizeLimitedQueue{
+		cond:     sync.NewCond(&amp;sync.Mutex{}),
+		capacity: capacity,
+		queue:    []int{},
+	}
+}
+
+func (s *SizeLimitedQueue) Push(i int) {
+	s.cond.L.Lock()
+	for len(s.queue) == s.capacity {
+		s.cond.Wait()
+	}
+
+	s.queue = append(s.queue, i)
+	s.cond.Broadcast()
+	s.cond.L.Unlock()
+}
+
+func (s *SizeLimitedQueue) Pop() int {
+	s.cond.L.Lock()
+	for len(s.queue) == 0 {
+		s.cond.Wait()
+	}
+
+	ret := s.queue[0]
+	s.queue = s.queue[1:]
+	s.cond.Broadcast()
+	s.cond.L.Unlock()
+
+	return ret
+}
+</code></pre>
+
+<p>For condition variables, <a href="https://golang.org/pkg/sync/#Cond">Cond in the sync package</a> is used.
+As mentioned above, condition variables are used in combination with mutexes, but since sync.Cond can have an internal mutex (<code>sync.Locker</code> more precisely) , it is used as the mutex.</p>
+
+<p>Let&rsquo;s take a look at <code>Push()</code>. First, it explicitly locks the mutex, then checks the condition and <code>Wait()</code>. As mentioned above, in <a href="https://golang.org/src/sync/cond.go?s=1353:1374#L42">Wait</a>, the mutex is unlocked and locked by itself. There is no need to spin to wait for the conditions to change, the runtime will suspend and wake up the goroutine on its own.</p>
+
+<p>After adding an element to the queue, call <code>Broadcast()</code>. This wakes up all goroutines that are <code>Wait()</code>, acquires locks, then rechecks the loop conditions.</p>
+
+<p>It does almost the same thing with <code>Pop()</code>. It acquires the lock, then <code>Wait()</code>, then pops the element and calls <code>Broadcast</code>.</p>
+
+<p>The use of condition variables eliminates unnecessary spins and makes the implementation more efficient. However, there are still inefficient parts of this program, and we can make improvements. We will discuss these issues to deepen our understanding of condition variables.</p>
+
+<h3>Improving the implementation with condition variables</h3>
+
+<p>Let&rsquo;s summarize so far. What we can do with condition variables is to make a thread efficiently wait for some condition to be met. In the example of a queue with a maximum length, the &ldquo;some condition&rdquo; is currently &ldquo;change of the number of elements in the queue&rdquo;. In both <code>Push()</code> and <code>Pop()</code>, the above program works as follows: &ldquo;The number of elements in the queue changes -&gt; wake up the thread waiting for the event of changing the number of elements in the queue -&gt; check whether the number of elements in the queue matches the condition desired by the thread&rdquo;.</p>
+
+<h4>1. Consideration of notification timing for condition variables</h4>
+
+<p>Now, the first point to improve is &ldquo;to be able to narrow down the timing of notifications to condition variables&rdquo;.</p>
+
+<p>Currently, <code>Push()</code> returns from <code>Wait()</code> when &ldquo;the queue length is changed&rdquo;. However, <code>Push()</code> only needs to be notified when &ldquo;the queue length was the same as the capacity (full), but it became less than the capacity&rdquo;. For example, if the capacity of the queue is 10 and the queue length is only 2 or 3, there is no need to send a notification because the push will never be blocked.</p>
+
+<p>Similarly, for <code>Pop()</code>, it only needs to be sent the event &ldquo;queue length was 0, but now it is 1&rdquo;.</p>
+
+<p>Since we are broadcasting without considering these things now, we can make it more efficient by changing this to only do it when necessary.</p>
+
+<h4>2. Make the condition variable meaningful</h4>
+
+<p>Currently, there is only one the condition variable <code>s.cond</code> for the queue, and both <code>Push()</code> and <code>Pop()</code> share the same one. However, we can find that they can be separated.</p>
+
+<p>Semantically, the goroutine triggered by <code>Broadcast()</code> called in <code>Push()</code> is the one waiting to <code>Pop()</code>, not the one waiting to <code>Push()</code>. So, what is the goroutine in the <code>Push()</code> waiting for? They are waiting for the queue gets non-full; in other words, they are waiting for an element to be removed (= popped) from the queue that is full. Vice versa: &ldquo;<code>Broadcast()</code> called in <code>Pop()</code>&rdquo; is for goroutines waiting for an opportunity to <code>Push()</code>.</p>
+
+<p>In other words, since <code>Push()</code> and <code>Pop()</code> are semantically different in what they want to notify, it makes no sense for them to share a single condition variable, <code>s.cond</code>.</p>
+
+<p>Combining <code>1. Consideration of the timing of notifications to condition variables</code> and <code>2. Making condition variables meaningful</code>, we can organize them as follows.</p>
+
+<ul>
+<li>Change the condition variable <code>s.cond</code> : changes it to <code>s.nonEmptyCond</code> and modify it to &ldquo;Notify when the queue that was empty is no longer empty&rdquo;. This is used for <code>Wait()</code> in <code>Pop()</code>.</li>
+<li>New condition variable <code>s.nonFullCond</code> : Newly defined. <code>s.nonFullCond</code> is for notifying when a queue that was full is no longer full. This is used during <code>Wait()</code> in <code>Push()</code>.</li>
+</ul>
+
+<p>This fix changes the implementation from &ldquo;all goroutines are woken up when the queue length just changes&rdquo; to &ldquo;each goroutine is woken up only when the queue length changes that it is interested in&rdquo;.</p>
+
+<h4>3. Use <code>Signal()</code> instead of <code>Broadcast()</code>.</h4>
+
+<p>Changes 1 and 2 minimize the number of threads triggered, but there are still improvements to be made. For example, if the queue length changed to 1 from 0 by a <code>Push()</code>, all goroutines waiting for <code>Pop()</code> will be woken up. However, even if we wake up all the goroutines waiting for <code>Pop()</code>, only one goroutine can enter the next critical section, so it is more efficient to wake up only one thread instead of all of them. <a href="https://golang.org/pkg/sync/#Cond.Signal"><code>Signal()</code></a> can be used in this case. <code>Signal()</code> wakes up only one goroutine, not all the goroutines that are in <code>Wait()</code>. This makes the implementation more efficient by mitigating the Thundering Herd Problem when there are many waiting goroutines.</p>
+
+<p>An implementation of the above 1, 2, and 3 is shown below, which can also be found on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758/slqueue.go">dty1er/sie-limited-queue/slqueue.go</a>
+The diff is <a href="https://github.com/dty1er/size-limited-queue/commit/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758">here</a>.</p>
+
+<pre><code class="language-go">type SizeLimitedQueue struct {
+	nonFullCond *sync.Cond
+
+	nonEmptyCond *sync.Cond
+
+	capacity     int
+	queue        []int
+	mu           *sync.Mutex
+}
+
+func New(capacity int) *SizeLimitedQueue {
+	mu := &amp;sync.Mutex{}
+	return &amp;SizeLimitedQueue{
+		nonFullCond:  sync.NewCond(mu),
+		nonEmptyCond: sync.NewCond(mu),
+		capacity:     capacity,
+		queue:        []int{},
+		mu:           mu,
+	}
+}
+
+func (s *SizeLimitedQueue) Push(i int) {
+	s.nonFullCond.L.Lock()
+	for len(s.queue) == s.capacity {
+		s.nonFullCond.Wait()
+	}
+
+	wasEmpty := len(s.queue) == 0
+	s.queue = append(s.queue, i)
+
+	if wasEmpty {
+		s.nonEmptyCond.Signal()
+	}
+	s.nonFullCond.L.Unlock()
+}
+
+func (s *SizeLimitedQueue) Pop() int {
+	s.nonEmptyCond.L.Lock()
+	for len(s.queue) == 0 {
+		s.nonEmptyCond.Wait()
+	}
+
+	wasFull := len(s.queue) == s.capacity
+	ret := s.queue[0]
+	s.queue = s.queue[1:]
+
+	if wasFull {
+		s.nonFullCond.Signal()
+	}
+	s.nonEmptyCond.L.Unlock()
+
+	return ret
+}
+</code></pre>
+
+<p>In order to improve the efficiency of implementation using condition variables, it is important to ensure that notifications are sent only when necessary and that only necessary threads are started.</p>
+
+<p>In the next chapter, I will describe some supplementary points to keep in mind regarding condition variables.</p>
+
+<h2>Condition Variables and Spurious Wakeups</h2>
+
+<p>First, let&rsquo;s talk about spurious wakeup, which you may have heard before if you have been doing multithreaded programming in Java.</p>
+
+<p>Spurious wakeup refers to &ldquo;the waking up of a thread that has been suspended without notification during a wait process when using a condition variable&rdquo;. This is usually caused by the OS or hardware, and cannot be controlled by the user of the condition variable.</p>
+
+<p>In <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html#wait(long,int">Java documentation</a>) and <a href="https ://en.cppreference.com/w/cpp/thread/condition_variable">C++ documentation</a> (and more), they explicitly state that spurious wake-ups can occur.</p>
+
+<p>It is easy to deal with spurious wake-ups by always wrapping the wait process in a loop, as described in this article. Depending on the situation where you want to use a condition variable, you may not need to use looping actually, but even in such cases, you should always wait in a loop. For example, the <a href="http://www.chromium.org/developers/lock-and-condition-variable">Developer&rsquo;s documentation on chrome condition variables</a> has a similar description.</p>
+
+<p>Now, we want to know if Go&rsquo;s <code>sync.Cond</code> causes spurious wake-ups; This is not specified in the GoDoc as of <a href="https://github.com/golang/go/blob/go1.16.3/src/sync/cond.go">Go1.16.3</a>, which I referred to, and to be honest, I am not sure right now. I&rsquo;ll leave some of the articles and discussions I referenced below. However, I think that at least we, the users of synchronization primitives, should ensure that Wait is properly placed in the loop.</p>
+
+<ul>
+<li><a href="https://about.sourcegraph.com/go/gophercon-2018-rethinking-classical-concurrency-patterns/">GopherCon and dotGo 2019 liveblogs - GopherCon 2018 - Rethinking Classical Concurrency Patterns</a></li>
+<li><a href="https://github.com/golang/go/issues/16620">proposal: sync: mechanism to select on condition variables</a></li>
+<li><a href="https://groups.google.com/g/golang-dev/c/Kc1nOjju3zk/discussion">sync.Cond and spurious wekeups</a></li>
+<li><a href="https://github.com/golang/go/issues/21165">proposal: Go 2: sync: remove the Cond type</a></li>
+</ul>
+
+<h2>Condition variables and the Two-step dance</h2>
+
+<p>About Two-step dance. If we use condition variables, one lock/unlock of a mutex that seems unnecessary can occur.
+Let&rsquo;s see <code>Push()</code> <code>Pop()</code> in the above source again:</p>
+
+<pre><code class="language-go">func (s *SizeLimitedQueue) Push(i int) {
+	s.nonFullCond.L.Lock()
+	for len(s.queue) == s.capacity {
+		s.nonFullCond.Wait()
+	}
+
+	wasEmpty := len(s.queue) == 0
+	s.queue = append(s.queue, i)
+
+	if wasEmpty {
+		s.nonEmptyCond.Signal() // 1
+	}
+	s.nonFullCond.L.Unlock() // 3
+}
+
+func (s *SizeLimitedQueue) Pop() int {
+	s.nonEmptyCond.L.Lock()
+	for len(s.queue) == 0 {
+		s.nonEmptyCond.Wait() // 2
+	}
+
+	wasFull := len(s.queue) == s.capacity
+	ret := s.queue[0]
+	s.queue = s.queue[1:]
+
+	if wasFull {
+		s.nonFullCond.Signal()
+	}
+	s.nonEmptyCond.L.Unlock()
+
+	return ret
+}
+</code></pre>
+
+<p>First of all, let&rsquo;s assume that there is a goroutine waiting to be notified by <code>nonEmptyCond</code> at <code>2</code> in the source code. Now let&rsquo;s say a goroutine is doing <code>Push()</code> (goroutineA). goroutineA performs a queue manipulation and sends a notification at <code>1</code>.</p>
+
+<p>Here, when the notification is sent, one of the goroutines (goroutineB) that was <code>Wait()</code> at <code>2</code> is woken up from the <code>Wait()</code> state. As mentioned above (or more clearly if you refer to the source code of <code>sync.Cond.Wait</code>), in <code>Wait()</code> it tries to relock the mutex after being woken up from the wait (to enter the critical section). However, <strong>at this point the mutex has been locked by goroutineA</strong>. It will be unlocked at <code>3</code>. This means that the following unnecessary blocks are generated in these processes:</p>
+
+<ul>
+<li>goroutineB is first blocked by the condition variable <code>nonEmptyCond</code>.</li>
+<li>goroutineB is unblocked because the condition variable <code>nonEmptyCond</code> has been notified</li>
+<li>goroutineB tries to get a lock on the mutex with <code>2</code>, then <strong>blocked</strong>.</li>
+<li>goroutineA unlocks the mutex at <code>3</code>.</li>
+<li>goroutineB locks the mutex at <code>2</code>.</li>
+</ul>
+
+<p>goroutineB will go through the state of unblock -&gt; block -&gt; unblock, which is called <a href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/october/concurrency-hazards-solving-problems-in-your-multithreaded-code#two-step-dance">Two-step dance</a>.
+The disadvantage of the two-step dance is that it causes unnecessary context switches.</p>
+
+<p>There is a way to avoid the two-step dance; just place the <code>Signal()</code> at <code>1</code> after the <code>3</code>, i.e., to notify the condition variable after the critical section. However, this can sometimes be wrong.
+The <a href="http://www.chromium.org/developers/lock-and-condition-variable">developer documentation on condition variables in chromium</a> has the following.</p>
+
+<pre><code>In rare cases, it is incorrect to call Signal() after the critical section, 
+so we recommend always using it inside the critical section. 
+The following code can attempt to access the condition variable after it has been deleted, 
+but could be safe if Signal() were called inside the critical section.
+
+  struct Foo { Lock mu; ConditionVariable cv; bool del; ... };
+  ...
+  void Thread1(Foo *foo) {
+    foo-&gt;mu.Acquire();
+    while (!foo-&gt;del) {
+      foo-&gt;cv.Wait();
+    }
+    foo-&gt;mu.Release();
+    delete foo;
+  }
+  ...
+  void Thread2(Foo *foo) {
+    foo-&gt;mu.Acquire();
+    foo-&gt;del = true;
+                          // Signal() should be called here
+    foo-&gt;mu.Release();
+    foo-&gt;cv.Signal();     // BUG: foo may have been deleted
+  }
+</code></pre>
+
+<p>The document also states that Chrome&rsquo;s implementation of condition variables detects two-step dances and delays the wake-up of the waiting thread to prevent context-switching (so notification of condition variables should always be done in the critical section).</p>
+
+<h2>Summary</h2>
+
+<p>In Go, condition variables can be substituted with channels in some cases, so there are limited situations where they can be used. I sometimes hear people say &ldquo;sync.Cond is difficult to understand&rdquo;, and this may be due to that.</p>
+
+<p>It might be difficult to understand sync.Cond if you understand it from its behavior as &ldquo;sync.Cond is used when you want to start multiple goroutines at once&rdquo; because we can come up with a new question; &ldquo;why do we want to do that?&rdquo;</p>
+
+<p>I think it would be easier to understand that &ldquo;condition variables are an efficient way to wait for a certain condition to be satisfied in a multi-threaded environment&rdquo; first, and then how to use them in Go.</p>
+
+<p>To be honest, I don&rsquo;t fully understand the spurious wake-up, so I hope someone who knows more about it will write an article to explain it. By the way, when I was doing some research for this article, I found that there was a problem with <a href="https://github.com/golang/go/issues/7734">sync.WaitGroup causing spurious wake-up</a> in the previous version of Go, which I found interesting.</p>
+
+<p>Hope this article helps you. If you like this article, please leave it a star on the <a href="https://github.com/dty1er/size-limited-queue">size-limited-queue</a> repo.</p>
+
+<h2>Reference</h2>
+
+<ul>
+<li><a href="http://joeduffyblog.com/2009/07/13/a-simple-condition-variable-primitive/">A simple condition variable primitive</a></li>
+<li><a href="http://www.chromium.org/developers/lock-and-condition-variable">Chrome C++ Lock and ConditionVariable</a></li>
+<li><a href="https://youtu.be/5zXAHh5tJqQ?t=801">GopherCon 2018 Bryan C .Mills Rethinking Classical Concurrency Patterns</a></li>
+<li><a href="https://about.sourcegraph.com/go/gophercon-2018-rethinking-classical-concurrency-patterns/">GopherCon and dotGo 2019 liveblogs - GopherCon 2018 - Rethinking Classical Concurrency Patterns</a></li>
+<li><a href="https://github.com/golang/go/issues/16620">proposal: sync: mechanism to select on condition variables</a></li>
+<li><a href="https://groups.google.com/g/golang-dev/c/Kc1nOjju3zk/discussion">sync.Cond and spurious wekeups</a></li>
+<li><a href="https://github.com/golang/go/issues/21165">proposal: Go 2: sync: remove the Cond type</a></li>
+<li><a href="https://github.com/golang/go/issues/7734">sync: spurious wakeup from WaitGroup.Wait</a></li>
+<li><a href="https://ruby-doc.org/core-2.5.0/ConditionVariable.html">Ruby-Doc.org class ConditionVariable</a></li>
+<li><a href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2008/october/concurrency-hazards-solving-problems-in-your-multithreaded-code">Solving 11 Likely Problems In Your Multithreaded Code</a></li>
+<li><a href="https://lestrrat.medium.com/sync-cond-%E3%82%B3%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3%E5%A4%89%E6%95%B0%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E8%A7%A3%E8%AA%AC-dd2050cdfab7">ja - sync.Cond／コンディション変数についての解説</a></li>
+<li><a href="https://yohhoy.hatenablog.jp/entry/2014/09/23/193617">ja - 条件変数 Step-by-Step入門</a></li>
+<li><a href="https://yohhoy.hatenadiary.jp/entry/20120504/p1">ja - 条件変数とダンス(Two-Step Dance)を</a></li>
+<li><a href="https://yohhoy.hatenadiary.jp/entry/20140926/p1">ja - 条件変数とデッドロック・パズル（出題編）</a></li>
+<li><a href="https://yohhoy.hatenadiary.jp/entry/20120326/p1">ja - 条件変数とspurious wakeup</a></li>
+<li><a href="https://zenn.dev/yohhoy/articles/multithreading-toolbox">ja - マルチスレッド・プログラミングの道具箱</a></li>
+</ul>
+
+<hr>
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatsu Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
