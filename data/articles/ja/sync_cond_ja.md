@@ -19,8 +19,8 @@ goroutines waiting for or announcing the occurrence of an event.
 ここでも `condition variable` という言葉が出てきた。condition variableとは一体何だろうか？
 
 条件変数とはGo特有の言葉では決してなく、 (筆者の理解では) POSIXの言葉である。実際、[pthread](https://linux.die.net/man/3/pthread_cond_init) のための条件変数を操作するインタフェースも提供されている。
-[c++](https://en.cppreference.com/w/cpp/thread/condition_variable) や、[Rust](https://doc.rust-lang.org/std/sync/struct.Condvar.html)、[Ruby](https://docs.ruby-lang.org/ja/2.0.0/class/ConditionVariable.html)など様々な言語で同様の仕組みが提供されている。
-また、各言語のリファレンスを見てもらえばわかるように、どの言語でもほぼ同じようなインタフェースが提供されている。 ( `wait` ,  `signal (またはnotify_one)` ,  `broadcast (またはnotify_all)` )
+[c++](https://en.cppreference.com/w/cpp/thread/condition_variable) や、[Rust](https://doc.rust-lang.org/std/sync/struct.Condvar.html)、[Ruby](https://docs.ruby-lang.org/ja/2.0.0/class/ConditionVariable.html)など様々な言語で同様のメカニズムが存在する。
+また、各言語のリファレンスを見てもらえばわかるように、どの言語でもほぼ同じようなインタフェースになっている。 ( `wait` ,  `signal (またはnotify_one)` ,  `broadcast (またはnotify_all)` )
 
 条件変数はセマフォやミューテックスと同様、マルチスレッドプログラミングにおける同期プリミティブだ。すなわち、共有資源への同時アクセスを避けるための仕組みである。
 ただし、セマフォやミューテックスがそれ単体で同期プリミティブとして動作するのに対し、条件変数はミューテックスとセットで使用する。
@@ -90,7 +90,7 @@ mutex_unlock();
 * 最大長を超えて要素をプッシュしようとすると **ブロックする**
 * 要素が存在しない状態でポップすると **ブロックする**
 
-なお、この例は[条件変数 Step-by-Step入門](https://yohhoy.hatenablog.jp/entry/2014/09/23/193617)から拝借した。良い記事をありがとうございます。
+なお、この例は[A simple condition variable primitive](http://joeduffyblog.com/2009/07/13/a-simple-condition-variable-primitive/)および[条件変数 Step-by-Step入門](https://yohhoy.hatenablog.jp/entry/2014/09/23/193617)から拝借した。良い記事をありがとうございます。
 
 ### ミューテックスを使った実装
 
