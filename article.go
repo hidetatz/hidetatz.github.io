@@ -18,6 +18,8 @@ const timeformat = "2006/01/02"
 
 // title, datetime, content
 const articlePageMD = `
+[<- home](%s)
+
 # %s
 
 #### %s
@@ -27,7 +29,7 @@ const articlePageMD = `
 ---
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="%s">home</a>
 </div>
 `
 
@@ -144,8 +146,8 @@ func (a *Article) Link() string {
 		return fmt.Sprintf(
 			`<a href="%s">%s - %s</a><br>`,
 			a.URL.String(),
-			a.Title,
 			formatedTime,
+			a.Title,
 		)
 	}
 
@@ -153,8 +155,8 @@ func (a *Article) Link() string {
 		`<a href="/articles/%s/%s/">%s - %s</a><br>`,
 		formatedTime,
 		a.FileNameWithoutExtension(),
-		a.Title,
 		formatedTime,
+		a.Title,
 	)
 }
 
@@ -162,6 +164,18 @@ func (a *Article) FormatTime() string {
 	return a.Timestamp.Format(timeformat)
 }
 
-func GenerateArticlePageHTML(a *Article) string {
-	return GenerateHTMLPage(a.Title, fmt.Sprintf(articlePageMD, a.Title, a.FormatTime(), strings.Join(a.ContentsMD, "\n")))
+func GenerateArticlePageHTML(a *Article, en bool) string {
+	home := "/"
+	if !en {
+		home = "/ja"
+	}
+
+	return GenerateHTMLPage(a.Title, fmt.Sprintf(
+		articlePageMD,
+		home,
+		a.Title,
+		a.FormatTime(),
+		strings.Join(a.ContentsMD, "\n"), home),
+	)
+
 }

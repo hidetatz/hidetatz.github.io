@@ -28,16 +28,34 @@
 
 
 <body class="markdown-body">
-<h1>go getすれば即コマンドとして使えるようにCLIツールを作る</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/01/30</h4>
+<h1>
+  <a name="go-getすれば即コマンドとして使えるようにcliツールを作る" class="anchor" href="#go-getすれば即コマンドとして使えるようにcliツールを作る" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>go getすれば即コマンドとして使えるようにCLIツールを作る</h1>
 
-<h3>はじめに</h3>
+<h4>
+  <a name="2018-01-30" class="anchor" href="#2018-01-30" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/01/30</h4>
+
+<h3>
+  <a name="はじめに" class="anchor" href="#はじめに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>はじめに</h3>
 
 <p>Goはソースコードをクロスコンパイルして、各プラットフォーム向けに配布することができる。
 本エントリでは、Goの環境があるユーザに対して、goで作ったCLIツールを配布する方法を書いていく。</p>
 
-<h3>事前準備</h3>
+<h3>
+  <a name="事前準備" class="anchor" href="#事前準備" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>事前準備</h3>
 
 <p>ツールを使うユーザは、以下の環境変数を持っている必要がある。</p>
 
@@ -47,7 +65,11 @@
 <p><a href="https://golang.org/doc/code.html#GOPATH">公式</a>にもある通り。
 作りたいツールのREADMEにでも書いておくのがいいと思っている。</p>
 
-<h3>ツールの作り方</h3>
+<h3>
+  <a name="ツールの作り方" class="anchor" href="#ツールの作り方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ツールの作り方</h3>
 
 <p>ディレクトリ構成を、こんな感じにしている。ここでは、 <code>hello</code> というコマンドを作るとする。</p>
 
@@ -61,7 +83,11 @@
 └── README.md
 </code></pre>
 
-<h2>main.go</h2>
+<h2>
+  <a name="main-go" class="anchor" href="#main-go" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>main.go</h2>
 
 <p>main.goはコマンドの起点となる。これは、 <code>./cmd/コマンド名/main.go</code> という名前にする。
 こんな感じで書いていく。</p>
@@ -87,7 +113,11 @@ func main() {
 <p>ことです。
 次に、 <code>hello_lib</code> を書いていく。</p>
 
-<h2>hello_lib</h2>
+<h2>
+  <a name="hello-lib" class="anchor" href="#hello-lib" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>hello_lib</h2>
 
 <p>hello_libはmainから呼ばれるパッケージである。</p>
 
@@ -98,7 +128,11 @@ func World() string {
 }
 </code></pre>
 
-<h3>ダウンロード方法</h3>
+<h3>
+  <a name="ダウンロード方法" class="anchor" href="#ダウンロード方法" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ダウンロード方法</h3>
 
 <p>この状態で、</p>
 
@@ -122,14 +156,22 @@ func World() string {
 
 <p>が叩けるようになります。</p>
 
-<h3>なぜこれだけでいいのか？</h3>
+<h3>
+  <a name="なぜこれだけでいいのか" class="anchor" href="#なぜこれだけでいいのか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>なぜこれだけでいいのか？</h3>
 
 <p><code>go get</code> は渡されたパスのソースをダウンロードして、ユーザのプラットフォームに合わせてビルドし、それを <code>$GOPATH/bin</code> に配置してくれる。
 この時、main.goがあるディレクトリ名(上記の例では <code>hello</code> )のバイナリになる。
 ユーザが <code>$GOPATH/bin</code> にPATHを通してくれていれば、 <code>hello</code> というバイナリを叩けるようになる。
 また、 <code>main</code> で <code>hello_lib</code> というパッケージをimportしていますが、このような依存しているパッケージも勝手に落としてくれる。</p>
 
-<h3>コマンドを増やすことができる</h3>
+<h3>
+  <a name="コマンドを増やすことができる" class="anchor" href="#コマンドを増やすことができる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>コマンドを増やすことができる</h3>
 
 <pre><code class="language-shell">.
 ├── cmd
@@ -168,12 +210,20 @@ func World() string {
 <p>とすれば、hello_libを共通で使うようなコマンドを簡単に増やすこともできる。
 そのため、 <code>hello_lib</code> にユーティリティ的な関数を定義しておいて、それらを小さなコマンドに分割して、パイプでつないで使うような、使い方ができる。</p>
 
-<h3>ライブラリとしても使える</h3>
+<h3>
+  <a name="ライブラリとしても使える" class="anchor" href="#ライブラリとしても使える" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ライブラリとしても使える</h3>
 
 <p>このやり方だと、 <code>hello_lib</code> をライブラリとしても提供できるようになる。
 ユーザは <code>go get github.com/ygnmhdtt/hello_lib</code>するだけでいい。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>このやり方を採用することで、</p>
 
@@ -185,10 +235,10 @@ func World() string {
 
 <p>のようなメリットが有る。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

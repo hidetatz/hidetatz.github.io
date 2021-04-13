@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Kubernetesのオススメ勉強方法</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/12/23</h4>
+<h1>
+  <a name="kubernetesのオススメ勉強方法" class="anchor" href="#kubernetesのオススメ勉強方法" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetesのオススメ勉強方法</h1>
+
+<h4>
+  <a name="2018-12-23" class="anchor" href="#2018-12-23" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/12/23</h4>
 
 <p>この記事は<a href="https://qiita.com/advent-calendar/2018/kubernetes3">Kubernetes3 Advent Calendar</a>23日目の記事です。</p>
 
@@ -38,11 +48,19 @@
 Kubernetesは世界で見ればそのコミュニティは非常に大きく、様々な勉強方法のtipsがあり、この記事で私のたどった道のりをまとめます。
 なお、読む人はDockerなどコンテナの知識を持っていることを想定しています。</p>
 
-<hr>
+<hr />
 
-<h2>書籍</h2>
+<h2>
+  <a name="書籍" class="anchor" href="#書籍" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>書籍</h2>
 
-<h3>Kubernetes完全ガイド</h3>
+<h3>
+  <a name="kubernetes完全ガイド" class="anchor" href="#kubernetes完全ガイド" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetes完全ガイド</h3>
 
 <p><a href="https://www.amazon.co.jp/dp/B07HFS7TDT">Kubernetes完全ガイド</a></p>
 
@@ -51,7 +69,11 @@ Kubernetesは世界で見ればそのコミュニティは非常に大きく、�
 また、リソース以外にも周辺のOSSやエコシステムなどにも触れられており、全体像を把握できるようになっている。
 実際プロダクションですべてのリソースを使うことはないかもしれないが、全体像を把握する上で読んでおくのがおすすめ。</p>
 
-<h3>入門Kubernetes</h3>
+<h3>
+  <a name="入門kubernetes" class="anchor" href="#入門kubernetes" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>入門Kubernetes</h3>
 
 <p><a href="https://www.amazon.co.jp/dp/4873118409">入門Kubernetes</a></p>
 
@@ -61,11 +83,19 @@ Kubernetes完全ガイドとの違いは、実際プロダクションでよく�
 しかし、ReplicaSetやDeploymentなど、一般的によく使うリソースについては詳しい書かれている。
 2冊目として読むのがおすすめ。</p>
 
-<h2>実践</h2>
+<h2>
+  <a name="実践" class="anchor" href="#実践" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>実践</h2>
 
 <p>実際に動かさないと厳しいので、実際に何をしていくかを書いていく。</p>
 
-<h3>Play with Kubernetes</h3>
+<h3>
+  <a name="play-with-kubernetes" class="anchor" href="#play-with-kubernetes" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Play with Kubernetes</h3>
 
 <p><a href="https://labs.play-with-k8s.com/">Play with Kubernetes</a></p>
 
@@ -79,7 +109,11 @@ yamlはkubectl -fでURLを指定する必要がある。</p>
 <p>非常に便利だが、4時間でセッションが切れてすべてのリソースが削除されてしまう。
 また、単純に動作が重い(たぶん海外のVMにつないでいると思う)。</p>
 
-<h3>Kubernetes The Hard Way</h3>
+<h3>
+  <a name="kubernetes-the-hard-way" class="anchor" href="#kubernetes-the-hard-way" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetes The Hard Way</h3>
 
 <p><a href="https://github.com/kelseyhightower/kubernetes-the-hard-way">Kubernetes The Hard Way</a></p>
 
@@ -89,30 +123,46 @@ kube-controller-managerやkube-proxyなども自分で構築するようにな�
 GKEやEKSを使っていると隠蔽されている部分を自分で構築することで
 より理解が深まるため、一度やってみるといいと思う。</p>
 
-<h2>その他読んだほうがいいもの</h2>
+<h2>
+  <a name="その他読んだほうがいいもの" class="anchor" href="#その他読んだほうがいいもの" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>その他読んだほうがいいもの</h2>
 
-<h3>what-happens-when-k8s</h3>
+<h3>
+  <a name="what-happens-when-k8s" class="anchor" href="#what-happens-when-k8s" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>what-happens-when-k8s</h3>
 
 <p><a href="https://github.com/jamiehannaford/what-happens-when-k8s">what-happens-when-k8s</a></p>
 
 <p>kubectl runしたときに何が起こっているのかを文章で解説したドキュメント。
 The Hard Wayよりも細かい部分を解説してくれている。</p>
 
-<h3>Kubernetes at GitHub</h3>
+<h3>
+  <a name="kubernetes-at-github" class="anchor" href="#kubernetes-at-github" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetes at GitHub</h3>
 
 <p><a href="https://githubengineering.com/kubernetes-at-github/">Kubernetes at GitHub</a></p>
 
 <p>GitHubのKubernetesの事例。</p>
 
-<h2>まとめ</h2>
+<h2>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h2>
 
 <p>あまりいろいろやるのも大変なので、
 ここに書いたものを頑張るのがいい気がしている。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

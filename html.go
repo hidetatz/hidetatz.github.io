@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
-	"github.com/gomarkdown/markdown/parser"
+	"github.com/russross/blackfriday/v2"
 )
 
 const (
@@ -61,15 +59,11 @@ const (
 func GenerateHTMLPage(title, contentsMarkdown string) string {
 	head := fmt.Sprintf(Head, title)
 
-	parser := parser.New()
-
-	renderer := html.NewRenderer(
-		html.RendererOptions{
-			Flags: html.CommonFlags,
-		},
-	)
-
-	bodyHTML := string(markdown.ToHTML([]byte(contentsMarkdown), parser, renderer))
+	r := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
+		Flags: blackfriday.CommonHTMLFlags,
+	})
+	renderer := &renderer{r}
+	bodyHTML := string(blackfriday.Run([]byte(contentsMarkdown), blackfriday.WithRenderer(renderer)))
 	body := fmt.Sprintf(Body, bodyHTML)
 
 	return fmt.Sprintf(Page, head, body)

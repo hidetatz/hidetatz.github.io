@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>ELBの動きとSSLターミネーションについて学んだ</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/11/01</h4>
+<h1>
+  <a name="elbの動きとsslターミネーションについて学んだ" class="anchor" href="#elbの動きとsslターミネーションについて学んだ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ELBの動きとSSLターミネーションについて学んだ</h1>
+
+<h4>
+  <a name="2017-11-01" class="anchor" href="#2017-11-01" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/11/01</h4>
 
 <p>ELBはEC2へリクエストを負荷分散してくれる。
 その際の暗号化について学んだ。</p>
@@ -60,16 +70,20 @@ If you are concerned about security, you may want to use SSL for communication b
 <p>RDSについての記載だが、要点は同じ。
 同一リージョンのインスタンス間のトラフィックは、AWSのプライベートなネットワークを通るため、暗号化は不要とのこと。</p>
 
-<h3>セッション維持</h3>
+<h3>
+  <a name="セッション維持" class="anchor" href="#セッション維持" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>セッション維持</h3>
 
 <p>ELBにはスティッキーセッションという、Cookieベースでのセッション維持機能がある。
 そして、スティッキーセッションはSSLの終端をEC2にする場合は 使えない 。
 これは、ELBからEC2に通信する際のトラフィックが暗号化されると、ELBがCookieの中身を読み取れないため。(読み取れないと当然トラフィックをスティッキーに分散できない)</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

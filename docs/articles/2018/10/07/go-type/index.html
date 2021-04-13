@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Goの型システムとGoらしい書き方</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/10/07</h4>
+<h1>
+  <a name="goの型システムとgoらしい書き方" class="anchor" href="#goの型システムとgoらしい書き方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Goの型システムとGoらしい書き方</h1>
+
+<h4>
+  <a name="2018-10-07" class="anchor" href="#2018-10-07" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/10/07</h4>
 
 <p>Goにはクラスがない。しかし、データ構造をまとめるためのstructがあり、structにはメソッドを紐付けることができる。
 そのため、プログラマによってはオブジェクト指向言語のようにGoを書くこともある。
@@ -47,7 +57,11 @@ Goでは、データと振る舞いは分離している。
 structはデータを提供するための軽量な手段であり、それ以上のことはしない。
 structは型の階層を表現することは決して無い。</p>
 
-<h3>interfaceの埋め込み</h3>
+<h3>
+  <a name="interfaceの埋め込み" class="anchor" href="#interfaceの埋め込み" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>interfaceの埋め込み</h3>
 
 <p>interfaceの埋め込みは継承ではない。
 Goでは、コードの再利用は継承ではなくコンポジションで実現される。
@@ -80,7 +94,11 @@ func main() {
 これにより、File型の変数fも、 <code>Lock()</code> <code>Unlock()</code> というメソッドを呼び出すことができる。
 これは、サブクラスではなく、コンポジションである。</p>
 
-<h3>ポリモーフィズム</h3>
+<h3>
+  <a name="ポリモーフィズム" class="anchor" href="#ポリモーフィズム" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ポリモーフィズム</h3>
 
 <p>サブクラスのないGoでは、ポリモーフィズムをinterfaceによってのみ実現する。<a href="https://play.golang.org/p/a0nYrIniSLx">以下のような</a>コードを見てみよう。</p>
 
@@ -109,7 +127,11 @@ func main() {
 <code>bytes.Buffer</code> は <a href="https://golang.org/pkg/io/#Reader">io.Reader</a>を実装しているため、このような変数の代入が可能になる。
 つまり、 <code>r.Read</code> は <a href="https://golang.org/pkg/bytes/#Buffer.Read">(*Buffer).Read</a> にディスパッチされる。</p>
 
-<h3>interfaceの実装を宣言しない</h3>
+<h3>
+  <a name="interfaceの実装を宣言しない" class="anchor" href="#interfaceの実装を宣言しない" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>interfaceの実装を宣言しない</h3>
 
 <p>Goには <code>implements</code> というキーワードは存在しない。
 interfaceを実装しているかどうかは、interfaceに宣言されたメソッドリストをそのstructが実装しているかどうかのみで判断される。</p>
@@ -123,7 +145,11 @@ interfaceを実装しているかどうかは、interfaceに宣言されたメ�
 
 <p>interfaceは小さく宣言し、必要に応じて組み合わせて使うのが望ましい。</p>
 
-<h3>コンストラクタは作らない</h3>
+<h3>
+  <a name="コンストラクタは作らない" class="anchor" href="#コンストラクタは作らない" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>コンストラクタは作らない</h3>
 
 <p>Goでstcurtを初期化する際、値はすべて<a href="https://tour.golang.org/basics/12">ゼロ値</a>で初期化される。
 Goは、なるべくゼロ値で初期化しても動くようなstructを作る、という考え方がある。言うまでもなく、 <code>NewXxx()</code> という関数を知らなくても動かせるようにだ。</p>
@@ -149,16 +175,20 @@ Goは、なるべくゼロ値で初期化しても動くようなstructを作る
 <p><a href="https://golang.org/src/net/http/request.go?s=26446:26515#L782">実装</a>を見てみよう。
 メソッドとURLをバリデーションし、bodyをReadしているのがわかると思う。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>Goの型システムは覚えることが少ない一方、柔軟で、あたかもオブジェクト指向のように使用することも可能では有る。
 しかし、Goの思想やエコシステムを理解し、Goらしいコードを書くのは重要なことである。
 これらについて学ぶためには、なんといっても<a href="https://github.com/golang/go">標準パッケージ</a>のコードを読むのが良い。今後も goらしいコードを書けるよう精進していく。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

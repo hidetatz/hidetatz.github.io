@@ -28,13 +28,27 @@
 
 
 <body class="markdown-body">
-<h1>GentooにDockerを入れた</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/31</h4>
+<h1>
+  <a name="gentooにdockerを入れた" class="anchor" href="#gentooにdockerを入れた" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>GentooにDockerを入れた</h1>
+
+<h4>
+  <a name="2017-12-31" class="anchor" href="#2017-12-31" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/31</h4>
 
 <p>Gentooを使うにあたり、Dockerがないとなにもできない。インストールしていく。</p>
 
-<h3>dockerインストール</h3>
+<h3>
+  <a name="dockerインストール" class="anchor" href="#dockerインストール" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>dockerインストール</h3>
 
 <p>先にカーネルの設定をしてもいいが、筆者はとりあえず入れた。</p>
 
@@ -53,7 +67,11 @@
 
 <p>もし起動しなければ、カーネルの再設定が必要。必要に応じて <code>/var/log/docker.log</code> を確認しておく。</p>
 
-<h3>カーネル設定</h3>
+<h3>
+  <a name="カーネル設定" class="anchor" href="#カーネル設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>カーネル設定</h3>
 
 <p>カーネル設定については、<a href="https://wiki.gentoo.org/wiki/Docker">wiki</a>の通りやる。
 筆者の場合、特にモジュールを追加でロードするような設定もしなかった。
@@ -63,7 +81,11 @@ AUFSを採用する場合は<a href="https://wiki.gentoo.org/wiki/Aufs">こち�
 
 <p>カーネル設定したら <code>grub-mkconfig</code> して再起動する。</p>
 
-<h3>使用準備</h3>
+<h3>
+  <a name="使用準備" class="anchor" href="#使用準備" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>使用準備</h3>
 
 <p>これでdockerがちゃんと起動することを確認する。
 また、</p>
@@ -79,10 +101,10 @@ AUFSを採用する場合は<a href="https://wiki.gentoo.org/wiki/Aufs">こち�
 
 <p>で、ユーザをdockerグループに入れておく。こうしないと、 <code>docker ps</code> すら <code>sudo</code> が必要になってしまう。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

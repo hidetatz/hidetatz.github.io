@@ -28,14 +28,24 @@
 
 
 <body class="markdown-body">
-<h1>SQLパフォーマンス・チューニング・チュートリアル(翻訳)</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/09/15</h4>
+<h1>
+  <a name="sqlパフォーマンス-チューニング-チュートリアル-翻訳" class="anchor" href="#sqlパフォーマンス-チューニング-チュートリアル-翻訳" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SQLパフォーマンス・チューニング・チュートリアル(翻訳)</h1>
+
+<h4>
+  <a name="2018-09-15" class="anchor" href="#2018-09-15" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/09/15</h4>
 
 <p>本記事は<a href="https://www.eversql.com/sql-performance-tuning-tips-for-mysql-query-optimization/">SQL Performance Tuning Tutorial – MySQL Query Optimization Tips</a>
 を訳したもの。</p>
 
-<hr>
+<hr />
 
 <p>これは、SQLパフォーマンスチューニングシリーズの最初の部分です。
 この記事では、MySQL関連の例を中心に説明しますが、他の多くのリレーショナルデータベースにも同じ概念を適用できます。</p>
@@ -52,7 +62,11 @@
 <p>データベースを抽象化するFW/ミドルウェア（Hibernate、JOOQ、Entity Framework、Sqlalchemy、Djangoなど）を使用している場合でも、ネイティブSQLクエリを記述している場合でも、
 最終的にはクエリをチューニングすることにチャレンジするコットになるでしょう。</p>
 
-<h3>インデックスを作成する、しかし賢くやろう</h3>
+<h3>
+  <a name="インデックスを作成する-しかし賢くやろう" class="anchor" href="#インデックスを作成する-しかし賢くやろう" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インデックスを作成する、しかし賢くやろう</h3>
 
 <p>インデックスはSQLのチューニングの最も重要な部分であると言う人もいます。
 多くの場合、それは間違いなく真実です。
@@ -74,13 +88,21 @@
 <p>また、インデックスを作成しすぎると、逆効果にもなりえます。というのは、INSERT/UPDATEなどの書き込み操作が遅くなる可能性があるためです。
 したがって、クエリを最適化するためにインデックスを作成しますが、それを賢く行ってください。</p>
 
-<h3>インデックスの障害になってはいけない</h3>
+<h3>
+  <a name="インデックスの障害になってはいけない" class="anchor" href="#インデックスの障害になってはいけない" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インデックスの障害になってはいけない</h3>
 
 <p>私たちに &ldquo;データベースが私のインデックスを使ってくれない理由は何ですか？&rdquo;と尋ねている顧客から、私たちは多くのことを学んでいます。
 実際、それは答えが無限に存在する質問です。
 しかし、この記事では、よく見かけるいくつかの一般的なオプションを提供しようとしていますので、うまくいけば、自分のユースケースに役立つでしょう。</p>
 
-<h4>例 1 – 関数でラッピングされたインデックスは避ける</h4>
+<h4>
+  <a name="例-1-関数でラッピングされたインデックスは避ける" class="anchor" href="#例-1-関数でラッピングされたインデックスは避ける" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>例 1 – 関数でラッピングされたインデックスは避ける</h4>
 
 <p>このクエリでは、2018年に米国で購入されたホットドッグの数を数えます。
 あなたが好奇心が強い場合に備えて、2018年に米国で18,000,000,000個のホットドッグが販売されたということにしましょう。</p>
@@ -103,7 +125,11 @@ DBはpurchase_timeの検索にインデックスを使用できなくなりま�
 <pre><code class="language-sql">SELECT count(*) FROM us_hotdog_purchases WHERE purchased_at &gt;= ‘2018-01-01’ AND purchased_at &lt; ‘2019-01-01’
 </code></pre>
 
-<h4>例 2 – OR条件を避ける</h4>
+<h4>
+  <a name="例-2-or条件を避ける" class="anchor" href="#例-2-or条件を避ける" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>例 2 – OR条件を避ける</h4>
 
 <p>新年の前夜に投稿されたFacebook上の投稿数、またはMarkという名前のユーザーの投稿数を選択するこのクエリを考えてみましょう。</p>
 
@@ -127,7 +153,11 @@ WHERE post_time &gt; ‘2018-01-01’
 
 <p>結果にレコードが重複しても構わない場合は、UNION ALL（デフォルトのUNION DISTINCTよりも優れたパフォーマンスを発揮する）を使用することもできます。</p>
 
-<h4>例 3 – Avoid sorting with a mixed order</h4>
+<h4>
+  <a name="例-3-avoid-sorting-with-a-mixed-order" class="anchor" href="#例-3-avoid-sorting-with-a-mixed-order" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>例 3 – Avoid sorting with a mixed order</h4>
 
 <p>Facebookからのすべての投稿を選択し、ユーザーåで昇順に並べ替え、投稿日順に降順で並べ替えるこのクエリを考えてみましょう。</p>
 
@@ -150,7 +180,11 @@ WHERE post_time &gt; ‘2018-01-01’
 <p>最後の潜在的な解決策は常に選択肢に存在しうるわけではないので、
 最後の手段はインデックスを使用した混合注文ソートをサポートする最新のMySQLバージョンにアップグレードすることです。</p>
 
-<h4>例 4 – Avoid conditions with different column types</h4>
+<h4>
+  <a name="例-4-avoid-conditions-with-different-column-types" class="anchor" href="#例-4-avoid-conditions-with-different-column-types" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>例 4 – Avoid conditions with different column types</h4>
 
 <p>森の中の赤い果物の数を選択するこのクエリを考えてみましょう。</p>
 
@@ -168,7 +202,11 @@ WHERE post_time &gt; ‘2018-01-01’
 この例では、列をINT型に変更する必要があります。
 列の型を変更することは複雑な作業になる可能性があるので、それに向かう前にその作業について調べてください。</p>
 
-<h3>接頭辞ワイルドカードを使用したLIKE検索を避ける</h3>
+<h3>
+  <a name="接頭辞ワイルドカードを使用したlike検索を避ける" class="anchor" href="#接頭辞ワイルドカードを使用したlike検索を避ける" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>接頭辞ワイルドカードを使用したLIKE検索を避ける</h3>
 
 <p>文字列 &lsquo;Mar&rsquo;を含むユーザー名からすべてのFacebook投稿を検索するこのクエリを考えてください。
 Mark、Marcus、Almarなどのユーザーが投稿したすべての投稿を検索します。</p>
@@ -186,16 +224,20 @@ Mark、Marcus、Almarなどのユーザーが投稿したすべての投稿を�
 <p><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-fulltext-index.html">フルテキストインデックス</a>を使用することもできます。
 しかし、これらのインデックスとMATCH &hellip; AGAINST構文は、MySQLのおなじみのLIKE式と比較して、いくつかの違いがあることに注意してください。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>SQLクエリパフォーマンスチューニングチュートリアルの最初のパートでは、賢明なインデックス作成の重要性について説明しました。
 また、クエリでインデックス付きのカラムを使用しているときのいくつかの問題の例を挙げました。
 これらで、クエリのパフォーマンスを向上できます。次の投稿で会いましょう。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

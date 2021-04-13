@@ -28,20 +28,38 @@
 
 
 <body class="markdown-body">
-<h1>Portageのオプション</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/02/25</h4>
+<h1>
+  <a name="portageのオプション" class="anchor" href="#portageのオプション" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Portageのオプション</h1>
+
+<h4>
+  <a name="2018-02-25" class="anchor" href="#2018-02-25" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/02/25</h4>
 
 <p>portage操作によく使うオプションたちを覚えるためにまとめる。</p>
 
-<h3>同期</h3>
+<h3>
+  <a name="同期" class="anchor" href="#同期" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>同期</h3>
 
 <p>Portageツリーの同期。ebuildファイル(パッケージの設計書)を更新する。</p>
 
 <pre><code>### emerge --sync
 </code></pre>
 
-<h3>検索</h3>
+<h3>
+  <a name="検索" class="anchor" href="#検索" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>検索</h3>
 
 <p>パッケージを検索する。</p>
 
@@ -53,14 +71,22 @@
 <pre><code>### emerge --verbose --pretend(-p) &lt;package&gt;
 </code></pre>
 
-<h3>インストール</h3>
+<h3>
+  <a name="インストール" class="anchor" href="#インストール" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インストール</h3>
 
 <p>パッケージをインストールする。</p>
 
 <pre><code>### emerge --ask(-a) --verbose(-v) &lt;package&gt;
 </code></pre>
 
-<h3>更新</h3>
+<h3>
+  <a name="更新" class="anchor" href="#更新" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>更新</h3>
 
 <p>インストールした全てのパッケージを更新する。
 あんま使わない。</p>
@@ -68,7 +94,11 @@
 <pre><code>### emerge --update(-u) --deep(-D) world
 </code></pre>
 
-<h3>更新(&ndash;newuse)</h3>
+<h3>
+  <a name="更新-newuse" class="anchor" href="#更新-newuse" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>更新(&ndash;newuse)</h3>
 
 <p>USEフラグに変更があった全てのパッケージを更新する。
 よく使う。</p>
@@ -76,21 +106,33 @@
 <pre><code>### emerge --update --deep --newuse(-N) world
 </code></pre>
 
-<h3>アンインストール</h3>
+<h3>
+  <a name="アンインストール" class="anchor" href="#アンインストール" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>アンインストール</h3>
 
 <p>指定したパッケージを削除する(依存関係は削除されない)</p>
 
 <pre><code>### emerge --unmerge(-C) &lt;package&gt;
 </code></pre>
 
-<h3>不要パッケージ削除</h3>
+<h3>
+  <a name="不要パッケージ削除" class="anchor" href="#不要パッケージ削除" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>不要パッケージ削除</h3>
 
 <p>依存関係を持たないパッケージを削除する。unmergeした後はたたくのが推奨。</p>
 
 <pre><code>### emerge --depclean
 </code></pre>
 
-<h3>その他</h3>
+<h3>
+  <a name="その他" class="anchor" href="#その他" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>その他</h3>
 
 <p>Portageによって使用されている変数を確認する。</p>
 
@@ -114,17 +156,17 @@
 </code></pre>
 
 <ul>
-<li>システムの再構築</li>
+<li>システムの再構築
+<code>
+### emerge -e system
+### emerge -e world
+</code></li>
 </ul>
 
-<pre><code>### emerge -e system
-### emerge -e world
-</code></pre>
-
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

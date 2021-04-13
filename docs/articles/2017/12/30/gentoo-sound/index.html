@@ -28,13 +28,27 @@
 
 
 <body class="markdown-body">
-<h1>ThinkPad上のLinuxで音を出すためにやったこと</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/30</h4>
+<h1>
+  <a name="thinkpad上のlinuxで音を出すためにやったこと" class="anchor" href="#thinkpad上のlinuxで音を出すためにやったこと" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ThinkPad上のLinuxで音を出すためにやったこと</h1>
+
+<h4>
+  <a name="2017-12-30" class="anchor" href="#2017-12-30" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/30</h4>
 
 <p>Xとfluxboxを入れたは良いものの、音が出なかったので、対応した。</p>
 
-<h3>ハードウェアレベルの調査</h3>
+<h3>
+  <a name="ハードウェアレベルの調査" class="anchor" href="#ハードウェアレベルの調査" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ハードウェアレベルの調査</h3>
 
 <p>まずはハードウェアレベルの調査。
 サウンドカードがカーネルに認識されているかをチェックする。</p>
@@ -45,7 +59,11 @@
 <p>筆者の場合はIntelのデバイス情報が出力されたので、サウンドカードはカーネルに認識されていると判断した。
 万が一なにも表示されない場合、カーネルに対してマシン上のオーディオデバイスの設定を組み込む必要がある。</p>
 
-<h3>権限の調査</h3>
+<h3>
+  <a name="権限の調査" class="anchor" href="#権限の調査" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>権限の調査</h3>
 
 <p>該当ユーザが <code>audio</code> グループに入っていることを確認。</p>
 
@@ -54,7 +72,11 @@
 
 <p><code>audio</code> とでなければ、usermodする。</p>
 
-<h3>ミュート状況の調査</h3>
+<h3>
+  <a name="ミュート状況の調査" class="anchor" href="#ミュート状況の調査" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ミュート状況の調査</h3>
 
 <p>以下はThinkPadの設定なので注意。
 Thinkpad ACPIが独立したレイヤでオーディオを管理しているらしいので確認する。</p>
@@ -67,12 +89,20 @@ mute:           on
 <p>筆者の場合は <code>mute</code> が <code>on</code> になっていた。
 これを <code>off</code> にすれば出る気がする。</p>
 
-<h3>1. マシンからミュート解除</h3>
+<h3>
+  <a name="1-マシンからミュート解除" class="anchor" href="#1-マシンからミュート解除" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>1. マシンからミュート解除</h3>
 
 <p>大概のマシンにはミュートを解除するボタンが有ると思うので押してみる。
 これで <code>off</code> になって、実際音も出れば最高だが、筆者はこれではダメだった。</p>
 
-<h3>2. ALSAから設定する</h3>
+<h3>
+  <a name="2-alsaから設定する" class="anchor" href="#2-alsaから設定する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2. ALSAから設定する</h3>
 
 <p>Linuxでは音をだすためのソフトウェアとして広く <code>ALSA</code> と <code>OSS</code> が使われている。とりあえずALSAを使ってみる。
 以下でインストール。</p>
@@ -90,10 +120,10 @@ mute:           on
 その上で矢印キーを押して音量を調整する。
 これで <code>esc</code> して、 <code>cat /proc/acpi/ibm/volume</code> して、offになっていることを確認する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,13 +28,27 @@
 
 
 <body class="markdown-body">
-<h1>Fluxboxのキーボード周りの設定について</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/30</h4>
+<h1>
+  <a name="fluxboxのキーボード周りの設定について" class="anchor" href="#fluxboxのキーボード周りの設定について" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Fluxboxのキーボード周りの設定について</h1>
+
+<h4>
+  <a name="2017-12-30" class="anchor" href="#2017-12-30" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/30</h4>
 
 <p>いろいろ設定した。</p>
 
-<h3>Capslock -&gt; Ctrl</h3>
+<h3>
+  <a name="capslock-ctrl" class="anchor" href="#capslock-ctrl" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Capslock -&gt; Ctrl</h3>
 
 <p>Capslockは不要なので、Ctrlにする。
 <code>xmodmap</code> を使う。 <code>xev</code> も後で使うので入れておく。</p>
@@ -82,7 +96,11 @@ add control = Control_L
 <code>.xinitrc</code> に書くと良い気がするが、fluxboxの場合は <code>~/.fluxbox/startup</code> にすでにロード処理が書いてあったので、
 特に何もしていない。</p>
 
-<h3>コロンとセミコロンを入れ替える</h3>
+<h3>
+  <a name="コロンとセミコロンを入れ替える" class="anchor" href="#コロンとセミコロンを入れ替える" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>コロンとセミコロンを入れ替える</h3>
 
 <p>USキーボードは、 <code>L</code> キーの右のキーにコロンとセミコロンが割り振られており、空打ちすると(デフォルトは)セミコロンが入力され、 Shiftキーと同時に押すとコロンになる。
 あんまりやってる人を見たことないが、筆者はこれを逆にして、空打ちでコロンになるようにしている。(主にvim及びSlackでの絵文字を打つ時用。)</p>
@@ -93,7 +111,11 @@ add control = Control_L
 keycode 47 = colon semicolon Cyrillic_ZHE
 </code></pre>
 
-<h3>日本語入力</h3>
+<h3>
+  <a name="日本語入力" class="anchor" href="#日本語入力" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>日本語入力</h3>
 
 <p>日本語を入力できるようにしていく。
 <code>fcitx</code> が良いらしいので、使うことにした。インプットメソッドは <code>mozc</code> とする。
@@ -151,7 +173,11 @@ InactivateKey=L_Alt
 
 <p>これでいい感じに動いた。</p>
 
-<h3>SandS</h3>
+<h3>
+  <a name="sands" class="anchor" href="#sands" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SandS</h3>
 
 <p>最後にSandS。
 SandSとは、スペースキーをShiftキーの様に使用し、大文字や記号入力する、ただしスペース空打ち時は通常のスペースが入力される、というもの。
@@ -179,14 +205,18 @@ keycode 65 = Shift_L
 
 <p>これで設定をリロードするかXを上げ直せばイケるはず。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>色々やりすぎて若干辛い。キーボード設定はやりすぎないのが良いと思う。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

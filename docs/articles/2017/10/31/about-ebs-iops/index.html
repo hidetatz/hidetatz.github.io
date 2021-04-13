@@ -28,37 +28,63 @@
 
 
 <body class="markdown-body">
-<h1>EBSのIOPSについて学んだ</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/10/31</h4>
+<h1>
+  <a name="ebsのiopsについて学んだ" class="anchor" href="#ebsのiopsについて学んだ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>EBSのIOPSについて学んだ</h1>
+
+<h4>
+  <a name="2017-10-31" class="anchor" href="#2017-10-31" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/10/31</h4>
 
 <p>EBSのIOとかキューとかについて調べた。</p>
 
-<h3>IOPSについて</h3>
+<h3>
+  <a name="iopsについて" class="anchor" href="#iopsについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>IOPSについて</h3>
 
 <p>SSDの場合、ひとつのIOPSで256KBのIOを処理できる。
 例えば、1024KBのIOは4とカウントされ、32KBのIOが連続して8つあった場合、ひとつのIOPSになる。</p>
 
-<h3>キュー長について</h3>
+<h3>
+  <a name="キュー長について" class="anchor" href="#キュー長について" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>キュー長について</h3>
 
 <p>キュー長はデバイスに対する保留中のIOリクエストの数を意味する。</p>
 
-<h3>レイテンシーについて</h3>
+<h3>
+  <a name="レイテンシーについて" class="anchor" href="#レイテンシーについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>レイテンシーについて</h3>
 
 <p>実際にIOリクエストの操作にかかる時間がレイテンシー。
 イコール、IOをEBSに送って、完了通知が送られるまでの時間。</p>
 
-<h3>キュー長の設定</h3>
+<h3>
+  <a name="キュー長の設定" class="anchor" href="#キュー長の設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>キュー長の設定</h3>
 
 <p>SSDバックドボリュームでは500IOPSごとにキュー長1が推奨されている。</p>
 
 <p>おそらく、EBSでは処理しきれないIOがキューに溜まっていくのだと思う。
 逆に言うと、500IOPSまでは待ちが発生せずに処理(IO)できるということになる。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

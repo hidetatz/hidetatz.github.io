@@ -5,7 +5,7 @@ import (
 )
 
 const indexPageMD = `
-# [dtyler.io](/)
+# dtyler.io
 
 [About](/about)
 
@@ -17,7 +17,7 @@ const indexPageMD = `
 `
 
 const jaIndexPageMD = `
-# [dtyler.io](/)
+# dtyler.io
 
 [About](/about)
 

@@ -28,25 +28,47 @@
 
 
 <body class="markdown-body">
-<h1>UNIXドメインソケットについて</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/07/30</h4>
+<h1>
+  <a name="unixドメインソケットについて" class="anchor" href="#unixドメインソケットについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>UNIXドメインソケットについて</h1>
+
+<h4>
+  <a name="2018-07-30" class="anchor" href="#2018-07-30" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/07/30</h4>
 
 <p>ISUCONの文脈で、UNIXドメインソケットという言葉がよく出てくる。
 詳しく知らなかったので、調べた。</p>
 
-<h2>Abstract</h2>
+<h2>
+  <a name="abstract" class="anchor" href="#abstract" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Abstract</h2>
 
 <p>ISUCONの文脈では、通信をTCPからUNIXドメインソケットを利用するように切り替えることで高速化が図れる、ということを言う。
 通常、プロセス間通信はポートを通じてやり取りを行う。
 しかし、UNIXドメインソケット通信はポートを使わず、ファイルシステムを利用して通信する。</p>
 
-<h2>ファイルシステム</h2>
+<h2>
+  <a name="ファイルシステム" class="anchor" href="#ファイルシステム" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ファイルシステム</h2>
 
 <p>UNIXドメインソケットでは、ファイルをインタフェースに使ってプロセス間通信を行う。
 この時、実際にファイルを生成するわけではなく、ソケットファイルという特殊なファイルが使われている。</p>
 
-<h2>見る</h2>
+<h2>
+  <a name="見る" class="anchor" href="#見る" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>見る</h2>
 
 <p>以下のように確認できる。</p>
 
@@ -62,7 +84,11 @@ unix  2      [ ]         DGRAM                    29920    -                    
 ### 後略
 </code></pre>
 
-<h2>Go</h2>
+<h2>
+  <a name="go" class="anchor" href="#go" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Go</h2>
 
 <p>Goでは、unixドメインソケットで使用するソケットファイルを、以下のようなコードで作ることができる。</p>
 
@@ -102,7 +128,11 @@ if err != nil {
 }
 </code></pre>
 
-<h2>使い所</h2>
+<h2>
+  <a name="使い所" class="anchor" href="#使い所" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>使い所</h2>
 
 <p>ISUCONでは、同じインスタンス内にアプリケーションサーバとMySQLが同居している、みたいなことがある。
 そのような場合は、ひとつのOSの中なのでUNIXドメインソケット通信が使用できる。
@@ -111,10 +141,10 @@ nginxの場合は
 な感じ、
 MySQLの場合は、my.cnfでソケットのパスを見て、アプリ側で指定する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

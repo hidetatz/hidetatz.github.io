@@ -28,22 +28,41 @@
 
 
 <body class="markdown-body">
-<h1>Math with fun #1: Factorization in easy way</h1>
+<p><a href="/">&lt;- home</a></p>
 
-<h4>2020/02/15</h4>
+<h1>
+  <a name="math-with-fun-1-factorization-in-easy-way" class="anchor" href="#math-with-fun-1-factorization-in-easy-way" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Math with fun #1: Factorization in easy way</h1>
+
+<h4>
+  <a name="2020-02-15" class="anchor" href="#2020-02-15" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2020/02/15</h4>
 
 <p>Let&rsquo;s see next formula.</p>
-<p><span class="math display">\[
+
+<p>$$
   6x^2 + 23x - 48
-\]</span></p><p>If you are asked to factorize this formula, how will you do it?
+$$</p>
+
+<p>If you are asked to factorize this formula, how will you do it?
 Because this is quadratic equation, it will be this form.</p>
-<p><span class="math display">\[
+
+<p>$$
   (ax + b)(cx + d)
-\]</span></p><p>Now, we have to know what a, b, c and d are.
+$$</p>
+
+<p>Now, we have to know what a, b, c and d are.
 This is the result of factorization of above formula.</p>
-<p><span class="math display">\[
+
+<p>$$
   (3x + 16)(2x - 3)
-\]</span></p><p>There are some ways to solve this problem, but one popular way is writing this diagram.</p>
+$$</p>
+
+<p>There are some ways to solve this problem, but one popular way is writing this diagram.</p>
 
 <pre><code>3   16
   ×
@@ -54,14 +73,17 @@ This is the result of factorization of above formula.</p>
 Multiply 16 and -3 is -48.</p>
 
 <p>Now, 2 numbers arranged diagonally (3 and -3, 2 and 16) can represent 23.</p>
-<p><span class="math display">\[
+
+<p>$$
 3 * -3 + 2 * 16 = 23
-\]</span></p><p>To do factorization in this way, the steps are like this:</p>
+$$</p>
+
+<p>To do factorization in this way, the steps are like this:</p>
 
 <ul>
-<li>Write 2 numbers which becomes a coefficint of <span class="math inline">\(x^2\)</span> (6) if they are multiplied</li>
+<li>Write 2 numbers which becomes a coefficint of $x^2$ (6) if they are multiplied</li>
 <li>Write 2 numbers which becomes constant term (-48) if they are multiplied</li>
-<li>If the result of the sum of diagonal multiplication (<span class="math inline">\(3 * -3 + 2 * 16 = 23\)</span>) is the same as a coefficint of <span class="math inline">\(x\)</span> (23), then the answer is found.
+<li>If the result of the sum of diagonal multiplication ($3 * -3 + 2 * 16 = 23$) is the same as a coefficint of $x$ (23), then the answer is found.
 
 <ul>
 <li>If they are different, try another multiplication</li>
@@ -83,14 +105,18 @@ For example, divisors of 6 are 1, 2, 3, 6. So, this diagram can be this 2 patter
 2
 </code></pre>
 
-<p>48 is <span class="math inline">\(2^4 * 3\)</span> . So, it has more patterns.
-<span class="math inline">\((1, 48)\)</span>, <span class="math inline">\((2, 24)\)</span>, <span class="math inline">\((3, 16)\)</span>, <span class="math inline">\((4, 12)\)</span>, <span class="math inline">\((6, 8)\)</span>.</p>
+<p>48 is $2^4 * 3$ . So, it has more patterns.
+$(1, 48)$, $(2, 24)$, $(3, 16)$, $(4, 12)$, $(6, 8)$.</p>
 
-<p>Because of above, this diagram can be 10 patterns (<span class="math inline">\(2 * 5\)</span>).
+<p>Because of above, this diagram can be 10 patterns ($2 * 5$).
 Also, we have to take care of - (minus). It becomes more.
 But we can simplify this method.</p>
 
-<h2>Don&rsquo;t need to examine all the cases</h2>
+<h2>
+  <a name="don-t-need-to-examine-all-the-cases" class="anchor" href="#don-t-need-to-examine-all-the-cases" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Don&rsquo;t need to examine all the cases</h2>
 
 <p>To get straight to the point, we can find the answer by 2 times trial at most.</p>
 
@@ -111,12 +137,18 @@ But we can simplify this method.</p>
 <p>We can ignore other cases like (2, 24). Why?</p>
 
 <p>If (6, 1) and (2, 24) works, factorized answer will be like this:</p>
-<p><span class="math display">\[
+
+<p>$$
 (6x \pm 2)(x \mp 24)
-\]</span></p><p>But, this can be still factorized:</p>
-<p><span class="math display">\[
+$$</p>
+
+<p>But, this can be still factorized:</p>
+
+<p>$$
 2(3x \pm 1)(x \mp 24)
-\]</span></p><p>If this can be an answer, given formula must be able to be factorized by 2. However, it&rsquo;s obviously impossible.
+$$</p>
+
+<p>If this can be an answer, given formula must be able to be factorized by 2. However, it&rsquo;s obviously impossible.
 In other words, left number and right number must be <em>coprime</em>. In this case, 6 and 2 is not coprime. So it never gets an answer.</p>
 
 <pre><code>6 +-1
@@ -131,7 +163,7 @@ In other words, left number and right number must be <em>coprime</em>. In this c
 2
 </code></pre>
 
-<p>48 is composed of <span class="math inline">\(2 * 2 * 2 * 2 * 3\)</span>. 6 is <span class="math inline">\(2 * 3\)</span>.
+<p>48 is composed of $2 * 2 * 2 * 2 * 3$. 6 is $2 * 3$.
 To make them coprime, only possible answer is (16, 3).</p>
 
 <pre><code>3 +-16
@@ -141,7 +173,7 @@ To make them coprime, only possible answer is (16, 3).</p>
 
 <p>Now, we only need to take care about sign.</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
   <a href="/">home</a>

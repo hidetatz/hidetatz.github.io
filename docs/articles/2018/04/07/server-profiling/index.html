@@ -28,11 +28,25 @@
 
 
 <body class="markdown-body">
-<h1>ボトルネック調査の基本的な手順</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/04/07</h4>
+<h1>
+  <a name="ボトルネック調査の基本的な手順" class="anchor" href="#ボトルネック調査の基本的な手順" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ボトルネック調査の基本的な手順</h1>
 
-<h2>負荷の見極め</h2>
+<h4>
+  <a name="2018-04-07" class="anchor" href="#2018-04-07" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/04/07</h4>
+
+<h2>
+  <a name="負荷の見極め" class="anchor" href="#負荷の見極め" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>負荷の見極め</h2>
 
 <p>一般的な負荷は大きく2つに分類される。ここをまず調査する。</p>
 
@@ -43,7 +57,11 @@
 
 <p>これらを見極めるために、まずロードアベレージを見ていく。</p>
 
-<h2>ロードアベレージ観測</h2>
+<h2>
+  <a name="ロードアベレージ観測" class="anchor" href="#ロードアベレージ観測" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロードアベレージ観測</h2>
 
 <p>ロードアベレージを見るにはいくつか方法がありますが、筆者は <code>top</code> を見ることが多い。</p>
 
@@ -65,24 +83,36 @@ KiB Swap:  1048572 total,  1047632 free,      940 used.  6661788 avail Mem
 
 <p>ちなみに、 <code>top</code> たたいた後 <code>1</code> を押すとコアごとにスタッツが見られる。</p>
 
-<h3>ロードアベレージとは</h3>
+<h3>
+  <a name="ロードアベレージとは" class="anchor" href="#ロードアベレージとは" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロードアベレージとは</h3>
 
 <p>そもそもロードアベレージとは、単位時間あたりのCPUによる実行を待っているタスクの数を示している。
-基本的には上記のように0.01 ~ 0.2くらいに収まり、感覚では1を超えていると「おっ」と思う感じ。<br>
-また、障害が起きてるノードだと、10を超えるのも見たことがあります。(こうなると完全にどこかがおかしいので、直前のデプロイをノータイムでリバートからの再デプロイとかする)<br>
+基本的には上記のように0.01 ~ 0.2くらいに収まり、感覚では1を超えていると「おっ」と思う感じ。<br />
+また、障害が起きてるノードだと、10を超えるのも見たことがあります。(こうなると完全にどこかがおかしいので、直前のデプロイをノータイムでリバートからの再デプロイとかする)<br />
 左から、1分、5分、15分間の平均値を示している。</p>
 
-<p>また、重要なのは、ロードアベレージが示す待ち状態のタスクとは、CPUが専有されていて実行されないタスクだけでなく、<br>
+<p>また、重要なのは、ロードアベレージが示す待ち状態のタスクとは、CPUが専有されていて実行されないタスクだけでなく、<br />
 ディスクIOを待っているタスクも含んでいる。
 そのため、ロードアベレージが高いだけではCPUネックか、IOネックかは判断できない。</p>
 
-<h2>CPU、I/Oのいずれかがボトルネックかを探る</h2>
+<h2>
+  <a name="cpu-i-oのいずれかがボトルネックかを探る" class="anchor" href="#cpu-i-oのいずれかがボトルネックかを探る" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>CPU、I/Oのいずれかがボトルネックかを探る</h2>
 
 <p>以下、それぞれの基本的な流れを説明する。</p>
 
-<h2>ロードアベレージが低い場合</h2>
+<h2>
+  <a name="ロードアベレージが低い場合" class="anchor" href="#ロードアベレージが低い場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロードアベレージが低い場合</h2>
 
-<p>まず、ロードアベレージは低い(感覚的には2以下くらい)のにシステムのスループットが上がらない場合は、サーバには負荷がかかっていない(たぶん)ため、<br>
+<p>まず、ロードアベレージは低い(感覚的には2以下くらい)のにシステムのスループットが上がらない場合は、サーバには負荷がかかっていない(たぶん)ため、<br />
 ソフトウェアの設定や不具合、ネットワーク(TCPコネクション数が増えていないか)、リモートホスト側に原因がないかなどを調査する
 ISUCONの文脈だと、インフラ側で制限かけられていてベンチマーカとアプリケーションサーバ間の帯域がサチってることもある。</p>
 
@@ -99,7 +129,11 @@ CSSとか画像とかがネックになるケースが多い。
 dstatとかでベンチ監視して、サーバー側の負荷はほとんどかかっておらず、かつネットワークIO(dstatでいうsend)も出せているのに遅い、というケースなど。
 サチってることがわかったら後はCDNなりクライアント側のキャッシュなりでなんとか(要するにサーバは何も返さないという状況を作ればOK)する。</p>
 
-<h2>ロードアベレージが高い場合</h2>
+<h2>
+  <a name="ロードアベレージが高い場合" class="anchor" href="#ロードアベレージが高い場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロードアベレージが高い場合</h2>
 
 <p>ロードアベレージが高い場合、ここから、CPU、I/Oのいずれがボトルネックかを調査します。</p>
 
@@ -184,7 +218,11 @@ Linux 4.14.8-gentoo-r1 (localhost)      04/07/2018      _x86_64_        (4 CPU)
 11:25:40 AM       3      1.01      0.00      0.00      0.00      0.00     98.99
 </code></pre>
 
-<h3>スワップについて</h3>
+<h3>
+  <a name="スワップについて" class="anchor" href="#スワップについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>スワップについて</h3>
 
 <p>swapがあるのかどうかは <code>swapon</code> で確認する。</p>
 
@@ -195,23 +233,31 @@ NAME      TYPE       SIZE USED PRIO
 
 <p>/dev/sda5がスワップになっている。</p>
 
-<h2>CPU負荷が高い場合</h2>
+<h2>
+  <a name="cpu負荷が高い場合" class="anchor" href="#cpu負荷が高い場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>CPU負荷が高い場合</h2>
 
 <p>CPU負荷が高い場合、以下の流れで探っていく。</p>
 
 <ul>
-<li>psで見えるプロセスの状態やCPU使用時間などを見ながら、原因となっているプロセスを特定する。<br>
+<li>psで見えるプロセスの状態やCPU使用時間などを見ながら、原因となっているプロセスを特定する。<br />
 </li>
 <li>プロセスを特定したら、straceでシステムコールをトレース、oprofileでプロファイリングをして、ボトルネック箇所を絞り込む。</li>
-<li>goアプリだったら<a href="http://klabgames.tech.blog.jp.klab.com/archives/pprof1-cpuprofile.html">pprof</a> 。ほかはわからない<br>
+<li>goアプリだったら<a href="http://klabgames.tech.blog.jp.klab.com/archives/pprof1-cpuprofile.html">pprof</a> 。ほかはわからない<br />
 </li>
 </ul>
 
-<h2>IO負荷が高い場合</h2>
+<h2>
+  <a name="io負荷が高い場合" class="anchor" href="#io負荷が高い場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>IO負荷が高い場合</h2>
 
-<p>CPU負荷が高くない場合はIO負荷を疑う。<br>
-IO負荷の場合、プログラムからの入出力が多いか、<br>
-スワップが発生してディスクアクセスが発生しているかのいずれかである場合がほとんど。<br>
+<p>CPU負荷が高くない場合はIO負荷を疑う。<br />
+IO負荷の場合、プログラムからの入出力が多いか、<br />
+スワップが発生してディスクアクセスが発生しているかのいずれかである場合がほとんど。<br />
 上記の <code>sar -W</code> でスワップの発生状況を確認する。</p>
 
 <p>スワップが発生している場合:</p>
@@ -222,7 +268,7 @@ IO負荷の場合、プログラムからの入出力が多いか、<br>
 <li>搭載メモリが不足している場合はメモリ増設で対応。メモリ増設できない場合は分散。</li>
 </ul>
 
-<p>スワップが発生していない場合:<br>
+<p>スワップが発生していない場合:<br />
 キャッシュに必要なメモリが不足しているケースが考えられる。</p>
 
 <ul>
@@ -230,7 +276,11 @@ IO負荷の場合、プログラムからの入出力が多いか、<br>
 <li>それ以外では、分散やキャッシュサーバの導入などを検討。また、プログラム改善でI/O頻度を軽減する。</li>
 </ul>
 
-<h2>その他</h2>
+<h2>
+  <a name="その他" class="anchor" href="#その他" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>その他</h2>
 
 <p>以下のようなコマンドもよく使う。</p>
 
@@ -253,10 +303,10 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 <li><a href="https://github.com/cjbassi/gotop">gotop</a> &hellip; きれいに見られる</li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

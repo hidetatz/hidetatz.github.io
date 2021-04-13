@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>MicroservicesアーキテクチャにおけるTransactional Integrityの実現</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2019/04/16</h4>
+<h1>
+  <a name="microservicesアーキテクチャにおけるtransactional-integrityの実現" class="anchor" href="#microservicesアーキテクチャにおけるtransactional-integrityの実現" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>MicroservicesアーキテクチャにおけるTransactional Integrityの実現</h1>
+
+<h4>
+  <a name="2019-04-16" class="anchor" href="#2019-04-16" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2019/04/16</h4>
 
 <p>マイクロサービスのような分散システム環境においては、複数のサービスに跨ってデータの整合性を保つことが、
 モノリシックなアプリケーションの場合と比較して困難である。
@@ -38,7 +48,11 @@
 
 <p>Transactional Integrityというアプローチでは、分散システム環境におけるデータの整合性を維持するためのテクニックがある。</p>
 
-<h2>Eventual Consistency</h2>
+<h2>
+  <a name="eventual-consistency" class="anchor" href="#eventual-consistency" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Eventual Consistency</h2>
 
 <p>Eventual Consistencyは、日本語では結果整合性と訳される。
 RDBMSにおける悲観的ロックのような、厳密な一貫性を要求する考え方とは異なる。
@@ -52,7 +66,11 @@ Eventual Consistencyの考え方を採用することができる。
 
 <p>データ更新を非同期的にノンブロッキングで行うため、どこかのマイクロサービスが不具合を起こしてもリクエストが止まることがないことがメリットだ。</p>
 
-<h2>Correlation ID</h2>
+<h2>
+  <a name="correlation-id" class="anchor" href="#correlation-id" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Correlation ID</h2>
 
 <p>マイクロサービスでは、複数のサービスがひとつのリクエストを扱うため、リクエストのログの追跡が難しくなる。
 これに対する解決策が、Correlation IDである。</p>
@@ -63,7 +81,11 @@ Eventual Consistencyの考え方を採用することができる。
 <p>Correlation IDの発行はAPI Gatewayのレイヤーが行う。
 また、ライブラリを提供するなど、全てのサービスが同じフォーマットでそれをロギングする仕組みを作る必要がある。</p>
 
-<h2>Rollback and Staged Commit</h2>
+<h2>
+  <a name="rollback-and-staged-commit" class="anchor" href="#rollback-and-staged-commit" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Rollback and Staged Commit</h2>
 
 <p>すべてのマイクロサービスがロールバックをサポートする(ロールバックのAPI/RPCを提供する)というパターンもある。
 ロールバックをサポートする場合は、トランザクションIDのようなものをマイクロサービスが発行し、そのIDを使ってロールバックのリクエストを受け取れるようにする。
@@ -74,7 +96,11 @@ Staged Commitでは、2 Phase commitのように、各マイクロサービス�
 <p>これらは分散トランザクションを実現するための基本的な機能であるが、ここで重要なのは、ロールバックやコミットを行うのは誰か？という問題である。
 それを解決するのが、次に説明するTransaction Managerである。</p>
 
-<h2>Transaction Manager</h2>
+<h2>
+  <a name="transaction-manager" class="anchor" href="#transaction-manager" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Transaction Manager</h2>
 
 <p>Transaction Managerは実態はマイクロサービスであり、関連のあるマイクロサービス群に対してロールバックやコミットなどのアクションを行う。</p>
 
@@ -95,7 +121,11 @@ Transaction Managerはすべてのcohortsから合意メッセージを受け取
 
 <p>Transaction Managerは、それ自体が応答不能になるなどでメッセージがロストすることはあってはならないため、Cloud Pub/SubやAWS SQSなどを用いるのが良い。</p>
 
-<h2>ロールバックを実現するためのEvent sourcing</h2>
+<h2>
+  <a name="ロールバックを実現するためのevent-sourcing" class="anchor" href="#ロールバックを実現するためのevent-sourcing" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロールバックを実現するためのEvent sourcing</h2>
 
 <p>Staged Commitを行わない場合、データは即コミットされるため、ロールバックをRDBのように単純には行えない。このとき、データ更新を所謂CRUDで実装していては、前の状態に戻すことは不可能である。
 CRUDでは単一のデータの状態を書き換えてしまうため、履歴情報は保持していないためである。履歴テーブルを作るなどのテクニックもあるが、このケースではEvent sourcingが相性が良い。</p>
@@ -254,23 +284,31 @@ CRUDでは、以下のようなフローを踏むだろう。</p>
 <p>Event sourcingパターンは、CQRSを実現するためのものとよく言われるが、マイクロサービスアーキテクチャでは一般的なデータアーキテクチャである。
 特に、どのサービスによってデータが更新されたのかを記録できるため、ロールバックとは異なる文脈でも有用である。</p>
 
-<h2>MDMでデータの整合性をチェックする</h2>
+<h2>
+  <a name="mdmでデータの整合性をチェックする" class="anchor" href="#mdmでデータの整合性をチェックする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>MDMでデータの整合性をチェックする</h2>
 
 <p>MDMはMaster Data Managementの略で、データの整合性をチェックするためのコンポーネントである。
 Hourlyなどでfunctionを走らせ、マイクロサービスを跨いでデータの一貫性をチェックする。
 通知を行い人間がデータを修正するか、データの修正までMDMが行うかは選択の余地がある。
 MDMについては別途記事を書こうと思う。</p>
 
-<h3>参考</h3>
+<h3>
+  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考</h3>
 
-<p><a href="https://www.slideshare.net/AmazonWebServices/a-modern-data-architecture-for-microservices">A Modern Data Architecture for Microservices</a><br>
-<a href="https://microservices.io/patterns/data/event-sourcing.html">Event sourcing</a><br>
+<p><a href="https://www.slideshare.net/AmazonWebServices/a-modern-data-architecture-for-microservices">A Modern Data Architecture for Microservices</a><br />
+<a href="https://microservices.io/patterns/data/event-sourcing.html">Event sourcing</a><br />
 <a href="https://www.infoq.com/articles/Microservices-Architectural-Fitness">Perspective on Architectural Fitness of Microservices</a></p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,23 +28,45 @@
 
 
 <body class="markdown-body">
-<h1>Introduce Terraform with simple template</h1>
+<p><a href="/">&lt;- home</a></p>
 
-<h4>2018/04/30</h4>
+<h1>
+  <a name="introduce-terraform-with-simple-template" class="anchor" href="#introduce-terraform-with-simple-template" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Introduce Terraform with simple template</h1>
+
+<h4>
+  <a name="2018-04-30" class="anchor" href="#2018-04-30" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/04/30</h4>
 
 <p>I have created simple terraform template for AWS.</p>
 
-<h3>At first: code is</h3>
+<h3>
+  <a name="at-first-code-is" class="anchor" href="#at-first-code-is" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>At first: code is</h3>
 
 <p><a href="https://github.com/ygnmhdtt/minimal-terraform">here</a> .</p>
 
-<h3>Terraform</h3>
+<h3>
+  <a name="terraform" class="anchor" href="#terraform" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Terraform</h3>
 
 <p>I love AWS, and use it every day at my work, or as my hobby.
 But, I always create aws resources with aws console or aws-cli or aws-shell.
 This is my first experience of terraform and I want to log it.</p>
 
-<h3>Install terraform</h3>
+<h3>
+  <a name="install-terraform" class="anchor" href="#install-terraform" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Install terraform</h3>
 
 <p>As Linux, very simple.</p>
 
@@ -54,7 +76,11 @@ $ mv terraform /usr/local/bin # or to any your $PATH
 $ which terraform
 </code></pre>
 
-<h3>Makefile</h3>
+<h3>
+  <a name="makefile" class="anchor" href="#makefile" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Makefile</h3>
 
 <p>I wrote Makefile like this. (I alse love Makefile)</p>
 
@@ -81,7 +107,11 @@ destroy:
         $(TERRAFORM) destroy
 </code></pre>
 
-<h3>write .tf files</h3>
+<h3>
+  <a name="write-tf-files" class="anchor" href="#write-tf-files" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>write .tf files</h3>
 
 <p>If you want to try terraform with my sample,
 only you have to do is <code>clone</code> .</p>
@@ -91,7 +121,11 @@ only you have to do is <code>clone</code> .</p>
 
 <p>and follow README.</p>
 
-<h3>init</h3>
+<h3>
+  <a name="init" class="anchor" href="#init" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>init</h3>
 
 <pre><code>$ make init  
 terraform init
@@ -132,7 +166,11 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 </code></pre>
 
-<h3>plan</h3>
+<h3>
+  <a name="plan" class="anchor" href="#plan" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>plan</h3>
 
 <pre><code>$ make plan  
 terraform plan  
@@ -292,7 +330,11 @@ can't guarantee that exactly these actions will be performed if
 &quot;terraform apply&quot; is subsequently run.
 </code></pre>
 
-<h3>create resources</h3>
+<h3>
+  <a name="create-resources" class="anchor" href="#create-resources" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>create resources</h3>
 
 <pre><code>$ make apply
 
@@ -439,7 +481,11 @@ module.ec2.aws_instance.bastion: Creation complete after 23s (ID: i-00ebded5f73c
 Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
 </code></pre>
 
-<h3>created resources</h3>
+<h3>
+  <a name="created-resources" class="anchor" href="#created-resources" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>created resources</h3>
 
 <p><img src="/images/introduce-terraform/1.png" alt="" />
 <img src="/images/introduce-terraform/2.png" alt="" />
@@ -448,7 +494,11 @@ Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
 <img src="/images/introduce-terraform/5.png" alt="" />
 <img src="/images/introduce-terraform/6.png" alt="" /></p>
 
-<h3>login</h3>
+<h3>
+  <a name="login" class="anchor" href="#login" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>login</h3>
 
 <pre><code>$ ssh ec2-user@18.182.42.233 -i ~/.ssh/tf-key
 The authenticity of host '18.182.42.233 (18.182.42.233)' can't be established.
@@ -472,7 +522,11 @@ ec2-user
 
 <p>succeed login!!</p>
 
-<h3>destroy resources</h3>
+<h3>
+  <a name="destroy-resources" class="anchor" href="#destroy-resources" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>destroy resources</h3>
 
 <pre><code>make destroy
 terraform destroy
@@ -551,7 +605,7 @@ Destroy complete! Resources: 8 destroyed.
 <li>template must be DRY, and small</li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
   <a href="/">home</a>

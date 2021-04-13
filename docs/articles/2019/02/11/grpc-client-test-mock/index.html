@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>gRPCサーバーをモックしてテストする</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2019/02/11</h4>
+<h1>
+  <a name="grpcサーバーをモックしてテストする" class="anchor" href="#grpcサーバーをモックしてテストする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>gRPCサーバーをモックしてテストする</h1>
+
+<h4>
+  <a name="2019-02-11" class="anchor" href="#2019-02-11" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2019/02/11</h4>
 
 <p>gRPC越しに別のマイクロサービスをコールするクライアントの層をテストしたいことがある。
 例えば、次のようなprotoを使ってみよう。</p>
@@ -66,84 +76,73 @@ message User {
 <p>これを素朴に使ってクライアント、サーバを実装するとこんな感じになる。</p>
 
 <ul>
-<li>Server</li>
-</ul>
-
-<pre><code>package main
-
+<li>Server
+<code>
+package main
 import (
-  &quot;context&quot;
-  &quot;fmt&quot;
-  &quot;log&quot;
-  &quot;net&quot;
-
-  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
-  &quot;google.golang.org/grpc&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+&quot;log&quot;
+&quot;net&quot;
+userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+&quot;google.golang.org/grpc&quot;
 )
-
 type server struct{}
-
 func (s *server) Get(ctx context.Context, req *userpb.GetRequest) (*userpb.GetResponse, error) {
-  if req.Id == &quot;1&quot; {
-    return &amp;userpb.GetResponse{User: &amp;userpb.User{
-      Id:    &quot;1&quot;,
-      Name:  &quot;bob&quot;,
-      Email: &quot;email@example.com&quot;,
-    }}, nil
-  }
-  return nil, fmt.Errorf(&quot;id invalid&quot;)
+if req.Id == &quot;1&quot; {
+return &amp;userpb.GetResponse{User: &amp;userpb.User{
+  Id:    &quot;1&quot;,
+  Name:  &quot;bob&quot;,
+  Email: &quot;email@example.com&quot;,
+}}, nil
 }
-
+return nil, fmt.Errorf(&quot;id invalid&quot;)
+}
 func main() {
-  listenPort, err := net.Listen(&quot;tcp&quot;, &quot;:19003&quot;)
-  if err != nil {
-    log.Fatalln(err)
-  }
-  grpcServer := grpc.NewServer()
-  userpb.RegisterUsersServer(grpcServer, &amp;server{})
-  grpcServer.Serve(listenPort)
+listenPort, err := net.Listen(&quot;tcp&quot;, &quot;:19003&quot;)
+if err != nil {
+log.Fatalln(err)
 }
-</code></pre>
+grpcServer := grpc.NewServer()
+userpb.RegisterUsersServer(grpcServer, &amp;server{})
+grpcServer.Serve(listenPort)
+}
+</code></li>
+</ul>
 
 <p>Getの実装はサンプルであり、実際はRDBやKVSから取得する。</p>
 
 <ul>
-<li>Client</li>
-</ul>
-
-<pre><code>package main
-
+<li>Client
+<code>
+package main
 import (
-  &quot;context&quot;
-  &quot;fmt&quot;
-
-  userpb &quot;github.com/yagi5/grpc-test/pb&quot;
-  &quot;google.golang.org/grpc&quot;
+&quot;context&quot;
+&quot;fmt&quot;
+userpb &quot;github.com/yagi5/grpc-test/pb&quot;
+&quot;google.golang.org/grpc&quot;
 )
-
 type user struct {
-  ID    string
-  Name  string
-  Email string
+ID    string
+Name  string
+Email string
 }
-
 func main() {
-  conn, err := grpc.Dial(&quot;127.0.0.1:19003&quot;, grpc.WithInsecure())
-  if err != nil {
-    panic(err)
-  }
-  defer conn.Close()
-  client := userpb.NewUsersClient(conn)
-
-  c := usersClient{client: client}
-  res, err := c.Get(ctx, &amp;userpb.GetRequest{Id: &quot;1&quot;})
-  if err != nil {
-    panic(err)
-  }
-
-  fmt.Printf(&quot;user: %#v\n&quot;, u)
+conn, err := grpc.Dial(&quot;127.0.0.1:19003&quot;, grpc.WithInsecure())
+if err != nil {
+panic(err)
 }
-</code></pre>
+defer conn.Close()
+client := userpb.NewUsersClient(conn)
+c := usersClient{client: client}
+res, err := c.Get(ctx, &amp;userpb.GetRequest{Id: &quot;1&quot;})
+if err != nil {
+panic(err)
+}
+fmt.Printf(&quot;user: %#v\n&quot;, u)
+}
+</code></li>
+</ul>
 
 <p>マイクロサービスのコンテキストにおいては、このgRPCサーバーが実態としては別のマイクロサービスであるということがほとんどである。
 このとき、ユニットテストでこのサーバー(Userマイクロサービス)を実際に起動するのはなかなか実装がめんどくさい。
@@ -294,10 +293,10 @@ mockUsersClientはGet()を実装しているため、userpb.UsersClientを実装
 
 <p>このように、mockClientを作り、そこにどのような関数を渡すかを各テストで定義するのは、特にinfraレイヤーでかなり使えるテクニックである。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

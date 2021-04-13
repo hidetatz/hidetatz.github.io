@@ -28,11 +28,25 @@
 
 
 <body class="markdown-body">
-<h1>Gentooのネットワーク周りのセットアップについて</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/26</h4>
+<h1>
+  <a name="gentooのネットワーク周りのセットアップについて" class="anchor" href="#gentooのネットワーク周りのセットアップについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Gentooのネットワーク周りのセットアップについて</h1>
 
-<h3>問題</h3>
+<h4>
+  <a name="2017-12-26" class="anchor" href="#2017-12-26" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/26</h4>
+
+<h3>
+  <a name="問題" class="anchor" href="#問題" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>問題</h3>
 
 <p>筆者は有線LANの環境がない家に住んでいる(デフォルトで無線LANがあるのが売りのマンション)ので、無線に繋ぐ必要がある。
 Gentooのインストールが終わり、ネットワーク設定をしようと思ったが、無線のドライバが認識されない。</p>
@@ -57,7 +71,11 @@ Gentooのインストールが終わり、ネットワーク設定をしよう�
 
 <p>と考えた。</p>
 
-<h3>調査方法</h3>
+<h3>
+  <a name="調査方法" class="anchor" href="#調査方法" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>調査方法</h3>
 
 <p><code>lspci</code> コマンドで、ドライバについて理解する。</p>
 
@@ -113,7 +131,11 @@ Device Drivers  ---&gt;
 
 <p>これで <code>make &amp;&amp; make modules_install</code> して、 <code>make install</code> して再起動したらイケた。公式は最高。</p>
 
-<h3>起動時に自動で無線に繋ぐ設定</h3>
+<h3>
+  <a name="起動時に自動で無線に繋ぐ設定" class="anchor" href="#起動時に自動で無線に繋ぐ設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>起動時に自動で無線に繋ぐ設定</h3>
 
 <p>まずは、<a href="https://yagi5.com/2017/12/24/wpa_supplicant/">こちら</a>の通り <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> を作成する。</p>
 
@@ -136,10 +158,10 @@ wpa_supplicant_wlp5s0=&quot;-Dnl80211,wext&quot;
 
 <p>rebootして、つながるか確認する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

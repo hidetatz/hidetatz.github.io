@@ -28,32 +28,50 @@
 
 
 <body class="markdown-body">
-<h1>Lambda Function to convert PDF to Image by Node.js</h1>
+<p><a href="/">&lt;- home</a></p>
 
-<h4>2018/04/12</h4>
+<h1>
+  <a name="lambda-function-to-convert-pdf-to-image-by-node-js" class="anchor" href="#lambda-function-to-convert-pdf-to-image-by-node-js" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Lambda Function to convert PDF to Image by Node.js</h1>
+
+<h4>
+  <a name="2018-04-12" class="anchor" href="#2018-04-12" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/04/12</h4>
 
 <p>I&rsquo;ve created AWS Lambda function to convert pdf to image.</p>
 
-<p>Repository is <a href="https://github.com/ygnmhdtt/lmd_pdf2img">here</a>.<br>
+<p>Repository is <a href="https://github.com/ygnmhdtt/lmd_pdf2img">here</a>.<br />
 I need this function for work, but I couldn&rsquo;t find any useful libraries or examples.</p>
 
-<h3>How to use</h3>
+<h3>
+  <a name="how-to-use" class="anchor" href="#how-to-use" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>How to use</h3>
 
 <p>First, you need to install dependencies.</p>
 
 <pre><code>$ npm install gm aws-sdk util
 </code></pre>
 
-<p>Now, I haven&rsquo;t prepared any deployment command.<br>
+<p>Now, I haven&rsquo;t prepared any deployment command.<br />
 You need to do it manually like this.</p>
 
 <pre><code>$ zip -r function.zip *
 </code></pre>
 
-<p>And, you need to upload zip at lambda console.<br>
+<p>And, you need to upload zip at lambda console.<br />
 Of course, you must set function trigger <code>S3 Upload</code> .</p>
 
-<h3>Source code</h3>
+<h3>
+  <a name="source-code" class="anchor" href="#source-code" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Source code</h3>
 
 <p>All in <code>index.js</code> .</p>
 
@@ -64,12 +82,12 @@ const dstBucket = srcBucket;
 const dstKey = srcKey.replace('.pdf', '.png');
 </code></pre>
 
-<p>Now, destination bucket and key is same as source (extension will be <code>png</code> ).<br>
+<p>Now, destination bucket and key is same as source (extension will be <code>png</code> ).<br />
 If you want to configure it, please write your own code.</p>
 
 <p>Other configurations are written in README.</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
   <a href="/">home</a>

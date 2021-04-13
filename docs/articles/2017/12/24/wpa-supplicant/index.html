@@ -28,17 +28,35 @@
 
 
 <body class="markdown-body">
-<h1>wpa_supplicantでWPAの無線LANに繋ぐ</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/24</h4>
+<h1>
+  <a name="wpa-supplicantでwpaの無線lanに繋ぐ" class="anchor" href="#wpa-supplicantでwpaの無線lanに繋ぐ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>wpa_supplicantでWPAの無線LANに繋ぐ</h1>
 
-<h3>暗号化方式を確かめる</h3>
+<h4>
+  <a name="2017-12-24" class="anchor" href="#2017-12-24" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/24</h4>
+
+<h3>
+  <a name="暗号化方式を確かめる" class="anchor" href="#暗号化方式を確かめる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>暗号化方式を確かめる</h3>
 
 <p>Windowsでログインして、繋がってるネットワークのプロパティからWEPなのか、WPA系なのかを確かめる。
 筆者環境の無線LANはWPA2形式で暗号化されていた。
 以下の方法はWPA系に対応した方法。</p>
 
-<h3>wpa_supplicantで繋ぐ</h3>
+<h3>
+  <a name="wpa-supplicantで繋ぐ" class="anchor" href="#wpa-supplicantで繋ぐ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>wpa_supplicantで繋ぐ</h3>
 
 <p>筆者はGentooインストールをSystemRescueCDからやっていたのでwpa_supplicantコマンドはデフォルトで入っていた。
 GentooのminimalCDとかには入ってないかもなので、その場合はSystemRescueCDを使うか、一回有線でつないでemergeするなどすること。</p>
@@ -82,7 +100,11 @@ Successfully initialized wpa_supplicant
 <p>これで、 IPアドレスがちゃんと振られていれば、インターネットに繋がると思う。
 pingを打つなりして確認する。</p>
 
-<h3>つながらない場合</h3>
+<h3>
+  <a name="つながらない場合" class="anchor" href="#つながらない場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>つながらない場合</h3>
 
 <p>もしつながらない場合はwpa_supplicantのログを出しながら繋ぐ。</p>
 
@@ -104,10 +126,10 @@ pingを打つなりして確認する。</p>
 
 <p>で、ドライバをupしなおしたりするといいという情報もある。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

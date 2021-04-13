@@ -28,13 +28,27 @@
 
 
 <body class="markdown-body">
-<h1>Goで使いやすいPackageを作るために知っておきたいこと</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/11/09</h4>
+<h1>
+  <a name="goで使いやすいpackageを作るために知っておきたいこと" class="anchor" href="#goで使いやすいpackageを作るために知っておきたいこと" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Goで使いやすいPackageを作るために知っておきたいこと</h1>
+
+<h4>
+  <a name="2018-11-09" class="anchor" href="#2018-11-09" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/11/09</h4>
 
 <p>Goのコードをいろいろと読んできて感じた、Goらしいパッケージのデザインを書いていく。</p>
 
-<h3>パッケージ</h3>
+<h3>
+  <a name="パッケージ" class="anchor" href="#パッケージ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>パッケージ</h3>
 
 <p>Goのパッケージは、ディレクトリ構造と一致する。
 ひとつのディレクトリには同じパッケージのファイルだけがある必要がある。
@@ -61,7 +75,11 @@ strings.s
 strings_test.go
 </code></pre>
 
-<h3>doc.go</h3>
+<h3>
+  <a name="doc-go" class="anchor" href="#doc-go" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>doc.go</h3>
 
 <p>doc.goという文化がある。コメントでパッケージの説明を書き、最後に <code>package xxx</code> だけ書いておく、というものだ。</p>
 
@@ -73,7 +91,11 @@ strings_test.go
 
 <p>書く内容は上記のように多岐にわたるのだが、ある程度規模の大きいパッケージを作るときには覚えておきたいテクニックだ。</p>
 
-<h3>型とファイルはなるべく一致させる</h3>
+<h3>
+  <a name="型とファイルはなるべく一致させる" class="anchor" href="#型とファイルはなるべく一致させる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>型とファイルはなるべく一致させる</h3>
 
 <p>goでは、例えば<a href="https://github.com/golang/go/blob/master/src/net/http/header.go">http.Header</a> は <code>net/http/header.go</code> にあることが一般的だ。</p>
 
@@ -107,7 +129,11 @@ func (h Header) Add(key, value string) {
 
 <p>このように、ファイル名と一致するstructがあり、そのメソッドが定義されている、というのは一般的だ。</p>
 
-<h3>パッケージは責務ごとに切る</h3>
+<h3>
+  <a name="パッケージは責務ごとに切る" class="anchor" href="#パッケージは責務ごとに切る" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>パッケージは責務ごとに切る</h3>
 
 <p>Ruby on Railsや他のMVCフレームワークのように、 <code>model</code> や <code>controller</code> のようなパッケージはGoでは切らない。
 そうではなく、機能に紐付いた責務でパッケージを切る。</p>
@@ -116,13 +142,21 @@ func (h Header) Add(key, value string) {
 ドメインのパッケージである。
 これがうまく決められない場合は、大きなひとつのmainパッケージにしても構わない。</p>
 
-<h3>godocを書く</h3>
+<h3>
+  <a name="godocを書く" class="anchor" href="#godocを書く" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>godocを書く</h3>
 
 <p>すべてのGoプログラマは<a href="https://godoc.org/">godoc</a>についてよく知っているべきだ。
 godocはわざわざそのために書いているわけではなく、コードの中のコメントを勝手に読んでくれる。
 godocフレンドリーなコメントを常に書くよう心がける。</p>
 
-<h3>Exampleを書く</h3>
+<h3>
+  <a name="exampleを書く" class="anchor" href="#exampleを書く" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Exampleを書く</h3>
 
 <p>パッケージの関数の使い方を説明するために、godocに加え <code>Example</code> という手法がある。
 <a href="https://golang.org/pkg/strings/#Replace">strings.Replace</a>を見てみよう。</p>
@@ -159,10 +193,10 @@ goから見るとExampleであってもtestとみなされ、 <code>go test</cod
 <p>また、関数名を工夫することで、単なる関数以外のテストもできるようになっている。
 詳しくは<a href="https://blog.golang.org/examples">Testable Examples in Go</a> を参照する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

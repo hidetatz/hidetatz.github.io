@@ -28,25 +28,47 @@
 
 
 <body class="markdown-body">
-<h1>NATインスタンスについて学んだ</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/11/18</h4>
+<h1>
+  <a name="natインスタンスについて学んだ" class="anchor" href="#natインスタンスについて学んだ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>NATインスタンスについて学んだ</h1>
+
+<h4>
+  <a name="2017-11-18" class="anchor" href="#2017-11-18" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/11/18</h4>
 
 <p>NATインスタンス(EC2)は Source/Destチェック を無効にしなければいけない理由について学んだ。</p>
 
 <p>AWSインフラでNATインスタンスを構築する際は、NATインスタンス自身の Source/Destチェック を無効にする必要がある。</p>
 
-<h3>NATインスタンスとは？</h3>
+<h3>
+  <a name="natインスタンスとは" class="anchor" href="#natインスタンスとは" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>NATインスタンスとは？</h3>
 
 <p>プライベートサブネットからインターネットに出るために使う。
 プライベートサブネットのルートテーブルで、デフォルトルートをNATインスタンスに向ける。
 NATインスタンス自体はパブリックサブネット自体にある。</p>
 
-<h3>Source/Destチェック とは？</h3>
+<h3>
+  <a name="source-destチェック-とは" class="anchor" href="#source-destチェック-とは" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Source/Destチェック とは？</h3>
 
 <p>インスタンスが自分宛てに来たパケット以外を捨てるための設定である。</p>
 
-<h3>何故無効にするのか？</h3>
+<h3>
+  <a name="何故無効にするのか" class="anchor" href="#何故無効にするのか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>何故無効にするのか？</h3>
 
 <p>NATインスタンスは、その性質上自分宛てのパケットをインターネットに通す必要がある。
 NATインスタンスがあるパブリックサブネットのルートテーブルのデフォルトルートはインターネットゲートウェイに向いており、
@@ -57,10 +79,10 @@ NATインスタンスがあるパブリックサブネットのルートテー�
 <p>また、基本的にはNATゲートウェイを使うのが良い。
 NATインスタンスは設定が面倒で、インスタンス使用料金も、スケールしない(HTTP Proxyを使えばスケールできる)ため、あまり採用するメリットはない。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

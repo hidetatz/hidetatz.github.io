@@ -28,19 +28,33 @@
 
 
 <body class="markdown-body">
-<h1>ThinkPadE470にGentooをインストールした その2</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/26</h4>
+<h1>
+  <a name="thinkpade470にgentooをインストールした-その2" class="anchor" href="#thinkpade470にgentooをインストールした-その2" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ThinkPadE470にGentooをインストールした その2</h1>
+
+<h4>
+  <a name="2017-12-26" class="anchor" href="#2017-12-26" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/26</h4>
 
 <p>以下について書く。</p>
 
-<p>6 . tarballを展開したディレクトリにchrootする<br>
-7 . portageをセットアップする<br>
-8 . カーネルをビルドする<br>
-9 . ブートローダをセットアップする<br>
+<p>6 . tarballを展開したディレクトリにchrootする<br />
+7 . portageをセットアップする<br />
+8 . カーネルをビルドする<br />
+9 . ブートローダをセットアップする<br />
 10 . Gentooが起動することを確認する</p>
 
-<h3>6. tarballを展開したディレクトリにchrootする</h3>
+<h3>
+  <a name="6-tarballを展開したディレクトリにchrootする" class="anchor" href="#6-tarballを展開したディレクトリにchrootする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>6. tarballを展開したディレクトリにchrootする</h3>
 
 <pre><code class="language-shell">### /etc/resolv.confのコピー
 % cp -L /etc/resolv.conf /mnt/gentoo/etc/
@@ -55,7 +69,11 @@
 % source /etc/profile
 </code></pre>
 
-<h3>7. portageをセットアップする</h3>
+<h3>
+  <a name="7-portageをセットアップする" class="anchor" href="#7-portageをセットアップする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>7. portageをセットアップする</h3>
 
 <p>portageとは、Gentooのパッケージ管理ツール。MacでいうHomebrew。
 設定の前に、コンパイルオプションを設定する。</p>
@@ -84,13 +102,21 @@ GRUB_PLATFORMS=&quot;efi-64&quot;
 
 <p>まあまあ時間がかかった気がする。</p>
 
-<h3>8. カーネルをビルドする</h3>
+<h3>
+  <a name="8-カーネルをビルドする" class="anchor" href="#8-カーネルをビルドする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>8. カーネルをビルドする</h3>
 
 <p>ここがけっこう大変。
 どのようにビルドするかの方針を決める必要がある。
 ここは環境に合わせるしかないので、省略する。</p>
 
-<h3>9. ブートローダをセットアップする</h3>
+<h3>
+  <a name="9-ブートローダをセットアップする" class="anchor" href="#9-ブートローダをセットアップする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>9. ブートローダをセットアップする</h3>
 
 <p>ブートローダをセットアップする。grubを使った。</p>
 
@@ -109,7 +135,11 @@ GRUB_PLATFORMS=&quot;efi-64&quot;
 
 <p>また、 <code>grub-mkconfig</code> の時のメッセージで、先程ビルドしたカーネルが認識されていることを確認すること。</p>
 
-<h3>10. Gentooが起動することを確認する</h3>
+<h3>
+  <a name="10-gentooが起動することを確認する" class="anchor" href="#10-gentooが起動することを確認する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>10. Gentooが起動することを確認する</h3>
 
 <p>これでたぶんできているはず。
 以下のようにして再起動。</p>
@@ -125,10 +155,10 @@ GRUB_PLATFORMS=&quot;efi-64&quot;
 
 <p>Gentooが上がってきたら優勝です。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,16 +28,34 @@
 
 
 <body class="markdown-body">
-<h1>How to get along with SLO and Error budget</h1>
+<p><a href="/">&lt;- home</a></p>
 
-<h4>2020/04/28</h4>
+<h1>
+  <a name="how-to-get-along-with-slo-and-error-budget" class="anchor" href="#how-to-get-along-with-slo-and-error-budget" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>How to get along with SLO and Error budget</h1>
 
-<h2>Introduction</h2>
+<h4>
+  <a name="2020-04-28" class="anchor" href="#2020-04-28" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2020/04/28</h4>
+
+<h2>
+  <a name="introduction" class="anchor" href="#introduction" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Introduction</h2>
 
 <p>I get to know SLO and error budget when reading a book &ldquo;Site Reliability Engineering&rdquo;[1]. While I am building some microservices in my company, I found how SLO and error budget are such powerful tool and really help to develop and maintain services.
 In this article, I will try to describe how SLO and error budget should work and why they such matters. I hope this article can help readers who are trying to understand and build their own SLO strategy.</p>
 
-<h2>SLA</h2>
+<h2>
+  <a name="sla" class="anchor" href="#sla" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLA</h2>
 
 <p>Before talking about SLO, let&rsquo;s understand what SLA is.
 SLA is an <strong>agreement</strong> of service level of a system. Usually, the agreement is made between service provider and service customer.
@@ -50,7 +68,11 @@ GCP[3], Azure[4], Datadog[5] and more cloud services have SLA.</p>
 
 <p>Developers or SRE don&rsquo;t have to get involved in defining SLA. Because SLA is more close to business and product side. Their target is usually SLO. The relation between SLO and SLA will be described later.</p>
 
-<h2>SLI</h2>
+<h2>
+  <a name="sli" class="anchor" href="#sli" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLI</h2>
 
 <p>SLI is a service level <strong>indicator</strong>. SLI is a quantitative measure which is a part of the service level. There are some common indicators.</p>
 
@@ -66,7 +88,11 @@ GCP[3], Azure[4], Datadog[5] and more cloud services have SLA.</p>
 <p>Good SLI can measure what users are interested in the service directly.
 But sometimes it&rsquo;s difficult. In that case, using another proxy is also OK.</p>
 
-<h2>SLO</h2>
+<h2>
+  <a name="slo" class="anchor" href="#slo" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLO</h2>
 
 <p>SLO represents service level <strong>objective</strong>.
 SLO usually includes SLI, which should be tracked.
@@ -84,11 +110,19 @@ SLO helps this situation. We can decide what to do when we face a problem. Simpl
 Usually, the balance between feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering&rsquo;s perspective, they should also work on feature development.
 Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.</p>
 
-<h2>How to implement SLO</h2>
+<h2>
+  <a name="how-to-implement-slo" class="anchor" href="#how-to-implement-slo" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>How to implement SLO</h2>
 
 <p>There are some ways how to implement SLO. Below is just one example.</p>
 
-<h3>Determine what kind of SLI is the best for the service</h3>
+<h3>
+  <a name="determine-what-kind-of-sli-is-the-best-for-the-service" class="anchor" href="#determine-what-kind-of-sli-is-the-best-for-the-service" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Determine what kind of SLI is the best for the service</h3>
 
 <p>First, decide what should be the indicators of the level for the service.
 Because SLO includes SLI, it&rsquo;s also determined based on users&rsquo; interests. Good SLI can be a measurement what users are interested in directly.
@@ -117,16 +151,28 @@ If your service has only READ operations (such as master-data service), you may 
 Popular ones would be &ldquo;availability&rdquo; and &ldquo;latency&rdquo;. However, these SLIs are based on infrastructure&rsquo;s health.
 If your infrastructure gets down, can your monitoring system send alert? If no, you&rsquo;d better to consider adding them as your SLI.</p>
 
-<h3>SLI Specification and implementation</h3>
+<h3>
+  <a name="sli-specification-and-implementation" class="anchor" href="#sli-specification-and-implementation" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLI Specification and implementation</h3>
 
 <p>SLI can be divided into 2 parts; <strong>specification</strong> and <strong>implementation</strong>.</p>
 
-<h4>SLI specification</h4>
+<h4>
+  <a name="sli-specification" class="anchor" href="#sli-specification" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLI specification</h4>
 
 <p><strong>SLI specification</strong> is an indicator which represents what matters to users. It doesn&rsquo;t include how to be measured.
 e.g. <strong>The latency of an API is less than 150ms</strong></p>
 
-<h4>SLI implementation</h4>
+<h4>
+  <a name="sli-implementation" class="anchor" href="#sli-implementation" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>SLI implementation</h4>
 
 <p><strong>SLI implementation</strong> describes how to measure SLI specification.</p>
 
@@ -143,7 +189,11 @@ e.g. <strong>The latency of an API is less than 150ms</strong></p>
 Let&rsquo;s have a question like this: what&rsquo;s the <strong>latency</strong>? Should it be on server-side? On Internet-service-provider? On real user? Defining SLI implementation will help to answer the question.
 There are no answers which measurement is &ldquo;correct&rdquo;. It should depend on what matters to your users.</p>
 
-<h3>Decide how to measure SLIs and measure them</h3>
+<h3>
+  <a name="decide-how-to-measure-slis-and-measure-them" class="anchor" href="#decide-how-to-measure-slis-and-measure-them" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Decide how to measure SLIs and measure them</h3>
 
 <p>After deciding SLI specification/implementation, now we want to talk about <strong>how to implement SLI implementation</strong>. If your team or company has already introduced any monitoring tool such as New Relic, Nagios, Datadog, Zabbix, etc, it&rsquo;s a good idea to use them for implementing SLI.
 For example, Datadog[7] has features for SLI/SLO measurement.
@@ -160,7 +210,11 @@ If you can use managed monitoring system, it will be better.</p>
 
 <p>More your SLI implementation is detailed, easier to implement it.</p>
 
-<h3>Decide SLO</h3>
+<h3>
+  <a name="decide-slo" class="anchor" href="#decide-slo" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Decide SLO</h3>
 
 <p>Deciding SLO consists of 2 parts; deciding SLI and deciding what number to set, e.g. 99.9%. We already decided SLI in above section, so then let&rsquo;s talk about its number.</p>
 
@@ -202,7 +256,11 @@ Finding good SLO is not easy.</p>
 
 <p>By the same method, you will be able to decide what latency you should target.</p>
 
-<h3>Decide time window</h3>
+<h3>
+  <a name="decide-time-window" class="anchor" href="#decide-time-window" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Decide time window</h3>
 
 <p>One thing we need to consider in addition is <strong>time window</strong> - SLO&rsquo;s time interval.
 What is time window?
@@ -217,7 +275,11 @@ This means, &ldquo;if first 1 week&rsquo;s availability is under 97%, no immedia
 Also, SLO can help to plan your team&rsquo;s headcount - you might need more experienced engineers to keep your SLO.
 Google[8] recommends &ldquo;4 weeks&rdquo; as general-purpose time window, but it&rsquo;s up to your team.</p>
 
-<h3>Calculate Error budgets</h3>
+<h3>
+  <a name="calculate-error-budgets" class="anchor" href="#calculate-error-budgets" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Calculate Error budgets</h3>
 
 <p>Finally, we are here to talk about error budget!
 SLO is target percentage; error budget is 100% - SLO.</p>
@@ -236,11 +298,19 @@ If we have 10,000,000 requests in 4 weeks time window, <code>10,000,000 * 0.03 =
 <p>I believe this is the most essential part in SLO work. Just deciding SLO is not enough. Without error budget, we cannot balance site reliability and feature development.
 As long as SLO is met, it&rsquo;s not problem at all. What we want to focus on is not only keeping SLO met, but also doing what to do when SLO is not met. It&rsquo;s a part of <strong>design for failure</strong>.</p>
 
-<h3>After SLO is decided</h3>
+<h3>
+  <a name="after-slo-is-decided" class="anchor" href="#after-slo-is-decided" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>After SLO is decided</h3>
 
 <p>Once we decided SLO by engineer side, we need more things to be done.</p>
 
-<h4>Stakeholders agreements</h4>
+<h4>
+  <a name="stakeholders-agreements" class="anchor" href="#stakeholders-agreements" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Stakeholders agreements</h4>
 
 <p>SLO is targeting better development cycle, but it should not be closed in only engineer team.
 Most product managers don&rsquo;t know what SLO is and tradeoff between site reliability and feature development.
@@ -249,7 +319,11 @@ Talk with them and get them understand why SLO/error budget is needed.</p>
 
 <p>After getting product managers&rsquo; understanding, writing documents and visualizing SLO/error budget is important. They will be described later.</p>
 
-<h4>Documentation</h4>
+<h4>
+  <a name="documentation" class="anchor" href="#documentation" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Documentation</h4>
 
 <p>After SLO is decided, they should be documented and able to be found easily from product managers and other teams.
 What to be documented is:</p>
@@ -269,7 +343,11 @@ What to be documented is:</p>
 
 <p>An example of SLO document is available by Google[9].</p>
 
-<h4>Dashboards and alerts</h4>
+<h4>
+  <a name="dashboards-and-alerts" class="anchor" href="#dashboards-and-alerts" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Dashboards and alerts</h4>
 
 <p>After SLO is decided, it should be visualized in dashboard and always visible.
 What to be shown is:</p>
@@ -280,7 +358,11 @@ What to be shown is:</p>
 <li>Remaining error budget time series graph.</li>
 </ul>
 
-<h4>Improve SLI/SLO</h4>
+<h4>
+  <a name="improve-sli-slo" class="anchor" href="#improve-sli-slo" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Improve SLI/SLO</h4>
 
 <p>SLI/SLO can be improved after some actual operation.
 When and why we want to change them? There are some signs:</p>
@@ -295,15 +377,23 @@ When and why we want to change them? There are some signs:</p>
 <p>Chances to review past SLO should be held periodically. When time window is 4weeks, typically once a quarter is good to see past 12 weeks SLO.
 At the meeting, see past SLI graph and error budget consumption, then talk about making it better.</p>
 
-<h2>Summary</h2>
+<h2>
+  <a name="summary" class="anchor" href="#summary" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Summary</h2>
 
 <p>In this article, I tried to describe how to decide SLO and work with it.
 Deciding SLO is not goal; goal is <strong>doing both site reliability and feature development</strong>. SLO and error budget can be a game changer if you are tired of going endless journey to 100% reliability.
 I hope this article can help you to decide your own SLO.</p>
 
-<hr>
+<hr />
 
-<h2>References</h2>
+<h2>
+  <a name="references" class="anchor" href="#references" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>References</h2>
 
 <ul>
 <li>[1]: Site Reliability Engineering <a href="https://landing.google.com/sre/books/">https://landing.google.com/sre/books/</a></li>
@@ -320,7 +410,7 @@ I hope this article can help you to decide your own SLO.</p>
 <li><a href="https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf">https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
   <a href="/">home</a>

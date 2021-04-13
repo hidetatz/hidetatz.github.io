@@ -28,21 +28,39 @@
 
 
 <body class="markdown-body">
-<h1>grubでGentooとWindowsを起動できるようにする</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/28</h4>
+<h1>
+  <a name="grubでgentooとwindowsを起動できるようにする" class="anchor" href="#grubでgentooとwindowsを起動できるようにする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>grubでGentooとWindowsを起動できるようにする</h1>
+
+<h4>
+  <a name="2017-12-28" class="anchor" href="#2017-12-28" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/28</h4>
 
 <p>grubを使ってLinuxとWindowsを選択できるようにする方法を書く。</p>
 
 <p><a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Bootloader/ja">ハンドブック</a>にはLinuxとWindowsのデュアルブートのやり方があまり書いてない。
 このやり方はマザーボードがUEFIに対応していることを前提としている。</p>
 
-<h3>必要なライブラリ</h3>
+<h3>
+  <a name="必要なライブラリ" class="anchor" href="#必要なライブラリ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>必要なライブラリ</h3>
 
 <pre><code class="language-shell">### emerge --ask --newuse sys-boot/os-prober
 </code></pre>
 
-<h3>udevをマウント</h3>
+<h3>
+  <a name="udevをマウント" class="anchor" href="#udevをマウント" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>udevをマウント</h3>
 
 <p><code>udev</code> をマウントすることで別のOSの情報にアクセスできるようになるらしい。
 (これは <code>/mnt/gentoo</code> にgentooのルートをマウントしていることを前提としている。)</p>
@@ -52,7 +70,11 @@
 ### mount --make-rslave /mnt/gentoo/run/udev
 </code></pre>
 
-<h3>grubの設定ファイルを作る</h3>
+<h3>
+  <a name="grubの設定ファイルを作る" class="anchor" href="#grubの設定ファイルを作る" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>grubの設定ファイルを作る</h3>
 
 <pre><code class="language-shell">### grub-mkconfig -o /boot/grub/grub.cfg
 </code></pre>
@@ -60,14 +82,18 @@
 <p>これで標準出力に <code>Found windows boot manager...</code> みたいに出てきたらOK。
 rebootして、windowsが選択、起動できることをテストする。</p>
 
-<h3>参考</h3>
+<h3>
+  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考</h3>
 
 <p><a href="https://wiki.gentoo.org/wiki/GRUB2/ja">GRUB2</a></p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

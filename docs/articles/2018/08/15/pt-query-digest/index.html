@@ -28,14 +28,28 @@
 
 
 <body class="markdown-body">
-<h1>pt-query-digestとRows examine/Rows sentについて</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/08/15</h4>
+<h1>
+  <a name="pt-query-digestとrows-examine-rows-sentについて" class="anchor" href="#pt-query-digestとrows-examine-rows-sentについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>pt-query-digestとRows examine/Rows sentについて</h1>
+
+<h4>
+  <a name="2018-08-15" class="anchor" href="#2018-08-15" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/08/15</h4>
 
 <p><a href="https://www.percona.com/doc/percona-toolkit/LATEST/pt-query-digest.html">pt-query-digest</a>というMySQLのスロークエリ調査ツールがある。
 ここでは、pt-query-digestでわかるRows examine/Rows sentの見方について書いておく。</p>
 
-<h3>使い方</h3>
+<h3>
+  <a name="使い方" class="anchor" href="#使い方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>使い方</h3>
 
 <pre><code>pt-query-digest /var/log/mysql/slow_query.log
 </code></pre>
@@ -153,10 +167,10 @@ SELECT COUNT(*) as cnt FROM message WHERE channel_id = 283\G
 Rows examineとRows sentを見てみると、examineしまくっている割にsentは非常に少ない。(countだから)
 そのため、countをなんとかしてなくす(専用のカラムを作っちゃうとか)ことで、パフォーマンスを向上できる可能性が高い。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,18 +28,36 @@
 
 
 <body class="markdown-body">
-<h1>static siteをFirebaseでホストする</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/10/06</h4>
+<h1>
+  <a name="static-siteをfirebaseでホストする" class="anchor" href="#static-siteをfirebaseでホストする" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>static siteをFirebaseでホストする</h1>
+
+<h4>
+  <a name="2018-10-06" class="anchor" href="#2018-10-06" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/10/06</h4>
 
 <p>このブログをfirebaseでホストすることにした。
 手順をdumpしておく。</p>
 
-<h3>プロジェクトの作成</h3>
+<h3>
+  <a name="プロジェクトの作成" class="anchor" href="#プロジェクトの作成" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>プロジェクトの作成</h3>
 
 <p>コンソールからプロジェクトを作成する。</p>
 
-<h3>firebase cliの設定</h3>
+<h3>
+  <a name="firebase-cliの設定" class="anchor" href="#firebase-cliの設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>firebase cliの設定</h3>
 
 <p>firebaseはコマンドラインでデプロイできるため、ツールの設定を行う。</p>
 
@@ -58,17 +76,21 @@ $ firebase deploy
 
 <p>siteを更新した際は <code>firebase deploy</code> を実行すれば良い。</p>
 
-<h3>ドメインの設定</h3>
+<h3>
+  <a name="ドメインの設定" class="anchor" href="#ドメインの設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメインの設定</h3>
 
 <p>ProjectのコンソールからConnect Domainを選択し、ドメインを入力する。
 Aレコードに指定すべきIPアドレスが表示されるので、DNS側で設定する。</p>
 
 <p>あとはTLS証明書のプロビジョニングをしばらく待てば完了する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

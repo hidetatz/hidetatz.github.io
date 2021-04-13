@@ -70,6 +70,7 @@ func runServer() {
 
 	watcher.Add("./data/articles/ja")
 	watcher.Add("./data/articles/")
+	watcher.Add("./")
 	<-done
 }
 

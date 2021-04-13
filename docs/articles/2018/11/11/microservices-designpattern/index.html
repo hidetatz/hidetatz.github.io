@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Microservicesデザインパターン</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/11/11</h4>
+<h1>
+  <a name="microservicesデザインパターン" class="anchor" href="#microservicesデザインパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Microservicesデザインパターン</h1>
+
+<h4>
+  <a name="2018-11-11" class="anchor" href="#2018-11-11" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/11/11</h4>
 
 <p>Microservicesにおいて名前のついている設計パターンについて書いていく。
 会社では、これらの言葉を使って会話している。</p>
@@ -38,56 +48,92 @@
 <p><img src="/images/microservices-designpattern/1.png" alt="" />
 (画像は<a href="https://azure.microsoft.com/ja-jp/blog/design-patterns-for-microservices/">Design patterns for microservices</a>より)</p>
 
-<h3>Ambassadorパターン</h3>
+<h3>
+  <a name="ambassadorパターン" class="anchor" href="#ambassadorパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Ambassadorパターン</h3>
 
 <p>各サービスにAmbassadorを付加してデプロイし、TLS、モニタリング、ロギング(分散トレーシング)、ルーティングなどに責任を負う。
 Istioなどの<a href="/post/2018/11/11/microservices-service-mesh/">Service Mesh</a>は、このパターンの実装である。</p>
 
-<h3>Anti-corruption layerパターン</h3>
+<h3>
+  <a name="anti-corruption-layerパターン" class="anchor" href="#anti-corruption-layerパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Anti-corruption layerパターン</h3>
 
 <p>モノリスをMicroservicesなどに移行する場合、DBはモノリスで見ていたものをしばらくは使う、というケースが有る。
 この時、DBアクセスはこのAnti-corruption layerを必ず経由するようにする。
 DDDにおける、Bounded Context間でモデルを変換したりするのに使う。</p>
 
-<h3>Backends for Frontendsパターン</h3>
+<h3>
+  <a name="backends-for-frontendsパターン" class="anchor" href="#backends-for-frontendsパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Backends for Frontendsパターン</h3>
 
 <p>Microservicesは多くの場合APIなので、デスクトップ/モバイルなど異なるタイプのクライアントから呼び出される。
 ひとつのサービスは、異なるタイプのクライアントから呼び出される方法を知っている必要はない。
 そこを知っているのがBackends for Frontends レイヤーである。</p>
 
-<h3>Bulkheadパターン</h3>
+<h3>
+  <a name="bulkheadパターン" class="anchor" href="#bulkheadパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Bulkheadパターン</h3>
 
 <p>一つのノードにふたつのサービスが乗っていて、同じコネクションプールを共有していた場合、
 サービスAが不具合でコネクションを使い果たしてしまうと、サービスBも止まってしまう。
 これを避けるため、コネクションプールや、CPUリソース等をサービスごとに分離する。</p>
 
-<h3>Gateway Aggregationパターン</h3>
+<h3>
+  <a name="gateway-aggregationパターン" class="anchor" href="#gateway-aggregationパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Gateway Aggregationパターン</h3>
 
 <p>複数の別のサービスへのリクエストをひとつにまとめることで、通信を効率化する。</p>
 
-<h3>Gateway Offloadingパターン</h3>
+<h3>
+  <a name="gateway-offloadingパターン" class="anchor" href="#gateway-offloadingパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Gateway Offloadingパターン</h3>
 
 <p>API GatewayでSSL認証などをまとめて引き受けることで、各サービスのロードを減らす。</p>
 
-<h3>Gateway Routingパターン</h3>
+<h3>
+  <a name="gateway-routingパターン" class="anchor" href="#gateway-routingパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Gateway Routingパターン</h3>
 
 <p>ユーザーが多くのエンドポイントを管理する必要がないように、複数のリクエストをひとつにまとめる。</p>
 
-<h3>Sidecarパターン</h3>
+<h3>
+  <a name="sidecarパターン" class="anchor" href="#sidecarパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Sidecarパターン</h3>
 
 <p>アプリケーションのコンポーネントを別のコンテナに載せてデプロイしてカプセル化する。</p>
 
-<h3>Stranglerパターン</h3>
+<h3>
+  <a name="stranglerパターン" class="anchor" href="#stranglerパターン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Stranglerパターン</h3>
 
 <p>サービスのバージョンアップ時などに、徐々にリクエストを新しいサービスにフォワードする。
 これにより、新しいバージョンのサービスにバグが有ったときに影響を最小限にできる。</p>
 
 <p>これらのパターンはすべて、サービス規模や特性によって使い分ける必要がある。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,18 +28,36 @@
 
 
 <body class="markdown-body">
-<h1>Goにおけるミューテックスのスタベーション</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2021/04/06</h4>
+<h1>
+  <a name="goにおけるミューテックスのスタベーション" class="anchor" href="#goにおけるミューテックスのスタベーション" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Goにおけるミューテックスのスタベーション</h1>
 
-<h2>はじめに</h2>
+<h4>
+  <a name="2021-04-06" class="anchor" href="#2021-04-06" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/04/06</h4>
+
+<h2>
+  <a name="はじめに" class="anchor" href="#はじめに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>はじめに</h2>
 
 <p>ミューテックスはマルチスレッドプログラミングにおける同期プリミティブのひとつだ。ミューテックスオブジェクトは通常 <code>Lock()</code> <code>Unlock()</code> のインタフェースを持ち、複数のスレッドから同時にロックされることがないことを保証する。利用する側のプログラムは、クリティカルセクションに入る前には必ずロックを獲得し、クリティカルセクションが終わり次第速やかにロックを手放すようにすれば、マルチスレッド環境でも排他ができるというわけだ。</p>
 
 <p>ミューテックスは極めてシンプルなロック機構であるがゆえに、そのアルゴリズムには様々なバリエーションが存在する。しかし、そのアルゴリズムは慎重に選択されないと時にスタベーションを引き起こし、スループットの低下やシステムの停止状態などを引き起こす。
 この記事では、Go1.8までに存在したある特定の状況でスタベーションを引き起こしてしまうミューテックスのアルゴリズムについて、実際のプログラムを実例に取りながら、ミューテックスの動作やスタベーション、ロックのアルゴリズムについての理解を深める。そして、Goが1.9で施した変更を見ていく。</p>
 
-<h2>Go1.8に存在したミューテックスの不公平性</h2>
+<h2>
+  <a name="go1-8に存在したミューテックスの不公平性" class="anchor" href="#go1-8に存在したミューテックスの不公平性" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Go1.8に存在したミューテックスの不公平性</h2>
 
 <p>Go1.9の<a href="https://golang.org/doc/go1.9#minor_library_changes">リリースノート</a> の <code>Minor changes to the library</code> 内 <code>sync</code> の項には、 <code>Mutex is now more fair.</code> とある。</p>
 
@@ -88,12 +106,20 @@ func main() {
 
 <p>このプログラムは、Go1.9以降であれば期待した通りすぐに終了する。なぜこうなるのかを説明する前に、いくつか説明すべきことがあるので先に説明する。</p>
 
-<h2>スタベーション (Starvation)</h2>
+<h2>
+  <a name="スタベーション-starvation" class="anchor" href="#スタベーション-starvation" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>スタベーション (Starvation)</h2>
 
 <p>スタベーションとは「飢餓」を意味する。マルチタスクの文脈でスタベーションとは、あるプロセスが必要なリソースを長期間獲得できないことを言う。ミューテックスの話題のときはより具体的に、READ/WRITEロックをなかなか獲得できない状況のことをスタベーションという。
 上のプログラムではスタベーションが起こっている。goroutine2はロックを獲得したいにもかかわらず、そのロックは後述するミューテックスのアルゴリズムの関係でロックを獲得できていない。一般的にスレッド間でのロックの獲得は、スループットを犠牲にしない範囲でなるべく公平であることが期待される。</p>
 
-<h2>ミューテックスの動作を決めるアルゴリズム</h2>
+<h2>
+  <a name="ミューテックスの動作を決めるアルゴリズム" class="anchor" href="#ミューテックスの動作を決めるアルゴリズム" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ミューテックスの動作を決めるアルゴリズム</h2>
 
 <p>前述のとおり、ミューテックスはシンプルな同期プリミティブである。その動作をもう一度確認しよう。</p>
 
@@ -109,14 +135,22 @@ func main() {
 <p>それらロックのアルゴリズムが規定するのは結局、ロックの獲得がかち合った時に、次のロックを獲得できるのはどのスレッドか？という点だ。
 以下でいくつか説明するが、これは網羅的ではない。</p>
 
-<h2>ロックのアルゴリズム #1. Thunder lock</h2>
+<h2>
+  <a name="ロックのアルゴリズム-1-thunder-lock" class="anchor" href="#ロックのアルゴリズム-1-thunder-lock" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロックのアルゴリズム #1. Thunder lock</h2>
 
 <p>Thunder Lockではロックを獲得しようとしたが既にロックされていた場合、そのスレッドはロック解放待ちのプールのようなものに入りスリープする。これをよく「パーキング (Parking、駐車)」という。
 ロック解放時にはパーキング中の全てのスレッドを一斉に起こし、それらのスレッドはまたロックを獲得しようとする。当然ながら、その後ロックをひとつのスレッドだけが獲得し、他のスレッドは再度スリープする。
 Thunder Lockの性質上、ミューテックスを解放する時にはThundering herdが発生する。
 Thunder lockは実装がシンプルというメリットがあるが、筆者としては特にこれを採用する理由はない印象ではある。</p>
 
-<h2>ロックのアルゴリズム #2. Barging</h2>
+<h2>
+  <a name="ロックのアルゴリズム-2-barging" class="anchor" href="#ロックのアルゴリズム-2-barging" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロックのアルゴリズム #2. Barging</h2>
 
 <p>Bargingはいろいろ調べたところおそらくJavaで初めて生まれたタームである。Bargeは日本語で「はしけ」というものらしいが、これは要するに「ある点とある点を行き来して何かを運ぶ橋渡しのようなもの」と理解すれば良いはず (たぶん) 。</p>
 
@@ -128,14 +162,22 @@ Thunder lockは実装がシンプルというメリットがあるが、筆者�
 <p>BargingはLock stealingが可能であるがゆえに比較的高いスループットを実現可能である。そもそも、スリープしているスレッドを起こすことは通常ハイコストな操作で非常に時間がかかるので、それをしなくてよいこと自体がメリットと言える。
 Bargingの持つデメリットは、ロック獲得の公平性を犠牲にすること、そしてスタベーションが起こりうることだ。</p>
 
-<h2>ロックのアルゴリズム #3. Handoff</h2>
+<h2>
+  <a name="ロックのアルゴリズム-3-handoff" class="anchor" href="#ロックのアルゴリズム-3-handoff" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ロックのアルゴリズム #3. Handoff</h2>
 
 <p>Handoffは文字通り「手渡し」を意味する。Handoffでは、ミューテックスがリリースされる時にキューからスレッドをポップし、そのスレッドを起こす。Bargingのように新たに来たロック獲得リクエストにロックを渡すことはなく、必ずロックの待ち行列の先頭にいるスレッドが次にロックを獲得できるようになる。すなわち、Handoffロックは厳密なFIFOロックと言える。</p>
 
 <p>Handoffでは一般的に、スループットは犠牲になる。何故なら、キューの先頭にいるスレッドの他に、ロックを獲得しようとしたスレッドが仮にいても、そのスレッドにはロックを決して渡さないからだ。ロックを獲得しようとしたスレッドは必ずキューに入り、順番を待つ必要がある。
 Linuxカーネルで、Handoffなミューテックスを実装したパッチは<a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c">こちら</a>である。</p>
 
-<h2>Adaptive lockとスピン</h2>
+<h2>
+  <a name="adaptive-lockとスピン" class="anchor" href="#adaptive-lockとスピン" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Adaptive lockとスピン</h2>
 
 <p>いくつかのロックアルゴリズムを簡単に見てきたが、これらは別のなにかと組み合わされて使用することがあり、これをAdaptive lockということが多い。
 Adaptive lockという言葉にははっきりした定義がなく、様々な「適応型」ロックアルゴリズムの総称としてそう言われることが多い。例えば、<a href="https://yanniss.github.io/al-transact09.pdf">Adaptive Locks: Combining Transactions and Locks for Efficient Concurrency</a> ではいわゆるミューテックスとSTMを組み合わせるアプローチを扱っている。</p>
@@ -145,13 +187,21 @@ Adaptive lockという言葉にははっきりした定義がなく、様々な�
 
 <p>例えば、<a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62">WebKit</a>のソースコードを見てみると、40回スピンして、それでもだめならパーキングしているのがわかる。</p>
 
-<h2>Go1.8のsync.Mutexのアルゴリズム</h2>
+<h2>
+  <a name="go1-8のsync-mutexのアルゴリズム" class="anchor" href="#go1-8のsync-mutexのアルゴリズム" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Go1.8のsync.Mutexのアルゴリズム</h2>
 
 <p>話をGoに戻そう。Go1.8までのミューテックスは、上記のBargingとAdaptive lockを組み合わせていた。ロック済みのミューテックスに対してロックを獲得しようとした時、まず<a href="https://github.com/golang/go/blob/go1.8/src/sync/mutex.go#L61-L72">mutex.Lock()</a>の中で呼び出す<a href="https://github.com/golang/go/blob/go1.8/src/runtime/proc.go#L4477-L4490">sync_runtime_canSpin</a>でスピンするかを判定している。それによれば、Goのミューテックスはまず<a href="https://github.com/golang/go/blob/go1.8/src/runtime/lock_futex.go#L30">4回</a>だけスピンする。</p>
 
 <p>このアルゴリズムは特定のgoroutineがスタベーションに陥っていたとしてもそれを考慮せずに動く。このため、先のプログラムは期待通り動かなかった。これが1.9でどう変わったのかを説明する。</p>
 
-<h2>Go1.9のsync.Mutexのアルゴリズム</h2>
+<h2>
+  <a name="go1-9のsync-mutexのアルゴリズム" class="anchor" href="#go1-9のsync-mutexのアルゴリズム" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Go1.9のsync.Mutexのアルゴリズム</h2>
 
 <p>修正のコミットは<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149">これ</a>である。</p>
 
@@ -193,12 +243,20 @@ Adaptive lockという言葉にははっきりした定義がなく、様々な�
 
 <p>これらの変更によって、スタベーションモードに入ったgoroutineは速やかにかつ明示的に、ロックを横取りされることなく渡してもらえるようになったことになる。</p>
 
-<h2>終わりに</h2>
+<h2>
+  <a name="終わりに" class="anchor" href="#終わりに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>終わりに</h2>
 
 <p>Go1.8までに潜在的に存在したミューテックスのスタベーションの問題について見てきた。コードのコメントなどにもある通り、HandoffはBargingと比較するとパフォーマンスで劣るがより高い公平性をもたらす。
 <a href="https://github.com/golang/go/issues/13086">大本となったissue</a> では <code>sync.FairMutex</code> みたいなのがあったほうがいいのではみたいな話もあって面白いので、興味のある読者は読んでみてほしい。</p>
 
-<h2>参考</h2>
+<h2>
+  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考</h2>
 
 <ul>
 <li><a href="https://github.com/golang/go/issues/13086">runtime: fall back to fair locks after repeated sleep-acquire failures</a></li>
@@ -208,7 +266,11 @@ Adaptive lockという言葉にははっきりした定義がなく、様々な�
 <li><a href="http://www.tsoftware.jp/nptl/">GNU/Linux でのスレッドプログラミング NPTL (Native POSIX Thread Library) Programming.</a></li>
 </ul>
 
-<h2>参考にしたソースコード</h2>
+<h2>
+  <a name="参考にしたソースコード" class="anchor" href="#参考にしたソースコード" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考にしたソースコード</h2>
 
 <ul>
 <li><a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c">https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c</a></li>
@@ -218,10 +280,10 @@ Adaptive lockという言葉にははっきりした定義がなく、様々な�
 <li><a href="https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444">https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

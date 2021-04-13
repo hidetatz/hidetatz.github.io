@@ -28,23 +28,41 @@
 
 
 <body class="markdown-body">
-<h1>ドメインモデルをMicroservicesに落とし込む</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/11/10</h4>
+<h1>
+  <a name="ドメインモデルをmicroservicesに落とし込む" class="anchor" href="#ドメインモデルをmicroservicesに落とし込む" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメインモデルをMicroservicesに落とし込む</h1>
+
+<h4>
+  <a name="2018-11-10" class="anchor" href="#2018-11-10" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/11/10</h4>
 
 <p><a href="/post/2018/11/06/domain-analysis/">Microservicesでサービス境界設計を行うためのドメイン分析</a>という記事で、
 ビジネス要件をDDDのアプローチで分析する方法について書いた。</p>
 
 <p>この記事では、どのようにシステムレイヤーに落とし込むかについて書いていく。</p>
 
-<h3>境界付けられたコンテキスト</h3>
+<h3>
+  <a name="境界付けられたコンテキスト" class="anchor" href="#境界付けられたコンテキスト" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>境界付けられたコンテキスト</h3>
 
 <p>まず、境界付けられたコンテキストをサービスにできないか検討する。
 基本的に、サービスは複数の境界付けられたコンテキストにまたがってはいけない。
 境界付けられたコンテキストは、特定のドメインモデルの境界であると定義されるため、
 複数の境界付けられたコンテキストにまたがるサービスは、複数の仕事を持ってしまっていることになる。</p>
 
-<h3>集約</h3>
+<h3>
+  <a name="集約" class="anchor" href="#集約" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>集約</h3>
 
 <p>集約をサービスにすることは多い。
 集約をサービスにすることは、以下のような意味を持つ。</p>
@@ -55,7 +73,11 @@
 <li>複数の集約は、疎結合である</li>
 </ul>
 
-<h3>ドメインサービス</h3>
+<h3>
+  <a name="ドメインサービス" class="anchor" href="#ドメインサービス" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメインサービス</h3>
 
 <p>ドメインサービスもサービスとして適している。
 ドメインサービスは、複数の集約に対するステートレスな操作である。</p>
@@ -63,7 +85,11 @@
 <p>これら以外に、チームの規模や技術的習熟度、スケーラビリティ、可用性などによって、
 サービスを分割したり、結合したりすることで、Microservices設計のたたきを作る。</p>
 
-<h3>設計の検証</h3>
+<h3>
+  <a name="設計の検証" class="anchor" href="#設計の検証" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>設計の検証</h3>
 
 <p>以下のような検証をする。</p>
 
@@ -81,7 +107,11 @@
 <p>また、サービスを細かくするか悩むときは、荒いままにしておくほうが良い。
 ひとつのサービスをふたつの小さいサービスに分割することは難しくないことが多い。</p>
 
-<h2>システムに落とし込む</h2>
+<h2>
+  <a name="システムに落とし込む" class="anchor" href="#システムに落とし込む" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>システムに落とし込む</h2>
 
 <p>Microservicesを設計したら、それをどのようなシステムアーキテクチャで運用するかを検討する。
 選択肢は多くの場合ふたつ。</p>
@@ -95,12 +125,20 @@
 後者は<a href="https://cloud.google.com/functions/">Cloud Functions</a>やAWS Lambdaを使用する。
 メジャーなパブリッククラウドであれば、これらは提供されているだろう。</p>
 
-<h3>サービスオーケストレータ</h3>
+<h3>
+  <a name="サービスオーケストレータ" class="anchor" href="#サービスオーケストレータ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>サービスオーケストレータ</h3>
 
 <p>サービスオーケストレータは、各サービスのデプロイ、管理、スケールをマネージしてくれる。
 また、サービスディスカバリ、監視なども提供されている。</p>
 
-<h4>コンテナは必要か？</h4>
+<h4>
+  <a name="コンテナは必要か" class="anchor" href="#コンテナは必要か" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>コンテナは必要か？</h4>
 
 <p>Microservices == Containerではない。
 Microservicesを始めるのに、コンテナは不要である。
@@ -119,24 +157,32 @@ Microservicesを始めるのに、コンテナは不要である。
 </ul></li>
 </ul>
 
-<h3>FaaS</h3>
+<h3>
+  <a name="faas" class="anchor" href="#faas" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>FaaS</h3>
 
 <p>ドメインイベントなどは、FaaSの利用を検討しても良い。</p>
 
 <p>オーケストレータかFaaSかは、移植性、管理コスト、スケーラビリティ、価格などを考慮して検討する。
 Mercariでは全面的にGKEを採用している。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>DDD的なアプローチでドメイン分析を行い、それをMicroservices/システムアーキテクチャに落とし込むやり方について書いた。
 ここがMicroservicesで一番むずかしいと言っても過言ではないと思う。
 ドメインベースの設計は反復的に、チームで訓練するような領域であると思う。
 精進していく。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

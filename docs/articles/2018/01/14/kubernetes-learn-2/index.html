@@ -28,15 +28,29 @@
 
 
 <body class="markdown-body">
-<h1>Kubernetesについて学ぶ 2</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/01/14</h4>
+<h1>
+  <a name="kubernetesについて学ぶ-2" class="anchor" href="#kubernetesについて学ぶ-2" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetesについて学ぶ 2</h1>
+
+<h4>
+  <a name="2018-01-14" class="anchor" href="#2018-01-14" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/01/14</h4>
 
 <p>前回は<a href="https://yagi5.com/2018/01/13/kubernetes-learn-1/">こちら</a>。</p>
 
 <p>今日からModule2の、 <code>Deploy an App</code> について学んでいく。</p>
 
-<h3>Kubernetes Deployments</h3>
+<h3>
+  <a name="kubernetes-deployments" class="anchor" href="#kubernetes-deployments" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Kubernetes Deployments</h3>
 
 <pre><code>Kubernetesクラスタが稼動したら、コンテナ化されたアプリケーションをその上に配置できます。
 これを行うには、KubernetesのDeployment Configurationを作成します。
@@ -67,7 +81,11 @@ Kubernetes Deploymentsは、アプリケーションインスタンスを作成�
 <p>Kubernetesがアプリケーションインスタンス(実体はたぶんコンテナ)を、ノードに配備する。そして管理もやってくれる。
 という話らしい。</p>
 
-<h3>Deploying your first app on Kubernetes</h3>
+<h3>
+  <a name="deploying-your-first-app-on-kubernetes" class="anchor" href="#deploying-your-first-app-on-kubernetes" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Deploying your first app on Kubernetes</h3>
 
 <pre><code>デプロイメントを作成および管理するには、KubernetesコマンドラインインターフェイスKubectlを使用します。
 KubectlはKubernetes APIを使用してクラスタと対話します。
@@ -85,9 +103,17 @@ KubectlはKubernetes APIを使用してクラスタと対話します。
 デプロイメントが何であるかを知ったので、オンラインチュートリアルに行き、最初のアプリをデプロイしましょう！
 </code></pre>
 
-<h3><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-interactive/">Interactive Tutorial - Deploying an App</a></h3>
+<h3>
+  <a name="" class="anchor" href="#" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-interactive/">Interactive Tutorial - Deploying an App</a></h3>
 
-<h3>kubectl basics</h3>
+<h3>
+  <a name="kubectl-basics" class="anchor" href="#kubectl-basics" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>kubectl basics</h3>
 
 <pre><code>minikubeのように、kubectlはオンライン端末にインストールされています。
 ターミナルにkubectlと入力して、その使用方法を確認します。
@@ -122,7 +148,11 @@ host01    Ready     &lt;none&gt;    6m        v1.5.
 Kubernetesは、ノードの利用可能なリソースに基づいてアプリケーションをどこに展開するかを選択します。
 </code></pre>
 
-<h3>Deploy our app</h3>
+<h3>
+  <a name="deploy-our-app" class="anchor" href="#deploy-our-app" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Deploy our app</h3>
 
 <pre><code>
 kubectlの実行コマンドを使ってKubernetesで最初のアプリケーションを実行しましょう。
@@ -210,7 +240,11 @@ Use &quot;kubectl options&quot; for a list of global command-line options (appli
 
 <p>最低限必要なのは、 <code>NAME</code> と コンテナイメージらしい。ローカルでビルドしたイメージを使うにはどうするのか？が気になる。</p>
 
-<h3>View our app</h3>
+<h3>
+  <a name="view-our-app" class="anchor" href="#view-our-app" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>View our app</h3>
 
 <pre><code>Kubernetes内で動作しているポッドは、プライベートな独立したネットワーク上で実行されています。
 デフォルトでは、同じkubernetesクラスタ内の他のポッドやサービスからは見えますが、
@@ -280,10 +314,10 @@ Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-390780338-7bv66 | v
 注：端末の上部を確認してください。プロキシは新しいタブ（ターミナル2）で実行され、最近のコマンドは元のタブ（ターミナル1）で実行されました。プロキシはまだ2番目のタブで実行されており、curlコマンドはlocalhost：8001を使用して動作することができました。
 </code></pre>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

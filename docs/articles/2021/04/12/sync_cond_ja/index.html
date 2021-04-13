@@ -28,17 +28,35 @@
 
 
 <body class="markdown-body">
-<h1>sync.Condとはなにか</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2021/04/12</h4>
+<h1>
+  <a name="sync-condとはなにか" class="anchor" href="#sync-condとはなにか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>sync.Condとはなにか</h1>
 
-<h2>はじめに</h2>
+<h4>
+  <a name="2021-04-12" class="anchor" href="#2021-04-12" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/04/12</h4>
+
+<h2>
+  <a name="はじめに" class="anchor" href="#はじめに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>はじめに</h2>
 
 <p>Goの <code>sync.Cond</code> は、マルチスレッド (正確にはgoroutine) プログラミングにおける同期プリミティブだ。
 sync.Condはミューテックスと比べユースケースが限定的で、かつ使い方もやや複雑であると感じられる。そのためか、あまり現実世界での使用例を見ないように筆者には思われる。
 本記事ではsync.Condについて、単に使い方のリファレンスとしてではなく、筆者の可能な限り体系的に説明する。併せて、なるべく現実世界にありそうで、かつsync.Condを使うとうまくプログラミングできるような題材をベースにさらに説明し、理解を深めていく。</p>
 
-<h2>sync.Condとはなにか？</h2>
+<h2>
+  <a name="sync-condとはなにか" class="anchor" href="#sync-condとはなにか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>sync.Condとはなにか？</h2>
 
 <p>sync.Condを一言でいうと、「<strong>条件変数 (condition variable)</strong>」をGoプログラムで利用するための仕組みだ。
 まず、<a href="https://golang.org/pkg/sync/#Cond">sync.Condのgodoc</a>には次のように書かれている。</p>
@@ -57,7 +75,11 @@ goroutines waiting for or announcing the occurrence of an event.
 ただし、セマフォやミューテックスがそれ単体で同期プリミティブとして動作するのに対し、条件変数はミューテックスとセットで使用する。
 ミューテックスは同期プリミティブとして非常にシンプルで理解しやすいのに対し、条件変数はやや複雑である。そこで、ミューテックスと条件変数を対比することで条件変数への理解を深めることを目指す。</p>
 
-<h3>条件変数とミューテックスの違い</h3>
+<h3>
+  <a name="条件変数とミューテックスの違い" class="anchor" href="#条件変数とミューテックスの違い" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>条件変数とミューテックスの違い</h3>
 
 <p>ミューテックスは、「一つのスレッドだけがクリティカルセクションに入れること」を保証するための極めてシンプルな仕組みだ。
 ミューテックスを使いたい場面とは、排他制御を行いたい時のはずだ。すなわち、「あるクリティカルセクションにアクセスしたくて、自スレッドだけがそこにアクセスしていることを保証したい時」と言い換えることもできるだろう。</p>
@@ -112,7 +134,11 @@ mutex_unlock();
 
 <p>次に、sync.Condを使ったプログラム例を見ながらさらに理解を深める。</p>
 
-<h2>sync.Cond in Real World</h2>
+<h2>
+  <a name="sync-cond-in-real-world" class="anchor" href="#sync-cond-in-real-world" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>sync.Cond in Real World</h2>
 
 <p>ここでは例として、マルチスレッドで動くキューをsync.Condを使ってうまく実装してみようと思う。単なるキューだと条件変数など不要なので、特別に以下のような仕様に則るものとする。</p>
 
@@ -125,7 +151,11 @@ mutex_unlock();
 
 <p>なお、この例は<a href="http://joeduffyblog.com/2009/07/13/a-simple-condition-variable-primitive/">A simple condition variable primitive</a>および<a href="https://yohhoy.hatenablog.jp/entry/2014/09/23/193617">条件変数 Step-by-Step入門</a>から拝借した。良い記事をありがとうございます。</p>
 
-<h3>ミューテックスを使った実装</h3>
+<h3>
+  <a name="ミューテックスを使った実装" class="anchor" href="#ミューテックスを使った実装" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ミューテックスを使った実装</h3>
 
 <p>まずはミューテックスを使った実装を見てみよう。このソースコードはGitHubでも参照できる。<a href="https://github.com/dty1er/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go">dty1er/size-limited-queue/mutex_slqueue.go</a></p>
 
@@ -178,7 +208,11 @@ func (s *MutexQueue) Pop() int {
 
 <p>これはまさしく、上述の「特定の条件になるまでスピンする」、非効率的な実装になっている。これを条件変数を使って書き換えてみよう。</p>
 
-<h3>条件変数を使った実装</h3>
+<h3>
+  <a name="条件変数を使った実装" class="anchor" href="#条件変数を使った実装" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>条件変数を使った実装</h3>
 
 <p>条件変数を使った実装は以下のようなものだ。これもGitHubで参照できる。 <a href="https://github.com/dty1er/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go">dty1er/size-limited-queue/slqueue.go</a></p>
 
@@ -233,11 +267,19 @@ func (s *SizeLimitedQueue) Pop() int {
 
 <p>条件変数を使うことで無駄なスピンがなくなり効率的な実装となった。しかし、このプログラムはまだ非効率的な部分が残っており改善の余地がある。それらについて検討しながら、さらに条件変数についての理解を深めていく。</p>
 
-<h3>条件変数を使った実装の改良</h3>
+<h3>
+  <a name="条件変数を使った実装の改良" class="anchor" href="#条件変数を使った実装の改良" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>条件変数を使った実装の改良</h3>
 
 <p>ここまでを整理しよう。条件変数でできることは、「あるスレッドが、何らかの条件が満たされることを効率よく待つ」ことと言える。例として挙げた最大長付きキューにおいての「何らかの条件」とは今のところ、「キューの要素数の変更」である。上のプログラムは <code>Push()</code> <code>Pop()</code> どちらにおいても、「キューの要素数が変わる -&gt; キューの要素数変更イベントを待っているスレッドを起こす -&gt; キューの要素数が自スレッドの希望する条件と一致しているかを確認」というような動きをする。</p>
 
-<h4>1. 条件変数への通知タイミングの検討</h4>
+<h4>
+  <a name="1-条件変数への通知タイミングの検討" class="anchor" href="#1-条件変数への通知タイミングの検討" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>1. 条件変数への通知タイミングの検討</h4>
 
 <p>さて、1点目の改良ポイントは、「条件変数への通知タイミングを絞ることができる」という点である。</p>
 
@@ -247,7 +289,11 @@ func (s *SizeLimitedQueue) Pop() int {
 
 <p>今はこれらを考慮せずにブロードキャストしているため、ここを必要な時のみ行うよう変えることでより効率的にすることができる。</p>
 
-<h4>2. 条件変数に意味を持たせる</h4>
+<h4>
+  <a name="2-条件変数に意味を持たせる" class="anchor" href="#2-条件変数に意味を持たせる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2. 条件変数に意味を持たせる</h4>
 
 <p>現状、条件変数 <code>s.cond</code> はキューに対して一つで、 <code>Push()</code> でも <code>Pop()</code> でも同じものを共同利用している。しかし、これらの意味について考えてみると、これはそれぞれで分離することができることがわかる。</p>
 
@@ -264,7 +310,11 @@ func (s *SizeLimitedQueue) Pop() int {
 
 <p>この修正により、「単にキュー長が変わっただけなのにすべてのgoroutineが起こされる」だった実装が「各goroutineが自分が関心のあるキュー長の変更の時にのみ起こされる」に変わった。</p>
 
-<h4>3. <code>Broadcast()</code> ではなく <code>Signal()</code> を使う</h4>
+<h4>
+  <a name="3" class="anchor" href="#3" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>3. <code>Broadcast()</code> ではなく <code>Signal()</code> を使う</h4>
 
 <p>1と2の変更で起こされるスレッドを最小限にすることができたが、まだ改良点はある。例えば <code>Push()</code> の際に、空だったキューが要素数1に変更されると、 <code>Pop()</code> を待っていたgoroutineは全て起こされることになる。しかし考えてみると、 <code>Pop()</code> を待っていたgoroutineをすべて起こしても次にクリティカルセクションに入れるgoroutineはひとつだけなので、すべて起こすのではなく一つのスレッドだけ起こすのが効率的だ。こういう時に使えるのが、 <a href="https://golang.org/pkg/sync/#Cond.Signal"><code>sync.Cond.Signal()</code></a> である。 <code>Signal()</code> は <code>Wait()</code> している全てのgoroutineではなく、あるひとつのgoroutineのみを起こす。これによって、待機しているgoroutineが多数あるときのThundering Herd Problemが緩和されるなどより効率的な実装となる。</p>
 
@@ -330,7 +380,11 @@ func (s *SizeLimitedQueue) Pop() int {
 
 <p>次章からは条件変数にまつわるいくつかの注意点等を補足的に記していく。</p>
 
-<h2>条件変数とスプリアス・ウェイクアップ</h2>
+<h2>
+  <a name="条件変数とスプリアス-ウェイクアップ" class="anchor" href="#条件変数とスプリアス-ウェイクアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>条件変数とスプリアス・ウェイクアップ</h2>
 
 <p>まずはスプリアス・ウェイクアップ (Spurious wakeup、直訳では「偽りの目覚め」) について。Javaでマルチスレッドプログラミングをやっていた人なら聞いたことのある言葉かもしれない。</p>
 
@@ -349,7 +403,11 @@ func (s *SizeLimitedQueue) Pop() int {
 <li><a href="https://github.com/golang/go/issues/21165">proposal: Go 2: sync: remove the Cond type</a></li>
 </ul>
 
-<h2>条件変数と Two step dance</h2>
+<h2>
+  <a name="条件変数と-two-step-dance" class="anchor" href="#条件変数と-two-step-dance" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>条件変数と Two step dance</h2>
 
 <p>最後にTwo step danceについて。条件変数を利用すると、不要に思えるミューテックスのロック/アンロックがある状況で1回発生する。
 上記のソースコードの <code>Push()</code> <code>Pop()</code> を以下に再度示す。</p>
@@ -434,7 +492,11 @@ but could be safe if Signal() were called inside the critical section.
 
 <p>同ドキュメントには、Chromeの条件変数の実装はTwo-step danceを検知し、待機スレッドのウェイクアップを遅延させることでコンテキストスイッチを起こらなくしている (だから、条件変数への通知は必ずクリティカルセクション内で行うべき) とも書かれている。</p>
 
-<h2>終わりに</h2>
+<h2>
+  <a name="終わりに" class="anchor" href="#終わりに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>終わりに</h2>
 
 <p>Goにおいて、条件変数は場合によってはチャネルで代用することも可能なため、それを使う場面は限られている。筆者は「sync.Condがよくわからない」という声をたまに聞くが、そういったことにも起因しているかもしれない。</p>
 
@@ -443,7 +505,11 @@ but could be safe if Signal() were called inside the critical section.
 
 <p>スプリアス・ウェイクアップについては正直理解しきれていないので、詳しい人が解説記事などを書いてくれたらいいな～と思っている。ちなみに、この記事を書くにあたり色々調べていたら、以前のGoでは <a href="https://github.com/golang/go/issues/7734">sync.WaitGroupでスプリアス・ウェイクアップが起きる問題</a>があったらしく興味深かった。</p>
 
-<h2>参考</h2>
+<h2>
+  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考</h2>
 
 <ul>
 <li><a href="http://joeduffyblog.com/2009/07/13/a-simple-condition-variable-primitive/">A simple condition variable primitive</a></li>
@@ -464,10 +530,10 @@ but could be safe if Signal() were called inside the critical section.
 <li><a href="https://zenn.dev/yohhoy/articles/multithreading-toolbox">マルチスレッド・プログラミングの道具箱</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

@@ -28,13 +28,23 @@
 
 
 <body class="markdown-body">
-<h1>マイクロサービスを結合させて動作確認する</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/12/22</h4>
+<h1>
+  <a name="マイクロサービスを結合させて動作確認する" class="anchor" href="#マイクロサービスを結合させて動作確認する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>マイクロサービスを結合させて動作確認する</h1>
+
+<h4>
+  <a name="2018-12-22" class="anchor" href="#2018-12-22" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/12/22</h4>
 
 <p>この記事は<a href="https://qiita.com/advent-calendar/2018/microservices">Microservices Advent Calendar</a>23日目の記事です。</p>
 
-<hr>
+<hr />
 
 <p>マイクロサービスは関心ごとのスコープを小さくできる。
 大きなシステムを小さなマイクロサービスに分割することで、
@@ -52,7 +62,11 @@
 <p>この記事では、どのようにマイクロサービスを簡単に他のマイクロサービスと結合するかを考える。
 なお、自分が開発するサービス以外のサービスは、クラウド上の開発環境ですでに稼働していることを前提とする。</p>
 
-<h2>1. すべてローカルで動かす</h2>
+<h2>
+  <a name="1-すべてローカルで動かす" class="anchor" href="#1-すべてローカルで動かす" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>1. すべてローカルで動かす</h2>
 
 <p><img src="/images/ms-connect/1.png" alt="" /></p>
 
@@ -69,7 +83,11 @@
 <li>要するに、 <strong>結合という意味では不十分である</strong></li>
 </ul>
 
-<h2>2. すべてクラウド上で動かす</h2>
+<h2>
+  <a name="2-すべてクラウド上で動かす" class="anchor" href="#2-すべてクラウド上で動かす" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2. すべてクラウド上で動かす</h2>
 
 <p><img src="/images/ms-connect/2.png" alt="" /></p>
 
@@ -85,7 +103,11 @@
 <li>ログの取得がめんどくさい</li>
 </ul>
 
-<h2>3. ローカルとクラウドの組み合わせ① マネージドサービスだけはクラウド</h2>
+<h2>
+  <a name="3-ローカルとクラウドの組み合わせ①-マネージドサービスだけはクラウド" class="anchor" href="#3-ローカルとクラウドの組み合わせ①-マネージドサービスだけはクラウド" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>3. ローカルとクラウドの組み合わせ① マネージドサービスだけはクラウド</h2>
 
 <p><img src="/images/ms-connect/3.png" alt="" /></p>
 
@@ -93,7 +115,11 @@
 このやり方は悪くないが、結局ローカルにクラスタを構築する手間は発生してしまう。
 結論としては、次の4のやり方がいいと思っている。</p>
 
-<h2>4. ローカルとクラウドの組み合わせ② 自分の開発したサービス以外はすべてクラウド上で動かす</h2>
+<h2>
+  <a name="4-ローカルとクラウドの組み合わせ②-自分の開発したサービス以外はすべてクラウド上で動かす" class="anchor" href="#4-ローカルとクラウドの組み合わせ②-自分の開発したサービス以外はすべてクラウド上で動かす" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>4. ローカルとクラウドの組み合わせ② 自分の開発したサービス以外はすべてクラウド上で動かす</h2>
 
 <p><img src="/images/ms-connect/4.png" alt="" /></p>
 
@@ -103,15 +129,19 @@
 <p>ローカルのサービスからの接続をどのように行うかは、VPNやプロキシを立てる方法がひとつある。
 ただし、Kubernetesを使っている場合は <code>kubectl port-forward</code> や、<a href="https://github.com/telepresenceio/telepresence/">telepresenceio/telepresence</a>などを使っていると、容易につなぎこみが可能である。</p>
 
-<h2>まとめ</h2>
+<h2>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h2>
 
 <p>結論としては、4のやり方がおすすめである。
 Kubernetesを使っていれば、デメリットらしいデメリットもない。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

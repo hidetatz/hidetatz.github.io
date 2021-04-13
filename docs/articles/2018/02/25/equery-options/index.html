@@ -28,13 +28,27 @@
 
 
 <body class="markdown-body">
-<h1>equeryのオプション</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/02/25</h4>
+<h1>
+  <a name="equeryのオプション" class="anchor" href="#equeryのオプション" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>equeryのオプション</h1>
+
+<h4>
+  <a name="2018-02-25" class="anchor" href="#2018-02-25" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/02/25</h4>
 
 <p>equeryでよく使うコマンドオプションをメモっておく。</p>
 
-<h3>インストール</h3>
+<h3>
+  <a name="インストール" class="anchor" href="#インストール" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インストール</h3>
 
 <p>equery自体は以下のようにインストール。</p>
 
@@ -43,48 +57,72 @@
 
 <p>なくてもportageは使えるが、便利なので入れるのが良いと思う。</p>
 
-<h3>ファイルがどのパッケージに入っていたのか</h3>
+<h3>
+  <a name="ファイルがどのパッケージに入っていたのか" class="anchor" href="#ファイルがどのパッケージに入っていたのか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ファイルがどのパッケージに入っていたのか</h3>
 
 <pre><code>$ equery belongs -e /usr/bin/glxgears
 </code></pre>
 
 <p><code>/usr/bin/glxgears</code> がどのパッケージによってインストールされたのかを検索できる。</p>
 
-<h3>パッケージが壊れていないか検査する</h3>
+<h3>
+  <a name="パッケージが壊れていないか検査する" class="anchor" href="#パッケージが壊れていないか検査する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>パッケージが壊れていないか検査する</h3>
 
 <pre><code>$ equery check gentoolkit
 </code></pre>
 
-<h3>依存されているパッケージをリストアップ</h3>
+<h3>
+  <a name="依存されているパッケージをリストアップ" class="anchor" href="#依存されているパッケージをリストアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>依存されているパッケージをリストアップ</h3>
 
 <pre><code>$ equery depends pygtk
 </code></pre>
 
 <p><em>pygtkを必要としている</em> パッケージをリストアップする。</p>
 
-<h3>依存しているパッケージをリストアップ</h3>
+<h3>
+  <a name="依存しているパッケージをリストアップ" class="anchor" href="#依存しているパッケージをリストアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>依存しているパッケージをリストアップ</h3>
 
 <pre><code>$ equery depgraph mozilla-firefox
 </code></pre>
 
 <p><code>depends</code> の逆。</p>
 
-<h3>ファイルをリストアップ</h3>
+<h3>
+  <a name="ファイルをリストアップ" class="anchor" href="#ファイルをリストアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ファイルをリストアップ</h3>
 
 <pre><code>$ equery files --tree gentoolkit
 </code></pre>
 
-<h3>パッケージ自体をリストアップ</h3>
+<h3>
+  <a name="パッケージ自体をリストアップ" class="anchor" href="#パッケージ自体をリストアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>パッケージ自体をリストアップ</h3>
 
 <pre><code>$ equery list '*'
 </code></pre>
 
 <p>よく使う。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

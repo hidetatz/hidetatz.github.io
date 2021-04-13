@@ -28,21 +28,39 @@
 
 
 <body class="markdown-body">
-<h1>Gentooの初期設定</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/26</h4>
+<h1>
+  <a name="gentooの初期設定" class="anchor" href="#gentooの初期設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Gentooの初期設定</h1>
+
+<h4>
+  <a name="2017-12-26" class="anchor" href="#2017-12-26" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/26</h4>
 
 <p>Gentooの初期設定をメモる。</p>
 
 <p>ネットワーク周りについては、色々ハマったので<a href="https://yagi5.com/2017/12/26/gentoo-setup-network/">こちら</a>に書いた。</p>
 
-<h3>ユーザ作成</h3>
+<h3>
+  <a name="ユーザ作成" class="anchor" href="#ユーザ作成" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ユーザ作成</h3>
 
 <pre><code>% useradd -m -G users,wheel,audio -s /bin/bash ユーザー名
 % passwd ユーザー名
 </code></pre>
 
-<h3>sudo導入</h3>
+<h3>
+  <a name="sudo導入" class="anchor" href="#sudo導入" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>sudo導入</h3>
 
 <p>sudoがないとなにもできない。</p>
 
@@ -57,7 +75,11 @@
 
 <p>これにより、wheelグループに入っているユーザはsudoできるようになる。</p>
 
-<h3>sshdを導入</h3>
+<h3>
+  <a name="sshdを導入" class="anchor" href="#sshdを導入" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>sshdを導入</h3>
 
 <p>sshdを入れて、Macからsshで入って作業できるようにする。(色々と便利なので。)
 sshd自体はデフォルトで入っていた。</p>
@@ -116,7 +138,11 @@ PasswordAuthentication no
 
 <p>これで、Macから <code>ssh gentoo</code> で入れるようになる。</p>
 
-<h3>NTP導入</h3>
+<h3>
+  <a name="ntp導入" class="anchor" href="#ntp導入" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>NTP導入</h3>
 
 <p>ntpdをあげておく。</p>
 
@@ -124,7 +150,11 @@ PasswordAuthentication no
 $ rc-update add ntpd default
 </code></pre>
 
-<h3>zsh導入</h3>
+<h3>
+  <a name="zsh導入" class="anchor" href="#zsh導入" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>zsh導入</h3>
 
 <p>zshにしておく。</p>
 
@@ -139,15 +169,19 @@ $ touch ~/.zshrc
 $ chsh -s /bin/zsh
 </code></pre>
 
-<h3>git導入</h3>
+<h3>
+  <a name="git導入" class="anchor" href="#git導入" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>git導入</h3>
 
 <pre><code>emerge --ask dev-vcs/git
 </code></pre>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

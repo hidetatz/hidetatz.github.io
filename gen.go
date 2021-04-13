@@ -52,7 +52,7 @@ func gen() {
 	for _, a := range articles {
 		// if url != nil, no need to generate the page because it is linked from nowhere
 		if a.URL == nil {
-			write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+			write(GenerateArticlePageHTML(a, true), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
 		}
 	}
 
@@ -61,7 +61,7 @@ func gen() {
 
 	for _, a := range articlesJA {
 		if a.URL == nil {
-			write(GenerateArticlePageHTML(a), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
+			write(GenerateArticlePageHTML(a, false), fmt.Sprintf("./docs/articles/%s/%s/index.html", a.FormatTime(), a.FileNameWithoutExtension()))
 		}
 	}
 

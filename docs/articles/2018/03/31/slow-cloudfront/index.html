@@ -28,16 +28,30 @@
 
 
 <body class="markdown-body">
-<h1>S3 x Cloudfront なのに遅い時</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/03/31</h4>
+<h1>
+  <a name="s3-x-cloudfront-なのに遅い時" class="anchor" href="#s3-x-cloudfront-なのに遅い時" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>S3 x Cloudfront なのに遅い時</h1>
+
+<h4>
+  <a name="2018-03-31" class="anchor" href="#2018-03-31" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/03/31</h4>
 
 <p>S3にアセットを置いてCloudFrontのディストリビューションから配信する。というのは、
 クラウドデザインパターンのひとつでもあり、有用な戦略である。
 CloudFrontはCDNで、エッジサーバにアセットをキャッシュしてくれるから速い。というのは基本的に正しいんだけど、
 たまに(大体特定のファイルだけ)遅い。ということがある。</p>
 
-<h2>原因</h2>
+<h2>
+  <a name="原因" class="anchor" href="#原因" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>原因</h2>
 
 <p>特に、特定のファイルだけ遅い。というケースでは、ファイルがハードディスクに保存され、かつうまくセクタに載ってくれてないことが多い。</p>
 
@@ -58,7 +72,11 @@ CloudFrontはCDNで、エッジサーバにアセットをキャッシュして�
 同じファイルが連続したセクタに乗らず、離れたセクタに分散してしまっていることを言う。
 離れたセクタに乗ること自体はよくあることで、昔のWindowsだと <strong>デフラグ</strong> で断片化を直したりしていたはず。</p>
 
-<h2>切り分け方</h2>
+<h2>
+  <a name="切り分け方" class="anchor" href="#切り分け方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>切り分け方</h2>
 
 <p>原因がS3にあるのか、CloudFrontにあるのかを調べるのは大切。
 やり方としては、CloudFrontを外してみて、S3のエンドポイントから取得した時のレイテンシを計測すればいい。
@@ -66,24 +84,36 @@ CloudFrontはCDNで、エッジサーバにアセットをキャッシュして�
 
 <p>(ただし、理論上は両方が原因ということもある。)</p>
 
-<h2>直し方</h2>
+<h2>
+  <a name="直し方" class="anchor" href="#直し方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>直し方</h2>
 
 <p>直し方はいくつかある。</p>
 
-<h3>ファイル名を変更してみる</h3>
+<h3>
+  <a name="ファイル名を変更してみる" class="anchor" href="#ファイル名を変更してみる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ファイル名を変更してみる</h3>
 
 <p>ファイル名を変更すると、別ファイルとみなされ、セクタが変わるので、運が良ければうまくいく。
 ただ、これをやるとその結果別のファイルが遅くなったりすることがある。</p>
 
-<h3>CloudFrontをやめる</h3>
+<h3>
+  <a name="cloudfrontをやめる" class="anchor" href="#cloudfrontをやめる" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>CloudFrontをやめる</h3>
 
 <p>高速化できればいいなら、Akamai、FastlyなどのフルSSDなCDNを使うという手もある。
 ただし、理論上はSSDでもバッドセクタは発生する(正確にはバッドブロック)ので、注意。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

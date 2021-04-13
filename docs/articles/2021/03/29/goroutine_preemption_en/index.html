@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Preemption in Go</h1>
+<p><a href="/">&lt;- home</a></p>
 
-<h4>2021/03/29</h4>
+<h1>
+  <a name="preemption-in-go" class="anchor" href="#preemption-in-go" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Preemption in Go</h1>
+
+<h4>
+  <a name="2021-03-29" class="anchor" href="#2021-03-29" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/03/29</h4>
 
 <p>I was looking into the preemption of goroutine in Go. It would be appreciatee if you could point out any mistakes and tell me it.</p>
 
@@ -97,7 +107,11 @@ In other words, explicitly calling <code>runtime.Gosched()</code> will force the
 
 <p>Another way is using <a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257">GOEXPERIMENT=preemptibleloops</a>. It forces the Go runtime to do the preemption on the &ldquo;loop&rdquo;. The way doesn&rsquo;t require the code change.</p>
 
-<h2>Cooperative vs. Preemptive scheduling in Go</h2>
+<h2>
+  <a name="cooperative-vs-preemptive-scheduling-in-go" class="anchor" href="#cooperative-vs-preemptive-scheduling-in-go" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Cooperative vs. Preemptive scheduling in Go</h2>
 
 <p>To begin with, there are two main methods for scheduling multitasking; &ldquo;Cooperative&rdquo; and &ldquo;Preemptive&rdquo;. Cooperative multitasking is also called &ldquo;non-preemptive&rdquo;.
 In cooperative multitasking, how the program switches depends on the program itself. It seems that the term &ldquo;cooperative&rdquo; is intended to refer to the fact that the programs should be designed to be interoperable and they must &ldquo;cooperate&rdquo; each other.
@@ -131,7 +145,11 @@ By the way, the global queue is a different queue from the &ldquo;local queue&rd
 
 <p>And yes, this behavior has changed with the introduction of &ldquo;non-cooperative preemption&rdquo; (asynchronous preemption) in Go1.14.</p>
 
-<h2>What does &ldquo;asynchronously preemptible&rdquo; mean?</h2>
+<h2>
+  <a name="what-does-asynchronously-preemptible-mean" class="anchor" href="#what-does-asynchronously-preemptible-mean" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>What does &ldquo;asynchronously preemptible&rdquo; mean?</h2>
 
 <p>Let&rsquo;s summarize the points so far; Go has a mechanism, called &ldquo;sysmon&rdquo;, to monitor goroutines running for more than 10ms and force preemption when necessary. However, due to the way it worked, preemption did not occur in cases like <code>for {}</code>.</p>
 
@@ -146,13 +164,21 @@ Go&rsquo;s signal handler invokes another goroutine called <code>gsignal</code> 
 
 <p>Incidentally, they chose to use SIGURG because SIGURG does not interfere with the use of existing debuggers and other signals, and because it is not used in libc. (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations">Reference</a>)</p>
 
-<h2>Summary</h2>
+<h2>
+  <a name="summary" class="anchor" href="#summary" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Summary</h2>
 
 <p>Just because an infinite loop that doesn&rsquo;t do anything doesn&rsquo;t pass holding CPU to other goroutines, it doesn&rsquo;t mean that the mechanism up to Go1.13 is bad. As <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022">@davecheney</a> has said, this is usually not considered a particular problem. In the first place, asynchronous preemption was not introduced to solve this infinite loop problem.</p>
 
 <p>Although the introduction of asynchronous preemption made scheduling more preemptive, it also made it necessary to be more careful in handling &ldquo;unsafe points&rdquo; during GC. The implementation considerations in this area are also very interesting. Readers who are interested can read it themselves <a href="https://github.com/golang/proposal/blob/master/design/24543-non- cooperative-preemption.md">Proposition: Non-cooperative goroutine preemption</a>.</p>
 
-<h2>References</h2>
+<h2>
+  <a name="references" class="anchor" href="#references" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>References</h2>
 
 <ul>
 <li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a></li>
@@ -169,7 +195,7 @@ Go&rsquo;s signal handler invokes another goroutine called <code>gsignal</code> 
 <li><a href="https://qiita.com/umisama/items/93333ffe4d9fc7e4ba1f">(Ja) goroutineがスイッチされるタイミング</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
   <a href="/">home</a>

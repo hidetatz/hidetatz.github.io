@@ -28,14 +28,28 @@
 
 
 <body class="markdown-body">
-<h1>CaaSの課題について</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/08/06</h4>
+<h1>
+  <a name="caasの課題について" class="anchor" href="#caasの課題について" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>CaaSの課題について</h1>
+
+<h4>
+  <a name="2018-08-06" class="anchor" href="#2018-08-06" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/08/06</h4>
 
 <p><a href="https://www.amazon.co.jp/dp/B079Q6S12G">コンテナ・ベース・オーケストレーション Docker/Kubernetesで作るクラウド時代のシステム基盤</a>という本を読んでいる。
 CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課題(設計/運用など)</code> という項があったので、メモしておく。</p>
 
-<h3>1クラスタあたりのサイジング</h3>
+<h3>
+  <a name="1クラスタあたりのサイジング" class="anchor" href="#1クラスタあたりのサイジング" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>1クラスタあたりのサイジング</h3>
 
 <ul>
 <li>クラスタの規模は有限なため、リソースの分配をきちんと設計する必要がある</li>
@@ -52,7 +66,11 @@ CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課�
 </ul></li>
 </ul>
 
-<h3>ヘルスチェック</h3>
+<h3>
+  <a name="ヘルスチェック" class="anchor" href="#ヘルスチェック" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ヘルスチェック</h3>
 
 <ul>
 <li><p>一般的には以下のような監視サービスが提供されている</p>
@@ -77,7 +95,11 @@ CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課�
 <li><p>上記を検討する必要がある</p></li>
 </ul>
 
-<h3>サービスディスカバリ</h3>
+<h3>
+  <a name="サービスディスカバリ" class="anchor" href="#サービスディスカバリ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>サービスディスカバリ</h3>
 
 <ul>
 <li>Caas上で起動するコンテナは、動的に収容されるノードが変わる</li>
@@ -96,7 +118,11 @@ CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課�
 <li>よって、適切なサービスディスカバリ方法を検討する必要がある</li>
 </ul>
 
-<h3>インスタンスのコネクションの上限</h3>
+<h3>
+  <a name="インスタンスのコネクションの上限" class="anchor" href="#インスタンスのコネクションの上限" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インスタンスのコネクションの上限</h3>
 
 <ul>
 <li>仮想インスタンスは、1台の物理サーバ上にハイパーバイザー型のVMとして起動している</li>
@@ -112,7 +138,11 @@ CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課�
 <li>そのため、コネクションの上限等が設けられているか確認する必要がある</li>
 </ul>
 
-<h3>トラフィック制御</h3>
+<h3>
+  <a name="トラフィック制御" class="anchor" href="#トラフィック制御" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>トラフィック制御</h3>
 
 <ul>
 <li>CaaSではコンテナが動的に展開されるため、IPアドレス等のネットワーク情報も変化する</li>
@@ -121,30 +151,42 @@ CaaS(Container as a Service)の章に、 <code>3.4 CasSの提供における課�
 <li>ambassadorコンテナのリソースがä½計に必要、またスケール時にオーバーヘッドが発生するなど、問題も起こりやすい</li>
 </ul>
 
-<h3>従来のアプライアンス製品との相性</h3>
+<h3>
+  <a name="従来のアプライアンス製品との相性" class="anchor" href="#従来のアプライアンス製品との相性" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>従来のアプライアンス製品との相性</h3>
 
 <ul>
 <li>従来のアプライアンスは、CaaSのように動的にコンテナが可動するという用途に合わないものがある(らしい)</li>
 </ul>
 
-<h3>監視SaaSの利用時の注意</h3>
+<h3>
+  <a name="監視saasの利用時の注意" class="anchor" href="#監視saasの利用時の注意" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>監視SaaSの利用時の注意</h3>
 
 <ul>
 <li>従来の監視SaaSでは、エージェントあたり100台以上のコンテナインスタンスのメトリクス収集は負荷的な部分で想定されていない</li>
 <li>その結果、SaaS事業者のDCに過負荷を与えてしまう可能性がある</li>
 </ul>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <ul>
 <li>様々なコンテナや周辺技術がCaaSでつながっていくことで、新たに生じる課題も存在する</li>
 <li>それらを解消し、コンテナとの潜在的価値を発揮できる環境を整備することが大切である</li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

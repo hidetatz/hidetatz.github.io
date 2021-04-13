@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Microservicesでサービス境界設計を行うためのドメイン分析</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/11/06</h4>
+<h1>
+  <a name="microservicesでサービス境界設計を行うためのドメイン分析" class="anchor" href="#microservicesでサービス境界設計を行うためのドメイン分析" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Microservicesでサービス境界設計を行うためのドメイン分析</h1>
+
+<h4>
+  <a name="2018-11-06" class="anchor" href="#2018-11-06" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/11/06</h4>
 
 <p><a href="https://yagi5.com/post/2018/11/03/about-microservices/">Microservices入門</a>という記事で、</p>
 
@@ -73,7 +83,11 @@ DDDにはふたつの異なるフェーズがある。 <code>戦略</code> と <
 
 <p>以下に詳しく書いていく。</p>
 
-<h3>ドメインの分析</h3>
+<h3>
+  <a name="ドメインの分析" class="anchor" href="#ドメインの分析" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメインの分析</h3>
 
 <p>コードを記述する前に、作成するシステムを俯瞰する必要がある。DDDでは、最初にビジネス度面をモデリングして、 <code>ドメインモデル</code> を作成する。
 まずは、すべてのビジネス機能を洗い出し、またその関係をマッピングする。
@@ -93,7 +107,11 @@ DDDにはふたつの異なるフェーズがある。 <code>戦略</code> と <
 <p>このタイミングでは、実装については考慮する必要はない。
 とにかくドメインを洗い出すことに集中すれば良い。</p>
 
-<h3>分析の流れ</h3>
+<h3>
+  <a name="分析の流れ" class="anchor" href="#分析の流れ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>分析の流れ</h3>
 
 <p>ドメインの分析はいくつかのステップに分かれている。</p>
 
@@ -106,7 +124,11 @@ DDDにはふたつの異なるフェーズがある。 <code>戦略</code> と <
 <p>ドメインの分析をなぜやるかというと、最後にMicroservicesに落とし込むためである。
 上記のような分析をして、それらをサービスにできるかどうかを検討する、という流れを踏む。</p>
 
-<h3>境界付けられたコンテキストを定義する</h3>
+<h3>
+  <a name="境界付けられたコンテキストを定義する" class="anchor" href="#境界付けられたコンテキストを定義する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>境界付けられたコンテキストを定義する</h3>
 
 <p>ドメインモデルには、実際にこの世に存在するものの表現が含まれている。
 しかし、それらをすべてのサブシステムが同じ表現で使わなくてもよい。</p>
@@ -124,7 +146,11 @@ DDDにはふたつの異なるフェーズがある。 <code>戦略</code> と <
 
 <p>また、DDDと同様に、境界付けられたコンテキストを定義したあとはコンテキストマッピングを行っておく。</p>
 
-<h3>集約を定義する</h3>
+<h3>
+  <a name="集約を定義する" class="anchor" href="#集約を定義する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>集約を定義する</h3>
 
 <p>境界付けられたコンテキストが定義できたら、集約を見つけていく。
 マイクロサービスは、集約よりは大きく、境界付けられたコンテキストよりは小さくすると良いと言われている。</p>
@@ -148,21 +174,29 @@ DDDにはふたつの異なるフェーズがある。 <code>戦略</code> と <
 このとき、 <code>配送履歴</code> <code>商品</code> というエンティティは <code>集約</code> である。
 また、これらには当てはまらないような粒度の細かい処理のことを <code>ドメインサービス</code> と呼ぶ。(これもDDD)</p>
 
-<h3>ドメインサービスを洗い出す</h3>
+<h3>
+  <a name="ドメインサービスを洗い出す" class="anchor" href="#ドメインサービスを洗い出す" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメインサービスを洗い出す</h3>
 
 <p>例えば、配送処理には順番があって、その順番を守る必要があるとする。
 順番の保証は、境界付けられたコンテキストでも、エンティティでも集約でもない場合、ドメインサービスとして定義する。</p>
 
-<h3>ドメイン分析 まとめ</h3>
+<h3>
+  <a name="ドメイン分析-まとめ" class="anchor" href="#ドメイン分析-まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ドメイン分析 まとめ</h3>
 
 <p>DDDにおける <code>境界付けられたコンテキスト</code> <code>集約</code> <code>ドメイン分析</code> は、Microservicesにおけるサービス設計に
 よく使われる概念である。
 <a href="/post/2018/11/10/domain-to-microservices/">次の記事</a>では、これをマイクロサービスに落とし込んで、どうシステムアーキテクチャを設計するかを書いていく。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

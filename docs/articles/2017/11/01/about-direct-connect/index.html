@@ -28,11 +28,25 @@
 
 
 <body class="markdown-body">
-<h1>Direct Connectについて学んだ</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/11/01</h4>
+<h1>
+  <a name="direct-connectについて学んだ" class="anchor" href="#direct-connectについて学んだ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Direct Connectについて学んだ</h1>
 
-<h3>Direct Connectについて</h3>
+<h4>
+  <a name="2017-11-01" class="anchor" href="#2017-11-01" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/11/01</h4>
+
+<h3>
+  <a name="direct-connectについて" class="anchor" href="#direct-connectについて" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Direct Connectについて</h3>
 
 <p>そもそもDirectConnectとは、エクイニクスという会社が持っているDCから、AWSのネットワークに直結した専用ゲートウェイのポートを、従量課金で使用できるサービスである。
 AWSのDCはセキュリティ上の理由から公開されていない。
@@ -40,12 +54,20 @@ AWSのDCはセキュリティ上の理由から公開されていない。
 Direct Connectの世界における <strong>専用線</strong> とは、エクイニクスのDCからVPC側のVGWまでをつないでいる部分のことを言う。
 エクイニクスのDCは日本では東京・大阪にあり、専用線の冗長化ができる。</p>
 
-<h3>オンプレからエクイニクスまではどうするのか?</h3>
+<h3>
+  <a name="オンプレからエクイニクスまではどうするのか" class="anchor" href="#オンプレからエクイニクスまではどうするのか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>オンプレからエクイニクスまではどうするのか?</h3>
 
 <p>前述の通り、オンプレからエクイニクスまでの接続はユーザーがセットアップする必要がある。AWSとユーザの責任分界点でもある。
 この間の接続は、ユーザが自前でセットアップするか(FLETS光とかを使う)、ソフトバンクや野村総研などの、 Direct Connectが受けられるAPN にお願いするという方法があるらしい。</p>
 
-<h3>どこでBGPを使っているのか？</h3>
+<h3>
+  <a name="どこでbgpを使っているのか" class="anchor" href="#どこでbgpを使っているのか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>どこでBGPを使っているのか？</h3>
 
 <p>最初、「VPCとオンプレを専用線で結ぶんでしょ?」としか思っていなかったので、BGPをどこで必要とするのかわからなかった。
 BGPについては、仮想プライベートゲートウェイの作成時にASNの設定をする必要がある。
@@ -55,14 +77,18 @@ BGPについては、仮想プライベートゲートウェイの作成時にAS
 BGPはパスベクトル方式を採用していて、ルーティングプロトコルの中でASNを必要とする。
 つまり、AWSクラウドのネットワーク(AS)に対してルータ(カスタマーゲートウェイ)からルーティングするにあたり、BGPが使われている、と考えれば良さそう。</p>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>以前リージョン間VPN接続を試した際にカスタマゲートウェイの構築はしたことがあったので、DirectConnectで使用するカスタマーゲートウェイもそれと仕組みは同じ、ということに気づいてからは難しくなかった。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

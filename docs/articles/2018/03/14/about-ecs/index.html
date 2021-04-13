@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>AWS ECSを使った普通の開発・デプロイフロー</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/03/14</h4>
+<h1>
+  <a name="aws-ecsを使った普通の開発-デプロイフロー" class="anchor" href="#aws-ecsを使った普通の開発-デプロイフロー" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>AWS ECSを使った普通の開発・デプロイフロー</h1>
+
+<h4>
+  <a name="2018-03-14" class="anchor" href="#2018-03-14" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/03/14</h4>
 
 <p>ECSを使った開発・デプロイの基本的なやり方を書いていく。</p>
 
@@ -38,7 +48,11 @@
 プリミティブにdocker-compose on EC2でも別に動かすことは可能だが、デプロイなどを考慮すると、シンプルにコンテナを管理できるECSが
 (少なくとも今は)いいと思う。</p>
 
-<h2>前提</h2>
+<h2>
+  <a name="前提" class="anchor" href="#前提" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>前提</h2>
 
 <ul>
 <li>開発環境・ステージング環境(stg)・本番環境(prd)が存在</li>
@@ -47,12 +61,20 @@
 <li>ベースイメージは、ECRで管理する(重要)</li>
 </ul>
 
-<h2>開発フロー</h2>
+<h2>
+  <a name="開発フロー" class="anchor" href="#開発フロー" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>開発フロー</h2>
 
 <p>開発フローを示す。
 開発環境構築 -&gt; stg/prd構築 -&gt; 開発 -&gt; デプロイの流れで書いていく。</p>
 
-<h3>開発環境構築</h3>
+<h3>
+  <a name="開発環境構築" class="anchor" href="#開発環境構築" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>開発環境構築</h3>
 
 <ul>
 <li>Dockerfileを書く</li>
@@ -223,7 +245,11 @@ app(Rails)コンテナは、./Dockerfileを見ており、DockerfileはECRのベ
 <p>とはいえ、ここまでやれば、各自の開発環境のイメージが、ECRのベースイメージを見るようにできた。
 次にデプロイメントについて書いていく。</p>
 
-<h3>デプロイ</h3>
+<h3>
+  <a name="デプロイ" class="anchor" href="#デプロイ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>デプロイ</h3>
 
 <p>さっきも書いたように、stg/prdではアセットプリコンパイルしたいので、
 Dockerfileをそのまま使えない。なので、Dockerfile.deployを作り、あくまでFROMにはECRのベースイメージを指定する。</p>
@@ -362,7 +388,11 @@ workflows:
 pipとか入れたあと、
 <code>build docker image</code> -&gt; <code>deployment</code> と進んでいく。</p>
 
-<h4>build docker image</h4>
+<h4>
+  <a name="build-docker-image" class="anchor" href="#build-docker-image" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>build docker image</h4>
 
 <p>以下のようなシェルスクリプトを作成する。</p>
 
@@ -444,7 +474,11 @@ exit 0
 
 <p>これで、対象のブランチがプッシュされたら、CI経由でECRのbaseを基にイメージビルド -&gt; ECSにデプロイができるようになった。</p>
 
-<h3>Goとかの場合</h3>
+<h3>
+  <a name="goとかの場合" class="anchor" href="#goとかの場合" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Goとかの場合</h3>
 
 <p>Goでは、<a href="https://docs.docker.com/develop/develop-images/multistage-build/">multi stage build</a> を使うことで大きく簡略化できる。</p>
 
@@ -481,10 +515,10 @@ CMD /usr/local/bin/api-server
 という構造を作れる。
 この手軽さは気に入っている。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

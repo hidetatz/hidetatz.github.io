@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>GentooをSystemdに移行した</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/02/26</h4>
+<h1>
+  <a name="gentooをsystemdに移行した" class="anchor" href="#gentooをsystemdに移行した" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>GentooをSystemdに移行した</h1>
+
+<h4>
+  <a name="2018-02-26" class="anchor" href="#2018-02-26" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/02/26</h4>
 
 <p>OpenRCからSystemdに移行した。</p>
 
@@ -38,7 +48,11 @@
 オーバーレイを導入すればOpenRCでもGNOMEが使えるようだったが、そんなにOpenRCにこだわりがなかったし、
 最近カーネルのビルドもやってなかったので、やってみた。</p>
 
-<h3>カーネル設定</h3>
+<h3>
+  <a name="カーネル設定" class="anchor" href="#カーネル設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>カーネル設定</h3>
 
 <p>カーネルのリビルドが必要だったので、以下のように対応。ついでにアップデートした。</p>
 
@@ -130,7 +144,11 @@ $ emerge -avDN @world
 
 <p>これでうまく立ち上がるのを祈る。</p>
 
-<h3>systemctl 設定</h3>
+<h3>
+  <a name="systemctl-設定" class="anchor" href="#systemctl-設定" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>systemctl 設定</h3>
 
 <p>今までrc-serviceに登録してたものをsystemctlに登録する。</p>
 
@@ -143,10 +161,10 @@ $ systemctl enable docker.service
 
 <p>再起動して、ちゃんとサービスが上がるか、インターネットにつながるか確認する。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

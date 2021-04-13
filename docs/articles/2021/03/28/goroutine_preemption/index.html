@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Goroutineのプリエンプション</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2021/03/28</h4>
+<h1>
+  <a name="goroutineのプリエンプション" class="anchor" href="#goroutineのプリエンプション" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Goroutineのプリエンプション</h1>
+
+<h4>
+  <a name="2021-03-28" class="anchor" href="#2021-03-28" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/03/28</h4>
 
 <p>Goにおけるgoroutineのプリエンプションについて調べていたのでメモ。間違いがあれば指摘いただけると助かります。</p>
 
@@ -94,7 +104,11 @@ func main() {
 
 <p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
 
-<h2>GoにおけるCooperative vs. Preemptive スケジューリング</h2>
+<h2>
+  <a name="goにおけるcooperative-vs-preemptive-スケジューリング" class="anchor" href="#goにおけるcooperative-vs-preemptive-スケジューリング" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>GoにおけるCooperative vs. Preemptive スケジューリング</h2>
 
 <p>そもそも、マルチタスクのスケジューリングには大きく2つの方式がある。それは「Cooperative(協調的)」と「Preemptive(プリエンプティブ)」だ。協調的マルチタスクは「ノンプリエンプティブ」とも呼ばれる。
 協調的マルチタスクは、プログラムのスイッチがどのように行われるかは、そのプログラム自身に依存する。「協調型」と呼ばれるのは、プログラムが相互動作可能に設計されていることを意図した呼び方なのだと思われる。
@@ -129,7 +143,11 @@ sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。
 
 <p>そして、Go1.14で導入された &ldquo;non-cooperative preemption&rdquo; (asynchronous preemption) によって、この挙動は変わった。</p>
 
-<h2>asynchronously preemptibleとはなにか？</h2>
+<h2>
+  <a name="asynchronously-preemptibleとはなにか" class="anchor" href="#asynchronously-preemptibleとはなにか" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>asynchronously preemptibleとはなにか？</h2>
 
 <p>ここまでを整理しよう。Goは10ms以上実行されているgoroutineをsysmonで監視し、適宜強制的にプリエンプションするよう計らう仕組みがそもそも存在した。しかし、その動作の仕組み上、 <code>for {}</code> のような場合は実際はプリエンプションが発生しなかった。</p>
 
@@ -144,13 +162,21 @@ Goのsignal handlerはシグナルをハンドリングするためにそのPに
 
 <p>ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations">参考</a>)</p>
 
-<h2>終わりに</h2>
+<h2>
+  <a name="終わりに" class="anchor" href="#終わりに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>終わりに</h2>
 
 <p>何もしない無限ループが他のgoroutineに処理を渡さないからと言って、Go1.13までの仕組みがダメかというとそうでもないと思われる。 <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022">@davecheney氏</a>も発言しているように、通常これは特に問題にならないと考えられる。そもそもasynchronous preemptionはこの無限ループの問題を解決するために導入されたのではない。</p>
 
 <p>asynchronous preemptionの導入によってスケジューリングがプリエンプティブになったものの、GCの際の「アンセーフ・ポイント」の取り扱いにさらに注意が必要となった。この辺の実装の考慮が大変面白くて話したかったのだが、力尽きたのでここでこの記事は終わる。気になる読者は自分で<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a>を読んでほしい。</p>
 
-<h2>参考</h2>
+<h2>
+  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>参考</h2>
 
 <ul>
 <li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a></li>
@@ -167,10 +193,10 @@ Goのsignal handlerはシグナルをハンドリングするためにそのPに
 <li><a href="https://qiita.com/umisama/items/93333ffe4d9fc7e4ba1f">goroutineがスイッチされるタイミング</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

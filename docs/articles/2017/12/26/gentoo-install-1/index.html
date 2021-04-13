@@ -28,15 +28,33 @@
 
 
 <body class="markdown-body">
-<h1>ThinkPadE470にGentooをインストールしたログ その1</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2017/12/26</h4>
+<h1>
+  <a name="thinkpade470にgentooをインストールしたログ-その1" class="anchor" href="#thinkpade470にgentooをインストールしたログ-その1" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>ThinkPadE470にGentooをインストールしたログ その1</h1>
 
-<h3>はじめに</h3>
+<h4>
+  <a name="2017-12-26" class="anchor" href="#2017-12-26" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2017/12/26</h4>
+
+<h3>
+  <a name="はじめに" class="anchor" href="#はじめに" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>はじめに</h3>
 
 <p>基本的に<a href="https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation">公式ハンドブック</a>を参照しながら進めた。</p>
 
-<h3>インストールの流れ</h3>
+<h3>
+  <a name="インストールの流れ" class="anchor" href="#インストールの流れ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>インストールの流れ</h3>
 
 <p>インストールの流れを示す。</p>
 
@@ -55,7 +73,11 @@
 
 <p>このエントリーでは5まで書く。</p>
 
-<h3>1. インストールメディアを作成する</h3>
+<h3>
+  <a name="1-インストールメディアを作成する" class="anchor" href="#1-インストールメディアを作成する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>1. インストールメディアを作成する</h3>
 
 <p>USBメモリにインストールメディアを作成する。
 インストールメディアの中には小さいOSが入っている。しかし、インストールメディアを起動しても、操作できるのは当然インストールメディアの中だけ。
@@ -68,7 +90,11 @@
 Rufusを起動し、ビックカメラで買ってきたUSBメモリ(16GB(たぶんこんなにいらない))をマシンに挿す。
 Rufusの画面から、パーティション構成をGPTに設定してスタートする。たぶんなにも起きないはず。</p>
 
-<h3>2. インストールメディアを起動する</h3>
+<h3>
+  <a name="2-インストールメディアを起動する" class="anchor" href="#2-インストールメディアを起動する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2. インストールメディアを起動する</h3>
 
 <p>Windows10では <code>高速スタートアップ</code> という機能があり、メディアからの起動ができないので、<a href="http://121ware.com/qasearch/1007/app/servlet/relatedqa?QID=018214">こちら</a>を参考に無効にする。
 そして、 <code>スタート</code> -&gt; 電源のマークを押す -&gt; <code>Shift</code> を押しながら再起動をクリックし、電源を切る。
@@ -80,14 +106,22 @@ USBを挿す。
 SystemRescueCD内のgrubが起動するので、一番上を選択する。
 これでインストールメディアが起動する。</p>
 
-<h3>3. インターネットに繋ぐ</h3>
+<h3>
+  <a name="3-インターネットに繋ぐ" class="anchor" href="#3-インターネットに繋ぐ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>3. インターネットに繋ぐ</h3>
 
 <p>これはハンドブックに載っていたやり方だとダメだった。
 筆者の家は有線LAN環境がないため、無線でつなぎたかったが、ハンドブックのやり方ではWEPの無線にのみ対応している。
 最近WEPとかあんまり使ってないと思う。
 WPAでのつなぎ方は<a href="https://yagi5.com/2017/12/24/wpa_supplicant/">こちら</a>に書いた。</p>
 
-<h3>4. パーティショニングして、ファイルシステムを作成する</h3>
+<h3>
+  <a name="4-パーティショニングして-ファイルシステムを作成する" class="anchor" href="#4-パーティショニングして-ファイルシステムを作成する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>4. パーティショニングして、ファイルシステムを作成する</h3>
 
 <p>パーティショニングは、ハードディスクを分割すること。
 したがって、どう分割するかを設計する必要がある。
@@ -157,7 +191,11 @@ Gentoo用のパーティションはよっぽどこだわりがなければext4�
 % swapon /dev/sda2
 </code></pre>
 
-<h3>5. tarballをダウンロードし、展開する。</h3>
+<h3>
+  <a name="5-tarballをダウンロードし-展開する" class="anchor" href="#5-tarballをダウンロードし-展開する" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>5. tarballをダウンロードし、展開する。</h3>
 
 <p>前述の通り、今はUSBメディアの中で作業している。
 しかし、Gentooをインストールしたいのはさっき切った <code>/dev/sda3</code> なので。
@@ -194,10 +232,10 @@ SystemRescueCDには <code>links</code> コマンドがないため、以下の�
 
 <p>続きは<a href="https://yagi5.com/2017/12/26/gentoo-install-2/">こちら</a>。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 

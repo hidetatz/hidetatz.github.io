@@ -28,9 +28,19 @@
 
 
 <body class="markdown-body">
-<h1>Dockerを使った開発環境</h1>
+<p><a href="/ja">&lt;- home</a></p>
 
-<h4>2018/02/02</h4>
+<h1>
+  <a name="dockerを使った開発環境" class="anchor" href="#dockerを使った開発環境" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Dockerを使った開発環境</h1>
+
+<h4>
+  <a name="2018-02-02" class="anchor" href="#2018-02-02" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2018/02/02</h4>
 
 <p>自分のdockerの使い方について書いていく。</p>
 
@@ -40,12 +50,20 @@
 しかし、ローカルにRubyやGoはなるべく入れたくないと思っている。
 これは単に潔癖なのではなく、実行環境のポータブル化を意識している。</p>
 
-<h2>手順</h2>
+<h2>
+  <a name="手順" class="anchor" href="#手順" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>手順</h2>
 
 <p>筆者は、何かコードを書き始めるときはまずDockerfileから書く。
 例として、nodeが動く環境を作りたいときは、自分はこんな感じで書いている。</p>
 
-<h3>Dockerfileを書く</h3>
+<h3>
+  <a name="dockerfileを書く" class="anchor" href="#dockerfileを書く" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Dockerfileを書く</h3>
 
 <p>Dockerfileは、あまり書いたことがない頃は悩みながら書いていたが、慣れてくると、全然難しくないことがわかる。
 とにかくnodeさえ動けばいいので、これだけ書く。</p>
@@ -60,7 +78,11 @@ FROMにはRubyならruby、Nodeならnodeを書けばいい。
 自分は、 <code>node docker</code> と検索して出て来る<a href="https://hub.docker.com/_/node/">Docker Hub</a>のページを見て、
 バージョンを選んでいる。</p>
 
-<h3>docker-compose.ymlを書く</h3>
+<h3>
+  <a name="docker-compose-ymlを書く" class="anchor" href="#docker-compose-ymlを書く" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>docker-compose.ymlを書く</h3>
 
 <p>docker-composeは絶対書かないといけないものではない(基本は複数コンテナのオーケストレーションに使うものなので。)が、
 自分は書くことが多い。</p>
@@ -103,7 +125,11 @@ docker-composeだと、簡単にできる。</p>
 $ docker-compose up
 </code></pre>
 
-<h3>コードを実行</h3>
+<h3>
+  <a name="コードを実行" class="anchor" href="#コードを実行" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>コードを実行</h3>
 
 <p>コードの実行もdocker-composeだと簡単で、</p>
 
@@ -113,7 +139,11 @@ $ docker-compose up
 <p>みたいに実行が可能。
 ホスト側のセットアップ済みのvimで開発し、実行はコンテナでできる。</p>
 
-<h3>tips</h3>
+<h3>
+  <a name="tips" class="anchor" href="#tips" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>tips</h3>
 
 <p>筆者は以下のように設定して、ちょっと楽にしている。</p>
 
@@ -121,14 +151,18 @@ $ docker-compose up
 alias drc='docker-compose'
 </code></pre>
 
-<h3>まとめ</h3>
+<h3>
+  <a name="まとめ" class="anchor" href="#まとめ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>まとめ</h3>
 
 <p>dockerがないと開発がつらい。</p>
 
-<hr>
+<hr />
 
 <div style="text-align: center;">
-  <a href="/">home</a>
+  <a href="/ja">home</a>
 </div>
 
 
