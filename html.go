@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 const (
@@ -59,7 +61,15 @@ const (
 func GenerateHTMLPage(title, contentsMarkdown string) string {
 	head := fmt.Sprintf(Head, title)
 
-	bodyHTML := string(markdown.ToHTML([]byte(contentsMarkdown), nil, nil))
+	parser := parser.New()
+
+	renderer := html.NewRenderer(
+		html.RendererOptions{
+			Flags: html.CommonFlags,
+		},
+	)
+
+	bodyHTML := string(markdown.ToHTML([]byte(contentsMarkdown), parser, renderer))
 	body := fmt.Sprintf(Body, bodyHTML)
 
 	return fmt.Sprintf(Page, head, body)
