@@ -33,7 +33,7 @@ The situation where you want to use a mutex is when you want to perform exclusio
 
 Condition variables appends a point to the above "I want to access a critical section" situation. The point is "I want to access a critical section, but I don't want to access it **until a condition xxx is met**". This might sound difficult to understand because it is written in a rather abstract way, but I will explain it later with a concrete example.
 
-In order to achieve the above in mutex, it is generally necessary to implement it as a busy weight. Let's take a look at the following pseudo code.
+In order to achieve the above in mutex, it is generally necessary to implement it as a busy wait. Let's take a look at the following pseudo code.
 
 ```
 mutex_lock(); // Lock the critical section
