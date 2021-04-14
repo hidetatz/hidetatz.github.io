@@ -26,7 +26,7 @@ const articlePageMD = `
 
 %s
 
-<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ---
 
@@ -172,7 +172,7 @@ func GenerateArticlePageHTML(a *Article, en bool) string {
 		home = "/ja"
 	}
 
-	return GenerateHTMLPage(a.Title, fmt.Sprintf(
+	return GenerateHTMLPage(fmt.Sprintf("%s | dtyler.io", a.Title), fmt.Sprintf(
 		articlePageMD,
 		home,
 		a.Title,

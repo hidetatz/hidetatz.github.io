@@ -71,13 +71,13 @@ func gen() {
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
 
-	write(GenerateHTMLPage("about", about), "./docs/about/index.html")
+	write(GenerateHTMLPage("about | dtyler.io", about), "./docs/about/index.html")
 
 	articlesFor404Page := ""
 	for i := 0; i < articlesCountOn404Page; i++ {
 		articlesFor404Page += articleList[i] + "\n"
 	}
-	write(GenerateHTMLPage("404", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
+	write(GenerateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 }
 
 func write(content, fileNameWithDir string) {
