@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-04-23T17:00:03+09:00</updated>
+  <updated>2021-04-23T19:44:14+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>秘匿情報をメモリ上でどう扱うか</title>
+    <updated>2021-04-23T19:28:13Z</updated>
+    <id>tag:dtyler.io,2021-04-23:/articles/2021/04/23/treat-secrets-on-memory-ja</id>
+    <link href="https://dtyler.io/articles/2021/04/23/treat-secrets-on-memory-ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>sync.Condとはなにか</title>
     <updated>2021-04-12T11:00:00Z</updated>
@@ -210,17 +221,6 @@
     <updated>2018-11-06T00:10:46Z</updated>
     <id>tag:dtyler.io,2018-11-06:/articles/2018/11/06/domain-analysis</id>
     <link href="https://dtyler.io/articles/2018/11/06/domain-analysis" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Microservices入門</title>
-    <updated>2018-11-03T14:46:31Z</updated>
-    <id>tag:dtyler.io,2018-11-03:/articles/2018/11/03/about-microservices</id>
-    <link href="https://dtyler.io/articles/2018/11/03/about-microservices" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>

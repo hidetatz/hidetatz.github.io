@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dtyler.io</loc>
-    <lastmod>2021-04-23T17:00:03.5892687+09:00</lastmod>
+    <lastmod>2021-04-23T19:44:14.9891258+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/ja/</loc>
-    <lastmod>2021-04-23T17:00:03.5892687+09:00</lastmod>
+    <lastmod>2021-04-23T19:44:14.9891258+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/about/</loc>
-    <lastmod>2021-04-23T17:00:03.5892687+09:00</lastmod>
+    <lastmod>2021-04-23T19:44:14.9891258+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/articles/2021/04/13/sync_cond</loc>
@@ -75,6 +75,10 @@
   <url>
     <loc>https://dtyler.io/articles/2018/04/12/lambda-convert-pdf-to-img</loc>
     <lastmod>2018-04-12T21:28:36Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dtyler.io/articles/2021/04/23/treat-secrets-on-memory-ja</loc>
+    <lastmod>2021-04-23T19:28:13Z</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/articles/2021/04/12/sync_cond_ja</loc>
