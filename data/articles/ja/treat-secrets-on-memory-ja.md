@@ -115,3 +115,4 @@ func Wipe(b []byte) {
 * [Hacker News - Securely Handle Encryption Keys in Go](https://news.ycombinator.com/item?id=14174500)
 * [Clearing secrets from memory](https://www.sjoerdlangkemper.nl/2016/05/22/should-passwords-be-cleared-from-memory/)
 * [github.com/hashicorp/vault](https://github.com/hashicorp/vault)
+* [proposal: add built-in function "formallyRead" for preventing elimination of "dead" stores #33325](https://github.com/golang/go/issues/33325)
