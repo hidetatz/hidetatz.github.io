@@ -15,7 +15,7 @@ func genAtom(articles []*Article, count int, fqdn string) string {
 	name := "Hidetatsu Yaginuma"
 	email := "deetyler@protonmail.com"
 	feed := &feeds.Feed{
-		Title:   "dtyler.io | Hidetatsy Yaginuma",
+		Title:   "dtyler.io | Hidetatsu Yaginuma",
 		Link:    &feeds.Link{Href: "https://dtyler.io"},
 		Author:  &feeds.Author{Name: name, Email: email},
 		Created: time.Now(),
