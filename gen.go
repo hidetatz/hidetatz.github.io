@@ -34,11 +34,15 @@ var (
 
 	//go:embed data/404.md
 	notFoundPage string
+
+	//go:embed data/robots.txt
+	robotsTxt string
 )
 
 func gen() {
 	// required for GitHub pages
 	write(cname, "./docs/CNAME")
+	write(robotsTxt, "./docs/robots.txt")
 
 	// assets
 	write(markdownCSS, "./docs/markdown.css")
@@ -70,6 +74,8 @@ func gen() {
 
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
+
+	write(genSiteMap(append(articles, articlesJA...), cname), "./docs/sitemap.xml")
 
 	write(GenerateHTMLPage("about | dtyler.io", about), "./docs/about/index.html")
 
