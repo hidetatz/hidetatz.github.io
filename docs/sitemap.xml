@@ -2,366 +2,366 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dtyler.io</loc>
-    <lastmod>2021-04-23T15:02:17.033558+09:00</lastmod>
+    <lastmod>2021-04-23T15:25:40.8672641+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/ja/</loc>
-    <lastmod>2021-04-23T15:02:17.033558+09:00</lastmod>
+    <lastmod>2021-04-23T15:25:40.8672641+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/about/</loc>
-    <lastmod>2021-04-23T15:02:17.033558+09:00</lastmod>
+    <lastmod>2021-04-23T15:25:40.8672641+09:00</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/04/13/sync_cond/</loc>
+    <loc>https://dtyler.io/articles/2021/04/13/sync_cond</loc>
     <lastmod>2021-04-13T12:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/04/07/go_mutex_starvation_en/</loc>
+    <loc>https://dtyler.io/articles/2021/04/07/go_mutex_starvation_en</loc>
     <lastmod>2021-04-07T18:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/03/29/goroutine_preemption_en/</loc>
+    <loc>https://dtyler.io/articles/2021/03/29/goroutine_preemption_en</loc>
     <lastmod>2021-03-29T18:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/01/07/how_innodb_writes_changes_on_the_disk/</loc>
+    <loc>https://dtyler.io/articles/2021/01/07/how_innodb_writes_changes_on_the_disk</loc>
     <lastmod>2021-01-07T15:19:58Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2020/10/18/kubecolor/</loc>
+    <loc>https://dtyler.io/articles/2020/10/18/kubecolor</loc>
     <lastmod>2020-10-18T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2020/04/28/how-to-get-along-with-slo-error-budget/</loc>
+    <loc>https://dtyler.io/articles/2020/04/28/how-to-get-along-with-slo-error-budget</loc>
     <lastmod>2020-04-28T12:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2020/03/05/internets_of_interests_1/</loc>
+    <loc>https://dtyler.io/articles/2020/03/05/internets_of_interests_1</loc>
     <lastmod>2020-03-05T01:53:21Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2020/02/15/math_with_fun_1/</loc>
+    <loc>https://dtyler.io/articles/2020/02/15/math_with_fun_1</loc>
     <lastmod>2020-02-15T22:08:14Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/12/29/ds_4/</loc>
+    <loc>https://dtyler.io/articles/2019/12/29/ds_4</loc>
     <lastmod>2019-12-29T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/12/23/ds_3/</loc>
+    <loc>https://dtyler.io/articles/2019/12/23/ds_3</loc>
     <lastmod>2019-12-23T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/11/07/ds_2/</loc>
+    <loc>https://dtyler.io/articles/2019/11/07/ds_2</loc>
     <lastmod>2019-11-07T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/11/04/ds_1/</loc>
+    <loc>https://dtyler.io/articles/2019/11/04/ds_1</loc>
     <lastmod>2019-11-04T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/05/21/aws-beginners-lesson/</loc>
+    <loc>https://dtyler.io/articles/2018/05/21/aws-beginners-lesson</loc>
     <lastmod>2018-05-21T21:52:40Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/05/05/awscli-on-container/</loc>
+    <loc>https://dtyler.io/articles/2018/05/05/awscli-on-container</loc>
     <lastmod>2018-05-05T13:51:28Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/04/30/introduce-terraform/</loc>
+    <loc>https://dtyler.io/articles/2018/04/30/introduce-terraform</loc>
     <lastmod>2018-04-30T06:18:53Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/04/12/lambda-convert-pdf-to-img/</loc>
+    <loc>https://dtyler.io/articles/2018/04/12/lambda-convert-pdf-to-img</loc>
     <lastmod>2018-04-12T21:28:36Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/04/12/sync_cond_ja/</loc>
+    <loc>https://dtyler.io/articles/2021/04/12/sync_cond_ja</loc>
     <lastmod>2021-04-12T11:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/04/06/go_mutex_starvation/</loc>
+    <loc>https://dtyler.io/articles/2021/04/06/go_mutex_starvation</loc>
     <lastmod>2021-04-06T20:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2021/03/28/goroutine_preemption/</loc>
+    <loc>https://dtyler.io/articles/2021/03/28/goroutine_preemption</loc>
     <lastmod>2021-03-28T09:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2020/10/14/kubecolor_ja/</loc>
+    <loc>https://dtyler.io/articles/2020/10/14/kubecolor_ja</loc>
     <lastmod>2020-10-14T00:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/06/29/microservices-patterns/</loc>
+    <loc>https://dtyler.io/articles/2019/06/29/microservices-patterns</loc>
     <lastmod>2019-06-29T18:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/04/16/microservices-transactional-integrity/</loc>
+    <loc>https://dtyler.io/articles/2019/04/16/microservices-transactional-integrity</loc>
     <lastmod>2019-04-16T13:07:41Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2019/02/11/grpc-client-test-mock/</loc>
+    <loc>https://dtyler.io/articles/2019/02/11/grpc-client-test-mock</loc>
     <lastmod>2019-02-11T00:36:30Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/12/23/2018/</loc>
+    <loc>https://dtyler.io/articles/2018/12/23/2018</loc>
     <lastmod>2018-12-23T23:20:55Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/12/23/k8s-learning/</loc>
+    <loc>https://dtyler.io/articles/2018/12/23/k8s-learning</loc>
     <lastmod>2018-12-23T16:07:32Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/12/22/ms-connect/</loc>
+    <loc>https://dtyler.io/articles/2018/12/22/ms-connect</loc>
     <lastmod>2018-12-22T15:41:59Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/12/16/k8s-env/</loc>
+    <loc>https://dtyler.io/articles/2018/12/16/k8s-env</loc>
     <lastmod>2018-12-16T18:55:58Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/29/gocon-2018-autumn/</loc>
+    <loc>https://dtyler.io/articles/2018/11/29/gocon-2018-autumn</loc>
     <lastmod>2018-11-29T12:49:30Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/11/microservices-designpattern/</loc>
+    <loc>https://dtyler.io/articles/2018/11/11/microservices-designpattern</loc>
     <lastmod>2018-11-11T16:06:03Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/11/microservices-service-mesh/</loc>
+    <loc>https://dtyler.io/articles/2018/11/11/microservices-service-mesh</loc>
     <lastmod>2018-11-11T13:00:44Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/10/about-circuit-breaker/</loc>
+    <loc>https://dtyler.io/articles/2018/11/10/about-circuit-breaker</loc>
     <lastmod>2018-11-10T21:34:03Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/10/domain-to-microservices/</loc>
+    <loc>https://dtyler.io/articles/2018/11/10/domain-to-microservices</loc>
     <lastmod>2018-11-10T14:17:53Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/09/go-table-driven-codes/</loc>
+    <loc>https://dtyler.io/articles/2018/11/09/go-table-driven-codes</loc>
     <lastmod>2018-11-09T23:36:31Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/09/go-package-style/</loc>
+    <loc>https://dtyler.io/articles/2018/11/09/go-package-style</loc>
     <lastmod>2018-11-09T22:57:53Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/06/domain-analysis/</loc>
+    <loc>https://dtyler.io/articles/2018/11/06/domain-analysis</loc>
     <lastmod>2018-11-06T00:10:46Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/11/03/about-microservices/</loc>
+    <loc>https://dtyler.io/articles/2018/11/03/about-microservices</loc>
     <lastmod>2018-11-03T14:46:31Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/10/28/go-interface/</loc>
+    <loc>https://dtyler.io/articles/2018/10/28/go-interface</loc>
     <lastmod>2018-10-28T22:01:45Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/10/28/golang-nil/</loc>
+    <loc>https://dtyler.io/articles/2018/10/28/golang-nil</loc>
     <lastmod>2018-10-28T18:32:50Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/10/07/go-type/</loc>
+    <loc>https://dtyler.io/articles/2018/10/07/go-type</loc>
     <lastmod>2018-10-07T11:35:53Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/10/06/firebase-sitehosting/</loc>
+    <loc>https://dtyler.io/articles/2018/10/06/firebase-sitehosting</loc>
     <lastmod>2018-10-06T21:09:22Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/10/04/go-modules/</loc>
+    <loc>https://dtyler.io/articles/2018/10/04/go-modules</loc>
     <lastmod>2018-10-04T19:15:39Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/09/23/nginx-restudy/</loc>
+    <loc>https://dtyler.io/articles/2018/09/23/nginx-restudy</loc>
     <lastmod>2018-09-23T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/09/15/sql-tuning/</loc>
+    <loc>https://dtyler.io/articles/2018/09/15/sql-tuning</loc>
     <lastmod>2018-09-15T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/08/15/pt-query-digest/</loc>
+    <loc>https://dtyler.io/articles/2018/08/15/pt-query-digest</loc>
     <lastmod>2018-08-15T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/08/06/caas/</loc>
+    <loc>https://dtyler.io/articles/2018/08/06/caas</loc>
     <lastmod>2018-08-06T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/08/03/arch-pacman/</loc>
+    <loc>https://dtyler.io/articles/2018/08/03/arch-pacman</loc>
     <lastmod>2018-08-03T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/07/30/about-unix-domain-socket/</loc>
+    <loc>https://dtyler.io/articles/2018/07/30/about-unix-domain-socket</loc>
     <lastmod>2018-07-30T19:09:52Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/04/07/server-profiling/</loc>
+    <loc>https://dtyler.io/articles/2018/04/07/server-profiling</loc>
     <lastmod>2018-04-07T11:40:29Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/03/31/slow-cloudfront/</loc>
+    <loc>https://dtyler.io/articles/2018/03/31/slow-cloudfront</loc>
     <lastmod>2018-03-31T23:18:04Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/03/14/about-ecs/</loc>
+    <loc>https://dtyler.io/articles/2018/03/14/about-ecs</loc>
     <lastmod>2018-03-14T09:34:04Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/27/gentoo-ricty/</loc>
+    <loc>https://dtyler.io/articles/2018/02/27/gentoo-ricty</loc>
     <lastmod>2018-02-27T22:05:46Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/26/gentoo-systemd/</loc>
+    <loc>https://dtyler.io/articles/2018/02/26/gentoo-systemd</loc>
     <lastmod>2018-02-26T20:11:32Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/25/equery-options/</loc>
+    <loc>https://dtyler.io/articles/2018/02/25/equery-options</loc>
     <lastmod>2018-02-25T11:12:20Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/25/portage-options/</loc>
+    <loc>https://dtyler.io/articles/2018/02/25/portage-options</loc>
     <lastmod>2018-02-25T05:01:33Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/02/docker-development-environment/</loc>
+    <loc>https://dtyler.io/articles/2018/02/02/docker-development-environment</loc>
     <lastmod>2018-02-02T18:22:42Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/02/01/about-deep-healthcheck/</loc>
+    <loc>https://dtyler.io/articles/2018/02/01/about-deep-healthcheck</loc>
     <lastmod>2018-02-01T23:39:27Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/30/go-cli-directory/</loc>
+    <loc>https://dtyler.io/articles/2018/01/30/go-cli-directory</loc>
     <lastmod>2018-01-30T20:08:16Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/18/kubernetes-learn-3/</loc>
+    <loc>https://dtyler.io/articles/2018/01/18/kubernetes-learn-3</loc>
     <lastmod>2018-01-18T21:06:37Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/14/gentoo-wifi-problem/</loc>
+    <loc>https://dtyler.io/articles/2018/01/14/gentoo-wifi-problem</loc>
     <lastmod>2018-01-14T22:46:49Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/14/kubernetes-learn-2/</loc>
+    <loc>https://dtyler.io/articles/2018/01/14/kubernetes-learn-2</loc>
     <lastmod>2018-01-14T11:01:57Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/12/kubernetes-learn-1/</loc>
+    <loc>https://dtyler.io/articles/2018/01/12/kubernetes-learn-1</loc>
     <lastmod>2018-01-12T18:40:08Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/09/movies-url/</loc>
+    <loc>https://dtyler.io/articles/2018/01/09/movies-url</loc>
     <lastmod>2018-01-09T22:25:23Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/03/2017-movies/</loc>
+    <loc>https://dtyler.io/articles/2018/01/03/2017-movies</loc>
     <lastmod>2018-01-03T20:33:26Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2018/01/02/gentoo-skype/</loc>
+    <loc>https://dtyler.io/articles/2018/01/02/gentoo-skype</loc>
     <lastmod>2018-01-02T19:27:43Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/31/gentoo-docker/</loc>
+    <loc>https://dtyler.io/articles/2017/12/31/gentoo-docker</loc>
     <lastmod>2017-12-31T08:48:51Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/30/gentoo-keyboard/</loc>
+    <loc>https://dtyler.io/articles/2017/12/30/gentoo-keyboard</loc>
     <lastmod>2017-12-30T17:35:09Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/30/gentoo-fluxbox/</loc>
+    <loc>https://dtyler.io/articles/2017/12/30/gentoo-fluxbox</loc>
     <lastmod>2017-12-30T11:19:33Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/30/gentoo-sound/</loc>
+    <loc>https://dtyler.io/articles/2017/12/30/gentoo-sound</loc>
     <lastmod>2017-12-30T11:04:42Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/29/about-kernel-make-config/</loc>
+    <loc>https://dtyler.io/articles/2017/12/29/about-kernel-make-config</loc>
     <lastmod>2017-12-29T10:40:43Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/28/grub-windows/</loc>
+    <loc>https://dtyler.io/articles/2017/12/28/grub-windows</loc>
     <lastmod>2017-12-28T22:36:16Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/26/gentoo-setup-network/</loc>
+    <loc>https://dtyler.io/articles/2017/12/26/gentoo-setup-network</loc>
     <lastmod>2017-12-26T12:29:07Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/26/gentoo-setup/</loc>
+    <loc>https://dtyler.io/articles/2017/12/26/gentoo-setup</loc>
     <lastmod>2017-12-26T12:05:00Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/26/gentoo-install-2/</loc>
+    <loc>https://dtyler.io/articles/2017/12/26/gentoo-install-2</loc>
     <lastmod>2017-12-26T11:39:37Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/26/gentoo-install-1/</loc>
+    <loc>https://dtyler.io/articles/2017/12/26/gentoo-install-1</loc>
     <lastmod>2017-12-26T10:49:31Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/24/wpa-supplicant/</loc>
+    <loc>https://dtyler.io/articles/2017/12/24/wpa-supplicant</loc>
     <lastmod>2017-12-24T19:15:39Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/12/21/aws-sap/</loc>
+    <loc>https://dtyler.io/articles/2017/12/21/aws-sap</loc>
     <lastmod>2017-12-21T21:20:14Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/11/18/about-nat-instance/</loc>
+    <loc>https://dtyler.io/articles/2017/11/18/about-nat-instance</loc>
     <lastmod>2017-11-18T18:39:17Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/11/08/about-ebs-snapshot/</loc>
+    <loc>https://dtyler.io/articles/2017/11/08/about-ebs-snapshot</loc>
     <lastmod>2017-11-08T21:57:55Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/11/01/about-direct-connect/</loc>
+    <loc>https://dtyler.io/articles/2017/11/01/about-direct-connect</loc>
     <lastmod>2017-11-01T22:34:12Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/11/01/ssl-termination/</loc>
+    <loc>https://dtyler.io/articles/2017/11/01/ssl-termination</loc>
     <lastmod>2017-11-01T20:40:29Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/10/31/about-ebs-iops/</loc>
+    <loc>https://dtyler.io/articles/2017/10/31/about-ebs-iops</loc>
     <lastmod>2017-10-31T23:03:23Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/10/24/about-saml/</loc>
+    <loc>https://dtyler.io/articles/2017/10/24/about-saml</loc>
     <lastmod>2017-10-24T19:03:25Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/10/17/aws-saa/</loc>
+    <loc>https://dtyler.io/articles/2017/10/17/aws-saa</loc>
     <lastmod>2017-10-17T15:10:24Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/10/17/official-karabiner/</loc>
+    <loc>https://dtyler.io/articles/2017/10/17/official-karabiner</loc>
     <lastmod>2017-10-17T15:09:56Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/09/22/datadog-lambda/</loc>
+    <loc>https://dtyler.io/articles/2017/09/22/datadog-lambda</loc>
     <lastmod>2017-09-22T18:01:35Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/09/07/docker-capybara-selenium-headless/</loc>
+    <loc>https://dtyler.io/articles/2017/09/07/docker-capybara-selenium-headless</loc>
     <lastmod>2017-09-07T09:18:13Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/06/19/python2-lambda-slack/</loc>
+    <loc>https://dtyler.io/articles/2017/06/19/python2-lambda-slack</loc>
     <lastmod>2017-06-19T10:22:59Z</lastmod>
   </url>
   <url>
-    <loc>https://dtyler.io/articles/2017/06/08/peco-scripts/</loc>
+    <loc>https://dtyler.io/articles/2017/06/08/peco-scripts</loc>
     <lastmod>2017-06-08T09:55:55Z</lastmod>
   </url>
 </urlset>

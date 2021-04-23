@@ -16,8 +16,7 @@ func genSiteMap(articles []*Article, fqdn string) string {
 	sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s/about/", fqdn), LastMod: &now})
 
 	for _, a := range articles {
-		loc := fmt.Sprintf("https://%s/articles/%s/%s/", fqdn, a.FormatTime(), a.FileNameWithoutExtension())
-		sm.Add(&sitemap.URL{Loc: loc, LastMod: &a.Timestamp})
+		sm.Add(&sitemap.URL{Loc: a.ToURL(fqdn), LastMod: &a.Timestamp})
 	}
 
 	buff := &bytes.Buffer{}

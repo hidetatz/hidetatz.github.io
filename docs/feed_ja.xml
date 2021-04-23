@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <title>dtyler.io | Hidetatsy Yaginuma</title>
+  <id>https://dtyler.io</id>
+  <updated>2021-04-23T15:25:40+09:00</updated>
+  <link href="https://dtyler.io"></link>
+  <author>
+    <name>Hidetatsu Yaginuma</name>
+    <email>deetyler@protonmail.com</email>
+  </author>
+  <entry>
+    <title>sync.Condとはなにか</title>
+    <updated>2021-04-12T11:00:00Z</updated>
+    <id>tag:dtyler.io,2021-04-12:/articles/2021/04/12/sync_cond_ja</id>
+    <link href="https://dtyler.io/articles/2021/04/12/sync_cond_ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goにおけるミューテックスのスタベーション</title>
+    <updated>2021-04-06T20:00:00Z</updated>
+    <id>tag:dtyler.io,2021-04-06:/articles/2021/04/06/go_mutex_starvation</id>
+    <link href="https://dtyler.io/articles/2021/04/06/go_mutex_starvation" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goroutineのプリエンプション</title>
+    <updated>2021-03-28T09:00:00Z</updated>
+    <id>tag:dtyler.io,2021-03-28:/articles/2021/03/28/goroutine_preemption</id>
+    <link href="https://dtyler.io/articles/2021/03/28/goroutine_preemption" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>kubecolorでkubectlの出力に色を付ける</title>
+    <updated>2020-10-14T00:00:00Z</updated>
+    <id>tag:dtyler.io,2020-10-14:/articles/2020/10/14/kubecolor_ja</id>
+    <link href="https://dtyler.io/articles/2020/10/14/kubecolor_ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>マイクロサービスアーキテクチャにおける処理パターン</title>
+    <updated>2019-06-29T18:00:00Z</updated>
+    <id>tag:dtyler.io,2019-06-29:/articles/2019/06/29/microservices-patterns</id>
+    <link href="https://dtyler.io/articles/2019/06/29/microservices-patterns" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>MicroservicesアーキテクチャにおけるTransactional Integrityの実現</title>
+    <updated>2019-04-16T13:07:41Z</updated>
+    <id>tag:dtyler.io,2019-04-16:/articles/2019/04/16/microservices-transactional-integrity</id>
+    <link href="https://dtyler.io/articles/2019/04/16/microservices-transactional-integrity" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>gRPCサーバーをモックしてテストする</title>
+    <updated>2019-02-11T00:36:30Z</updated>
+    <id>tag:dtyler.io,2019-02-11:/articles/2019/02/11/grpc-client-test-mock</id>
+    <link href="https://dtyler.io/articles/2019/02/11/grpc-client-test-mock" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>2018年に買ってよかったものと面白かった本</title>
+    <updated>2018-12-23T23:20:55Z</updated>
+    <id>tag:dtyler.io,2018-12-23:/articles/2018/12/23/2018</id>
+    <link href="https://dtyler.io/articles/2018/12/23/2018" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Kubernetesのオススメ勉強方法</title>
+    <updated>2018-12-23T16:07:32Z</updated>
+    <id>tag:dtyler.io,2018-12-23:/articles/2018/12/23/k8s-learning</id>
+    <link href="https://dtyler.io/articles/2018/12/23/k8s-learning" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>マイクロサービスを結合させて動作確認する</title>
+    <updated>2018-12-22T15:41:59Z</updated>
+    <id>tag:dtyler.io,2018-12-22:/articles/2018/12/22/ms-connect</id>
+    <link href="https://dtyler.io/articles/2018/12/22/ms-connect" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Kubernetesを動かすまで</title>
+    <updated>2018-12-16T18:55:58Z</updated>
+    <id>tag:dtyler.io,2018-12-16:/articles/2018/12/16/k8s-env</id>
+    <link href="https://dtyler.io/articles/2018/12/16/k8s-env" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Go Conference 2018 Autumnで登壇してきた</title>
+    <updated>2018-11-29T12:49:30Z</updated>
+    <id>tag:dtyler.io,2018-11-29:/articles/2018/11/29/gocon-2018-autumn</id>
+    <link href="https://dtyler.io/articles/2018/11/29/gocon-2018-autumn" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Microservicesデザインパターン</title>
+    <updated>2018-11-11T16:06:03Z</updated>
+    <id>tag:dtyler.io,2018-11-11:/articles/2018/11/11/microservices-designpattern</id>
+    <link href="https://dtyler.io/articles/2018/11/11/microservices-designpattern" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Microservicesにおけるサービス間通信とService Mesh</title>
+    <updated>2018-11-11T13:00:44Z</updated>
+    <id>tag:dtyler.io,2018-11-11:/articles/2018/11/11/microservices-service-mesh</id>
+    <link href="https://dtyler.io/articles/2018/11/11/microservices-service-mesh" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Microservicesで障害が起きたサービスを切り離すためのCircuit Breaker</title>
+    <updated>2018-11-10T21:34:03Z</updated>
+    <id>tag:dtyler.io,2018-11-10:/articles/2018/11/10/about-circuit-breaker</id>
+    <link href="https://dtyler.io/articles/2018/11/10/about-circuit-breaker" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>ドメインモデルをMicroservicesに落とし込む</title>
+    <updated>2018-11-10T14:17:53Z</updated>
+    <id>tag:dtyler.io,2018-11-10:/articles/2018/11/10/domain-to-microservices</id>
+    <link href="https://dtyler.io/articles/2018/11/10/domain-to-microservices" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goでテスト以外でもTable Drivenに書く</title>
+    <updated>2018-11-09T23:36:31Z</updated>
+    <id>tag:dtyler.io,2018-11-09:/articles/2018/11/09/go-table-driven-codes</id>
+    <link href="https://dtyler.io/articles/2018/11/09/go-table-driven-codes" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goで使いやすいPackageを作るために知っておきたいこと</title>
+    <updated>2018-11-09T22:57:53Z</updated>
+    <id>tag:dtyler.io,2018-11-09:/articles/2018/11/09/go-package-style</id>
+    <link href="https://dtyler.io/articles/2018/11/09/go-package-style" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Microservicesでサービス境界設計を行うためのドメイン分析</title>
+    <updated>2018-11-06T00:10:46Z</updated>
+    <id>tag:dtyler.io,2018-11-06:/articles/2018/11/06/domain-analysis</id>
+    <link href="https://dtyler.io/articles/2018/11/06/domain-analysis" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Microservices入門</title>
+    <updated>2018-11-03T14:46:31Z</updated>
+    <id>tag:dtyler.io,2018-11-03:/articles/2018/11/03/about-microservices</id>
+    <link href="https://dtyler.io/articles/2018/11/03/about-microservices" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+</feed>

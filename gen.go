@@ -76,6 +76,8 @@ func gen() {
 	write(idxJA, "./docs/ja/index.html")
 
 	write(genSiteMap(append(articles, articlesJA...), cname), "./docs/sitemap.xml")
+	write(genAtom(articles, 20, cname), "./docs/feed.xml")
+	write(genAtom(articlesJA, 20, cname), "./docs/feed_ja.xml")
 
 	write(GenerateHTMLPage("about | dtyler.io", about), "./docs/about/index.html")
 

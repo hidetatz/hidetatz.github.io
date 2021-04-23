@@ -9,7 +9,9 @@ const indexPageMD = `
 
 [About](/about)
 
-[Ja](/ja)
+[*Ja*](/ja)
+
+[feed](/feed.xml)
 
 ---
 
@@ -21,7 +23,9 @@ const jaIndexPageMD = `
 
 [About](/about)
 
-[En](/)
+[*En*](/)
+
+[feed](/feed_ja.xml)
 
 ---
 

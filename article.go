@@ -166,6 +166,10 @@ func (a *Article) FormatTime() string {
 	return a.Timestamp.Format(timeformat)
 }
 
+func (a *Article) ToURL(fqdn string) string {
+	return fmt.Sprintf("https://%s/articles/%s/%s", fqdn, a.FormatTime(), a.FileNameWithoutExtension())
+}
+
 func GenerateArticlePageHTML(a *Article, en bool) string {
 	home := "/"
 	if !en {
