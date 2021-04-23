@@ -88,7 +88,7 @@ err := unix.Setrlimit(unix.RLIMIT_CORE, &amp;unix.Rlimit{Cur: 0, Max: 0})
 
 <p>注意すべきは、<a href="https://linux.die.net/man/2/madvise">madvise(2) - Linux man page</a> にあるように、 <code>The kernel is free to ignore the advice.</code> すなわち、カーネルはこのアドバイスを無視することもあるらしい。</p>
 
-<p>また、そもそもコアダンプはアプリケーションからでなくOS事態に設定も可能である。</p>
+<p>また、そもそもコアダンプはアプリケーションからでなくOS自体に設定も可能である。</p>
 
 <h3>
   <a name="スワップの抑止" class="anchor" href="#スワップの抑止" rel="nofollow" aria-hidden="true">
@@ -122,6 +122,40 @@ err := unix.Setrlimit(unix.RLIMIT_CORE, &amp;unix.Rlimit{Cur: 0, Max: 0})
 <p>この場合どうすればよいか。Goでこれをやるには、 <code>mmap</code> や <code>munmap</code> で自前でメモリを管理する必要がある。これで確保したメモリはガベージコレクタの観測範囲外になるので、これに対して <code>mlock</code> を行ったり、使い終わった後のゼロ埋めを行えばよい。また言うまでもないが、使った後は自分でメモリを解放する必要がある。</p>
 
 <p>余談だが、自前でメモリを管理するにあたっては解放を忘れないことだけでなく、 <code>mprotect</code> を使ったガードページの実装や、カナリア領域の確保など、バッファオーバーフロー・アンダーランを防ぐ機構もおそらく必要になるだろう。</p>
+
+<h4>
+  <a name="メモリのクリーンアップ" class="anchor" href="#メモリのクリーンアップ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>メモリのクリーンアップ</h4>
+
+<p>上述したメモリのゼロ埋めをメモリのクリーンアップ、「ワイプ(Wipe)」などと呼ぶが、これはどう実装するか？すぐに思いつくのは、次のようなやり方ではないか。</p>
+
+<pre><code class="language-go">func Wipe(b []byte) {
+	for i := range b {
+		b[i] = 0
+	}
+}
+</code></pre>
+
+<p>この実装は明示的にメモリに0を書き込んでいるように見えるが、実際はこれでは不十分らしい。
+この実装では0を書き込むだけ書き込んでいるが、それを利用するコードがない。このように、あるメモリに書き込みを行ったもののそれを読み込んでいないとき、コンパイラは最適化の一環としてその書き込みを不要と判断し、書き込みを行うコード自体を消すことがあるらしい。
+こういった最適化を「Dead store elimination」という。</p>
+
+<p>上記のコードでも、bに書き込んだ0を利用するコードがないため、この最適化が起こる可能性がある。そうなると、ゼロ埋めに失敗することになる。</p>
+
+<p>これを解決する方法の一つは、 <code>runtime.KeepAlive</code> を使うことだ。</p>
+
+<pre><code class="language-go">func Wipe(b []byte) {
+	for i := range b {
+		b[i] = 0
+	}
+
+	runtime.KeepAlive(b) // &lt;-
+}
+</code></pre>
+
+<p>筆者の理解では、 <code>runtime.KeepAlive</code> があると、コンパイラはその箇所にその部分のメモリを使用するようなコードを挿入し、結果的に書き込みが &ldquo;Dead store&rdquo; であると判断されることを防ぐ。メモリのワイプ時にはこういった考慮も必要になる。</p>
 
 <h2>
   <a name="終わりに" class="anchor" href="#終わりに" rel="nofollow" aria-hidden="true">
