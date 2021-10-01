@@ -1,0 +1,19 @@
+name: generate blog
+on: [push]
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: check out
+        uses: actions/checkout@v2
+      - run: make gen
+      - run: |
+          git config --local user.email "deetyler@protonmail.com"
+          git config --local user.name "dty1er"
+      - run: |
+          git commit -a -m "[skip ci] Generate blog"
+          git push origin master
