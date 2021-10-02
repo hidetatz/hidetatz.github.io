@@ -71,7 +71,7 @@ func gen() {
 	// 404 page
 	articlesFor404Page := ""
 	for i := 0; i < articlesCountOn404Page; i++ {
-		articlesFor404Page += fmt.Sprintf("[%s](%s)\n", articles[i].title, link(articles[i]))
+		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, link(articles[i]))
 	}
 	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 }
