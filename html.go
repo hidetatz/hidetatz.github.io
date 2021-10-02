@@ -56,7 +56,7 @@ const (
 `
 )
 
-func GenerateHTMLPage(title, contentsMarkdown string) string {
+func generateHTMLPage(title, contentsMarkdown string) string {
 	head := fmt.Sprintf(Head, title)
 
 	r := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{

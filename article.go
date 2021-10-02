@@ -176,7 +176,7 @@ func GenerateArticlePageHTML(a *Article, en bool) string {
 		home = "/ja"
 	}
 
-	return GenerateHTMLPage(fmt.Sprintf("%s | dtyler.io", a.Title), fmt.Sprintf(
+	return generateHTMLPage(fmt.Sprintf("%s | dtyler.io", a.Title), fmt.Sprintf(
 		articlePageMD,
 		home,
 		a.Title,

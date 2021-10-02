@@ -9,5 +9,5 @@ require (
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/snabb/sitemap v1.0.0
-	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57 // indirect
+	golang.org/x/net v0.0.0-20210929193557-e81a3d93ecf6
 )

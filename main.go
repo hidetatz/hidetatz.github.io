@@ -20,6 +20,8 @@ func main() {
 	case *n:
 		newFile()
 	default:
+		removeAllFiles("./docs/")
+		gen()
 		runServer()
 	}
 }

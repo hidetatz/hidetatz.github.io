@@ -7,11 +7,7 @@ import (
 const indexPageMD = `
 # dtyler.io
 
-[About](/about)
-
-[*Ja*](/ja)
-
-[feed](/feed.xml)
+[About](/about) / [*Ja*](/ja) / [Input](/inputs) / [feed](/feed.xml)
 
 ---
 
@@ -21,21 +17,17 @@ const indexPageMD = `
 const jaIndexPageMD = `
 # dtyler.io
 
-[About](/about)
-
-[*En*](/)
-
-[feed](/feed_ja.xml)
+[About](/about) / [*En*](/) / [Input](/inputs) / [feed](/feed_ja.xml)
 
 ---
 
 %s
 `
 
-func GenerateIndexPageHTML(articlesList string) string {
-	return GenerateHTMLPage("dtyler.io", fmt.Sprintf(indexPageMD, articlesList))
+func generateIndexPageHTML(articlesList string) string {
+	return generateHTMLPage("dtyler.io", fmt.Sprintf(indexPageMD, articlesList))
 }
 
-func GenerateJaIndexPageHTML(articlesList string) string {
-	return GenerateHTMLPage("dtyler.io - ja", fmt.Sprintf(jaIndexPageMD, articlesList))
+func generateJaIndexPageHTML(articlesList string) string {
+	return generateHTMLPage("dtyler.io - ja", fmt.Sprintf(jaIndexPageMD, articlesList))
 }

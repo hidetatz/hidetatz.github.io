@@ -69,8 +69,8 @@ func gen() {
 		}
 	}
 
-	idx := GenerateIndexPageHTML(strings.Join(articleList, "\n"))
-	idxJA := GenerateJaIndexPageHTML(strings.Join(articlesJAList, "\n"))
+	idx := generateIndexPageHTML(strings.Join(articleList, "\n"))
+	idxJA := generateJaIndexPageHTML(strings.Join(articlesJAList, "\n"))
 
 	write(idx, "./docs/index.html")
 	write(idxJA, "./docs/ja/index.html")
@@ -79,13 +79,21 @@ func gen() {
 	write(genAtom(articles, 20, cname), "./docs/feed.xml")
 	write(genAtom(articlesJA, 20, cname), "./docs/feed_ja.xml")
 
-	write(GenerateHTMLPage("about | dtyler.io", about), "./docs/about/index.html")
+	write(generateHTMLPage("about | dtyler.io", about), "./docs/about/index.html")
+
+	inputs := readInputs("./data/inputs")
+	inputList := listInputsHref(inputs)
+	inputidx := generateIndexPageHTML(strings.Join(inputList, "\n"))
+	for _, i := range inputs {
+		write(generateInputPageHTML(i), fmt.Sprintf("./docs/inputs/%s/%s/index.html", i.FormatTime(), i.FileNameWithoutExtension()))
+	}
+	write(inputidx, "./docs/inputs/index.html")
 
 	articlesFor404Page := ""
 	for i := 0; i < articlesCountOn404Page; i++ {
 		articlesFor404Page += articleList[i] + "\n"
 	}
-	write(GenerateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
+	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 }
 
 func write(content, fileNameWithDir string) {
