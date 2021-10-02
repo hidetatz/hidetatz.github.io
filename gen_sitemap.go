@@ -8,7 +8,7 @@ import (
 	"github.com/snabb/sitemap"
 )
 
-func genSiteMap(articles []*Article, fqdn string) string {
+func genSiteMap(articles []*article, fqdn string) string {
 	sm := sitemap.New()
 	now := time.Now()
 	sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s", fqdn), LastMod: &now})
@@ -16,7 +16,7 @@ func genSiteMap(articles []*Article, fqdn string) string {
 	sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s/about/", fqdn), LastMod: &now})
 
 	for _, a := range articles {
-		sm.Add(&sitemap.URL{Loc: a.ToURL(fqdn), LastMod: &a.Timestamp})
+		sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s/%s", fqdn, link(a)), LastMod: &a.timestamp})
 	}
 
 	buff := &bytes.Buffer{}

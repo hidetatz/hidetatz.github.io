@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-10-02T10:44:51+09:00</updated>
+  <updated>2021-10-02T22:52:36+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
   <entry>
+    <title>Configuring sql.DB for Better Performance – Alex Edwards</title>
+    <updated>2021-10-01T10:00:00Z</updated>
+    <id>tag:dtyler.io,2021-10-01://articles/2021/10/01/sqldb</id>
+    <link href="https://dtyler.io//articles/2021/10/01/sqldb" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>秘匿情報をメモリ上でどう扱うか</title>
+    <updated>2021-04-23T19:28:13Z</updated>
+    <id>tag:dtyler.io,2021-04-23://articles/2021/04/23/treat_secrets_on_memory_ja</id>
+    <link href="https://dtyler.io//articles/2021/04/23/treat_secrets_on_memory_ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
     <title>What&#39;s the &#34;sync.Cond&#34;</title>
     <updated>2021-04-13T12:00:00Z</updated>
-    <id>tag:dtyler.io,2021-04-13:/articles/2021/04/13/sync_cond</id>
-    <link href="https://dtyler.io/articles/2021/04/13/sync_cond" rel="alternate"></link>
+    <id>tag:dtyler.io,2021-04-13://articles/2021/04/13/sync_cond</id>
+    <link href="https://dtyler.io//articles/2021/04/13/sync_cond" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>sync.Condとはなにか</title>
+    <updated>2021-04-12T11:00:00Z</updated>
+    <id>tag:dtyler.io,2021-04-12://articles/2021/04/12/sync_cond_ja</id>
+    <link href="https://dtyler.io//articles/2021/04/12/sync_cond_ja" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -21,8 +54,19 @@
   <entry>
     <title>Mutex starvation in Go</title>
     <updated>2021-04-07T18:00:00Z</updated>
-    <id>tag:dtyler.io,2021-04-07:/articles/2021/04/07/go_mutex_starvation_en</id>
-    <link href="https://dtyler.io/articles/2021/04/07/go_mutex_starvation_en" rel="alternate"></link>
+    <id>tag:dtyler.io,2021-04-07://articles/2021/04/07/go_mutex_starvation</id>
+    <link href="https://dtyler.io//articles/2021/04/07/go_mutex_starvation" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goにおけるミューテックスのスタベーション</title>
+    <updated>2021-04-06T20:00:00Z</updated>
+    <id>tag:dtyler.io,2021-04-06://articles/2021/04/06/go_mutex_starvation_ja</id>
+    <link href="https://dtyler.io//articles/2021/04/06/go_mutex_starvation_ja" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -32,8 +76,19 @@
   <entry>
     <title>Preemption in Go</title>
     <updated>2021-03-29T18:00:00Z</updated>
-    <id>tag:dtyler.io,2021-03-29:/articles/2021/03/29/goroutine_preemption_en</id>
-    <link href="https://dtyler.io/articles/2021/03/29/goroutine_preemption_en" rel="alternate"></link>
+    <id>tag:dtyler.io,2021-03-29://articles/2021/03/29/goroutine_preemption</id>
+    <link href="https://dtyler.io//articles/2021/03/29/goroutine_preemption" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Goroutineのプリエンプション</title>
+    <updated>2021-03-28T09:00:00Z</updated>
+    <id>tag:dtyler.io,2021-03-28://articles/2021/03/28/goroutine_preemption_ja</id>
+    <link href="https://dtyler.io//articles/2021/03/28/goroutine_preemption_ja" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -43,8 +98,8 @@
   <entry>
     <title>How InnoDB writes data on the disk</title>
     <updated>2021-01-07T15:19:58Z</updated>
-    <id>tag:dtyler.io,2021-01-07:/articles/2021/01/07/how_innodb_writes_changes_on_the_disk</id>
-    <link href="https://dtyler.io/articles/2021/01/07/how_innodb_writes_changes_on_the_disk" rel="alternate"></link>
+    <id>tag:dtyler.io,2021-01-07:/https://dty1er.medium.com/how-innodb-writes-data-on-the-disk-1b109a8a8d14</id>
+    <link href="https://dtyler.io/https://dty1er.medium.com/how-innodb-writes-data-on-the-disk-1b109a8a8d14" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -54,8 +109,19 @@
   <entry>
     <title>Colorize kubectl output by kubecolor</title>
     <updated>2020-10-18T00:00:00Z</updated>
-    <id>tag:dtyler.io,2020-10-18:/articles/2020/10/18/kubecolor</id>
-    <link href="https://dtyler.io/articles/2020/10/18/kubecolor" rel="alternate"></link>
+    <id>tag:dtyler.io,2020-10-18:/https://medium.com/@dty1er/colorize-kubectl-output-by-kubecolor-2c222af3163a</id>
+    <link href="https://dtyler.io/https://medium.com/@dty1er/colorize-kubectl-output-by-kubecolor-2c222af3163a" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>kubecolorでkubectlの出力に色を付ける</title>
+    <updated>2020-10-14T00:00:00Z</updated>
+    <id>tag:dtyler.io,2020-10-14:/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf</id>
+    <link href="https://dtyler.io/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -65,30 +131,8 @@
   <entry>
     <title>How to get along with SLO and Error budget</title>
     <updated>2020-04-28T12:00:00Z</updated>
-    <id>tag:dtyler.io,2020-04-28:/articles/2020/04/28/how-to-get-along-with-slo-error-budget</id>
-    <link href="https://dtyler.io/articles/2020/04/28/how-to-get-along-with-slo-error-budget" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Internets of interests #1 The Making of Chocolate</title>
-    <updated>2020-03-05T01:53:21Z</updated>
-    <id>tag:dtyler.io,2020-03-05:/articles/2020/03/05/internets_of_interests_1</id>
-    <link href="https://dtyler.io/articles/2020/03/05/internets_of_interests_1" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Math with fun #1: Factorization in easy way</title>
-    <updated>2020-02-15T22:08:14Z</updated>
-    <id>tag:dtyler.io,2020-02-15:/articles/2020/02/15/math_with_fun_1</id>
-    <link href="https://dtyler.io/articles/2020/02/15/math_with_fun_1" rel="alternate"></link>
+    <id>tag:dtyler.io,2020-04-28://articles/2020/04/28/how_to_get_along_with_slo_error_budget</id>
+    <link href="https://dtyler.io//articles/2020/04/28/how_to_get_along_with_slo_error_budget" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -98,8 +142,8 @@
   <entry>
     <title>Let’s study distributed systems — 4. Leader election</title>
     <updated>2019-12-29T00:00:00Z</updated>
-    <id>tag:dtyler.io,2019-12-29:/articles/2019/12/29/ds_4</id>
-    <link href="https://dtyler.io/articles/2019/12/29/ds_4" rel="alternate"></link>
+    <id>tag:dtyler.io,2019-12-29:/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321</id>
+    <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -109,8 +153,8 @@
   <entry>
     <title>Let’s study distributed systems — 3. Distributed snapshots</title>
     <updated>2019-12-23T00:00:00Z</updated>
-    <id>tag:dtyler.io,2019-12-23:/articles/2019/12/23/ds_3</id>
-    <link href="https://dtyler.io/articles/2019/12/23/ds_3" rel="alternate"></link>
+    <id>tag:dtyler.io,2019-12-23:/https://medium.com/@dty1er/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988</id>
+    <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -120,8 +164,8 @@
   <entry>
     <title>Let’s study distributed systems — 2. Clock</title>
     <updated>2019-11-07T00:00:00Z</updated>
-    <id>tag:dtyler.io,2019-11-07:/articles/2019/11/07/ds_2</id>
-    <link href="https://dtyler.io/articles/2019/11/07/ds_2" rel="alternate"></link>
+    <id>tag:dtyler.io,2019-11-07:/https://medium.com/@dty1er/lets-study-distributed-systems-2-clock-67ffcf98a645</id>
+    <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-2-clock-67ffcf98a645" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
@@ -129,54 +173,10 @@
     </author>
   </entry>
   <entry>
-    <title>Let’s study distributed systems — 1. Introduction</title>
+    <title>Let’s study distributed systems - 1. Introduction</title>
     <updated>2019-11-04T00:00:00Z</updated>
-    <id>tag:dtyler.io,2019-11-04:/articles/2019/11/04/ds_1</id>
-    <link href="https://dtyler.io/articles/2019/11/04/ds_1" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>How to learn about AWS for beginners</title>
-    <updated>2018-05-21T21:52:40Z</updated>
-    <id>tag:dtyler.io,2018-05-21:/articles/2018/05/21/aws-beginners-lesson</id>
-    <link href="https://dtyler.io/articles/2018/05/21/aws-beginners-lesson" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Run aws-cli without pip</title>
-    <updated>2018-05-05T13:51:28Z</updated>
-    <id>tag:dtyler.io,2018-05-05:/articles/2018/05/05/awscli-on-container</id>
-    <link href="https://dtyler.io/articles/2018/05/05/awscli-on-container" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Introduce Terraform with simple template</title>
-    <updated>2018-04-30T06:18:53Z</updated>
-    <id>tag:dtyler.io,2018-04-30:/articles/2018/04/30/introduce-terraform</id>
-    <link href="https://dtyler.io/articles/2018/04/30/introduce-terraform" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Lambda Function to convert PDF to Image by Node.js</title>
-    <updated>2018-04-12T21:28:36Z</updated>
-    <id>tag:dtyler.io,2018-04-12:/articles/2018/04/12/lambda-convert-pdf-to-img</id>
-    <link href="https://dtyler.io/articles/2018/04/12/lambda-convert-pdf-to-img" rel="alternate"></link>
+    <id>tag:dtyler.io,2019-11-04:/https://medium.com/@dty1er/lets-study-distributed-systems-1-introduction-e149f2157253</id>
+    <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-1-introduction-e149f2157253" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/gorilla/feeds"
 )
 
-func genAtom(articles []*Article, count int, fqdn string) string {
+func genAtom(articles []*article, count int, fqdn string) string {
 	if count > len(articles) {
 		count = len(articles)
 	}
@@ -25,11 +26,11 @@ func genAtom(articles []*Article, count int, fqdn string) string {
 	for i := 0; i < count; i++ {
 		a := articles[i]
 		feed.Items[i] = &feeds.Item{
-			Title:       a.Title,
-			Link:        &feeds.Link{Href: a.ToURL(fqdn)},
+			Title:       a.title,
+			Link:        &feeds.Link{Href: fmt.Sprintf("https://%s/%s", fqdn, link(a))},
 			Description: "The post first appeared on dtyler.io.",
 			Author:      &feeds.Author{Name: name, Email: email},
-			Created:     a.Timestamp,
+			Created:     a.timestamp,
 		}
 
 	}

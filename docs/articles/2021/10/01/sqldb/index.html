@@ -1,0 +1,195 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Configuring sql.DB for Better Performance – Alex Edwards | dtyler.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatsu Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+
+<h1>
+  <a name="configuring-sql-db-for-better-performance-alex-edwards" class="anchor" href="#configuring-sql-db-for-better-performance-alex-edwards" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Configuring sql.DB for Better Performance – Alex Edwards</h1>
+
+<h4>
+  <a name="2021-10-01" class="anchor" href="#2021-10-01" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/10/01</h4>
+
+<h3>
+  <a name="" class="anchor" href="#" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a><a href="https://www.alexedwards.net/blog/configuring-sqldb">https://www.alexedwards.net/blog/configuring-sqldb</a></h3>
+
+<p>Configuring sql.DB for Better Performance
+<a href="https://www.alexedwards.net/blog/configuring-sqldb">https://www.alexedwards.net/blog/configuring-sqldb</a></p>
+
+<ul>
+<li><p>sql.DBはデータベースコネクションのプールである</p>
+
+<ul>
+<li>使用中のコネクションと、アイドルのコネクションが含まれている</li>
+</ul></li>
+
+<li><p>sql.DBを使う時、まずアイドルなコネクションがプールに存在するかを調べる</p>
+
+<ul>
+<li>あれば、それを使う</li>
+<li>なければ、コネクションを新たに張ってそれを使う</li>
+</ul></li>
+
+<li><p>SetMaxOpenConnsとは？</p>
+
+<ul>
+<li>プールの中のコネクション数にはデフォルトでは制限がない
+
+<ul>
+<li>SetMaxOpenConnsはin-useとidleのコネクションの数の合計を制限する
+
+<ul>
+<li>なので、例えばSetMaxOpenConns(5)して、5つコネクションが全てin-useな状態で新たなコネクションが必要な場合、どれかがidleになるのを待つ。新たにコネクションを張らない。</li>
+<li>上の記事によればこう (コードはこれ <a href="https://gist.github.com/alexedwards/5d1db82e6358b5b6efcb038ca888ab07">https://gist.github.com/alexedwards/5d1db82e6358b5b6efcb038ca888ab07</a>)
+<code>
+BenchmarkMaxOpenConns1-8                 500       3129633 ns/op         478 B/op         10 allocs/op
+BenchmarkMaxOpenConns2-8                1000       2181641 ns/op         470 B/op         10 allocs/op
+BenchmarkMaxOpenConns5-8                2000        859654 ns/op         493 B/op         10 allocs/op
+BenchmarkMaxOpenConns10-8               2000        545394 ns/op         510 B/op         10 allocs/op
+BenchmarkMaxOpenConnsUnlimited-8        2000        531030 ns/op         479 B/op          9 allocs/op
+PASS
+</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+
+<li><p>SetMaxIdleConnsとは？</p>
+
+<ul>
+<li>プール内のアイドルなコネクションの数を制限する。デフォルトでは2</li>
+<li>理論上、アイドルコネクションの数が多ければパフォーマンスは向上するはずである</li>
+<li>上の記事によればこう
+<code>
+BenchmarkMaxIdleConnsNone-8          300       4567245 ns/op       58174 B/op        625 allocs/op
+BenchmarkMaxIdleConns1-8            2000        568765 ns/op        2596 B/op         32 allocs/op
+BenchmarkMaxIdleConns2-8            2000        529359 ns/op         596 B/op         11 allocs/op
+BenchmarkMaxIdleConns5-8            2000        506207 ns/op         451 B/op          9 allocs/op
+BenchmarkMaxIdleConns10-8           2000        501639 ns/op         450 B/op          9 allocs/op
+PASS
+</code></li>
+</ul></li>
+
+<li><p>MaxIdleConnを0にするといちいちコネクションを貼り直すので極めて遅い</p></li>
+
+<li><p>1にするだけでもずいぶん変わった</p></li>
+
+<li><p>じゃあアイドルコネクションをたくさん確保すれば良いのか？</p>
+
+<ul>
+<li>場合による</li>
+<li>アイドルコネクションを確保するコストはメモリを食ってしまうこと</li>
+<li>アイドルコネクションは使われていないとはいえ結局データベースとつながりっぱなしではあるので</li>
+</ul></li>
+
+<li><p>コネクションがあまりに長い時間アイドルだったら切る、ということもできる</p>
+
+<ul>
+<li>例えばMySQLのwait_timeoutがそれを示す (デフォルトでは8h)</li>
+<li>sql.DBの場合、コネクションはgracefullyにハンドルされる。コネクションがサーバーサイドから切られてもGoはそれを知るはずがないので、死んだコネクションを使おうとしたら2回リトライしたあとそれをプールから取り除き、新たにコネクションを張るような動きになる</li>
+<li>なので、アイドルコネクションを持ちすぎるとより多くのリソースが使われてしまうかも。</li>
+<li>本当に使う分のアイドルコネクションだけ持つのが望ましい</li>
+</ul></li>
+
+<li><p>MaxIdleConnsはMaxOpenConnsより小さくなければならない (当たり前のことだが)</p></li>
+
+<li><p>SetConnMaxLifetime(d time.Duration)は、コネクションがどれだけの間使用可能かを定義する</p></li>
+
+<li><p>db.SetConnMaxLifetime(time.Hour)とすると、作られてから1時間でコネクションは &lsquo;expire&rsquo; する</p>
+
+<ul>
+<li>コネクションが1時間残り続けることを保証するものではない</li>
+<li>コネクションは1時間経っても使われ続けていることはあり得る。1時間以上経ってから使用開始されることはないが。</li>
+<li>アイドルになってから1時間ではなく、作られてから1時間</li>
+<li>expireしたコネクションをプールから除外するのは1秒に1回実行される</li>
+</ul></li>
+
+<li><p>ConnMaxLifetimeが短いと、すぐにexpireして、より多くのコネクションが新たに張られなければならなくなる</p></li>
+
+<li><p>上の記事によればこう</p>
+
+<pre><code>BenchmarkConnMaxLifetime100-8               2000        637902 ns/op        2770 B/op         34 allocs/op
+BenchmarkConnMaxLifetime200-8               2000        576053 ns/op        1612 B/op         21 allocs/op
+BenchmarkConnMaxLifetime500-8               2000        558297 ns/op         913 B/op         14 allocs/op
+BenchmarkConnMaxLifetime1000-8              2000        543601 ns/op         740 B/op         12 allocs/op
+BenchmarkConnMaxLifetimeUnlimited-8         3000        532789 ns/op         412 B/op          9 allocs/op
+PASS
+</code></pre></li>
+
+<li><p>MaxConnLifetimeを設定する場合、コネクションがどのくらい頻繁にexpire -&gt; recreateされるのかを意識する</p></li>
+
+<li><p>100のコネクションがあって1分のlifetimeだと、1秒に1.67のコネクションがexpireする。これがあまりに大きいとパフォーマンスが悪化しうる</p></li>
+</ul>
+
+<p><a href="http://dsas.blog.klab.org/archives/2018-02/configure-sql-db.html">http://dsas.blog.klab.org/archives/2018-02/configure-sql-db.html</a></p>
+
+<p>ポイント</p>
+
+<ul>
+<li>MySQLではwait_timeoutで接続がサーバから切られた場合、MySQLドライバはそれに気づかず、クエリを終わったコネクションで送ろうとしてしまう</li>
+<li>SetConnMaxLifetimeを短めに設定しておけばそういうことが起こらない</li>
+<li>副次的な効果は:
+
+<ul>
+<li>コネクションがすぐ切れるのでサーバの増減しやすくなる</li>
+<li>DBのフェイルオーバーがしやすくなる</li>
+<li>MySQLをオンラインで設定変更しても古い設定のコネクションが残りにくく鳴る</li>
+</ul></li>
+<li>SetMaxOpenConnsは必ず設定する。負荷が大きい時に新規コネクションを作らない程度の値にする</li>
+<li>SetMaxIdleConnsはおそらくSetMaxOpenConnsと同じにしておけば良いと思う、減らす理由がない</li>
+<li>SetConnMaxLifetimeは、何秒に1回再接続するか？で考える。1秒に1回程度なら殆どの場合負荷は問題にならない</li>
+</ul>
+
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="dty1er1" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<hr />
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatsu Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
