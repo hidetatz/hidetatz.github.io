@@ -21,7 +21,7 @@ Some articles are available in Japanese also.
 
 ## Inputs
 
-What I've read/learned, with some thoughts.
+What I've read, watched, listened, and learned with some thoughts.
 
 %s
 

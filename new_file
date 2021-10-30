@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+  echo "filename must be passed"
+  exit 1
+fi
+
+file="data/articles/$1.md"
+
+if [ -e $file ]; then
+  echo "$file already exists"
+  exit 1
+fi
+
+now=$(gdate "+%Y-%m-%d %H:%M:%S")
+echo "type: input/blog" > $file
+echo "title: necessary if type is blog" >> $file
+echo "timestamp: $now" >> $file
+echo "url: necessary in case type is input or external blog" >> $file
+echo "lang: ja/en" >> $file
+echo "---" >> $file
+
+echo $file
