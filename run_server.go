@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"time"
 
-	"github.com/atotto/clipboard"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -17,7 +15,6 @@ func runServer() {
 
 	port := "8080"
 	directory := "./docs"
-	ip := getLocalIP()
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -31,8 +28,7 @@ func runServer() {
 		server.ListenAndServe()
 	}()
 
-	fmt.Printf("Serving at %s:%s (the address is automatically copied into the clipboard)\n", ip, port)
-	clipboard.WriteAll(fmt.Sprintf("%s:%s", ip, port))
+	fmt.Printf("Serving at localhost:%s\n", port)
 
 	// live reload with fsnotify
 	done := make(chan bool)
@@ -72,21 +68,4 @@ func runServer() {
 	watcher.Add("./data/articles/")
 	watcher.Add("./")
 	<-done
-}
-
-func getLocalIP() string {
-	addrs, err := net.InterfaceAddrs()
-	if err != nil {
-		panic(err)
-	}
-
-	for _, a := range addrs {
-		if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				return ipnet.IP.String()
-			}
-		}
-	}
-
-	return ""
 }

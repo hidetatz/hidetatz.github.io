@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-10-02T22:54:30+09:00</updated>
+  <updated>2021-10-30T23:28:45+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>Infrastructure Observability for Changing the Spend Curve - Slack Engineering</title>
+    <updated>2021-10-30T23:23:34Z</updated>
+    <id>tag:dtyler.io,2021-10-30://articles/2021/10/30/slack_ci</id>
+    <link href="https://dtyler.io//articles/2021/10/30/slack_ci" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Configuring sql.DB for Better Performance – Alex Edwards</title>
     <updated>2021-10-01T10:00:00Z</updated>
