@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-10-30T23:32:22+09:00</updated>
+  <updated>2021-10-31T23:16:25+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>Alerting on SLOs like Pros | SoundCloud Backstage Blog</title>
+    <updated>2021-10-31T23:15:34Z</updated>
+    <id>tag:dtyler.io,2021-10-31://articles/2021/10/31/alerting_slos_like_pros</id>
+    <link href="https://dtyler.io//articles/2021/10/31/alerting_slos_like_pros" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Infrastructure Observability for Changing the Spend Curve - Slack Engineering</title>
     <updated>2021-10-30T23:23:34Z</updated>
