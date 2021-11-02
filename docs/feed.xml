@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-02T23:25:27+09:00</updated>
+  <updated>2021-11-02T23:59:12+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>Practical API Design at Netflix, Part 1: Using Protobuf FieldMask | by Netflix Technology Blog | Netflix TechBlog</title>
+    <updated>2021-11-02T23:58:20Z</updated>
+    <id>tag:dtyler.io,2021-11-02://articles/2021/11/02/netflix_grpc_fieldmask</id>
+    <link href="https://dtyler.io//articles/2021/11/02/netflix_grpc_fieldmask" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Building Uber’s Fulfillment Platform for Planet-Scale using Google Cloud Spanner</title>
     <updated>2021-11-02T23:24:30Z</updated>
