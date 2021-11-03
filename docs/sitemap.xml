@@ -2,15 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dtyler.io</loc>
-    <lastmod>2021-11-03T22:24:03.592593+09:00</lastmod>
+    <lastmod>2021-11-03T23:22:05.38443+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/ja/</loc>
-    <lastmod>2021-11-03T22:24:03.592593+09:00</lastmod>
+    <lastmod>2021-11-03T23:22:05.38443+09:00</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io/about/</loc>
-    <lastmod>2021-11-03T22:24:03.592593+09:00</lastmod>
+    <lastmod>2021-11-03T23:22:05.38443+09:00</lastmod>
+  </url>
+  <url>
+    <loc>https://dtyler.io//articles/2021/11/03/kubernetes_insecure_by_default</loc>
+    <lastmod>2021-11-03T23:08:22Z</lastmod>
   </url>
   <url>
     <loc>https://dtyler.io//articles/2021/11/03/discord_cassandra</loc>
