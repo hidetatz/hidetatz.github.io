@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>dtyler.io | Hidetatsu Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-02T23:59:12+09:00</updated>
+  <updated>2021-11-03T22:24:03+09:00</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatsu Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>How Discord Stores Billions of Messages | by Stanislav Vishnevskiy | Discord Blog</title>
+    <updated>2021-11-03T22:23:03Z</updated>
+    <id>tag:dtyler.io,2021-11-03://articles/2021/11/03/discord_cassandra</id>
+    <link href="https://dtyler.io//articles/2021/11/03/discord_cassandra" rel="alternate"></link>
+    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <author>
+      <name>Hidetatsu Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Practical API Design at Netflix, Part 1: Using Protobuf FieldMask | by Netflix Technology Blog | Netflix TechBlog</title>
     <updated>2021-11-02T23:58:20Z</updated>
@@ -210,17 +221,6 @@
     <updated>2019-11-07T00:00:00Z</updated>
     <id>tag:dtyler.io,2019-11-07:/https://medium.com/@dty1er/lets-study-distributed-systems-2-clock-67ffcf98a645</id>
     <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-2-clock-67ffcf98a645" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
-    <author>
-      <name>Hidetatsu Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Let’s study distributed systems - 1. Introduction</title>
-    <updated>2019-11-04T00:00:00Z</updated>
-    <id>tag:dtyler.io,2019-11-04:/https://medium.com/@dty1er/lets-study-distributed-systems-1-introduction-e149f2157253</id>
-    <link href="https://dtyler.io/https://medium.com/@dty1er/lets-study-distributed-systems-1-introduction-e149f2157253" rel="alternate"></link>
     <summary type="html">The post first appeared on dtyler.io.</summary>
     <author>
       <name>Hidetatsu Yaginuma</name>
