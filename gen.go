@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	cname = "dtyler.io"
+	cname = "hidetatz.io"
 
 	// the number of "recent articles" on 404 page
 	articlesCountOn404Page = 5
