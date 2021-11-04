@@ -48,7 +48,7 @@ func generateIndexPageHTML(articles []*article) string {
 		}
 	}
 
-	return generateHTMLPage("dtyler.io", fmt.Sprintf(indexPageMD, enblogsList, jablogsList, inputsList))
+	return generateHTMLPage("hidetatz.io", fmt.Sprintf(indexPageMD, enblogsList, jablogsList, inputsList))
 }
 
 func link(a *article) string {
