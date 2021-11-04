@@ -2,15 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2021-11-04T14:59:21Z</lastmod>
+    <lastmod>2021-11-04T15:19:38Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/ja/</loc>
-    <lastmod>2021-11-04T14:59:21Z</lastmod>
+    <lastmod>2021-11-04T15:19:38Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/about/</loc>
-    <lastmod>2021-11-04T14:59:21Z</lastmod>
+    <lastmod>2021-11-04T15:19:38Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hidetatz.io//articles/2021/11/04/twilio_scale_engineering_structure</loc>
+    <lastmod>2021-11-04T15:19:38Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/11/04/akita_go_mem_usage</loc>

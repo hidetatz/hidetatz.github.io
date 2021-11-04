@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>hidetatz.io | Hidetatz Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-04T14:59:21Z</updated>
+  <updated>2021-11-04T15:19:38Z</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatz Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>The process: How Twilio scaled its engineering structure – Increment: Teams</title>
+    <updated>2021-11-04T15:19:38Z</updated>
+    <id>tag:hidetatz.io,2021-11-04://articles/2021/11/04/twilio_scale_engineering_structure</id>
+    <link href="https://hidetatz.io//articles/2021/11/04/twilio_scale_engineering_structure" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Taming Go’s Memory Usage, or How We Avoided Rewriting Our Client in Rust — Akita Software</title>
     <updated>2021-11-04T14:59:21Z</updated>
@@ -210,17 +221,6 @@
     <updated>2020-10-14T00:00:00Z</updated>
     <id>tag:hidetatz.io,2020-10-14:/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf</id>
     <link href="https://hidetatz.io/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf" rel="alternate"></link>
-    <summary type="html">The post first appeared on hidetatz.io.</summary>
-    <author>
-      <name>Hidetatz Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>How to get along with SLO and Error budget</title>
-    <updated>2020-04-28T12:00:00Z</updated>
-    <id>tag:hidetatz.io,2020-04-28://articles/2020/04/28/how_to_get_along_with_slo_error_budget</id>
-    <link href="https://hidetatz.io//articles/2020/04/28/how_to_get_along_with_slo_error_budget" rel="alternate"></link>
     <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
       <name>Hidetatz Yaginuma</name>
