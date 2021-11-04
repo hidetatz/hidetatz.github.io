@@ -64,9 +64,11 @@ func gen() {
 	// index
 	write(generateIndexPageHTML(articles), "./docs/index.html")
 
+	latestArticle := articles[0]
+
 	// sitemap, atom feed
-	write(genSiteMap(articles, cname), "./docs/sitemap.xml")
-	write(genAtom(articles, 20, cname), "./docs/feed.xml")
+	write(genSiteMap(articles, latestArticle.timestamp, cname), "./docs/sitemap.xml")
+	write(genAtom(articles, latestArticle.timestamp, 20, cname), "./docs/feed.xml")
 
 	// 404 page
 	articlesFor404Page := ""

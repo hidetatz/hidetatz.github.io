@@ -1,6 +1,6 @@
 ## blog
 
-https://dtyler.io
+https://hidetatz.io
 
 ## Run blog on local HTTP server
 
@@ -13,7 +13,7 @@ then, access the url copied into the clipboard
 ## How to write Article
 
 ```shell
-make new
+./new_file file_name
 ```
 
 ## How to generate blog

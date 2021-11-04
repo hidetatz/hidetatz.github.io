@@ -8,18 +8,18 @@ import (
 	"github.com/gorilla/feeds"
 )
 
-func genAtom(articles []*article, count int, fqdn string) string {
+func genAtom(articles []*article, t time.Time, count int, fqdn string) string {
 	if count > len(articles) {
 		count = len(articles)
 	}
 
-	name := "Hidetatsu Yaginuma"
+	name := "Hidetatz Yaginuma"
 	email := "deetyler@protonmail.com"
 	feed := &feeds.Feed{
-		Title:   "dtyler.io | Hidetatsu Yaginuma",
+		Title:   fmt.Sprintf("hidetatz.io | %s", name),
 		Link:    &feeds.Link{Href: "https://dtyler.io"},
 		Author:  &feeds.Author{Name: name, Email: email},
-		Created: time.Now(),
+		Created: t,
 		Items:   make([]*feeds.Item, count),
 	}
 
@@ -28,7 +28,7 @@ func genAtom(articles []*article, count int, fqdn string) string {
 		feed.Items[i] = &feeds.Item{
 			Title:       a.title,
 			Link:        &feeds.Link{Href: fmt.Sprintf("https://%s/%s", fqdn, link(a))},
-			Description: "The post first appeared on dtyler.io.",
+			Description: "The post first appeared on hidetatz.io.",
 			Author:      &feeds.Author{Name: name, Email: email},
 			Created:     a.timestamp,
 		}

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
-  <title>dtyler.io | Hidetatsu Yaginuma</title>
+  <title>hidetatz.io | Hidetatz Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-04T09:57:12+09:00</updated>
+  <updated>2021-11-03T23:08:22Z</updated>
   <link href="https://dtyler.io"></link>
   <author>
-    <name>Hidetatsu Yaginuma</name>
+    <name>Hidetatz Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
   <entry>
@@ -12,9 +12,9 @@
     <updated>2021-11-03T23:08:22Z</updated>
     <id>tag:hidetatz.io,2021-11-03://articles/2021/11/03/kubernetes_insecure_by_default</id>
     <link href="https://hidetatz.io//articles/2021/11/03/kubernetes_insecure_by_default" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -23,9 +23,9 @@
     <updated>2021-11-03T22:23:03Z</updated>
     <id>tag:hidetatz.io,2021-11-03://articles/2021/11/03/discord_cassandra</id>
     <link href="https://hidetatz.io//articles/2021/11/03/discord_cassandra" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -34,9 +34,9 @@
     <updated>2021-11-02T23:58:20Z</updated>
     <id>tag:hidetatz.io,2021-11-02://articles/2021/11/02/netflix_grpc_fieldmask</id>
     <link href="https://hidetatz.io//articles/2021/11/02/netflix_grpc_fieldmask" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -45,9 +45,9 @@
     <updated>2021-11-02T23:24:30Z</updated>
     <id>tag:hidetatz.io,2021-11-02://articles/2021/11/02/uber_spanner</id>
     <link href="https://hidetatz.io//articles/2021/11/02/uber_spanner" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -56,9 +56,9 @@
     <updated>2021-10-31T23:15:34Z</updated>
     <id>tag:hidetatz.io,2021-10-31://articles/2021/10/31/alerting_slos_like_pros</id>
     <link href="https://hidetatz.io//articles/2021/10/31/alerting_slos_like_pros" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -67,9 +67,9 @@
     <updated>2021-10-30T23:23:34Z</updated>
     <id>tag:hidetatz.io,2021-10-30://articles/2021/10/30/slack_ci</id>
     <link href="https://hidetatz.io//articles/2021/10/30/slack_ci" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -78,9 +78,9 @@
     <updated>2021-10-01T10:00:00Z</updated>
     <id>tag:hidetatz.io,2021-10-01://articles/2021/10/01/sqldb</id>
     <link href="https://hidetatz.io//articles/2021/10/01/sqldb" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -89,9 +89,9 @@
     <updated>2021-04-23T19:28:13Z</updated>
     <id>tag:hidetatz.io,2021-04-23://articles/2021/04/23/treat_secrets_on_memory_ja</id>
     <link href="https://hidetatz.io//articles/2021/04/23/treat_secrets_on_memory_ja" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -100,9 +100,9 @@
     <updated>2021-04-13T12:00:00Z</updated>
     <id>tag:hidetatz.io,2021-04-13://articles/2021/04/13/sync_cond</id>
     <link href="https://hidetatz.io//articles/2021/04/13/sync_cond" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -111,9 +111,9 @@
     <updated>2021-04-12T11:00:00Z</updated>
     <id>tag:hidetatz.io,2021-04-12://articles/2021/04/12/sync_cond_ja</id>
     <link href="https://hidetatz.io//articles/2021/04/12/sync_cond_ja" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -122,9 +122,9 @@
     <updated>2021-04-07T18:00:00Z</updated>
     <id>tag:hidetatz.io,2021-04-07://articles/2021/04/07/go_mutex_starvation</id>
     <link href="https://hidetatz.io//articles/2021/04/07/go_mutex_starvation" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -133,9 +133,9 @@
     <updated>2021-04-06T20:00:00Z</updated>
     <id>tag:hidetatz.io,2021-04-06://articles/2021/04/06/go_mutex_starvation_ja</id>
     <link href="https://hidetatz.io//articles/2021/04/06/go_mutex_starvation_ja" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -144,9 +144,9 @@
     <updated>2021-03-29T18:00:00Z</updated>
     <id>tag:hidetatz.io,2021-03-29://articles/2021/03/29/goroutine_preemption</id>
     <link href="https://hidetatz.io//articles/2021/03/29/goroutine_preemption" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -155,9 +155,9 @@
     <updated>2021-03-28T09:00:00Z</updated>
     <id>tag:hidetatz.io,2021-03-28://articles/2021/03/28/goroutine_preemption_ja</id>
     <link href="https://hidetatz.io//articles/2021/03/28/goroutine_preemption_ja" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -166,9 +166,9 @@
     <updated>2021-01-07T15:19:58Z</updated>
     <id>tag:hidetatz.io,2021-01-07:/https://dty1er.medium.com/how-innodb-writes-data-on-the-disk-1b109a8a8d14</id>
     <link href="https://hidetatz.io/https://dty1er.medium.com/how-innodb-writes-data-on-the-disk-1b109a8a8d14" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -177,9 +177,9 @@
     <updated>2020-10-18T00:00:00Z</updated>
     <id>tag:hidetatz.io,2020-10-18:/https://medium.com/@dty1er/colorize-kubectl-output-by-kubecolor-2c222af3163a</id>
     <link href="https://hidetatz.io/https://medium.com/@dty1er/colorize-kubectl-output-by-kubecolor-2c222af3163a" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -188,9 +188,9 @@
     <updated>2020-10-14T00:00:00Z</updated>
     <id>tag:hidetatz.io,2020-10-14:/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf</id>
     <link href="https://hidetatz.io/https://zenn.dev/dty1er/articles/f36b73ca81afe4e87dcf" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -199,9 +199,9 @@
     <updated>2020-04-28T12:00:00Z</updated>
     <id>tag:hidetatz.io,2020-04-28://articles/2020/04/28/how_to_get_along_with_slo_error_budget</id>
     <link href="https://hidetatz.io//articles/2020/04/28/how_to_get_along_with_slo_error_budget" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -210,9 +210,9 @@
     <updated>2019-12-29T00:00:00Z</updated>
     <id>tag:hidetatz.io,2019-12-29:/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321</id>
     <link href="https://hidetatz.io/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>
@@ -221,9 +221,9 @@
     <updated>2019-12-23T00:00:00Z</updated>
     <id>tag:hidetatz.io,2019-12-23:/https://medium.com/@dty1er/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988</id>
     <link href="https://hidetatz.io/https://medium.com/@dty1er/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988" rel="alternate"></link>
-    <summary type="html">The post first appeared on dtyler.io.</summary>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
-      <name>Hidetatsu Yaginuma</name>
+      <name>Hidetatz Yaginuma</name>
       <email>deetyler@protonmail.com</email>
     </author>
   </entry>

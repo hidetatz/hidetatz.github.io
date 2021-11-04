@@ -200,7 +200,7 @@ const articlePageMD = `
 
 %s
 
-<a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-via="dty1er1" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ---
 
@@ -215,7 +215,7 @@ func generateArticlePageHTML(a *article) string {
 		contents = fmt.Sprintf("### %s\n\n%s", a.url.String(), contents)
 	}
 
-	return generateHTMLPage(fmt.Sprintf("%s | dtyler.io", a.title), fmt.Sprintf(
+	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", a.title), fmt.Sprintf(
 		articlePageMD,
 		a.title,
 		a.timestamp.Format(timeformat),

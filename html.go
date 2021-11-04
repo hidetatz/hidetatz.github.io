@@ -20,7 +20,7 @@ const (
   <meta charset="utf-8">
   <title>%s</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="author" content="Hidetatsu Yaginuma">
+  <meta name="author" content="Hidetatz Yaginuma">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
 
   <style>
@@ -48,7 +48,7 @@ const (
 <hr>
 
 <footer>
-<p style="text-align:center">© 2017-2021 Hidetatsu Yaginuma</p>
+<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
 </footer>
 <script src="/syntax.js"></script>
 <script>hljs.highlightAll();</script>

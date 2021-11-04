@@ -3,9 +3,9 @@ package main
 import "fmt"
 
 const indexPageMD = `
-# dtyler.io
+# hidetatz.io
 
-dtyler.io is my personal blog. The author Hidetatsu is a software engineer mainly focuses on reliability, performance, observability and developer experience based in Japan. Hidetatsu does infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/dty1er).
+hidetatz.io is my personal blog. The author Hidetatsu (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. Hidetatsu writes code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
 
 ---
 
