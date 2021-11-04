@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>hidetatz.io | Hidetatz Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-04T14:16:29Z</updated>
+  <updated>2021-11-04T14:59:21Z</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatz Yaginuma</name>
     <email>deetyler@protonmail.com</email>
   </author>
+  <entry>
+    <title>Taming Go’s Memory Usage, or How We Avoided Rewriting Our Client in Rust — Akita Software</title>
+    <updated>2021-11-04T14:59:21Z</updated>
+    <id>tag:hidetatz.io,2021-11-04://articles/2021/11/04/akita_go_mem_usage</id>
+    <link href="https://hidetatz.io//articles/2021/11/04/akita_go_mem_usage" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>deetyler@protonmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Siloscape: The Dark Side of Kubernetes - Container Journal</title>
     <updated>2021-11-04T14:16:29Z</updated>
@@ -210,17 +221,6 @@
     <updated>2020-04-28T12:00:00Z</updated>
     <id>tag:hidetatz.io,2020-04-28://articles/2020/04/28/how_to_get_along_with_slo_error_budget</id>
     <link href="https://hidetatz.io//articles/2020/04/28/how_to_get_along_with_slo_error_budget" rel="alternate"></link>
-    <summary type="html">The post first appeared on hidetatz.io.</summary>
-    <author>
-      <name>Hidetatz Yaginuma</name>
-      <email>deetyler@protonmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Let’s study distributed systems — 4. Leader election</title>
-    <updated>2019-12-29T00:00:00Z</updated>
-    <id>tag:hidetatz.io,2019-12-29:/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321</id>
-    <link href="https://hidetatz.io/https://medium.com/@dty1er/lets-study-distributed-systems-4-leader-election-78a083981321" rel="alternate"></link>
     <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
       <name>Hidetatz Yaginuma</name>
