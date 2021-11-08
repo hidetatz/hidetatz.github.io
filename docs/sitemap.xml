@@ -2,15 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2021-11-04T23:23:04Z</lastmod>
+    <lastmod>2021-11-08T15:21:50Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/ja/</loc>
-    <lastmod>2021-11-04T23:23:04Z</lastmod>
+    <lastmod>2021-11-08T15:21:50Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/about/</loc>
-    <lastmod>2021-11-04T23:23:04Z</lastmod>
+    <lastmod>2021-11-08T15:21:50Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hidetatz.io//articles/2021/11/08/mttr_is_a_misleading</loc>
+    <lastmod>2021-11-08T15:21:50Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/11/04/you_are_not_google</loc>
