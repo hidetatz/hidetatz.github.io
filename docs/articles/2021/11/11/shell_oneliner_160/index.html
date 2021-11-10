@@ -1,0 +1,134 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>GitHub - shellgei/shellgei160: 書籍: シェル・ワンライナー160本ノックの情報ページ | hidetatz.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+
+<h1>
+  <a name="github-shellgei-shellgei160-書籍-シェル-ワンライナー160本ノックの情報ページ" class="anchor" href="#github-shellgei-shellgei160-書籍-シェル-ワンライナー160本ノックの情報ページ" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>GitHub - shellgei/shellgei160: 書籍: シェル・ワンライナー160本ノックの情報ページ</h1>
+
+<h4>
+  <a name="2021-11-11" class="anchor" href="#2021-11-11" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/11/11</h4>
+
+<h3>
+  <a name="" class="anchor" href="#" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a><a href="https://github.com/shellgei/shellgei160">https://github.com/shellgei/shellgei160</a></h3>
+
+<ul>
+<li>Reading a book abount shell oneliner: <a href="https://gihyo.jp/book/2021/978-4-297-12267-6">https://gihyo.jp/book/2021/978-4-297-12267-6</a></li>
+<li>in: abcdefg, out: abcdbcdefg
+
+<ul>
+<li><code>echo abcdefg | sed 's/bcd/&amp;&amp;/'</code></li>
+</ul></li>
+<li>in: abcdefg, out: aefbcdg
+
+<ul>
+<li><code>echo abcdefg | sed -E 's/(bcd)(ef)/\2\1/'</code></li>
+</ul></li>
+<li>in: $(seq 100), out: 1 3 5 7 9 (omitted) 95 97 99
+
+<ul>
+<li><code>seq 100 | grep &quot;^.*[13579]$&quot; | xargs</code></li>
+<li>ends with 02468.</li>
+<li><code>seq 100 | grep &quot;[^02468]$&quot; | xargs</code></li>
+<li>does not end with 02468.</li>
+</ul></li>
+<li>in: $(seq 100), out: 11 22 33 44 55 66 77 88 99
+
+<ul>
+<li><code>seq 100 | grep -E &quot;^(.)\1&quot;$ | xargs</code></li>
+</ul></li>
+<li><code>grep -o</code>: shows matched parts only</li>
+<li>in: $(seq 5), out: 2 4
+
+<ul>
+<li><code>seq 5 | awk '/[24]/' | xargs</code></li>
+<li><code>seq 5 | awk '$1%2==0' | xargs</code></li>
+<li><code>seq 5 | awk '$1%2==0{print $1}' | xargs</code></li>
+</ul></li>
+<li>in: $(seq 5), out: 2 even 4 even
+
+<ul>
+<li><code>seq 5 | awk '$1%2==0{print $1, &quot;even&quot;}' | xargs</code></li>
+<li><code>seq 5 | awk '$1%2==0{print($1, &quot;even&quot;)}' | xargs</code></li>
+</ul></li>
+<li>in: $(seq 5), out: 1 odd 2 even 3 odd 4 even 5 odd
+
+<ul>
+<li><code>seq 5 | awk '$1%2==0{print($1, &quot;even&quot;)}$1%2==1{print($1, &quot;odd&quot;)}' | xargs</code></li>
+<li><code>seq 5 | awk '$1%2==0{print($1, &quot;even&quot;)}$1%2{print($1, &quot;odd&quot;)}' | xargs</code></li>
+<li>in awk, a condition is called &ldquo;pattern&rdquo;, and the process is called &ldquo;action&rdquo;</li>
+<li>in above command, &ldquo;$1%2==0&rdquo; is pattern and the correlated action is &ldquo;{print($1, &ldquo;even&rdquo;)}&rdquo;</li>
+<li>multiple condition/action can be written</li>
+</ul></li>
+<li>in: $(seq 5), out: 1 odd 2 even 3 odd 4 even 5 odd sum 15
+
+<ul>
+<li><code>seq 5 | awk 'BEGIN{sum=0}$1%2==0{print $1, &quot;even&quot;}$1%2{print $1, &quot;odd&quot;}{sum+=$1}END{print &quot;sum&quot;, sum}' | xargs</code></li>
+<li>BEGIN pattern matches when the awk starts to process the first line</li>
+<li>END pattern matches after the awk finishes to process the last line</li>
+<li>fourth action (<code>{sum+=$1}</code>) is called in every line process because there is no correlated pattern</li>
+</ul></li>
+<li>in: $(seq 5), out: odd 3 even 2
+
+<ul>
+<li><code>seq 5 | awk '{print $1%2==0 ? &quot;even&quot; : &quot;odd&quot;}' | sort | uniq -c | awk '{print $2, $1}' | gsort -k2,2nr</code></li>
+<li><code>seq 5 | awk '{print $1%2==0 ? &quot;even&quot; : &quot;odd&quot;}' | awk '{m[$1]+=1}END{for(key in m)print key, m[key]}'</code></li>
+<li>you can use hashmap in awk!</li>
+</ul></li>
+</ul>
+
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<hr />
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
