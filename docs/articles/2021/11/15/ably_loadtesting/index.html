@@ -1,0 +1,82 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Squid game: how we load-tested Ably’s Control API | Ably Blog: Data in Motion | hidetatz.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+
+<h1>
+  <a name="squid-game-how-we-load-tested-ably-s-control-api-ably-blog-data-in-motion" class="anchor" href="#squid-game-how-we-load-tested-ably-s-control-api-ably-blog-data-in-motion" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Squid game: how we load-tested Ably’s Control API | Ably Blog: Data in Motion</h1>
+
+<h4>
+  <a name="2021-11-15" class="anchor" href="#2021-11-15" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/11/15</h4>
+
+<h3>
+  <a name="" class="anchor" href="#" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a><a href="https://ably.com/blog/how-we-load-tested-control-api">https://ably.com/blog/how-we-load-tested-control-api</a></h3>
+
+<ul>
+<li>They devide load test scenarios into three;
+
+<ul>
+<li>Typical users</li>
+<li>Power users</li>
+<li>Too many traffic, but don&rsquo;t have malcious intent</li>
+<li>To simulate this properly without facing rate limiting, they use a reverse proxy (squid) to distribute the client IP address</li>
+<li>Bad users/bots</li>
+<li>Send too many traffic with bad intentions</li>
+</ul></li>
+</ul>
+
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<hr />
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
