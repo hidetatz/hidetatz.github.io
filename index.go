@@ -7,6 +7,8 @@ const indexPageMD = `
 
 hidetatz.io is my personal blog. The author Hidetatsu (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
 
+I [do fail](https://hidetatz.fail/).
+
 ---
 
 ## Articles
