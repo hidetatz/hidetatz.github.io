@@ -14,7 +14,7 @@ func genAtom(articles []*article, t time.Time, count int, fqdn string) string {
 	}
 
 	name := "Hidetatz Yaginuma"
-	email := "deetyler@protonmail.com"
+	email := "hidetatz@gmail.com"
 	feed := &feeds.Feed{
 		Title:   fmt.Sprintf("hidetatz.io | %s", name),
 		Link:    &feeds.Link{Href: "https://dtyler.io"},
