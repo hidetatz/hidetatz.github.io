@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>hidetatz.io | Hidetatz Yaginuma</title>
   <id>https://dtyler.io</id>
-  <updated>2021-11-15T12:08:10Z</updated>
+  <updated>2021-11-19T19:00:00Z</updated>
   <link href="https://dtyler.io"></link>
   <author>
     <name>Hidetatz Yaginuma</name>
     <email>hidetatz@gmail.com</email>
   </author>
+  <entry>
+    <title>How Amazon MemoryDB for Redis guarantees the data durability</title>
+    <updated>2021-11-19T19:00:00Z</updated>
+    <id>tag:hidetatz.io,2021-11-19://articles/2021/11/19/amazon_memorydb_architecture</id>
+    <link href="https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>hidetatz@gmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Amazon MemoryDB for Redisはどのように耐久性を保証しているか</title>
+    <updated>2021-11-19T19:00:00Z</updated>
+    <id>tag:hidetatz.io,2021-11-19://articles/2021/11/19/amazon_memorydb_architecture_ja</id>
+    <link href="https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture_ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>hidetatz@gmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>Squid game: how we load-tested Ably’s Control API | Ably Blog: Data in Motion</title>
     <updated>2021-11-15T12:08:10Z</updated>
@@ -199,28 +221,6 @@
     <updated>2021-04-07T18:00:00Z</updated>
     <id>tag:hidetatz.io,2021-04-07://articles/2021/04/07/go_mutex_starvation</id>
     <link href="https://hidetatz.io//articles/2021/04/07/go_mutex_starvation" rel="alternate"></link>
-    <summary type="html">The post first appeared on hidetatz.io.</summary>
-    <author>
-      <name>Hidetatz Yaginuma</name>
-      <email>hidetatz@gmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Goにおけるミューテックスのスタベーション</title>
-    <updated>2021-04-06T20:00:00Z</updated>
-    <id>tag:hidetatz.io,2021-04-06://articles/2021/04/06/go_mutex_starvation_ja</id>
-    <link href="https://hidetatz.io//articles/2021/04/06/go_mutex_starvation_ja" rel="alternate"></link>
-    <summary type="html">The post first appeared on hidetatz.io.</summary>
-    <author>
-      <name>Hidetatz Yaginuma</name>
-      <email>hidetatz@gmail.com</email>
-    </author>
-  </entry>
-  <entry>
-    <title>Preemption in Go</title>
-    <updated>2021-03-29T18:00:00Z</updated>
-    <id>tag:hidetatz.io,2021-03-29://articles/2021/03/29/goroutine_preemption</id>
-    <link href="https://hidetatz.io//articles/2021/03/29/goroutine_preemption" rel="alternate"></link>
     <summary type="html">The post first appeared on hidetatz.io.</summary>
     <author>
       <name>Hidetatz Yaginuma</name>

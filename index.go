@@ -39,13 +39,13 @@ func generateIndexPageHTML(articles []*article) string {
 	for _, a := range articles {
 		switch a.typ {
 		case inputType:
-			inputsList += fmt.Sprintf("%s - [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+			inputsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
 		case blogType:
 			switch a.lang {
 			case en:
-				enblogsList += fmt.Sprintf("%s - [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+				enblogsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
 			case ja:
-				jablogsList += fmt.Sprintf("%s - [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+				jablogsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
 			}
 		}
 	}
