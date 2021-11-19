@@ -4,6 +4,8 @@ timestamp: 2021-11-19 19:00:00
 lang: en
 ---
 
+Note: This article is available in [Japanese](https://hidetatz.io/articles/2021/11/19/amazon_memorydb_architecture_ja/) also.
+
 ## Introduction
 
 [Amazon MemoryDB for Redis](https://aws.amazon.com/memorydb/) is a distributed managed database compatible with Redis interface, announced by AWS in 2021.

@@ -4,6 +4,7 @@ timestamp: 2021-11-19 19:00:00
 lang: ja
 ---
 
+Note: This article is available in [English](https://hidetatz.io/articles/2021/11/19/amazon_memorydb_architecture/) also.
 
 ## はじめに
 
