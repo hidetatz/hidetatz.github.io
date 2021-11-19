@@ -29,6 +29,10 @@ What I've read, watched, listened, and learned with some thoughts.
 
 ---
 
+If you want to send me any feedback about this website, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
+
+---
+
 [feed](/feed.xml)
 `
 

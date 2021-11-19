@@ -204,6 +204,11 @@ const articlePageMD = `
 
 ---
 
+If you want to send me any feedback about this article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
+Just a comment, pointing out a mistake, minor typo, any other else are welcome.
+
+---
+
 <div style="text-align: center;">
   <a href="/">home</a>
 </div>
