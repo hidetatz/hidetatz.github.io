@@ -31,6 +31,9 @@ var (
 	//go:embed data/404.md
 	notFoundPage string
 
+	//go:embed data/distsys.md
+	distsys string
+
 	//go:embed data/robots.txt
 	robotsTxt string
 )
@@ -76,6 +79,8 @@ func gen() {
 		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, link(articles[i]))
 	}
 	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
+
+	write(generateHTMLPage("Learn distributed systems | dtyler.io", distsys), "./docs/distsys.html")
 }
 
 func write(content, fileNameWithDir string) {

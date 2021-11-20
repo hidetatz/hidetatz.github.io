@@ -1,0 +1,249 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Learn distributed systems | dtyler.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+
+<h1>
+  <a name="分散システムの学び方" class="anchor" href="#分散システムの学び方" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>分散システムの学び方</h1>
+
+<p>分散システムについて学ぶためのリソースを列挙する。全てを読む必要はおそらくなく、一通りさらって見て気になったのを読み込むのが良いと思う。</p>
+
+<h2>
+  <a name="書籍" class="anchor" href="#書籍" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>書籍:</h2>
+
+<ul>
+<li>大学で使う教科書。かなり基礎的で良い。
+
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4320124499">https://www.amazon.co.jp/dp/4320124499</a></li>
+<li><a href="https://www.amazon.co.jp/dp/4627810717">https://www.amazon.co.jp/dp/4627810717</a></li>
+</ul></li>
+<li>所謂タネンバウム本。個人的にはさらっと読むくらいで良いと思う
+
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4894714981">https://www.amazon.co.jp/dp/4894714981</a></li>
+</ul></li>
+<li>個人的に一番おすすめはこれ (ただし英語)
+
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/3642112935">https://www.amazon.co.jp/dp/3642112935</a></li>
+</ul></li>
+<li>ZooKeeper本なんだけど、ZooKeeperを通して分散システムについて学べるので良いと思う
+
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/4873116937">https://www.amazon.co.jp/dp/4873116937</a></li>
+</ul></li>
+<li>Designing Data-Intensive Applicationsもかなり良い本
+
+<ul>
+<li><a href="https://www.amazon.co.jp/dp/1449373321">https://www.amazon.co.jp/dp/1449373321</a></li>
+</ul></li>
+<li>後は以下のブログを読んで気になった本を読めば良いと思う
+
+<ul>
+<li><a href="http://home.att.ne.jp/sigma/satoh/diary/diary100331.html#20100102">http://home.att.ne.jp/sigma/satoh/diary/diary100331.html#20100102</a></li>
+</ul></li>
+</ul>
+
+<h2>
+  <a name="webサイト" class="anchor" href="#webサイト" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Webサイト</h2>
+
+<ul>
+<li>system-design-primer、分散システムに特化はしていないが、一通り読んでおくのがおすすめ。
+
+<ul>
+<li><a href="https://github.com/donnemartin/system-design-primer/blob/master/README-ja.md">https://github.com/donnemartin/system-design-primer/blob/master/README-ja.md</a></li>
+</ul></li>
+<li>AmazonがAWS作る時に得た知見をシェアするサイトで、かなりおすすめ。
+
+<ul>
+<li><a href="https://aws.amazon.com/jp/builders-library">https://aws.amazon.com/jp/builders-library</a></li>
+</ul></li>
+<li>Designs, Lessons and Advice from Building Large Distributed Systems by Jeff Dean
+
+<ul>
+<li><a href="http://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf">http://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf</a></li>
+</ul></li>
+<li>jepsen.ioのconsistency modelsの章。これだけは最低限読んでおいたほうが良いと思う
+
+<ul>
+<li><a href="https://jepsen.io/consistency">https://jepsen.io/consistency</a></li>
+</ul></li>
+<li>MQTT作った人の講演を文字に興したもの (たぶん) 。とっかかりはこれが良いかも。
+
+<ul>
+<li><a href="https://postd.cc/learning-about-distributed-systems/">https://postd.cc/learning-about-distributed-systems/</a></li>
+</ul></li>
+<li>たぶん学生の人が書いてるんだと思うけど、絵が可愛いので良い。
+
+<ul>
+<li><a href="https://medium.com/baseds">https://medium.com/baseds</a></li>
+</ul></li>
+<li>jepsen.ioが提供する分散システムの講義のマテリアルだと思う。基礎的な内容
+
+<ul>
+<li><a href="https://github.com/aphyr/distsys-class">https://github.com/aphyr/distsys-class</a></li>
+</ul></li>
+<li>Dropboxのアーキテクチャについての動画。
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=PE4gwstWhmc&amp;ab_channel=Stanford">https://www.youtube.com/watch?v=PE4gwstWhmc&amp;ab_channel=Stanford</a></li>
+</ul></li>
+<li>PingCapが提供してる分散システムを学ぶためのやつ
+
+<ul>
+<li><a href="https://github.com/pingcap/talent-plan">https://github.com/pingcap/talent-plan</a></li>
+</ul></li>
+</ul>
+
+<h2>
+  <a name="paper" class="anchor" href="#paper" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>Paper</h2>
+
+<ul>
+<li>Facebookのアーキテクチャ
+
+<ul>
+<li><a href="https://cs.uwaterloo.ca/~brecht/courses/854-Emerging-2014/readings/key-value/fb-memcached-nsdi-2013.pdf">https://cs.uwaterloo.ca/~brecht/courses/854-Emerging-2014/readings/key-value/fb-memcached-nsdi-2013.pdf</a></li>
+</ul></li>
+<li>AWS Auroraのアーキテクチャ、難しい
+
+<ul>
+<li><a href="https://spring-mt.hatenablog.com/entry/2021/03/01/123934">https://spring-mt.hatenablog.com/entry/2021/03/01/123934</a></li>
+</ul></li>
+<li>Hekatonの話、かなり難しい
+
+<ul>
+<li><a href="https://okachimachiorz.hatenablog.com/entry/20170918/1505729999">https://okachimachiorz.hatenablog.com/entry/20170918/1505729999</a></li>
+</ul></li>
+</ul>
+
+<h2>
+  <a name="oss" class="anchor" href="#oss" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>OSS</h2>
+
+<ul>
+<li>comma.ai が本番で使っている、1000行以下で書かれた分散KVS
+
+<ul>
+<li><a href="https://github.com/geohot/minikeyvalue">https://github.com/geohot/minikeyvalue</a></li>
+</ul></li>
+<li>極めて基本的な構成で分散KVS
+
+<ul>
+<li><a href="https://github.com/chrislusf/vasto">https://github.com/chrislusf/vasto</a></li>
+<li>分散システムのことわかってくると分散KVS作りたくなるっぽくて、調べるとたくさん出てくる</li>
+</ul></li>
+<li>Redisで分散ロックするやつ
+
+<ul>
+<li><a href="https://github.com/go-redsync/redsync">https://github.com/go-redsync/redsync</a></li>
+<li>分散ロックとはなにかというのはこれを読む</li>
+<li><a href="https://kumagi.hatenablog.com/entry/distributed_lock">https://kumagi.hatenablog.com/entry/distributed_lock</a></li>
+</ul></li>
+</ul>
+
+<h2>
+  <a name="その他色々" class="anchor" href="#その他色々" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>その他色々</h2>
+
+<ul>
+<li>Tail Latencyの話
+
+<ul>
+<li><a href="https://agnozingdays.hatenablog.com/entry/2019/04/25/210721">https://agnozingdays.hatenablog.com/entry/2019/04/25/210721</a></li>
+</ul></li>
+<li>Paxos
+
+<ul>
+<li><a href="https://qiita.com/kumagi/items/535c9b7a761d2ed52bc0">https://qiita.com/kumagi/items/535c9b7a761d2ed52bc0</a></li>
+<li>この方の記事は全部読むと良いと思う</li>
+</ul></li>
+<li>Randezvos Hash
+
+<ul>
+<li><a href="https://medium.com/@reduls/about-rendezvous-hashing-76aaf1a3f705">https://medium.com/@reduls/about-rendezvous-hashing-76aaf1a3f705</a></li>
+</ul></li>
+<li>CRDT
+
+<ul>
+<li><a href="https://qiita.com/everpeace/items/bb73ec64d3e682279d26">https://qiita.com/everpeace/items/bb73ec64d3e682279d26</a></li>
+</ul></li>
+<li>replicated log
+
+<ul>
+<li><a href="http://mesos.apache.org/documentation/latest/replicated-log-internals/">http://mesos.apache.org/documentation/latest/replicated-log-internals/</a></li>
+</ul></li>
+<li>Cosmos DBの一貫性モデル
+
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels">https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels</a></li>
+</ul></li>
+</ul>
+
+<p><a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<hr />
+
+<p>If you want to send me any feedback about this article, you can submit it as GitHub issue <a href="https://github.com/hidetatz/blog/issues/new">here</a>.
+Just a comment, pointing out a mistake, minor typo, any other else are welcome.</p>
+
+<hr />
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
