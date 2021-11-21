@@ -1,4 +1,4 @@
-分散システムについて学ぶためのリソースを列挙する。全てを読む必要はおそらくなく、一通りさらって見て気になったのを読み込むのが良いと思う。
+分散システムについて学ぶためのリソースを単純に列挙する。全てを読む必要はなくて (無理だと思う) 一通りさらって見て気になったのを読み込むのが良いと思う。
 随時更新。
 
 ## 書籍: 
@@ -83,6 +83,8 @@
 
 * [O'Reilly Japan - 並行プログラミング入門](https://www.oreilly.co.jp/books/9784873119595/)
   * 素晴らしい本
+* [一人トランザクション技術 Advent Calendar 2016 - Qiita](https://qiita.com/advent-calendar/2016/transaction)
+  * トランザクション
 * [research!rsc: Hardware Memory Models (Memory Models, Part 1)](https://research.swtch.com/hwmm)
   * rscさんが書いたメモリモデルのハードウェアの方
 * [「強いメモリモデル」と「弱いメモリモデル」 - yamasaのネタ帳](https://yamasa.hatenablog.jp/entry/2020/11/29/171322)
