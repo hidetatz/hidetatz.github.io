@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 const (
@@ -80,7 +81,7 @@ func gen() {
 	}
 	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 
-	write(generateHTMLPage("Learn distributed systems | dtyler.io", distsys), "./docs/distsys.html")
+	write(generateArticlePageHTMLFromMarkdown("Learn distributed systems", distsys, time.Date(2021, 11, 20, 22, 0, 0, 0, time.Local)), "./docs/distsys.html")
 }
 
 func write(content, fileNameWithDir string) {

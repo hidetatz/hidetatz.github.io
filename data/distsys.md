@@ -1,7 +1,3 @@
-[<- home](/)
-
-# 分散システムの学び方
-
 分散システムについて学ぶためのリソースを列挙する。全てを読む必要はおそらくなく、一通りさらって見て気になったのを読み込むのが良いと思う。
 
 ## 書籍: 
@@ -76,15 +72,3 @@
 * Cosmos DBの一貫性モデル
   * https://docs.microsoft.com/en-us/azure/cosmos-db/consistency-levels
 
-<a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
----
-
-If you want to send me any feedback about this article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
-Just a comment, pointing out a mistake, minor typo, any other else are welcome.
-
----
-
-<div style="text-align: center;">
-  <a href="/">home</a>
-</div>
