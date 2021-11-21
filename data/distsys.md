@@ -20,6 +20,8 @@
 
 * system-design-primer、分散システムに特化はしていないが、一通り読んでおくのがおすすめ。
   * https://github.com/donnemartin/system-design-primer/blob/master/README-ja.md
+* リファレンス的に使う。
+  * https://martinfowler.com/articles/patterns-of-distributed-systems/
 * AmazonがAWS作る時に得た知見をシェアするサイトで、かなりおすすめ。
   * https://aws.amazon.com/jp/builders-library
 * Designs, Lessons and Advice from Building Large Distributed Systems by Jeff Dean
