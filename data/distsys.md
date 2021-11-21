@@ -19,6 +19,8 @@
 
 ## Webサイト
 
+* [Readings in distributed systems](http://christophermeiklejohn.com/distributed/systems/2013/07/12/readings-in-distributed-systems.html)
+* [papers-we-love/distributed_systems at master · papers-we-love/papers-we-love](https://github.com/papers-we-love/papers-we-love/tree/master/distributed_systems)
 * [system-design-primer/README-ja.md at master · donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer/blob/master/README-ja.md)
   * system-design-primer、分散システムに特化はしていないが、一通り読んでおくのがおすすめ。
 * [Patterns of Distributed Systems](https://martinfowler.com/articles/patterns-of-distributed-systems/)
