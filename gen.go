@@ -82,6 +82,8 @@ func gen() {
 	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 
 	write(generateArticlePageHTMLFromMarkdown("Learn distributed systems", distsys, time.Date(2021, 11, 20, 22, 0, 0, 0, time.Local)), "./docs/distsys.html")
+
+	write(generateInputPageHTML(articles), "./docs/inputs.html")
 }
 
 func write(content, fileNameWithDir string) {

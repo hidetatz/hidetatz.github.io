@@ -21,11 +21,12 @@ Some articles are available in Japanese also.
 
 ---
 
-## Inputs
+## Some other pages
 
-What I've read, watched, listened, and learned with some thoughts.
-
-%s
+* [/inputs](/inputs.html)
+  - What I've read, listened, watched, etc.
+* [/distsys](/distsys.html)
+  - Distributed systems learning meterials (in Japanese)
 
 ---
 
@@ -39,11 +40,10 @@ If you want to send me any feedback about this website, you can submit it as Git
 func generateIndexPageHTML(articles []*article) string {
 	enblogsList := ""
 	jablogsList := ""
-	inputsList := ""
 	for _, a := range articles {
 		switch a.typ {
 		case inputType:
-			inputsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+			continue
 		case blogType:
 			switch a.lang {
 			case en:
@@ -54,7 +54,7 @@ func generateIndexPageHTML(articles []*article) string {
 		}
 	}
 
-	return generateHTMLPage("hidetatz.io", fmt.Sprintf(indexPageMD, enblogsList, jablogsList, inputsList))
+	return generateHTMLPage("hidetatz.io", fmt.Sprintf(indexPageMD, enblogsList, jablogsList))
 }
 
 func link(a *article) string {
@@ -72,4 +72,28 @@ func link(a *article) string {
 		// else, it is input. return internal link
 		return fmt.Sprintf("/articles/%s/%s", formattedTime, trimExtension(a.fileName))
 	}
+}
+
+const inputPageMD = `
+
+[<- home](/)
+
+# /inputs
+
+%s
+
+`
+
+func generateInputPageHTML(articles []*article) string {
+	list := ""
+	for _, a := range articles {
+		switch a.typ {
+		case blogType:
+			continue
+		case inputType:
+			list += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+		}
+	}
+
+	return generateHTMLPage("hidetatz.io | inputs", fmt.Sprintf(inputPageMD, list))
 }
