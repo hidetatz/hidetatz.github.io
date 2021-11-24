@@ -2,15 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2021-11-19T19:00:00Z</lastmod>
+    <lastmod>2021-11-24T09:45:22Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/ja/</loc>
-    <lastmod>2021-11-19T19:00:00Z</lastmod>
+    <lastmod>2021-11-24T09:45:22Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/about/</loc>
-    <lastmod>2021-11-19T19:00:00Z</lastmod>
+    <lastmod>2021-11-24T09:45:22Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hidetatz.io//articles/2021/11/24/dropbox_replay_sync</loc>
+    <lastmod>2021-11-24T09:45:22Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture</loc>

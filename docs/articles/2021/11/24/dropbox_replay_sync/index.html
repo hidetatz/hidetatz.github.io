@@ -1,0 +1,83 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>How Dropbox Replay keeps everyone in sync - Dropbox | hidetatz.io</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+
+
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+
+<h1>
+  <a name="how-dropbox-replay-keeps-everyone-in-sync-dropbox" class="anchor" href="#how-dropbox-replay-keeps-everyone-in-sync-dropbox" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>How Dropbox Replay keeps everyone in sync - Dropbox</h1>
+
+<h4>
+  <a name="2021-11-24" class="anchor" href="#2021-11-24" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a>2021/11/24</h4>
+
+<h3>
+  <a name="" class="anchor" href="#" rel="nofollow" aria-hidden="true">
+    <span class="octicon octicon-link">
+    </span>
+  </a><a href="https://dropbox.tech/application/how-dropbox-replay-keeps-everyone-in-sync">https://dropbox.tech/application/how-dropbox-replay-keeps-everyone-in-sync</a></h3>
+
+<ul>
+<li>Dropbox Replay defines happend-before relationship to each message and processes them one by one
+
+<ul>
+<li>Using mutex, each message is received and broadcasted one by one and next message is never processed if the prev message is still in progress</li>
+</ul></li>
+<li>Internally the sync service must handle distributed lock? or it might be using RDB transaction for this</li>
+</ul>
+
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<hr />
+
+<p>If you want to send me any feedback about this article, you can submit it as GitHub issue <a href="https://github.com/hidetatz/blog/issues/new">here</a>.
+Just a comment, pointing out a mistake, minor typo, any other else are welcome.</p>
+
+<hr />
+
+<div style="text-align: center;">
+  <a href="/">home</a>
+</div>
+
+
+<hr>
+
+<footer>
+<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
+</footer>
+<script src="/syntax.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+
+</html>
