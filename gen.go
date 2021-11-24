@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 const (
@@ -34,6 +33,9 @@ var (
 
 	//go:embed data/distsys.md
 	distsys string
+
+	//go:embed data/inputs.md
+	inputs string
 
 	//go:embed data/robots.txt
 	robotsTxt string
@@ -79,11 +81,11 @@ func gen() {
 	for i := 0; i < articlesCountOn404Page; i++ {
 		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, link(articles[i]))
 	}
-	write(generateHTMLPage("404 | dtyler.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
+	write(generateHTMLPage("404 | hidetatz.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 
-	write(generateArticlePageHTMLFromMarkdown("Learn distributed systems", distsys, time.Date(2021, 11, 20, 22, 0, 0, 0, time.Local)), "./docs/distsys.html")
+	write(generateArticlePageHTMLFromMarkdown("Learn distributed systems", distsys), "./docs/distsys.html")
 
-	write(generateInputPageHTML(articles), "./docs/inputs.html")
+	write(generateArticlePageHTMLFromMarkdown("Inputs", inputs), "./docs/inputs.html")
 }
 
 func write(content, fileNameWithDir string) {

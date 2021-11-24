@@ -2,19 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2021-11-24T09:45:22Z</lastmod>
+    <lastmod>2021-11-19T19:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/ja/</loc>
-    <lastmod>2021-11-24T09:45:22Z</lastmod>
+    <lastmod>2021-11-19T19:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/about/</loc>
-    <lastmod>2021-11-24T09:45:22Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/24/dropbox_replay_sync</loc>
-    <lastmod>2021-11-24T09:45:22Z</lastmod>
+    <lastmod>2021-11-19T19:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture</loc>
@@ -23,62 +19,6 @@
   <url>
     <loc>https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture_ja</loc>
     <lastmod>2021-11-19T19:00:00Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/15/ably_loadtesting</loc>
-    <lastmod>2021-11-15T12:08:10Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/11/shell_oneliner_160</loc>
-    <lastmod>2021-11-11T00:03:03Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/08/mttr_is_a_misleading</loc>
-    <lastmod>2021-11-08T15:21:50Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/04/you_are_not_google</loc>
-    <lastmod>2021-11-04T23:23:04Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/04/twilio_scale_engineering_structure</loc>
-    <lastmod>2021-11-04T15:19:38Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/04/akita_go_mem_usage</loc>
-    <lastmod>2021-11-04T14:59:21Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/04/siloscape_kubernetes</loc>
-    <lastmod>2021-11-04T14:16:29Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/03/kubernetes_insecure_by_default</loc>
-    <lastmod>2021-11-03T23:08:22Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/03/discord_cassandra</loc>
-    <lastmod>2021-11-03T22:23:03Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/02/netflix_grpc_fieldmask</loc>
-    <lastmod>2021-11-02T23:58:20Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/11/02/uber_spanner</loc>
-    <lastmod>2021-11-02T23:24:30Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/10/31/alerting_slos_like_pros</loc>
-    <lastmod>2021-10-31T23:15:34Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/10/30/slack_ci</loc>
-    <lastmod>2021-10-30T23:23:34Z</lastmod>
-  </url>
-  <url>
-    <loc>https://hidetatz.io//articles/2021/10/01/sqldb</loc>
-    <lastmod>2021-10-01T10:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/04/23/treat_secrets_on_memory_ja</loc>

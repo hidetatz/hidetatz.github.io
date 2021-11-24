@@ -228,11 +228,11 @@ func generateArticlePageHTML(a *article) string {
 	))
 }
 
-func generateArticlePageHTMLFromMarkdown(title string, contents string, timestamp time.Time) string {
+func generateArticlePageHTMLFromMarkdown(title string, contents string) string {
 	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), fmt.Sprintf(
 		articlePageMD,
 		title,
-		timestamp.Format(timeformat),
+		"",
 		contents,
 	))
 }
