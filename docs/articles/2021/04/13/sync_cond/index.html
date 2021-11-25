@@ -157,7 +157,7 @@ mutex_unlock();
     </span>
   </a>Implementation with mutexes</h3>
 
-<p>First, let&rsquo;s take a look at the implementation using mutexes. This source code can be found on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go">dty1er/size-limited-queue/mutex_slqueue.go</a></p>
+<p>First, let&rsquo;s take a look at the implementation using mutexes. This source code can be found on GitHub. <a href="https://github.com/hidetatz/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go">hidetatz/size-limited-queue/mutex_slqueue.go</a></p>
 
 <pre><code class="language-go">type MutexQueue struct {
 	mu       sync.Mutex
@@ -214,7 +214,7 @@ func (s *MutexQueue) Pop() int {
     </span>
   </a>Implementation using condition variables</h3>
 
-<p>The implementation using condition variables looks like this. You can find it on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go">dty1er/size-limited-queue/slqueue.go</a></p>
+<p>The implementation using condition variables looks like this. You can find it on GitHub. <a href="https://github.com/hidetatz/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go">hidetatz/size-limited-queue/slqueue.go</a></p>
 
 <pre><code class="language-go">type SizeLimitedQueue struct {
 	cond     *sync.Cond
@@ -318,8 +318,8 @@ As mentioned above, condition variables are used in combination with mutexes, bu
 
 <p>Changes 1 and 2 minimize the number of threads triggered, but there are still improvements to be made. For example, if the queue length changed to 1 from 0 by a <code>Push()</code>, all goroutines waiting for <code>Pop()</code> will be woken up. However, even if we wake up all the goroutines waiting for <code>Pop()</code>, only one goroutine can enter the next critical section, so it is more efficient to wake up only one thread instead of all of them. <a href="https://golang.org/pkg/sync/#Cond.Signal"><code>Signal()</code></a> can be used in this case. <code>Signal()</code> wakes up only one goroutine, not all the goroutines that are in <code>Wait()</code>. This makes the implementation more efficient by mitigating the Thundering Herd Problem when there are many waiting goroutines.</p>
 
-<p>An implementation of the above 1, 2, and 3 is shown below, which can also be found on GitHub. <a href="https://github.com/dty1er/size-limited-queue/blob/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758/slqueue.go">dty1er/sie-limited-queue/slqueue.go</a>
-The diff is <a href="https://github.com/dty1er/size-limited-queue/commit/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758">here</a>.</p>
+<p>An implementation of the above 1, 2, and 3 is shown below, which can also be found on GitHub. <a href="https://github.com/hidetatz/size-limited-queue/blob/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758/slqueue.go">hidetatz/sie-limited-queue/slqueue.go</a>
+The diff is <a href="https://github.com/hidetatz/size-limited-queue/commit/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758">here</a>.</p>
 
 <pre><code class="language-go">type SizeLimitedQueue struct {
 	nonFullCond *sync.Cond
@@ -505,7 +505,7 @@ but could be safe if Signal() were called inside the critical section.
 
 <p>To be honest, I don&rsquo;t fully understand the spurious wake-up, so I hope someone who knows more about it will write an article to explain it. By the way, when I was doing some research for this article, I found that there was a problem with <a href="https://github.com/golang/go/issues/7734">sync.WaitGroup causing spurious wake-up</a> in the previous version of Go, which I found interesting.</p>
 
-<p>Hope this article helps you. If you like this article, please leave it a star on the <a href="https://github.com/dty1er/size-limited-queue">size-limited-queue</a> repo.</p>
+<p>Hope this article helps you. If you like this article, please leave it a star on the <a href="https://github.com/hidetatz/size-limited-queue">size-limited-queue</a> repo.</p>
 
 <h2>
   <a name="reference" class="anchor" href="#reference" rel="nofollow" aria-hidden="true">
