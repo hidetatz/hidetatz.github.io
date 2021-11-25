@@ -3,7 +3,7 @@ timestamp: 2020-10-14 00:00:00
 lang: ja
 ---
 
-![](https://storage.googleapis.com/zenn-user-upload/tugxpw8uu3bg8c10jounker54xls)
+![](https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png)
 
 # 1. はじめに
 
@@ -18,13 +18,13 @@ kubectlはKubernetesクラスタを操作するためのCLIクライアントで
 
 初めに、素のkubectlの出力を見てみます。（画像内で使用しているクラスタはテスト用のものです）
 
-![](https://storage.googleapis.com/zenn-user-upload/krqr1ud7rwhr8bcturrrqwbbjiz2)
+![](https://miro.medium.com/max/1400/1*Kb6T3-K6__x31zjVq_xvDQ.png)
 
 kubectlは出力に色を一切つけません。上の画像はまだ出力結果が十分に短いため視認性に大きな問題はありませんが、　"kubectl describe" や "kubectl get -o json" など、大きめの出力を行うコマンドは、次のように見えます。
 
-![](https://storage.googleapis.com/zenn-user-upload/7sb702m4htks09bq1mzgn00qg3cm)
+![](https://miro.medium.com/max/1400/1*CYNZMsuAyiCMeIx10VjfiQ.png)
 
-![](https://storage.googleapis.com/zenn-user-upload/lfm3wjluvleivppudndy5d5am8pv)
+![](https://miro.medium.com/max/1400/1*IwXwh_PVpC2hN6-lQn4jLg.png)
 
 出力が大きくなると、先程よりも「見辛く」感じないでしょうか。もちろん個人差があるとは思うのですが、筆者は欲しいデータがどこにあるかを瞬時に認識することが難しいなと以前から感じていました。これが、筆者がkubecolorを開発した理由です。
 次章では、kubecolorがどのようなアプローチで「見やすさ」に貢献できるかを解説します。
@@ -41,23 +41,23 @@ https://github.com/hidetatz/kubecolor
 
 * kubectl get pods
 
-![](https://storage.googleapis.com/zenn-user-upload/0axnlztv2wusigzjpcg4craxxhmk)
+![](https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png)
 
 * kubectl describe pod
 
-![](https://storage.googleapis.com/zenn-user-upload/3uucjklexol3n7s5vlvbjchwb0it)
+![](https://miro.medium.com/max/1400/1*HFm_-f6yw8XGbNJ5sEGc-Q.png)
 
 * kubectl get pods -o json
 
-![](https://storage.googleapis.com/zenn-user-upload/8yi2f4hmiu1nqhkoc7mstelqy0od)
+![](https://miro.medium.com/max/1400/1*KCKUa18M2foTxQvRTeayBA.png)
 
 * kubectl get pods -o yaml
 
-![](https://storage.googleapis.com/zenn-user-upload/zr0i8bvgzrgo5bbu7uym6lkjgh2s)
+![](https://miro.medium.com/max/1400/1*RVeL4fdxX4WRxKcrdQqqPw.png)
 
 また、コマンドがエラーを出力した場合、kubecolorはそれを赤で出力することでエラーが起きたことをユーザーにわかりやすく伝えることもできます。
 
-![](https://storage.googleapis.com/zenn-user-upload/6gjh1kums4rwp7cu9h5togy5uedz)
+![](https://miro.medium.com/max/1304/1*Wp7OBW1cwy5CKCX-j0ZkFw.png)
 
 色がつくことで、かなり見やすくなったのではないでしょうか。筆者は元々の一色のみの出力よりも、目的のものが見つけやすくなったなと感じます。
 次章では、kubecolorのインストール方法及び使い方などについて解説します。
@@ -119,11 +119,11 @@ alias kubectl=kubecolor
 kubecolorが色付けに使用する色のプリセットは、デフォルトでは「背景が暗い色に設定してあるターミナルエミュレータ」上で見やすくなるように設定されています。これは逆に言えば、ターミナルの背景を白などの明るい色に設定している環境では、kubecolorの使う色が見えにくいと感じる可能性があります。 `--light-background` フラグをkubecolorに渡すことで、明るい背景に最適な色のプリセットを使って出力に色付けを行うようになります。
 実際に背景色を白に設定したターミナルで、kubecolor describe podコマンドを実行します。 `--light-background` なしでは次のように見えます。
 
-![](https://storage.googleapis.com/zenn-user-upload/4n9qrv259imkmxe9cior4hz5tacx)
+![](https://miro.medium.com/max/1400/1*yO-CZlwmbWr6tXn6j6YoQA.png)
 
 `--light-background` をつけると、次のように見えます。
 
-![](https://storage.googleapis.com/zenn-user-upload/h0y2cffxga86lr9pse466ee8php9)
+![](https://miro.medium.com/max/1400/1*HrIyZChtuLD5FGjLcJjHzA.png)
 
 白 -> 黒に、シアン -> 濃い青にそれぞれ変わったことで、読みやすくなります。
 
