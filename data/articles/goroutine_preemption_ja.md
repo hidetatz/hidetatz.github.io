@@ -1,4 +1,3 @@
-type: blog
 title: Goroutineのプリエンプション
 timestamp: 2021-03-28 09:00:00
 lang: ja

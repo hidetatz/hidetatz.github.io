@@ -1,4 +1,3 @@
-type: blog
 title: How Amazon MemoryDB for Redis guarantees the data durability
 timestamp: 2021-11-19 19:00:00
 lang: en

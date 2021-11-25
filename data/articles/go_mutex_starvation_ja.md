@@ -1,4 +1,3 @@
-type: blog
 title: Goにおけるミューテックスのスタベーション
 timestamp: 2021-04-06 20:00:00
 lang: ja

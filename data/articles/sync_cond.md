@@ -1,4 +1,3 @@
-type: blog
 title: What's the "sync.Cond"
 timestamp: 2021-04-13 12:00:00
 lang: en

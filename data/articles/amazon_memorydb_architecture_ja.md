@@ -1,4 +1,3 @@
-type: blog
 title: Amazon MemoryDB for Redisはどのように耐久性を保証しているか
 timestamp: 2021-11-19 19:00:00
 lang: ja

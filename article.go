@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"net/url"
 	"os"
 	"path"
@@ -13,18 +12,9 @@ import (
 	"sort"
 	"strings"
 	"time"
-
-	"golang.org/x/net/html"
 )
 
 const timeformat = "2006/01/02"
-
-type articleType string
-
-const (
-	blogType  articleType = "blog"
-	inputType articleType = "input"
-)
 
 type lang string
 
@@ -34,7 +24,6 @@ const (
 )
 
 type article struct {
-	typ        articleType
 	title      string
 	timestamp  time.Time
 	fileName   string
@@ -86,15 +75,6 @@ func readYamlFrontMatter(aa *article, line string) error {
 	splitted := strings.Split(line, ": ")
 	key, val := splitted[0], splitted[1]
 	switch key {
-	case "type":
-		switch val {
-		case string(blogType):
-			aa.typ = blogType
-		case string(inputType):
-			aa.typ = inputType
-		default:
-			return fmt.Errorf("unknown type: %s", val)
-		}
 	case "timestamp":
 		t, err := time.Parse("2006-01-02 15:04:05", val)
 		if err != nil {
@@ -117,11 +97,6 @@ func readYamlFrontMatter(aa *article, line string) error {
 		aa.title = val
 	default:
 		return fmt.Errorf("unknown key in yaml: %s", key)
-	}
-
-	// in case input
-	if aa.url != nil && aa.title == "" {
-		aa.title = getHTMLTitle(aa.url, trimExtension(aa.fileName))
 	}
 
 	return nil
@@ -148,44 +123,6 @@ func readFiles(dir string) []*os.File {
 	return files
 }
 
-func isTitleElement(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Data == "title"
-}
-
-func traverse(n *html.Node) (string, bool) {
-	if isTitleElement(n) {
-		return n.FirstChild.Data, true
-	}
-
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		result, ok := traverse(c)
-		if ok {
-			return result, ok
-		}
-	}
-
-	return "", false
-}
-
-func getHTMLTitle(u *url.URL, fallback string) string {
-	resp, err := http.Get(u.String())
-	if err != nil {
-		return fallback
-	}
-	defer resp.Body.Close()
-
-	doc, err := html.Parse(resp.Body)
-	if err != nil {
-		return fallback
-	}
-
-	title, ok := traverse(doc)
-	if !ok {
-		return fallback
-	}
-
-	return title
-}
 func trimExtension(filename string) string {
 	return filepath.Base(filename[:len(filename)-len(filepath.Ext(filename))])
 }
@@ -216,9 +153,6 @@ Just a comment, pointing out a mistake, minor typo, any other else are welcome.
 
 func generateArticlePageHTML(a *article) string {
 	contents := strings.Join(a.contentsMD, "\n")
-	if a.typ == inputType {
-		contents = fmt.Sprintf("### %s\n\n%s", a.url.String(), contents)
-	}
 
 	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", a.title), fmt.Sprintf(
 		articlePageMD,

@@ -1,4 +1,3 @@
-type: blog
 title: Preemption in Go
 timestamp: 2021-03-29 18:00:00
 lang: en

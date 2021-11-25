@@ -1,4 +1,3 @@
-type: blog
 title: sync.Condとはなにか
 timestamp: 2021-04-12 11:00:00
 lang: ja

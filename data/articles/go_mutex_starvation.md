@@ -1,4 +1,3 @@
-type: blog
 title: Mutex starvation in Go
 timestamp: 2021-04-07 18:00:00
 lang: en

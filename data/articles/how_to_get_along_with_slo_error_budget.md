@@ -1,4 +1,3 @@
-type: blog
 title: How to get along with SLO and Error budget
 timestamp: 2020-04-28 12:00:00
 lang: en

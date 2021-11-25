@@ -62,7 +62,7 @@ func gen() {
 
 	// write each articles
 	for _, a := range articles {
-		if a.url == nil || a.typ == inputType {
+		if a.url == nil {
 			write(generateArticlePageHTML(a), fmt.Sprintf("./docs/%s/index.html", link(a)))
 		}
 	}

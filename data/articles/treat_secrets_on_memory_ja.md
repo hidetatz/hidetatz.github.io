@@ -1,4 +1,3 @@
-type: blog
 title: 秘匿情報をメモリ上でどう扱うか
 timestamp: 2021-04-23 19:28:13
 lang: ja
