@@ -97,7 +97,7 @@ Note that this example is based on [A simple condition variable primitive](http:
 
 ### Implementation with mutexes
 
-First, let's take a look at the implementation using mutexes. This source code can be found on GitHub. [dty1er/size-limited-queue/mutex_slqueue.go](https://github.com/dty1er/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go)
+First, let's take a look at the implementation using mutexes. This source code can be found on GitHub. [hidetatz/size-limited-queue/mutex_slqueue.go](https://github.com/hidetatz/size-limited-queue/blob/381725020d4de089741743523ac2b032ee946767/mutex_slqueue.go)
 
 ```go
 type MutexQueue struct {
@@ -151,7 +151,7 @@ This is exactly the "spin until a specific condition is met" described above, wh
 
 ### Implementation using condition variables
 
-The implementation using condition variables looks like this. You can find it on GitHub. [dty1er/size-limited-queue/slqueue.go](https://github.com/dty1er/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go)
+The implementation using condition variables looks like this. You can find it on GitHub. [hidetatz/size-limited-queue/slqueue.go](https://github.com/hidetatz/size-limited-queue/blob/7482018a4aae723aebe80f0ff11f6b4f4fc265bc/slqueue.go)
 
 ```go
 type SizeLimitedQueue struct {
@@ -238,8 +238,8 @@ This fix changes the implementation from "all goroutines are woken up when the q
 
 Changes 1 and 2 minimize the number of threads triggered, but there are still improvements to be made. For example, if the queue length changed to 1 from 0 by a `Push()`, all goroutines waiting for `Pop()` will be woken up. However, even if we wake up all the goroutines waiting for `Pop()`, only one goroutine can enter the next critical section, so it is more efficient to wake up only one thread instead of all of them. [`Signal()`](https://golang.org/pkg/sync/#Cond.Signal) can be used in this case. `Signal()` wakes up only one goroutine, not all the goroutines that are in `Wait()`. This makes the implementation more efficient by mitigating the Thundering Herd Problem when there are many waiting goroutines.
 
-An implementation of the above 1, 2, and 3 is shown below, which can also be found on GitHub. [dty1er/sie-limited-queue/slqueue.go](https://github.com/dty1er/size-limited-queue/blob/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758/slqueue.go) 
-The diff is [here](https://github.com/dty1er/size-limited-queue/commit/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758).
+An implementation of the above 1, 2, and 3 is shown below, which can also be found on GitHub. [hidetatz/sie-limited-queue/slqueue.go](https://github.com/hidetatz/size-limited-queue/blob/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758/slqueue.go) 
+The diff is [here](https://github.com/hidetatz/size-limited-queue/commit/e9dd8dc2c2937d6cffe7e784bc5c2d436632b758).
 
 ```go
 type SizeLimitedQueue struct {
@@ -412,7 +412,7 @@ I think it would be easier to understand that "condition variables are an effici
 
 To be honest, I don't fully understand the spurious wake-up, so I hope someone who knows more about it will write an article to explain it. By the way, when I was doing some research for this article, I found that there was a problem with [sync.WaitGroup causing spurious wake-up](https://github.com/golang/go/issues/7734) in the previous version of Go, which I found interesting.
 
-Hope this article helps you. If you like this article, please leave it a star on the [size-limited-queue](https://github.com/dty1er/size-limited-queue) repo.
+Hope this article helps you. If you like this article, please leave it a star on the [size-limited-queue](https://github.com/hidetatz/size-limited-queue) repo.
 
 ## Reference
 
