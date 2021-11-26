@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -19,6 +21,8 @@ func main() {
 	default:
 		removeAllFiles("./docs/")
 		gen()
-		runServer()
+		server := &http.Server{Addr: ":8080", Handler: http.FileServer(http.Dir("./docs"))}
+		fmt.Printf("Serving at localhost:8080\n")
+		server.ListenAndServe()
 	}
 }
