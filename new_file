@@ -13,10 +13,9 @@ if [ -e $file ]; then
 fi
 
 now=$(gdate "+%Y-%m-%d %H:%M:%S")
-echo "type: input/blog" > $file
-echo "title: necessary if type is blog" >> $file
+echo "title: $1" >> $file
 echo "timestamp: $now" >> $file
-echo "url: necessary in case type is input or external blog" >> $file
+echo "url: necessary for external blog" >> $file
 echo "lang: ja/en" >> $file
 echo "---" >> $file
 
