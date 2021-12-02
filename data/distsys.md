@@ -43,6 +43,8 @@
   * PingCapが提供してる分散システムを学ぶためのやつ
 * [分散システムについて語らせてくれ](https://www.slideshare.net/kumagi/ss-78765920)
   * 故障モデルのところわかりやすい
+* [Enterprise Integration Patterns - Messaging Patterns Overview](https://www.enterpriseintegrationpatterns.com/patterns/messaging/) 
+  * 分散システム基盤とか作る場合におそらく必要になるメッセージング処理のパターン
 
 ## Paper
 
