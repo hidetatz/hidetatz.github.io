@@ -13,7 +13,7 @@ I [do fail](https://hidetatz.fail/).
 
 ## Projects
 
-Give them a star!
+If you love it, give a star!
 
 * [kubecolor](https://github.com/hidetatz/kubecolor) (Go)
   - kubecolor is a CLI tool which wraps kubectl and colorizes the output for readability.
