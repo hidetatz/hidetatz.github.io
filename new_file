@@ -1,7 +1,8 @@
 #!/bin/bash
 
 if [ $# -ne 1 ]; then
-  echo "filename must be passed"
+  echo "error: filename must be passed"
+  echo "usage: ./new_file article_file_name"
   exit 1
 fi
 
