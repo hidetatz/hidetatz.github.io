@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/russross/blackfriday/v2"
 )
@@ -56,14 +57,21 @@ const (
 `
 )
 
+var (
+	once sync.Once
+	re   *renderer
+)
+
 func generateHTMLPage(title, contentsMarkdown string) string {
 	head := fmt.Sprintf(Head, title)
 
-	r := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
-		Flags: blackfriday.CommonHTMLFlags,
+	once.Do(func() {
+		r := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
+			Flags: blackfriday.CommonHTMLFlags,
+		})
+		re = &renderer{r}
 	})
-	renderer := &renderer{r}
-	bodyHTML := string(blackfriday.Run([]byte(contentsMarkdown), blackfriday.WithRenderer(renderer)))
+	bodyHTML := string(blackfriday.Run([]byte(contentsMarkdown), blackfriday.WithRenderer(re)))
 	body := fmt.Sprintf(Body, bodyHTML)
 
 	return fmt.Sprintf(Page, head, body)
