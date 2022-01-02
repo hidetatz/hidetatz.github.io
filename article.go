@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	gfm "github.com/shurcooL/github_flavored_markdown"
 )
 
 const timeformat = "2006/01/02"
@@ -30,6 +32,7 @@ type article struct {
 	url        *url.URL
 	lang       lang
 	contentsMD []string
+	path       string
 }
 
 func readArticles() ([]*article, error) {
@@ -40,6 +43,7 @@ func readArticles() ([]*article, error) {
 		var aa article
 
 		aa.fileName = filepath.Base(file.Name())
+		aa.path = filepath.Base(aa.fileName[:len(aa.fileName)-len(filepath.Ext(aa.fileName))]) // trim extension
 
 		scanner := bufio.NewScanner(file)
 		inFrontMatter := true
@@ -123,10 +127,6 @@ func readFiles(dir string) []*os.File {
 	return files
 }
 
-func trimExtension(filename string) string {
-	return filepath.Base(filename[:len(filename)-len(filepath.Ext(filename))])
-}
-
 // title, datetime, content
 const articlePageMD = `
 [<- home](/)
@@ -136,37 +136,45 @@ const articlePageMD = `
 #### %s
 
 %s
-
-<a href="https://twitter.com/share?ref_src=twsrc%%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
----
-
-If you want to send me any feedback about this article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
-Just a comment, pointing out a mistake, minor typo, any other else are welcome.
-
----
-
-<div style="text-align: center;">
-  <a href="/">home</a>
-</div>
 `
 
-func generateArticlePageHTML(a *article) string {
-	contents := strings.Join(a.contentsMD, "\n")
+const articleFooter = `
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+`
 
-	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", a.title), fmt.Sprintf(
+func convertArticleToHTML(a *article) string {
+	contentsMD := fmt.Sprintf(
 		articlePageMD,
 		a.title,
 		a.timestamp.Format(timeformat),
-		contents,
-	))
+		strings.Join(a.contentsMD, "\n"),
+	)
+	contentsHTML := toHTML(contentsMD)
+
+	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", a.title), contentsHTML) + articleFooter
 }
 
-func generateArticlePageHTMLFromMarkdown(title string, contents string) string {
-	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), fmt.Sprintf(
+func convertMarkdownToHTML(title, markdown string) string {
+	contentsMD := fmt.Sprintf(
 		articlePageMD,
 		title,
-		"",
-		contents,
-	))
+		"", // pass empty to not show timestamp. This looks too lazy but this is sufficient for now.
+		markdown,
+	)
+	contentsHTML := toHTML(contentsMD)
+
+	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), contentsHTML) + articleFooter
+}
+
+func linkToArticle(a *article) string {
+	if a.url != nil {
+		// in case an url is found for the article, directly link to that url
+		return a.url.String()
+	}
+
+	return fmt.Sprintf("/articles/%s/%s", a.timestamp.Format(timeformat), a.path)
+}
+
+func toHTML(markdown string) string {
+	return string(gfm.Markdown([]byte(markdown)))
 }

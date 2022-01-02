@@ -2,13 +2,10 @@ package main
 
 import (
 	"fmt"
-	"sync"
-
-	"github.com/russross/blackfriday/v2"
 )
 
 const (
-	Page = `
+	page = `
 <!doctype html>
 <html lang="en">
 %s
@@ -16,7 +13,7 @@ const (
 </html>
 `
 
-	Head = `
+	head = `
 <head>
   <meta charset="utf-8">
   <title>%s</title>
@@ -42,37 +39,17 @@ const (
 </head>
 `
 
-	Body = `
+	body = `
 <body class="markdown-body">
 %s
 
-<hr>
-
-<footer>
-<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
-</footer>
 <script src="/syntax.js"></script>
 <script>hljs.highlightAll();</script>
 </body>
 `
 )
 
-var (
-	once sync.Once
-	re   *renderer
-)
-
-func generateHTMLPage(title, contentsMarkdown string) string {
-	head := fmt.Sprintf(Head, title)
-
-	once.Do(func() {
-		r := blackfriday.NewHTMLRenderer(blackfriday.HTMLRendererParameters{
-			Flags: blackfriday.CommonHTMLFlags,
-		})
-		re = &renderer{r}
-	})
-	bodyHTML := string(blackfriday.Run([]byte(contentsMarkdown), blackfriday.WithRenderer(re)))
-	body := fmt.Sprintf(Body, bodyHTML)
-
-	return fmt.Sprintf(Page, head, body)
+// body must be html
+func generateHTMLPage(title, content string) string {
+	return fmt.Sprintf(page, fmt.Sprintf(head, title), fmt.Sprintf(body, content))
 }

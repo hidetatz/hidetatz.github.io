@@ -1,11 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const indexPageMD = `
 # hidetatz.io
 
 hidetatz.io is my personal website. The author Hidetatz (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
+
+If you want to send me any feedback or questions about this website/article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
+
+Atom/RSS feed is found [here](/feed.xml).
 
 I [do fail](https://hidetatz.fail/).
 
@@ -35,20 +41,14 @@ Some articles are available in Japanese also.
 
 ---
 
-## Some other pages
+## Other writings
 
-* [/inputs](/inputs.html)
-  - What I've read, listened, watched, etc.
 * [/distsys](/distsys.html)
   - Distributed systems learning meterials (in Japanese)
 
 ---
 
-If you want to send me any feedback about this website, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
-
----
-
-[feed](/feed.xml)
+© 2022 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/).
 `
 
 func generateIndexPageHTML(articles []*article) string {
@@ -57,22 +57,12 @@ func generateIndexPageHTML(articles []*article) string {
 	for _, a := range articles {
 		switch a.lang {
 		case en:
-			enblogsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+			enblogsList += fmt.Sprintf("%s - [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, linkToArticle(a))
 		case ja:
-			jablogsList += fmt.Sprintf("%s	- [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, link(a))
+			jablogsList += fmt.Sprintf("%s - [%s](%s)  \n", a.timestamp.Format(timeformat), a.title, linkToArticle(a))
 		}
 	}
 
-	return generateHTMLPage("hidetatz.io", fmt.Sprintf(indexPageMD, enblogsList, jablogsList))
-}
-
-func link(a *article) string {
-	formattedTime := a.timestamp.Format(timeformat)
-	// if blog, the link should be external URL or internal link
-	switch {
-	case a.url == nil:
-		return fmt.Sprintf("/articles/%s/%s", formattedTime, trimExtension(a.fileName))
-	default:
-		return a.url.String()
-	}
+	contentsHTML := toHTML(fmt.Sprintf(indexPageMD, enblogsList, jablogsList))
+	return generateHTMLPage("hidetatz.io", contentsHTML)
 }
