@@ -13,7 +13,9 @@ import (
 	"strings"
 	"time"
 
-	gfm "github.com/shurcooL/github_flavored_markdown"
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 const timeformat = "2006/01/02"
@@ -50,6 +52,7 @@ func readArticles() ([]*article, error) {
 		for scanner.Scan() {
 			line := scanner.Text()
 
+			// assuming every article has yaml front matter
 			if line == "---" {
 				inFrontMatter = false
 				continue
@@ -115,7 +118,7 @@ func readFiles(dir string) []*os.File {
 	files := []*os.File{}
 	for _, info := range fileInfo {
 		if info.IsDir() {
-			continue // exclude ja/
+			continue
 		}
 		f, err := os.Open(path.Join(dir, info.Name()))
 		if err != nil {
@@ -138,32 +141,31 @@ const articlePageMD = `
 %s
 `
 
-const articleFooter = `
+const twitterButton = `
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 `
 
 func convertArticleToHTML(a *article) string {
-	contentsMD := fmt.Sprintf(
-		articlePageMD,
-		a.title,
-		a.timestamp.Format(timeformat),
-		strings.Join(a.contentsMD, "\n"),
-	)
-	contentsHTML := toHTML(contentsMD)
-
-	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", a.title), contentsHTML) + articleFooter
+	return convertMarkdownToHTML(a.title, strings.Join(a.contentsMD, "\n"), &a.timestamp)
 }
 
-func convertMarkdownToHTML(title, markdown string) string {
+func convertMarkdownToHTML(title, markdown string, timestamp *time.Time) string {
+	ts := ""
+	if timestamp != nil {
+		ts = timestamp.Format(timeformat)
+	}
 	contentsMD := fmt.Sprintf(
 		articlePageMD,
 		title,
-		"", // pass empty to not show timestamp. This looks too lazy but this is sufficient for now.
+		ts,
 		markdown,
 	)
 	contentsHTML := toHTML(contentsMD)
+	// workaround: if twitter share button is embedded into articlePageMD,
+	// the footnotes are placed under the button which does not look good
+	contentsHTML = contentsHTML + twitterButton
 
-	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), contentsHTML) + articleFooter
+	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), contentsHTML)
 }
 
 func linkToArticle(a *article) string {
@@ -175,6 +177,10 @@ func linkToArticle(a *article) string {
 	return fmt.Sprintf("/articles/%s/%s", a.timestamp.Format(timeformat), a.path)
 }
 
-func toHTML(markdown string) string {
-	return string(gfm.Markdown([]byte(markdown)))
+func toHTML(md string) string {
+	// return string(gfm.Markdown([]byte(markdown)))
+	parser := parser.NewWithExtensions(parser.CommonExtensions | parser.AutoHeadingIDs | parser.Footnotes)
+	renderer := html.NewRenderer(html.RendererOptions{Flags: html.CommonFlags | html.HrefTargetBlank | html.FootnoteReturnLinks})
+	return string(markdown.ToHTML([]byte(md), parser, renderer))
+
 }
