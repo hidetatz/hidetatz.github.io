@@ -30,42 +30,26 @@
 <body class="markdown-body">
 <p><a href="/">&lt;- home</a></p>
 
-<h1>
-  <a name="amazon-memorydb-for-redisはどのように耐久性を保証しているか" class="anchor" href="#amazon-memorydb-for-redisはどのように耐久性を保証しているか" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>Amazon MemoryDB for Redisはどのように耐久性を保証しているか</h1>
+<h1 id="amazon-memorydb-for-redisはどのように耐久性を保証しているか">Amazon MemoryDB for Redisはどのように耐久性を保証しているか</h1>
 
-<h4>
-  <a name="2021-11-19" class="anchor" href="#2021-11-19" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>2021/11/19</h4>
+<h4 id="2021-11-19">2021/11/19</h4>
 
-<p>Note: This article is available in <a href="https://hidetatz.io/articles/2021/11/19/amazon_memorydb_architecture/">English</a> also.</p>
+<p>Note: This article is available in <a href="https://hidetatz.io/articles/2021/11/19/amazon_memorydb_architecture/" target="_blank">English</a> also.</p>
 
-<h2>
-  <a name="はじめに" class="anchor" href="#はじめに" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>はじめに</h2>
+<h2 id="はじめに">はじめに</h2>
 
-<p><a href="https://aws.amazon.com/memorydb/">Amazon MemoryDB for Redis</a>は2021年にAWSが発表したRedis互換の分散型マネージドデータベースである。
+<p><a href="https://aws.amazon.com/memorydb/" target="_blank">Amazon MemoryDB for Redis</a>は2021年にAWSが発表したRedis互換の分散型マネージドデータベースである。
 これまでAWSはマネージドRedisとしてAmazon Elasticacheを提供していたが、Amazon MemoryDBはElasticacheにはない分散環境におけるデータの一貫性・耐久性を機能として提供している。
 この記事ではRedisの持つ一貫性・耐久性の仕組みを概観しながら、Amazon MemoryDBがどのように分散環境での耐久性保証を実現しているかについて、現状提供されている情報を基にまとめていく (参考とした情報は本記事末尾で列挙する) 。</p>
 
 <p>この記事ではレプリケーションにおける「マスター・レプリカ」モデルを扱うが、一貫してそれぞれを「プライマリ」「レプリカ」と呼称する。</p>
 
-<h2>
-  <a name="redisクラスタにおけるデータの一貫性" class="anchor" href="#redisクラスタにおけるデータの一貫性" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>Redisクラスタにおけるデータの一貫性</h2>
+<h2 id="redisクラスタにおけるデータの一貫性">Redisクラスタにおけるデータの一貫性</h2>
 
 <p>まず、Amazon MemoryDBではなく普通のRedisクラスタの話から。</p>
 
-<p>Redisクラスタは<a href="https://redis.io/topics/cluster-tutorial#redis-cluster-consistency-guarantees">強い一貫性を保証しない</a>。
-Redisのレプリケーションは<a href="http://antirez.com/news/36">結果整合性</a>で行われる。
+<p>Redisクラスタは<a href="https://redis.io/topics/cluster-tutorial#redis-cluster-consistency-guarantees" target="_blank">強い一貫性を保証しない</a>。
+Redisのレプリケーションは<a href="http://antirez.com/news/36" target="_blank">結果整合性</a>で行われる。
 すなわち、プライマリが書き込みを受け付けると、まずはクライアントにレスポンスが返り、その後非同期でレプリカに変更が反映される。
 従って、プライマリへの書き込みとレプリケーションの間にプライマリに障害が発生しフェイルオーバーした場合、プライマリへの書き込みはロストする。
 これによって、Redisは素早くレスポンスすることができるが、その分障害が発生した際に強い一貫性は保証できなくなる。</p>
@@ -73,16 +57,12 @@ Redisのレプリケーションは<a href="http://antirez.com/news/36">結果�
 <p><img width="764" alt="1" src="https://user-images.githubusercontent.com/60682957/142567317-2dc28ff9-371e-4aaa-859a-806ff32e587f.png"></p>
 
 <blockquote>
-<p><a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html">Amazon MemoryDB for Redis – Where speed meets consistency</a>より引用</p>
+<p><a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html" target="_blank">Amazon MemoryDB for Redis – Where speed meets consistency</a>より引用</p>
 </blockquote>
 
-<h3>
-  <a name="redisにおけるデータ永続化" class="anchor" href="#redisにおけるデータ永続化" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>Redisにおけるデータ永続化</h3>
+<h3 id="redisにおけるデータ永続化">Redisにおけるデータ永続化</h3>
 
-<p>Redisにはネイティブに<a href="https://redis.io/topics/persistence">RDBやAOF</a>といった永続化の仕組みが備わっているが、そのどれもが強い一貫性を保証するものではない。
+<p>Redisにはネイティブに<a href="https://redis.io/topics/persistence" target="_blank">RDBやAOF</a>といった永続化の仕組みが備わっているが、そのどれもが強い一貫性を保証するものではない。
 RDBは単なる定期的なスナップショット取得であるため、最後のスナップショット取得から現在時刻までの書き込みは常に永続化されていない。</p>
 
 <p>AOFとは、「Append Only File」のイニシャリズムで、これはいわゆるトランザクションログである。
@@ -94,7 +74,7 @@ RDBは単なる定期的なスナップショット取得であるため、最�
 <p><img width="683" alt="2" src="https://user-images.githubusercontent.com/60682957/142567324-65aa25ee-99ef-4e0a-b3ee-5722d1267510.png"></p>
 
 <blockquote>
-<p><a href="https://www.allthingsdistributed.com/2022/11/amazon-memorydb-for-redis-speed-consistency.html">Amazon MemoryDB for Redis – Where speed meets consistency</a>より引用</p>
+<p><a href="https://www.allthingsdistributed.com/2022/11/amazon-memorydb-for-redis-speed-consistency.html" target="_blank">Amazon MemoryDB for Redis – Where speed meets consistency</a>より引用</p>
 </blockquote>
 
 <p>このやり方にもデメリットがある。Redisが保持するデータセットが極めて大きい場合、そもそもAOFに記録された操作を全て再適用すること自体に時間がかかる。
@@ -113,16 +93,12 @@ Redisはあくまでデータのキャッシュを持つだけであり、本来
 <p>さて、ここまで読むと、AOFをレプリカからアクセス可能にすれば色々解決するじゃん？ということに気づくだろう。
 Amazon MemoryDBが実現したのはまさにこれである。</p>
 
-<h2>
-  <a name="amazon-memorydbのアーキテクチャ" class="anchor" href="#amazon-memorydbのアーキテクチャ" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>Amazon MemoryDBのアーキテクチャ</h2>
+<h2 id="amazon-memorydbのアーキテクチャ">Amazon MemoryDBのアーキテクチャ</h2>
 
 <p><img width="1097" alt="3" src="https://user-images.githubusercontent.com/60682957/142567327-26d34c4f-2495-4b0e-a422-baac5ba90863.png"></p>
 
 <blockquote>
-<p><a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a>より引用</p>
+<p><a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks" target="_blank">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a>より引用</p>
 </blockquote>
 
 <p>Amazon MemoryDBは、プライマリが書き込みをオンメモリにコミットするのと同期で、「Multi-AZ Transaction Log」を書き込んでいる。
@@ -131,17 +107,13 @@ Multi-AZ Transaction Logとは、詳細は明かされていないが、おそ�
 
 <p>レプリカへの書き込みは通常のRedisクラスタと同様に非同期で行われる。実際は、Multi-AZ Transaction Logへの書き込みが伝播するようである。</p>
 
-<h3>
-  <a name="フェイルオーバー" class="anchor" href="#フェイルオーバー" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>フェイルオーバー</h3>
+<h3 id="フェイルオーバー">フェイルオーバー</h3>
 
 <p><img width="1094" alt="4" src="https://user-images.githubusercontent.com/60682957/142567334-559b4050-7b93-4837-8369-305ae902b149.png">
 <img width="1093" alt="5" src="https://user-images.githubusercontent.com/60682957/142567342-cb3bb220-1066-4fbe-a621-c276cdabf2f2.png"></p>
 
 <blockquote>
-<p>どちらも<a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a>より引用</p>
+<p>どちらも<a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks" target="_blank">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a>より引用</p>
 </blockquote>
 
 <p>フェイルオーバーの際は、レプリカがプライマリに昇格する。しかし、フェイルオーバープロセスの中で、プライマリに昇格するレプリカはMulti-AZ Transaction Logのうち自身に適用されていないオペレーションだけを適用する。
@@ -157,64 +129,36 @@ Multi-AZ Transaction Logとは、詳細は明かされていないが、おそ�
 
 <p>AOFではファイルの先頭から末尾までを全て再適用しないと完全なデータが再現できなかった。上記のアプローチでは、適用されていないオペレーションのみを適用可能なため、データの復旧にかかる時間が大きく削減できると思われる。これによって、Amazon MemoryDBは高い可用性と一貫性・耐久性を同時に実現できる。</p>
 
-<h2>
-  <a name="mysqlクラスタとの類似点" class="anchor" href="#mysqlクラスタとの類似点" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>MySQLクラスタとの類似点</h2>
+<h2 id="mysqlクラスタとの類似点">MySQLクラスタとの類似点</h2>
 
 <p>さて、こういった技術は特に新規性のあるものではない。
 例えば、MySQLクラスタをフェイルオーバーするとき、MySQLのレプリケーションのBinlogを使って非同期で行われるので、結局はソースとレプリカでの差分が発生する。
-RDBは通常、キャッシュストアよりも一貫性にはシビアである。フェイルオーバーの際は結局はレプリカへの差分データのコピーを行う必要があり、これを自動で行うのが<a href="https://github.com/yoshinorim/mha4mysql-manager/wiki">MHA</a>や<a href="https://www.percona.com/blog/2014/07/03/failover-mysql-utilities-part-2-mysqlfailover/">mysqlfailover</a>である。 (<a href="https://github.com/openark/orchestrator">orchestrator</a>もおそらく同じ？)
+RDBは通常、キャッシュストアよりも一貫性にはシビアである。フェイルオーバーの際は結局はレプリカへの差分データのコピーを行う必要があり、これを自動で行うのが<a href="https://github.com/yoshinorim/mha4mysql-manager/wiki" target="_blank">MHA</a>や<a href="https://www.percona.com/blog/2014/07/03/failover-mysql-utilities-part-2-mysqlfailover/" target="_blank">mysqlfailover</a>である。 (<a href="https://github.com/openark/orchestrator" target="_blank">orchestrator</a>もおそらく同じ？)
 これはまさしくAmazon MemoryDBが実現していることである。</p>
 
-<h2>
-  <a name="終わりに" class="anchor" href="#終わりに" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>終わりに</h2>
+<h2 id="終わりに">終わりに</h2>
 
 <p>AOFはノードローカルに保有するので、ネットワーク通信が不要な分書き込みの失敗の確率がかなり低い。Multi-AZ Transaction LogはAWS内のネットワークとはいえ書き込み失敗の確率が比較的高いはずだが、リトライなどで解決可能だと思われる。
-筆者は<a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html">Amazon MemoryDB for Redis – Where speed meets consistency</a>を読んでいてMemoryDBのアーキテクチャを知った。一通り読んで、「これMySQLクラスタのフェイルオーバー自動化ツールがやってるやつじゃん」と思うと同時に、こういった既に世の中にある仕組みを流用して何かを少し便利にするようなエンジニアリングはクールだな、と感じこの記事を書いた。Amazon MemoryDBはElasticacheよりもコストがかかりそうだが、今後は基本的にAWSでRedis使う場合はMemoryDBを採用するのが良いではないだろうか。</p>
+筆者は<a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html" target="_blank">Amazon MemoryDB for Redis – Where speed meets consistency</a>を読んでいてMemoryDBのアーキテクチャを知った。一通り読んで、「これMySQLクラスタのフェイルオーバー自動化ツールがやってるやつじゃん」と思うと同時に、こういった既に世の中にある仕組みを流用して何かを少し便利にするようなエンジニアリングはクールだな、と感じこの記事を書いた。Amazon MemoryDBはElasticacheよりもコストがかかりそうだが、今後は基本的にAWSでRedis使う場合はMemoryDBを採用するのが良いではないだろうか。</p>
 
-<h2>
-  <a name="参考" class="anchor" href="#参考" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>参考</h2>
+<h2 id="参考">参考</h2>
 
 <ul>
-<li><a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html">Amazon MemoryDB for Redis – Where speed meets consistency</a></li>
-<li><a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a></li>
-<li><a href="https://www.infoq.com/news/2021/08/amazon-memorydb-for-redis-ga/">AWS Announces the General Availability of Amazon MemoryDB for Redis</a></li>
-<li><a href="https://redis.io/topics/persistence">Redis Persistence – Redis</a></li>
-<li><a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html">Minimizing downtime in ElastiCache for Redis with Multi-AZ - Amazon ElastiCache for Redis</a></li>
-<li><a href="http://antirez.com/news/36">Redis data model and eventual consistency - <antirez></a></li>
-<li><a href="http://yoshinorimatsunobu.blogspot.com/2011/07/announcing-mysql-mha-mysql-master-high.html">Yoshinori Matsunobu&rsquo;s blog: Announcing MySQL-MHA: &ldquo;MySQL Master High Availability manager and tools&rdquo;</a></li>
-<li><a href="https://github.com/openark/orchestrator">openark/orchestrator: MySQL replication topology management and HA</a></li>
-<li><a href="https://dev.mysql.com/doc/refman/8.0/en/replication-gtids-failover.html">MySQL :: MySQL 8.0 Reference Manual :: 17.1.3.5 Using GTIDs for Failover and Scaleout</a></li>
-<li><a href="https://www.percona.com/blog/2014/07/03/failover-mysql-utilities-part-2-mysqlfailover/">Failover with the MySQL Utilities: Part 2 - mysqlfailover</a></li>
+<li><a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html" target="_blank">Amazon MemoryDB for Redis – Where speed meets consistency</a></li>
+<li><a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks" target="_blank">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a></li>
+<li><a href="https://www.infoq.com/news/2021/08/amazon-memorydb-for-redis-ga/" target="_blank">AWS Announces the General Availability of Amazon MemoryDB for Redis</a></li>
+<li><a href="https://redis.io/topics/persistence" target="_blank">Redis Persistence – Redis</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html" target="_blank">Minimizing downtime in ElastiCache for Redis with Multi-AZ - Amazon ElastiCache for Redis</a></li>
+<li><a href="http://antirez.com/news/36" target="_blank">Redis data model and eventual consistency - <antirez></a></li>
+<li><a href="http://yoshinorimatsunobu.blogspot.com/2011/07/announcing-mysql-mha-mysql-master-high.html" target="_blank">Yoshinori Matsunobu&rsquo;s blog: Announcing MySQL-MHA: &ldquo;MySQL Master High Availability manager and tools&rdquo;</a></li>
+<li><a href="https://github.com/openark/orchestrator" target="_blank">openark/orchestrator: MySQL replication topology management and HA</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/replication-gtids-failover.html" target="_blank">MySQL :: MySQL 8.0 Reference Manual :: 17.1.3.5 Using GTIDs for Failover and Scaleout</a></li>
+<li><a href="https://www.percona.com/blog/2014/07/03/failover-mysql-utilities-part-2-mysqlfailover/" target="_blank">Failover with the MySQL Utilities: Part 2 - mysqlfailover</a></li>
 </ul>
 
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-<hr />
 
-<p>If you want to send me any feedback about this article, you can submit it as GitHub issue <a href="https://github.com/hidetatz/blog/issues/new">here</a>.
-Just a comment, pointing out a mistake, minor typo, any other else are welcome.</p>
-
-<hr />
-
-<div style="text-align: center;">
-  <a href="/">home</a>
-</div>
-
-
-<hr>
-
-<footer>
-<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
-</footer>
 <script src="/syntax.js"></script>
 <script>hljs.highlightAll();</script>
 </body>

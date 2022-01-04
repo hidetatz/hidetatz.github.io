@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>hidetatz.io | Hidetatz Yaginuma</title>
-  <id>https://dtyler.io</id>
-  <updated>2021-11-19T19:00:00Z</updated>
-  <link href="https://dtyler.io"></link>
+  <id>https://hidetatz.io</id>
+  <updated>2022-01-03T10:26:30Z</updated>
+  <link href="https://hidetatz.io"></link>
   <author>
     <name>Hidetatz Yaginuma</name>
     <email>hidetatz@gmail.com</email>
   </author>
+  <entry>
+    <title>メモリモデル</title>
+    <updated>2022-01-03T10:26:30Z</updated>
+    <id>tag:hidetatz.io,2022-01-03://articles/2022/01/03/memory_model_ja</id>
+    <link href="https://hidetatz.io//articles/2022/01/03/memory_model_ja" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>hidetatz@gmail.com</email>
+    </author>
+  </entry>
   <entry>
     <title>How Amazon MemoryDB for Redis guarantees the data durability</title>
     <updated>2021-11-19T19:00:00Z</updated>

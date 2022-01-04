@@ -30,38 +30,22 @@
 <body class="markdown-body">
 <p><a href="/">&lt;- home</a></p>
 
-<h1>
-  <a name="kubecolorでkubectlの出力に色を付ける" class="anchor" href="#kubecolorでkubectlの出力に色を付ける" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>kubecolorでkubectlの出力に色を付ける</h1>
+<h1 id="kubecolorでkubectlの出力に色を付ける">kubecolorでkubectlの出力に色を付ける</h1>
 
-<h4>
-  <a name="2020-10-14" class="anchor" href="#2020-10-14" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>2020/10/14</h4>
+<h4 id="2020-10-14">2020/10/14</h4>
 
 <p><img src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png" alt="" /></p>
 
-<h1>
-  <a name="1-はじめに" class="anchor" href="#1-はじめに" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>1. はじめに</h1>
+<h1 id="1-はじめに">1. はじめに</h1>
 
 <p>kubectlはKubernetesクラスタを操作するためのCLIクライアントです。
 筆者は仕事でほぼ毎日kubectlを使用しますが、その使い勝手に対して一点改善したい点がありました。それは、 _出力が一色のみで見辛い_　という点です。
-この記事では、筆者が開発したkubectlの出力に色を付けるためのOSS &ldquo;<a href="https://github.com/hidetatz/kubecolor">kubecolor</a>&rdquo; について紹介します。筆者はkubecolorは非常に便利で、もっと多くの人に使ってもらいたいと考えているため、この記事を書くことにしました。
+この記事では、筆者が開発したkubectlの出力に色を付けるためのOSS &ldquo;<a href="https://github.com/hidetatz/kubecolor" target="_blank">kubecolor</a>&rdquo; について紹介します。筆者はkubecolorは非常に便利で、もっと多くの人に使ってもらいたいと考えているため、この記事を書くことにしました。
 次章からは、既存のkubectlに対して筆者が改善したいと感じていた点についてもう具体例を上げながら説明し、その後kubecolorではそれをどう改善できているのかを解説します。そして、kubecolorの使い方について説明します。</p>
 
 <p>また本記事では、「見やすい」「見辛い」「わかりやすい」などの表現を使用しますが、筆者は色彩学やデザインの専門家では一切なく、単なる主観であることをご了承ください。</p>
 
-<h1>
-  <a name="2-kubectlを改善したかった点" class="anchor" href="#2-kubectlを改善したかった点" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>2. kubectlを改善したかった点</h1>
+<h1 id="2-kubectlを改善したかった点">2. kubectlを改善したかった点</h1>
 
 <p>初めに、素のkubectlの出力を見てみます。（画像内で使用しているクラスタはテスト用のものです）</p>
 
@@ -76,15 +60,11 @@
 <p>出力が大きくなると、先程よりも「見辛く」感じないでしょうか。もちろん個人差があるとは思うのですが、筆者は欲しいデータがどこにあるかを瞬時に認識することが難しいなと以前から感じていました。これが、筆者がkubecolorを開発した理由です。
 次章では、kubecolorがどのようなアプローチで「見やすさ」に貢献できるかを解説します。</p>
 
-<h1>
-  <a name="3-kubecolorを使うと何が変わるか" class="anchor" href="#3-kubecolorを使うと何が変わるか" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>3. kubecolorを使うと何が変わるか</h1>
+<h1 id="3-kubecolorを使うと何が変わるか">3. kubecolorを使うと何が変わるか</h1>
 
 <p>kubecolorは筆者が開発したOSSで、以下のGitHubリポジトリで開発しています。</p>
 
-<p><a href="https://github.com/hidetatz/kubecolor">https://github.com/hidetatz/kubecolor</a></p>
+<p><a href="https://github.com/hidetatz/kubecolor" target="_blank">https://github.com/hidetatz/kubecolor</a></p>
 
 <p>ライセンスはMITです。</p>
 
@@ -121,30 +101,18 @@
 <p>色がつくことで、かなり見やすくなったのではないでしょうか。筆者は元々の一色のみの出力よりも、目的のものが見つけやすくなったなと感じます。
 次章では、kubecolorのインストール方法及び使い方などについて解説します。</p>
 
-<h1>
-  <a name="4-kubecolorの使い方" class="anchor" href="#4-kubecolorの使い方" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>4. kubecolorの使い方</h1>
+<h1 id="4-kubecolorの使い方">4. kubecolorの使い方</h1>
 
 <p>本章の内容は、kubecolorの開発が進むにつれ最新の情報でなくなる可能性があります。</p>
 
-<h2>
-  <a name="kubecolorは何をするのか" class="anchor" href="#kubecolorは何をするのか" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>kubecolorは何をするのか</h2>
+<h2 id="kubecolorは何をするのか">kubecolorは何をするのか</h2>
 
 <p>kubecolorはkubectlコマンドに渡すべきコマンドラインオプションを受け取り、内部でkubectlコマンドを実行し、帰ってきた出力に色付けしてその後出力します。色付け以外のことは何もしません。
-kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコマンドの出力に対して色付けをサポートしているわけではありません。また、出力に用いる色が今後変更される可能性もあります。サポートされている機能や今後実装されるものについて、<a href="https://github.com/hidetatz/kubecolor">README</a>をご覧ください。</p>
+kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコマンドの出力に対して色付けをサポートしているわけではありません。また、出力に用いる色が今後変更される可能性もあります。サポートされている機能や今後実装されるものについて、<a href="https://github.com/hidetatz/kubecolor" target="_blank">README</a>をご覧ください。</p>
 
-<h2>
-  <a name="インストール" class="anchor" href="#インストール" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>インストール</h2>
+<h2 id="インストール">インストール</h2>
 
-<p>kubecolorはGoで実装されており、インストールにはgoコマンドを使用します。goコマンドがインストールされていない場合はまず<a href="https://golang.org/doc/install">公式ドキュメント</a>などを参考にインストールする必要があります。</p>
+<p>kubecolorはGoで実装されており、インストールにはgoコマンドを使用します。goコマンドがインストールされていない場合はまず<a href="https://golang.org/doc/install" target="_blank">公式ドキュメント</a>などを参考にインストールする必要があります。</p>
 
 <p>インストールは次のコマンドで行うことができます。</p>
 
@@ -158,11 +126,7 @@ kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコ�
 
 <p>(上記コマンドを実行してもkubecolorコマンドが実行できない場合、 <code>$GOPATH/bin</code> が <code>$PATH</code> に入っていない、<code>Go modules</code>が有効になっていて <code>$GOPATH/bin</code> にバイナリができていないなどの原因が考えられます。)</p>
 
-<h2>
-  <a name="使い方" class="anchor" href="#使い方" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>使い方</h2>
+<h2 id="使い方">使い方</h2>
 
 <p>kubectlコマンドに渡したいコマンドをそのままkubecolorに渡すことで、出力が色付けされます。例えば、次のようなコマンドが考えられます。</p>
 
@@ -179,25 +143,13 @@ kubecolor exec -it pod-a bash
 
 <p>しかし、単にこれを設定するとkubectlのネイティブの補完機能が動作しなくなります。対処法は後述します。</p>
 
-<h2>
-  <a name="有効なコマンドラインオプション" class="anchor" href="#有効なコマンドラインオプション" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>有効なコマンドラインオプション</h2>
+<h2 id="有効なコマンドラインオプション">有効なコマンドラインオプション</h2>
 
-<h3>
-  <a name="plainで色をつけなくする" class="anchor" href="#plainで色をつけなくする" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>&ndash;plainで色をつけなくする</h3>
+<h3 id="plainで色をつけなくする">&ndash;plainで色をつけなくする</h3>
 
 <p><code>--plain</code> フラグをkubecolorに渡すと、kubecolorは色をつけずに出力します。結果をファイルに書き込みたい時などに便利です。</p>
 
-<h3>
-  <a name="light-backgroundで使用する色を設定する" class="anchor" href="#light-backgroundで使用する色を設定する" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>&ndash;light-backgroundで使用する色を設定する</h3>
+<h3 id="light-backgroundで使用する色を設定する">&ndash;light-backgroundで使用する色を設定する</h3>
 
 <p>kubecolorが色付けに使用する色のプリセットは、デフォルトでは「背景が暗い色に設定してあるターミナルエミュレータ」上で見やすくなるように設定されています。これは逆に言えば、ターミナルの背景を白などの明るい色に設定している環境では、kubecolorの使う色が見えにくいと感じる可能性があります。 <code>--light-background</code> フラグをkubecolorに渡すことで、明るい背景に最適な色のプリセットを使って出力に色付けを行うようになります。
 実際に背景色を白に設定したターミナルで、kubecolor describe podコマンドを実行します。 <code>--light-background</code> なしでは次のように見えます。</p>
@@ -210,11 +162,7 @@ kubecolor exec -it pod-a bash
 
 <p>白 -&gt; 黒に、シアン -&gt; 濃い青にそれぞれ変わったことで、読みやすくなります。</p>
 
-<h2>
-  <a name="kubectlの自動補完機能と組み合わせる" class="anchor" href="#kubectlの自動補完機能と組み合わせる" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>kubectlの自動補完機能と組み合わせる</h2>
+<h2 id="kubectlの自動補完機能と組み合わせる">kubectlの自動補完機能と組み合わせる</h2>
 
 <p>kubectlにはネイティブに自動補完機能があります。これは、kubectlコマンドに対して補完を効かせるようになっているため、kubecolorコマンドでも同様に補完を効かせるためには次の設定が必要です。</p>
 
@@ -228,11 +176,7 @@ kubecolor exec -it pod-a bash
 
 <p>なお、この設定はbash上で期待通りに動作することを確認済みですが、fishなどでは事情が違います。kubectlの補完機能はfishをオフィシャルにサポートしていないためです。fish上での自動補完動作は調査中のステータスです。（fishに詳しい方がいれば、どうすれば補完可能か情報提供いただけると助かります！）</p>
 
-<h2>
-  <a name="kubectlコマンドを指定する" class="anchor" href="#kubectlコマンドを指定する" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>kubectlコマンドを指定する</h2>
+<h2 id="kubectlコマンドを指定する">kubectlコマンドを指定する</h2>
 
 <p>kubecolorは内部でkubectlコマンドを実行しますが、そこで利用するコマンドを変更したいことがたまにあります。例えば、gcloudを使えばkubectlをバージョン違いでインストールできますが、(kubectl.1.18など) これをkubecolorに使わせたいときは、次のようにします。</p>
 
@@ -241,11 +185,7 @@ kubecolor exec -it pod-a bash
 
 <p><code>KUBECTL_COMMAND</code> に何もセットしていない場合、kubecolorはデフォルトで <code>kubectl</code> を使用します。</p>
 
-<h1>
-  <a name="おわりに" class="anchor" href="#おわりに" rel="nofollow" aria-hidden="true">
-    <span class="octicon octicon-link">
-    </span>
-  </a>おわりに</h1>
+<h1 id="おわりに">おわりに</h1>
 
 <p>筆者が開発したOSS kubecolorについて紹介しました。色がつくとkubectlライフがより便利で、そして楽しくなりますね！ぜひ使ってみてください。
 良さそうだなと思ってもらえたら、GitHub上でスターを付けてもらえると嬉しいです！また、issueやプルリクエストも歓迎です。
@@ -253,23 +193,7 @@ kubecolor exec -it pod-a bash
 
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-<hr />
 
-<p>If you want to send me any feedback about this article, you can submit it as GitHub issue <a href="https://github.com/hidetatz/blog/issues/new">here</a>.
-Just a comment, pointing out a mistake, minor typo, any other else are welcome.</p>
-
-<hr />
-
-<div style="text-align: center;">
-  <a href="/">home</a>
-</div>
-
-
-<hr>
-
-<footer>
-<p style="text-align:center">© 2017-2021 Hidetatz Yaginuma</p>
-</footer>
 <script src="/syntax.js"></script>
 <script>hljs.highlightAll();</script>
 </body>
