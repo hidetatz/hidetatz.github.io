@@ -5,10 +5,10 @@ https://hidetatz.io
 ## Run blog on local HTTP server
 
 ```shell
-make
+make serve
 ```
 
-then, access the url copied into the clipboard
+Then, access to http://localhost:8080.
 
 ## How to write Article
 
@@ -19,5 +19,5 @@ then, access the url copied into the clipboard
 ## How to generate blog
 
 ```shell
-make gen
+make
 ```
