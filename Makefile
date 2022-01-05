@@ -1,7 +1,7 @@
-serve: 
+gen: 
 	go run *.go
-gen:
-	go run *.go -gen
+serve:
+	go run *.go -serve
 
 deploy: gen
 	git add .
