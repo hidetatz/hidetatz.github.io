@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
@@ -468,6 +469,40 @@ func main() {
 	removeAllFiles("./docs/")
 	gen()
 	if *serve {
+		watcher, err := fsnotify.NewWatcher()
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer watcher.Close()
+
+		go func() {
+			for {
+				select {
+				case <-watcher.Events:
+					fmt.Println("reloading...")
+					removeAllFiles("./docs/")
+					gen()
+				case err := <-watcher.Errors:
+					log.Println("error:", err)
+				}
+			}
+		}()
+
+		err = watcher.Add("./draft")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = watcher.Add("./data")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = watcher.Add("./data/articles")
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		server := &http.Server{Addr: ":8080", Handler: http.FileServer(http.Dir("./docs"))}
 		fmt.Printf("Serving at localhost:8080\n")
 		server.ListenAndServe()
