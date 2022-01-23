@@ -479,7 +479,7 @@ func main() {
 			for {
 				select {
 				case <-watcher.Events:
-					fmt.Println("reloading...")
+					fmt.Println("regenerating...")
 					removeAllFiles("./docs/")
 					gen()
 				case err := <-watcher.Errors:
@@ -487,11 +487,6 @@ func main() {
 				}
 			}
 		}()
-
-		err = watcher.Add("./draft")
-		if err != nil {
-			log.Fatal(err)
-		}
 
 		err = watcher.Add("./data")
 		if err != nil {
