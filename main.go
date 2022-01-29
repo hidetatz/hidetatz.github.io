@@ -456,7 +456,7 @@ func gen() {
 	}
 	write(generateHTMLPage("404 | hidetatz.io", fmt.Sprintf(notFoundPage, articlesFor404Page)), "./docs/404.html")
 
-	// writings
+	// other writings
 	write(convertArticleToHTML("Learn distributed systems", distsys, nil), "./docs/distsys.html")
 }
 
