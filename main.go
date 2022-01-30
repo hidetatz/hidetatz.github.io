@@ -479,7 +479,7 @@ func main() {
 			for {
 				select {
 				case <-watcher.Events:
-					fmt.Println("regenerating...")
+					log.Println("regenerating...")
 					removeAllFiles("./docs/")
 					gen()
 				case err := <-watcher.Errors:
@@ -499,7 +499,7 @@ func main() {
 		}
 
 		server := &http.Server{Addr: ":8080", Handler: http.FileServer(http.Dir("./docs"))}
-		fmt.Printf("Serving at localhost:8080\n")
+		log.Printf("Serving at localhost:8080\n")
 		server.ListenAndServe()
 	}
 }
