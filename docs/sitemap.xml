@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2022-01-20T12:00:00Z</lastmod>
+    <lastmod>2022-02-14T12:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/distsys.html</loc>
-    <lastmod>2022-01-20T12:00:00Z</lastmod>
+    <lastmod>2022-02-14T12:00:00Z</lastmod>
   </url>
   <url>
-    <loc>https://hidetatz.io//articles/2022/01/20/memory_model_ja</loc>
-    <lastmod>2022-01-20T12:00:00Z</lastmod>
+    <loc>https://hidetatz.io//articles/2022/02/14/memory_model_ja</loc>
+    <lastmod>2022-02-14T12:00:00Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2021/11/19/amazon_memorydb_architecture</loc>
