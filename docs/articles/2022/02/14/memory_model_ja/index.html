@@ -186,7 +186,7 @@ op_4()
 <p>まずは、有名な (？) メモリモデルであるTSOから。TSOは「Total Store Order」のアクロニムである。TSOは順序変更が発生しにくい、いわゆる「強いメモリモデル」に分類される。
 TSOを実装しているプロセッサの典型はx86であるが、<a href="https://cr.yp.to/2005-590/sparcv9.pdf" target="_blank">SPARC</a>や<a href="https://riscv.org/wp-content/uploads/2018/05/14.25-15.00-RISCVMemoryModelTutorial.pdf" target="_blank">RISC-V</a>もTSOをサポートしている。</p>
 
-<p>TSOでは、メモリへのストアがロードの後に順序変更されることがあり得る。それ以外の、「ロードがストアの後に順序変更」「ロードがロードの後に順序変更」「ストアがストアの後に順序変更」などは発生しない。</p>
+<p>TSOでは、メモリへストアする命令がメモリからロードする命令の後に順序変更されることがあり得る。それ以外の、「ロード命令がストア命令の後に順序変更」「ロード命令がロード命令の後に順序変更」「ストア命令がストア命令の後に順序変更」などは発生しない。</p>
 
 <p>なぜストアがロードの後に順序変更されるのか？というと、例えば以下はx86、SPARC TSOのアーキテクチャ図である (<a href="https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf" target="_blank">A Tutorial Introduction to the ARM and POWER Relaxed Memory Models</a>より図を引用) 。</p>
 

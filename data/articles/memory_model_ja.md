@@ -154,7 +154,7 @@ __スレッド1はop_1をop_2よりも前に実行すること__ と __スレッ
 まずは、有名な (？) メモリモデルであるTSOから。TSOは「Total Store Order」のアクロニムである。TSOは順序変更が発生しにくい、いわゆる「強いメモリモデル」に分類される。
 TSOを実装しているプロセッサの典型はx86であるが、[SPARC](https://cr.yp.to/2005-590/sparcv9.pdf)や[RISC-V](https://riscv.org/wp-content/uploads/2018/05/14.25-15.00-RISCVMemoryModelTutorial.pdf)もTSOをサポートしている。
 
-TSOでは、メモリへのストアがロードの後に順序変更されることがあり得る。それ以外の、「ロードがストアの後に順序変更」「ロードがロードの後に順序変更」「ストアがストアの後に順序変更」などは発生しない。
+TSOでは、メモリへストアする命令がメモリからロードする命令の後に順序変更されることがあり得る。それ以外の、「ロード命令がストア命令の後に順序変更」「ロード命令がロード命令の後に順序変更」「ストア命令がストア命令の後に順序変更」などは発生しない。
 
 なぜストアがロードの後に順序変更されるのか？というと、例えば以下はx86、SPARC TSOのアーキテクチャ図である ([A Tutorial Introduction to the ARM and POWER Relaxed Memory Models](https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf)より図を引用) 。
 
