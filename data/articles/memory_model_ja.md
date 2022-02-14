@@ -1,4 +1,4 @@
-title: メモリモデル
+title: メモリモデルとはなにか
 timestamp: 2022-02-14 12:00:00
 lang: ja
 ---
