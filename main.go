@@ -179,7 +179,6 @@ func linkToArticle(a *article) string {
 }
 
 func toHTML(md string) string {
-	// return string(gfm.Markdown([]byte(markdown)))
 	parser := parser.NewWithExtensions(parser.CommonExtensions | parser.AutoHeadingIDs | parser.Footnotes)
 	renderer := html.NewRenderer(html.RendererOptions{Flags: html.CommonFlags | html.HrefTargetBlank | html.FootnoteReturnLinks})
 	return string(markdown.ToHTML([]byte(md), parser, renderer))
