@@ -355,6 +355,8 @@ DRF-SCにおいて、ソフトウェアはatomicなどの同期プリミティ�
 
 ### Goのメモリモデル
 
+!! この内容は[May 31, 2014](https://web.archive.org/web/20211227220453/https://tip.golang.org/ref/mem)を基に書かれており、アップデートされていない箇所があります。[Goのメモリモデルのアップデート](/articles/2022/06/12/go_mem_update/)も併せてご覧ください。
+
 [Goのメモリモデル](https://go.dev/ref/mem)においては、次のことが書かれている。
 
 * 「同期」を行うことで、操作と操作の間に「先行発生 (Happens-before)」を関係付けられること
