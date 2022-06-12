@@ -12,7 +12,7 @@ Goのメモリモデルのページは長らく[May 31, 2014](https://web.archiv
 
 これまでのGoのメモリモデルは、内容としては上記のMay 31, 2014のものを読むのが一番良いのだけど、かなりざっくりしたものであった。
 Happens-Before関係を (改めて) 説明したあとに、Goroutineやチャネル、init関数といったものがランタイムでどのように順序保証されるかと、間違った同期のやり方はどんなものかという例を挙げるに留まっている。
-すなわち、データレースに関する詳しい説明や、最も重要 (と筆者は思うのだけど) なデータレース時の挙動についてはあまり書かれていなかった。
+すなわち、データレースに関する詳しい説明や、データレースを起こさないためのセマンティクス、データレース時の挙動についてはあまり書かれていなかった。
 
 Goでデータレース発生時にどうなるかは、[Benign Data Race and Undefined Behaviour](https://groups.google.com/g/golang-nuts/c/EHHMCdcenc8)や[Does Go have `undefined behaviour` ?](https://groups.google.com/g/golang-nuts/c/MB1QmhDd_Rk)、あるいは[Benign data races: what could possibly go wrong?](https://web.archive.org/web/20150604005924/http://software.intel.com/en-us/blogs/2013/01/06/benign-data-races-what-could-possibly-go-wrong)を読むと、「おそらく (C/C++のような) Undefined Behaviorになるのかな?」といった感じに見える。しかし、Goのドキュメントに直接書かれていないので、正直なところ筆者はよくわかっていなかった。ただ、別にデータ競合のあるプログラムを書きたいわけではないので、ロックやatomicはもちろん使っていたし、ThreadSanitizerも積極的に利用する、といった感じであった。
 
