@@ -36,12 +36,13 @@ Goでデータレース発生時にどうなるかは、[Benign Data Race and Un
 > Reads of memory locations larger than a single machine word are encouraged but not required to meet the same semantics as word-sized memory locations, observing a single allowed write w. For performance reasons, implementations may instead treat larger operations as a set of individual machine-word-sized operations in an unspecified order. This means that races on multiword data structures can lead to inconsistent values not corresponding to a single write. When the values depend on the consistency of internal (pointer, length) or (pointer, type) pairs, as can be the case for interface values, maps, slices, and strings in most Go implementations, such races can in turn lead to arbitrary memory corruption.
 
 * データレースが発生すると、Goはそれを報告してプログラムの実行を停止することができる
-* データレースがないのであれば、マシンワード以下のサイズのメモリへの読み書きはプログラマの期待通りになる
+* データレースによってプログラムが停止しないのであれば、マシンワード以下のサイズのメモリへの読み書きはプログラマの期待通りになる
 * マシンワードより大きなメモリ読み取りは、アトミックにはならない可能性がある
 
 1つ目に関して。[Benign data races: what could possibly go wrong?](https://web.archive.org/web/20150604005924/http://software.intel.com/en-us/blogs/2013/01/06/benign-data-races-what-could-possibly-go-wrong)では、「プログラマがデータレースを起こすと未定義動作が引き起こされaccidental nuclear missile launchが発生するかもしれないよ」と冗談ぽく書かれていた。Goではプログラムを停止させることがOKなので、そういったリスクは幾分低減されているようである。ただし、これはあらゆるGoの実装がデータレースに際して必ずプログラムを停止させなければいけないという意味ではないと思われるので、プログラマは依然としてデータレースのないプログラムを書かなければいけないし、 `-race` なども使用すべきである。
 
-2つ目に関して。データレースのないプログラムでは、マシンワードサイズ以下のメモリへの読み書きは、rやwといった言葉で説明されているが、これはすなわち逐次一貫した、プログラマの期待通りの動きとなると思われる。
+2つ目に関して。データレースによってプログラムの停止が引き起こされない場合、マシンワードサイズ以下のメモリへの読み書きは、rやwといった言葉で説明されているが、これはすなわち逐次一貫した、プログラマの期待通りの動きとなると思われる。
+これが明言されたのは重要なことで、CやC++のようにデータレースがUndefined Behaviorを引き起こすプログラミング言語では、データレースが発生すると全く何が起きるか不明なためマシンワードサイズの (一見アトミックに思われる) メモリの読み書きすら失敗しうる。Goではデータレース時に、プログラムの停止こそあり得るが、停止しないのであれば最低限の正しい動作保証を試みるという意味でワードサイズ以下のメモリの読み書きは失敗しないことが明言された。このおかげでおそらく、本番環境で実行時にまれにしか現れないようなバグを作り込む機会が減るのではないかなと考えられ、バランス感覚として優れているのではないかなと思う。
 
 3つ目に関して。当然のことだが、メモリ読み取りのサイズがシングルワードを超えてしまうと、それらは順序不定な複数回のマシンワードサイズの読み取りになる。例えば64ビットマシンでメモリから128ビット読みたいとき、それは64ビットの読み取り2回で実現される。これまでこのことは簡単にしか明記されていなかったが、このドキュメントから詳しく書かれている。
 マルチワード変数へのアクセスは自動ではアトミックにならないことはとても重要で、Goではインタフェースやマップ、スライス、あるいは単なる文字列であっても内部構造はマルチワードになる。このことは[Ice cream makers and data races](https://dave.cheney.net/2014/06/27/ice-cream-makers-and-data-races)に詳しく書かれていて、手元でも簡単に試すことができるのでやってみると良いのではないかなと思う。
