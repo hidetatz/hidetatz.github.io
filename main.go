@@ -190,9 +190,9 @@ const indexPageMD = `
 
 hidetatz.io is my personal website. The author Hidetatz (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
 
-If you want to send me any feedback or questions about this website/article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new).
+If you want to send me any feedback or questions about this website/article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new). The edit history is found as [git commits of this page](https://github.com/hidetatz/blog/commits/master).
 
-Atom/RSS feed is found [here](/feed.xml).
+[Atom/RSS feed](/feed.xml).
 
 I [do fail](https://hidetatz.fail/).
 
