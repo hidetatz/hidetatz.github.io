@@ -166,7 +166,7 @@ func convertArticleToHTML(title, markdown string, timestamp *time.Time) string {
 	// the footnotes are placed under the button which does not look good
 	contentsHTML = contentsHTML + twitterButton
 
-	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.io", title), contentsHTML)
+	return generateHTMLPage(fmt.Sprintf("%s | hidetatz.github.io", title), contentsHTML)
 }
 
 func linkToArticle(a *article) string {
@@ -186,9 +186,9 @@ func toHTML(md string) string {
 }
 
 const indexPageMD = `
-# hidetatz.io
+# hidetatz.github.io
 
-hidetatz.io is my personal website. The author Hidetatz (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
+hidetatz.github.io is my personal website. The author Hidetatz (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
 
 If you want to send me any feedback or questions about this website/article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new). The edit history is found as [git commits of this page](https://github.com/hidetatz/blog/commits/master).
 
@@ -208,7 +208,7 @@ If you love it, give a star!
 * [collection](https://github.com/hidetatz/collection) (Go)
   - collection is a generics-aware Go library which provides collection data structures like [Java's one](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html).
 * [size-limited-queue](https://github.com/hidetatz/size-limited-queue) (Go)
-  - size-limited-queue is a blocking queue implementation. Internally sync.Cond is used and I made this repository to [describe](https://hidetatz.io/articles/2021/04/13/sync_cond/) how to use it.
+  - size-limited-queue is a blocking queue implementation. Internally sync.Cond is used and I made this repository to [describe](https://hidetatz.github.io/articles/2021/04/13/sync_cond/) how to use it.
 
 ---
 
@@ -245,7 +245,7 @@ func generateIndexPageHTML(articles []*article) string {
 	}
 
 	contentsHTML := toHTML(fmt.Sprintf(indexPageMD, enblogsList, jablogsList))
-	return generateHTMLPage("hidetatz.io", contentsHTML)
+	return generateHTMLPage("hidetatz.github.io", contentsHTML)
 }
 
 const page = `
@@ -335,7 +335,7 @@ func removeAllFiles(dir string) {
 	}
 }
 
-func genFeed(articles []*article, t time.Time, count int, fqdn string) string {
+func genFeed(articles []*article, t time.Time, count int) string {
 	if count > len(articles) {
 		count = len(articles)
 	}
@@ -343,8 +343,8 @@ func genFeed(articles []*article, t time.Time, count int, fqdn string) string {
 	name := "Hidetatz Yaginuma"
 	email := "hidetatz@gmail.com"
 	feed := &feeds.Feed{
-		Title:   fmt.Sprintf("hidetatz.io | %s", name),
-		Link:    &feeds.Link{Href: "https://hidetatz.io"},
+		Title:   fmt.Sprintf("hidetatz.github.io | %s", name),
+		Link:    &feeds.Link{Href: "https://hidetatz.github.io"},
 		Author:  &feeds.Author{Name: name, Email: email},
 		Created: t,
 		Items:   make([]*feeds.Item, count),
@@ -354,8 +354,8 @@ func genFeed(articles []*article, t time.Time, count int, fqdn string) string {
 		a := articles[i]
 		feed.Items[i] = &feeds.Item{
 			Title:       a.title,
-			Link:        &feeds.Link{Href: fmt.Sprintf("https://%s/%s", fqdn, linkToArticle(a))},
-			Description: "The post first appeared on hidetatz.io.",
+			Link:        &feeds.Link{Href: fmt.Sprintf("https://hidetatz.github.io/%s", linkToArticle(a))},
+			Description: "The post first appeared on hidetatz.github.io.",
 			Author:      &feeds.Author{Name: name, Email: email},
 			Created:     a.timestamp,
 		}
@@ -370,7 +370,8 @@ func genFeed(articles []*article, t time.Time, count int, fqdn string) string {
 	return atom
 }
 
-func genSiteMap(articles []*article, t time.Time, fqdn string) string {
+func genSiteMap(articles []*article, t time.Time) string {
+	fqdn := "hidetatz.github.io"
 	sm := sitemap.New()
 	sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s", fqdn), LastMod: &t})
 	sm.Add(&sitemap.URL{Loc: fmt.Sprintf("https://%s/distsys.html", fqdn), LastMod: &t})
@@ -385,8 +386,6 @@ func genSiteMap(articles []*article, t time.Time, fqdn string) string {
 }
 
 var (
-	cname = "hidetatz.io"
-
 	//go:embed assets/favicon.ico
 	favicon string
 
@@ -413,9 +412,6 @@ var (
 )
 
 func gen() {
-	// required for GitHub pages
-	write(cname, "./docs/CNAME")
-
 	// robots.txt
 	write(robotsTxt, "./docs/robots.txt")
 
@@ -444,8 +440,8 @@ func gen() {
 	latestArticle := articles[0]
 
 	// sitemap, atom feed
-	write(genSiteMap(articles, latestArticle.timestamp, cname), "./docs/sitemap.xml")
-	write(genFeed(articles, latestArticle.timestamp, 20, cname), "./docs/feed.xml")
+	write(genSiteMap(articles, latestArticle.timestamp), "./docs/sitemap.xml")
+	write(genFeed(articles, latestArticle.timestamp, 20), "./docs/feed.xml")
 
 	// 404 page
 	articlesCountOn404Page := 5
@@ -453,10 +449,10 @@ func gen() {
 	for i := 0; i < articlesCountOn404Page; i++ {
 		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, linkToArticle(articles[i]))
 	}
-	write(convertArticleToHTML("404 | hidetatz.io", fmt.Sprintf(notFoundPage, articlesFor404Page), nil), "./docs/404.html")
+	write(convertArticleToHTML("404 | hidetatz.github.io", fmt.Sprintf(notFoundPage, articlesFor404Page), nil), "./docs/404.html")
 
 	// other writings
-	write(convertArticleToHTML("Learn distributed systems | hidetatz.io", distsys, nil), "./docs/distsys.html")
+	write(convertArticleToHTML("Learn distributed systems | hidetatz.github.io", distsys, nil), "./docs/distsys.html")
 }
 
 func main() {

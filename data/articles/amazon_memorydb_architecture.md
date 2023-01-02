@@ -3,7 +3,7 @@ timestamp: 2021-11-19 19:00:00
 lang: en
 ---
 
-Note: This article is available in [Japanese](https://hidetatz.io/articles/2021/11/19/amazon_memorydb_architecture_ja/) also.
+Note: This article is available in [Japanese](https://hidetatz.github.io/articles/2021/11/19/amazon_memorydb_architecture_ja/) also.
 
 ## Introduction
 
