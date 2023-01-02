@@ -188,13 +188,13 @@ func toHTML(md string) string {
 const indexPageMD = `
 # hidetatz.github.io
 
-hidetatz.github.io is my personal website. The author Hidetatz (pronounced he-day-tatz) is a software engineer mainly focuses on system architecture, reliability, performance and observability based in Japan. I write code around infrastructure, database, transaction, concurrent programming and distributed systems. My code is available in [GitHub](https://github.com/hidetatz).
+## About me
 
-If you want to send me any feedback or questions about this website/article, you can submit it as GitHub issue [here](https://github.com/hidetatz/blog/issues/new). The edit history is found as [git commits of this page](https://github.com/hidetatz/blog/commits/master).
+I'm hidetatz, a automotive software engineer. 
 
-[Atom/RSS feed](/feed.xml).
-
-I [do fail](https://hidetatz.fail/).
+* [GitHub/hidetatz](https://github.com/hidetatz)
+* [Twitter/hidetatz](https://twitter.com/hidetatz) (rarely appear)
+* [Atom/RSS feed](/feed.xml).
 
 ---
 
@@ -202,13 +202,13 @@ I [do fail](https://hidetatz.fail/).
 
 If you love it, give a star!
 
-* [kubecolor](https://github.com/hidetatz/kubecolor) (Go)
-  - kubecolor is a CLI tool which wraps kubectl and colorizes the output for readability.
+* [kubecolor](https://github.com/hidetatz/kubecolor)
+  - A CLI tool which colorizes the kubectl output for readability.
   - You can read my [blog article](https://hidetatz.medium.com/colorize-kubectl-output-by-kubecolor-2c222af3163a) about it.
-* [collection](https://github.com/hidetatz/collection) (Go)
-  - collection is a generics-aware Go library which provides collection data structures like [Java's one](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html).
-* [size-limited-queue](https://github.com/hidetatz/size-limited-queue) (Go)
-  - size-limited-queue is a blocking queue implementation. Internally sync.Cond is used and I made this repository to [describe](https://hidetatz.github.io/articles/2021/04/13/sync_cond/) how to use it.
+* [incdb](https://github.com/hidetatz/incdb)
+  - Incrementally developed RDB from scratch.
+* [rv](https://github.com/hidetatz/rv)
+  - RISC-V software emulator.
 
 ---
 
