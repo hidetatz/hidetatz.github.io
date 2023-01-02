@@ -1,6 +1,6 @@
 ## blog
 
-https://hidetatz.io
+https://hidetatz.github.io
 
 ## Run blog on local HTTP server
 
