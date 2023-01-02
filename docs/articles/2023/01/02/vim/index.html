@@ -214,7 +214,7 @@ make: *** [Makefile:2: build] Error 1
 
 <p>次に、これをvimから実行してみます。 <code>vim main.c</code> で開き、 <code>:make</code> を実行します。コンソールにエラーが表示されたらEnterを押し、vimのウインドウに戻ったら <code>cw</code> でQuickfixリストを開きます。</p>
 
-<pre><code>main.c                                                                                                                                                                                                                                                                                                                                                                                                         5,4            All
+<pre><code>main.c
 || gcc main.c
 || main.c: In function ‘main’:
 main.c|4 col 4| error: ‘a’ undeclared (first use in this function)
@@ -231,12 +231,12 @@ main.c|4 col 5| error: expected ‘;’ before ‘return’
 <p>Quickfixリストには、gccが出力したエラーが表示されています。ここで重要なのは、vimはこの出力を解釈できることです。解釈できるとなにが嬉しいかというと、エラーを選択してエラーがあるファイルのエラーがある行を直接vimから開くことができます。Quickfixリストの中をj/kで移動してEnterを押せば、そのエラーの箇所が開かれます。
 なぜvimはgccのエラーメッセージを解釈できるのでしょうか？そもそもvimがエラーメッセージをどう解釈しているかというと、 <code>errorformat</code> というオプションに従っています。errorformatはエラーメッセージのフォーマットを指定するリストです。フォーマットなのでフォーマット指定子 ( <code>%f</code> みたいなやつ) で組み立てます。筆者の環境では、デフォルトで以下のようになっていました。</p>
 
-<pre><code>errorformat=%*[^&quot;]&quot;%f&quot;%*\D%l: %m,&quot;%f&quot;%*\D%l: %m,%-G%f:%l: (Each undeclared identifier is reported only once,%-G%f:%l: for each function it appears in.),%-GIn file included from %f:%l:%c:,%-GIn file included from %f:%l:%c\,,%-GIn file included from %f:%l:%c,%-GIn file included from %f:%l,%-G%*[ ]from %f:%l:%c,%-G%*[ ]from %f:%l:,%-G%*[ ]from %f:%l\,,%-G%*[ ]from %f:%l,%f:%l:%c:%m,%f(%l):%m,%f:%l:%m,&quot;%f&quot;\, line %l%*\D%c%*[^ ] %m,%D%*\a[%*\d]: Entering directory %*[`']%f',%X%*\a[%*\d]: Leaving directory %*[`']%f',%D%*\a: Entering directory %*[`']%f',%X%*\a: Leaving directory %*[`']%f',%DMaking %*\a in %f,%f|%l| %m
+<pre><code class="language-plaintext">errorformat=%*[^&quot;]&quot;%f&quot;%*\D%l: %m,&quot;%f&quot;%*\D%l: %m,%-G%f:%l: (Each undeclared identifier is reported only once,%-G%f:%l: for each function it appears in.),%-GIn file included from %f:%l:%c:,%-GIn file included from %f:%l:%c\,,%-GIn file included from %f:%l:%c,%-GIn file included from %f:%l,%-G%*[ ]from %f:%l:%c,%-G%*[ ]from %f:%l:,%-G%*[ ]from %f:%l\,,%-G%*[ ]from %f:%l,%f:%l:%c:%m,%f(%l):%m,%f:%l:%m,&quot;%f&quot;\, line %l%*\D%c%*[^ ] %m,%D%*\a[%*\d]: Entering directory %*[`']%f',%X%*\a[%*\d]: Leaving directory %*[`']%f',%D%*\a: Entering directory %*[`']%f',%X%*\a: Leaving directory %*[`']%f',%DMaking %*\a in %f,%f|%l| %m
 </code></pre>
 
 <p>errorformatはリストで、カンマで区切られます。ちょっと見づらいので、カンマで改行してみます。</p>
 
-<pre><code>%*[^&quot;]&quot;%f&quot;%*\D%l: %m,
+<pre><code class="language-plaintext">%*[^&quot;]&quot;%f&quot;%*\D%l: %m,
 &quot;%f&quot;%*\D%l: %m,
 %-G%f:%l: (Each undeclared identifier is reported only once,
 %-G%f:%l: for each function it appears in.),
@@ -419,9 +419,12 @@ int main() {
 またこの記事は、IDEやプラグインを使っている人に、IDEやプラグインは使わないほうがいいよ、と主張するための記事ではありません。こういうのは大前提として、好みとか慣れの問題だと思っています。他人がどんな風にコードを書いているのかはけっこう面白い話だと思っていて、それを自分も書いてみたくなったので書きました。
 最後まで読んでいただきありがとうございました!</p>
 
-<p>参考
-* <a href="https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim" target="_blank">How to Do 90% of What Plugins Do (With Just Vim)</a>
-* <a href="https://tatsu-zine.com/books/practical-vim" target="_blank">実践Vim</a></p>
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim" target="_blank">How to Do 90% of What Plugins Do (With Just Vim)</a></li>
+<li><a href="https://tatsu-zine.com/books/practical-vim" target="_blank">実践Vim</a></li>
+</ul>
 
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 

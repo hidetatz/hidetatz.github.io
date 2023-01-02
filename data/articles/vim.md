@@ -193,7 +193,7 @@ make: *** [Makefile:2: build] Error 1
 次に、これをvimから実行してみます。 `vim main.c` で開き、 `:make` を実行します。コンソールにエラーが表示されたらEnterを押し、vimのウインドウに戻ったら `cw` でQuickfixリストを開きます。
 
 ```
-main.c                                                                                                                                                                                                                                                                                                                                                                                                         5,4            All
+main.c
 || gcc main.c
 || main.c: In function ‘main’:
 main.c|4 col 4| error: ‘a’ undeclared (first use in this function)
@@ -210,13 +210,13 @@ main.c|4 col 5| error: expected ‘;’ before ‘return’
 Quickfixリストには、gccが出力したエラーが表示されています。ここで重要なのは、vimはこの出力を解釈できることです。解釈できるとなにが嬉しいかというと、エラーを選択してエラーがあるファイルのエラーがある行を直接vimから開くことができます。Quickfixリストの中をj/kで移動してEnterを押せば、そのエラーの箇所が開かれます。
 なぜvimはgccのエラーメッセージを解釈できるのでしょうか？そもそもvimがエラーメッセージをどう解釈しているかというと、 `errorformat` というオプションに従っています。errorformatはエラーメッセージのフォーマットを指定するリストです。フォーマットなのでフォーマット指定子 ( `%f` みたいなやつ) で組み立てます。筆者の環境では、デフォルトで以下のようになっていました。
 
-```
+```plaintext
 errorformat=%*[^"]"%f"%*\D%l: %m,"%f"%*\D%l: %m,%-G%f:%l: (Each undeclared identifier is reported only once,%-G%f:%l: for each function it appears in.),%-GIn file included from %f:%l:%c:,%-GIn file included from %f:%l:%c\,,%-GIn file included from %f:%l:%c,%-GIn file included from %f:%l,%-G%*[ ]from %f:%l:%c,%-G%*[ ]from %f:%l:,%-G%*[ ]from %f:%l\,,%-G%*[ ]from %f:%l,%f:%l:%c:%m,%f(%l):%m,%f:%l:%m,"%f"\, line %l%*\D%c%*[^ ] %m,%D%*\a[%*\d]: Entering directory %*[`']%f',%X%*\a[%*\d]: Leaving directory %*[`']%f',%D%*\a: Entering directory %*[`']%f',%X%*\a: Leaving directory %*[`']%f',%DMaking %*\a in %f,%f|%l| %m
 ```
 
 errorformatはリストで、カンマで区切られます。ちょっと見づらいので、カンマで改行してみます。
 
-```
+```plaintext
 %*[^"]"%f"%*\D%l: %m,
 "%f"%*\D%l: %m,
 %-G%f:%l: (Each undeclared identifier is reported only once,
@@ -403,6 +403,7 @@ Ctrl-lの行補完はけっこう便利です。Goプログラマの人は `if e
 またこの記事は、IDEやプラグインを使っている人に、IDEやプラグインは使わないほうがいいよ、と主張するための記事ではありません。こういうのは大前提として、好みとか慣れの問題だと思っています。他人がどんな風にコードを書いているのかはけっこう面白い話だと思っていて、それを自分も書いてみたくなったので書きました。
 最後まで読んでいただきありがとうございました!
 
-参考
+## 参考
+
 * [How to Do 90% of What Plugins Do (With Just Vim)](https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim)
 * [実践Vim](https://tatsu-zine.com/books/practical-vim)
