@@ -2,11 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hidetatz.io</loc>
-    <lastmod>2022-06-12T11:00:00Z</lastmod>
+    <lastmod>2023-01-02T22:58:12Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io/distsys.html</loc>
-    <lastmod>2022-06-12T11:00:00Z</lastmod>
+    <lastmod>2023-01-02T22:58:12Z</lastmod>
+  </url>
+  <url>
+    <loc>https://hidetatz.io//articles/2023/01/02/vim</loc>
+    <lastmod>2023-01-02T22:58:12Z</lastmod>
   </url>
   <url>
     <loc>https://hidetatz.io//articles/2022/06/12/go_mem_update</loc>

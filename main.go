@@ -497,8 +497,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		server := &http.Server{Addr: ":8080", Handler: http.FileServer(http.Dir("./docs"))}
-		log.Printf("Serving at localhost:8080\n")
+		server := &http.Server{Addr: ":8090", Handler: http.FileServer(http.Dir("./docs"))}
+		log.Printf("Serving at localhost:8090\n")
 		server.ListenAndServe()
 	}
 }
