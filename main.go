@@ -190,7 +190,7 @@ const indexPageMD = `
 
 ## About me
 
-I'm hidetatz, a automotive software engineer. 
+I'm hidetatz, an automotive software engineer developing software-defined car at [TURING Inc.](https://www.turing-motors.com/en). Making level 5, full self-driving EV.
 
 * [GitHub/hidetatz](https://github.com/hidetatz)
 * [Twitter/hidetatz](https://twitter.com/hidetatz) (rarely appear)
