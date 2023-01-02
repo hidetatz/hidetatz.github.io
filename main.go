@@ -449,10 +449,10 @@ func gen() {
 	for i := 0; i < articlesCountOn404Page; i++ {
 		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, linkToArticle(articles[i]))
 	}
-	write(convertArticleToHTML("404 | hidetatz.github.io", fmt.Sprintf(notFoundPage, articlesFor404Page), nil), "./docs/404.html")
+	write(convertArticleToHTML("404", fmt.Sprintf(notFoundPage, articlesFor404Page), nil), "./docs/404.html")
 
 	// other writings
-	write(convertArticleToHTML("Learn distributed systems | hidetatz.github.io", distsys, nil), "./docs/distsys.html")
+	write(convertArticleToHTML("Learn distributed systems", distsys, nil), "./docs/distsys.html")
 }
 
 func main() {
