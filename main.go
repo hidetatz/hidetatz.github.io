@@ -186,16 +186,17 @@ func toHTML(md string) string {
 }
 
 const indexPageMD = `
-Hidetatz is a software and AI enthusiast.
-I'm currently developing [whale](https://github.com/hidetatz/whale), a deep learning framework like pytorch but purely written in Go.
-Because AI technology will be more commoditized for every software engineer, whale is necessary in this world.
+I'm Hidetatz, a software and AI enthusiast.
+I'm currently developing [whale](https://github.com/hidetatz/whale), a deep learning framework inspired by PyTorch but entirely written in Go.
+Currently AI technology is for researchers rathar than for developers.
+As building AI into the systems becomes common, it must be changed. Building AI model must be more diverse, and that's why I develop whale.
 
 See some other open source software authored by me:
 
 * [shiba](https://github.com/hidetatz/shiba)
 
 shiba is a programming language which is plain like Python, but modern like Go or Rust.
-Python is great, but some parts (e.g. package manager) must be updated and that's why I create this.
+Python is great, but some parts (e.g. package manager, code formatting) must be updated and that's why I create shiba.
 
 * [kubecolor](https://github.com/hidetatz/kubecolor) (publicly archived)
 
@@ -213,7 +214,7 @@ RISC-V software emulator. WIP.
 
 Visit my [GitHub](https://github.com/hidetatz) and [X](https://twitter.com/hidetatz) for more information.
 
-* [Atom/RSS feed](/feed.xml).
+[Atom/RSS feed](/feed.xml).
 
 ---
 
