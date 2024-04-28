@@ -186,29 +186,33 @@ func toHTML(md string) string {
 }
 
 const indexPageMD = `
-# hidetatz.github.io
+Hidetatz is a software and AI enthusiast.
+I'm currently developing [whale](https://github.com/hidetatz/whale), a deep learning framework like pytorch but purely written in Go.
+Because AI technology will be more commoditized for every software engineer, whale is necessary in this world.
 
-## About me
+See some other open source software authored by me:
 
-I'm hidetatz, an automotive software engineer developing software-defined car at [TURING Inc.](https://www.turing-motors.com/en). Making level 5, full self-driving EV.
+* [shiba](https://github.com/hidetatz/shiba)
 
-* [GitHub/hidetatz](https://github.com/hidetatz)
-* [Twitter/hidetatz](https://twitter.com/hidetatz) (rarely appear)
-* [Atom/RSS feed](/feed.xml).
+shiba is a programming language which is plain like Python, but modern like Go or Rust.
+Python is great, but some parts (e.g. package manager) must be updated and that's why I create this.
 
----
+* [kubecolor](https://github.com/hidetatz/kubecolor) (publicly archived)
 
-## Projects
+kubecolor is a CLI tool which colorizes the kubectl output for readability.
+It's archived because I am not using Kubernetes for my work. I'll restart maitaining it if I have to run some containers on Kubernetes again (though I don't hope so).
+You can use the [community fork](https://github.com/kubecolor/kubecolor) if wanted.
 
-If you love it, give a star!
-
-* [kubecolor](https://github.com/hidetatz/kubecolor)
-  - A CLI tool which colorizes the kubectl output for readability.
-  - You can read my [blog article](https://hidetatz.medium.com/colorize-kubectl-output-by-kubecolor-2c222af3163a) about it.
 * [incdb](https://github.com/hidetatz/incdb)
-  - Incrementally developed RDB from scratch.
+This is an incrementally developed RDBMS from scratch. This is work-in-progress project.
+
 * [rv](https://github.com/hidetatz/rv)
-  - RISC-V software emulator.
+
+RISC-V software emulator. WIP.
+
+Visit my [GitHub](https://github.com/hidetatz) and [X](https://twitter.com/hidetatz) for more information.
+
+* [Atom/RSS feed](/feed.xml).
 
 ---
 
@@ -229,7 +233,7 @@ Some articles are available in Japanese also.
 
 ---
 
-© 2022 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/).
+© 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/).
 `
 
 func generateIndexPageHTML(articles []*article) string {
