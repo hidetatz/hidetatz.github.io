@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>hidetatz.github.io | Hidetatz Yaginuma</title>
   <id>https://hidetatz.github.io</id>
-  <updated>2023-08-31T15:54:35Z</updated>
+  <updated>2023-01-02T22:58:12Z</updated>
   <link href="https://hidetatz.github.io"></link>
   <author>
     <name>Hidetatz Yaginuma</name>
     <email>hidetatz@gmail.com</email>
   </author>
-  <entry>
-    <title>今働いているTuringという会社の話</title>
-    <updated>2023-08-31T15:54:35Z</updated>
-    <id>tag:hidetatz.github.io,2023-08-31://articles/2023/08/31/turing</id>
-    <link href="https://hidetatz.github.io//articles/2023/08/31/turing" rel="alternate"></link>
-    <summary type="html">The post first appeared on hidetatz.github.io.</summary>
-    <author>
-      <name>Hidetatz Yaginuma</name>
-      <email>hidetatz@gmail.com</email>
-    </author>
-  </entry>
   <entry>
     <title>なるべくプラグインを使わずにどうvimでプログラミングしているか</title>
     <updated>2023-01-02T22:58:12Z</updated>
@@ -221,6 +210,17 @@
     <updated>2019-12-23T00:00:00Z</updated>
     <id>tag:hidetatz.github.io,2019-12-23:/https://hidetatz.medium.com/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988</id>
     <link href="https://hidetatz.github.io/https://hidetatz.medium.com/lets-study-distributed-systems-3-distributed-snapshots-4bd8eba07988" rel="alternate"></link>
+    <summary type="html">The post first appeared on hidetatz.github.io.</summary>
+    <author>
+      <name>Hidetatz Yaginuma</name>
+      <email>hidetatz@gmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <title>Let’s study distributed systems — 2. Clock</title>
+    <updated>2019-11-07T00:00:00Z</updated>
+    <id>tag:hidetatz.github.io,2019-11-07:/https://hidetatz.medium.com/lets-study-distributed-systems-2-clock-67ffcf98a645</id>
+    <link href="https://hidetatz.github.io/https://hidetatz.medium.com/lets-study-distributed-systems-2-clock-67ffcf98a645" rel="alternate"></link>
     <summary type="html">The post first appeared on hidetatz.github.io.</summary>
     <author>
       <name>Hidetatz Yaginuma</name>

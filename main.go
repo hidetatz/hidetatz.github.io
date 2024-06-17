@@ -212,9 +212,9 @@ This is an incrementally developed RDBMS from scratch. This is work-in-progress 
 
 RISC-V software emulator. WIP.
 
-Visit my [GitHub](https://github.com/hidetatz) and [X](https://twitter.com/hidetatz) for more information.
+Visit my [GitHub](https://github.com/hidetatz) for more information.
 
-[Atom/RSS feed](/feed.xml).
+[Atom/RSS feed](/feed.xml)
 
 ---
 
@@ -225,13 +225,6 @@ Visit my [GitHub](https://github.com/hidetatz) and [X](https://twitter.com/hidet
 Some articles are available in Japanese also.
 
 %s
-
----
-
-## Other writings
-
-* [/distsys](/distsys.html)
-  - Distributed systems learning meterials (in Japanese)
 
 ---
 
@@ -456,9 +449,6 @@ func gen() {
 		articlesFor404Page += fmt.Sprintf("[%s](%s)  \n", articles[i].title, linkToArticle(articles[i]))
 	}
 	write(convertArticleToHTML("404", fmt.Sprintf(notFoundPage, articlesFor404Page), nil), "./docs/404.html")
-
-	// other writings
-	write(convertArticleToHTML("Learn distributed systems", distsys, nil), "./docs/distsys.html")
 }
 
 func main() {
