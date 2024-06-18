@@ -1,0 +1,10 @@
+on:
+  issues:
+
+jobs:
+  handle_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: python handle_issue.py
