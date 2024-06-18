@@ -7,4 +7,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - run: python handle_issue.py
+      - env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: python handle_issue.py
