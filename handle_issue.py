@@ -2,14 +2,15 @@ import datetime
 import json
 import os
 import re
+import subprocess
 
-import git
 from github import Github, Auth
 
 import generate
 
 ctx = json.loads(os.environ.get("GITHUB_CONTEXT"))
-gh = Github(auth=Auth.Token(os.environ.get("GITHUB_TOKEN")))
+gh_token = os.environ.get("GITHUB_TOKEN")
+gh = Github(auth=Auth.Token(gh_token))
 
 # closed: do publish
 if ctx["event"]["action"] == "closed":
@@ -25,10 +26,11 @@ if ctx["event"]["action"] == "closed":
     generate.generate()
     gh.close()
 
-    repo = git.Repo()
-    repo.git.commit(".", "-m", "update diary")
-    origin = repo.remote(name="origin")
-    origin.push()
+    subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
+    subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
+    subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
+    subprocess.run(["git", "commit", "-a", "-m", '"update diary"'])
+    subprocess.run(["git", "push", "origin", "master"])
 
 # # edited: if the issue is already closed, do publish
 # if ctx["event"]["action"] == "edited":
