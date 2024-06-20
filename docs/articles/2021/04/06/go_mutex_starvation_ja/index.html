@@ -1,9 +1,8 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Goにおけるミューテックスのスタベーション | hidetatz.github.io</title>
+  <title>Goにおけるミューテックスのスタベーション</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="author" content="Hidetatz Yaginuma">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
@@ -26,201 +25,146 @@
 </head>
 <body class="markdown-body">
 <p><a href="/">&lt;- home</a></p>
-
-<h1 id="goにおけるミューテックスのスタベーション">Goにおけるミューテックスのスタベーション</h1>
-
-<h4 id="2021-04-06">2021/04/06</h4>
-
-<h2 id="はじめに">はじめに</h2>
-
+<h1>Goにおけるミューテックスのスタベーション</h1>
+<h4>2021/04/06</h4>
+<h2>はじめに</h2>
 <p>ミューテックスはマルチスレッドプログラミングにおける同期プリミティブのひとつだ。ミューテックスオブジェクトは通常 <code>Lock()</code> <code>Unlock()</code> のインタフェースを持ち、複数のスレッドから同時にロックされることがないことを保証する。利用する側のプログラムは、クリティカルセクションに入る前には必ずロックを獲得し、クリティカルセクションが終わり次第速やかにロックを手放すようにすれば、マルチスレッド環境でも排他ができるというわけだ。</p>
-
 <p>ミューテックスは極めてシンプルなロック機構であるがゆえに、そのアルゴリズムには様々なバリエーションが存在する。しかし、そのアルゴリズムは慎重に選択されないと時にスタベーションを引き起こし、スループットの低下やシステムの停止状態などを引き起こす。
 この記事では、Go1.8までに存在したある特定の状況でスタベーションを引き起こしてしまうミューテックスのアルゴリズムについて、実際のプログラムを実例に取りながら、ミューテックスの動作やスタベーション、ロックのアルゴリズムについての理解を深める。そして、Goが1.9で施した変更を見ていく。</p>
-
-<h2 id="go1-8に存在したミューテックスの不公平性">Go1.8に存在したミューテックスの不公平性</h2>
-
-<p>Go1.9の<a href="https://golang.org/doc/go1.9#minor_library_changes" target="_blank">リリースノート</a> の <code>Minor changes to the library</code> 内 <code>sync</code> の項には、 <code>Mutex is now more fair.</code> とある。</p>
-
+<h2>Go1.8に存在したミューテックスの不公平性</h2>
+<p>Go1.9の<a href="https://golang.org/doc/go1.9#minor_library_changes">リリースノート</a> の <code>Minor changes to the library</code> 内 <code>sync</code> の項には、 <code>Mutex is now more fair.</code> とある。</p>
 <p>まず、Go1.8までのミューテックスに存在したある問題について見ていこう。これは、「2つのgoroutineがロックを獲得しようと争っていて、片方はロックを長時間保持して短時間解放、もう片方は短時間保持して長時間解放する場合」に発生する。それは、ちょうどこんなコードだ。</p>
-
 <pre><code class="language-go">package main
 
 import (
-	&quot;sync&quot;
-	&quot;time&quot;
+    &quot;sync&quot;
+    &quot;time&quot;
 )
 
 func main() {
-	done := make(chan bool, 1)
-	var mu sync.Mutex
+    done := make(chan bool, 1)
+    var mu sync.Mutex
 
-	// goroutine 1
-	go func() {
-		for {
-			select {
-			case &lt;-done:
-				return
-			default:
-				mu.Lock()
-				time.Sleep(100 * time.Microsecond)
-				mu.Unlock()
-			}
-		}
-	}()
+    // goroutine 1
+    go func() {
+        for {
+            select {
+            case &lt;-done:
+                return
+            default:
+                mu.Lock()
+                time.Sleep(100 * time.Microsecond)
+                mu.Unlock()
+            }
+        }
+    }()
 
-	// goroutine 2
-	for i := 0; i &lt; 10; i++ {
-		time.Sleep(100 * time.Microsecond)
-		mu.Lock()
-		mu.Unlock()
-	}
-	done &lt;- true
+    // goroutine 2
+    for i := 0; i &lt; 10; i++ {
+        time.Sleep(100 * time.Microsecond)
+        mu.Lock()
+        mu.Unlock()
+    }
+    done &lt;- true
 }
 </code></pre>
-
 <p>このプログラムは、1つgoroutineを起動し、その中ではfor-loopを起動している。ループの中ではミューテックスをロックし、ロックした後100µsスリープし、ロックを手放している。
 また、別のgoroutineでは、10回のみ実行するfor-loopを起動し、そちらでは100μsスリープした後、ロック獲得、および速やかなロック解除をしている。</p>
-
 <p>このプログラムがどう動くかを予想してみると、goroutine2は最終的には10回ロックを獲得するが、その間にgoroutine1にもロックを何度か取られるだろう、そういった取りつ取られつを繰り返しつつもすぐに、おそらくは1秒か2秒でプログラムは正常終了する、といった感じに筆者には見える。
 このプログラムを、手元のGo1.8で動かしてみると実際はどうなったかというと、いつまで経ってもプログラムが終わらない。時間がかかりすぎたので途中でプログラムを終了してしまったが、少なくとも3分ほどはプログラムが終了しなかった。 (興味があれば試してみてほしい。)</p>
-
 <p>このプログラムは、Go1.9以降であれば期待した通りすぐに終了する。なぜこうなるのかを説明する前に、いくつか説明すべきことがあるので先に説明する。</p>
-
-<h2 id="スタベーション-starvation">スタベーション (Starvation)</h2>
-
+<h2>スタベーション (Starvation)</h2>
 <p>スタベーションとは「飢餓」を意味する。マルチタスクの文脈でスタベーションとは、あるプロセスが必要なリソースを長期間獲得できないことを言う。ミューテックスの話題のときはより具体的に、READ/WRITEロックをなかなか獲得できない状況のことをスタベーションという。
 上のプログラムではスタベーションが起こっている。goroutine2はロックを獲得したいにもかかわらず、そのロックは後述するミューテックスのアルゴリズムの関係でロックを獲得できていない。一般的にスレッド間でのロックの獲得は、スループットを犠牲にしない範囲でなるべく公平であることが期待される。</p>
-
-<h2 id="ミューテックスの動作を決めるアルゴリズム">ミューテックスの動作を決めるアルゴリズム</h2>
-
+<h2>ミューテックスの動作を決めるアルゴリズム</h2>
 <p>前述のとおり、ミューテックスはシンプルな同期プリミティブである。その動作をもう一度確認しよう。</p>
-
 <ul>
 <li>ロックされていないミューテックスは <code>Lock()</code> でロックすることができる</li>
 <li>ロックされているミューテックスは <code>Unlock()</code> でロックを解除することができる</li>
 <li>同時にロックできるのは1スレッドだけである</li>
 <li>ロックされているミューテックスを <code>Lock()</code> しようとすると、ブロックする</li>
 </ul>
-
 <p>このようなインタフェースを守りながら動くロックのアルゴリズムは複数存在する。</p>
-
 <p>それらロックのアルゴリズムが規定するのは結局、ロックの獲得がかち合った時に、次のロックを獲得できるのはどのスレッドか？という点だ。
 以下でいくつか説明するが、これは網羅的ではない。</p>
-
-<h2 id="ロックのアルゴリズム-1-thunder-lock">ロックのアルゴリズム #1. Thunder lock</h2>
-
+<h2>ロックのアルゴリズム #1. Thunder lock</h2>
 <p>Thunder Lockではロックを獲得しようとしたが既にロックされていた場合、そのスレッドはロック解放待ちのプールのようなものに入りスリープする。これをよく「パーキング (Parking、駐車)」という。
 ロック解放時にはパーキング中の全てのスレッドを一斉に起こし、それらのスレッドはまたロックを獲得しようとする。当然ながら、その後ロックをひとつのスレッドだけが獲得し、他のスレッドは再度スリープする。
 Thunder Lockの性質上、ミューテックスを解放する時にはThundering herdが発生する。
 Thunder lockは実装がシンプルというメリットがあるが、筆者としては特にこれを採用する理由はない印象ではある。</p>
-
-<h2 id="ロックのアルゴリズム-2-barging">ロックのアルゴリズム #2. Barging</h2>
-
+<h2>ロックのアルゴリズム #2. Barging</h2>
 <p>Bargingはいろいろ調べたところおそらくJavaで初めて生まれたタームである。Bargeは日本語で「はしけ」というものらしいが、これは要するに「ある点とある点を行き来して何かを運ぶ橋渡しのようなもの」と理解すれば良いはず (たぶん) 。</p>
-
 <p>Bargingでは多くの場合ミューテックスを待つスレッドのキューがある。スレッドはtry Lock時にそのロックが既にLockedであることを確認すると、そのキューに入りスリープする。ここまではThunder lockと似ている。</p>
-
 <p>ミューテックスがリリースされる時には、そのキューからポップしたスレッドをスリープから起こす。ただし、ロックは必ずしもそのスレッドに渡らない。ロックはその起こされたスレッドか、キューにはまだ入っていないがその時たまたまロックを取ろうとやってきたスレッドの<strong>どちらか</strong>に、ロックを渡す。どちらに渡すかはその時次第である。
 ロック獲得を待つスレッドが既にいたにもかかわらず新たにロックを取りに来たスレッドがロックを取ってしまう事を <code>Lock stealing</code> 、ロックの盗難という。これはちょうど、行列に並んでいたのに横入りされてしまったような状況に近い。</p>
-
 <p>BargingはLock stealingが可能であるがゆえに比較的高いスループットを実現可能である。そもそも、スリープしているスレッドを起こすことは通常ハイコストな操作で非常に時間がかかるので、それをしなくてよいこと自体がメリットと言える。
 Bargingの持つデメリットは、ロック獲得の公平性を犠牲にすること、そしてスタベーションが起こりうることだ。</p>
-
-<h2 id="ロックのアルゴリズム-3-handoff">ロックのアルゴリズム #3. Handoff</h2>
-
+<h2>ロックのアルゴリズム #3. Handoff</h2>
 <p>Handoffは文字通り「手渡し」を意味する。Handoffでは、ミューテックスがリリースされる時にキューからスレッドをポップし、そのスレッドを起こす。Bargingのように新たに来たロック獲得リクエストにロックを渡すことはなく、必ずロックの待ち行列の先頭にいるスレッドが次にロックを獲得できるようになる。すなわち、Handoffロックは厳密なFIFOロックと言える。</p>
-
 <p>Handoffでは一般的に、スループットは犠牲になる。何故なら、キューの先頭にいるスレッドの他に、ロックを獲得しようとしたスレッドが仮にいても、そのスレッドにはロックを決して渡さないからだ。ロックを獲得しようとしたスレッドは必ずキューに入り、順番を待つ必要がある。
-Linuxカーネルで、Handoffなミューテックスを実装したパッチは<a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c" target="_blank">こちら</a>である。</p>
-
-<h2 id="adaptive-lockとスピン">Adaptive lockとスピン</h2>
-
+Linuxカーネルで、Handoffなミューテックスを実装したパッチは<a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c">こちら</a>である。</p>
+<h2>Adaptive lockとスピン</h2>
 <p>いくつかのロックアルゴリズムを簡単に見てきたが、これらは別のなにかと組み合わされて使用することがあり、これをAdaptive lockということが多い。
-Adaptive lockという言葉にははっきりした定義がなく、様々な「適応型」ロックアルゴリズムの総称としてそう言われることが多い。例えば、<a href="https://yanniss.github.io/al-transact09.pdf" target="_blank">Adaptive Locks: Combining Transactions and Locks for Efficient Concurrency</a> ではいわゆるミューテックスとSTMを組み合わせるアプローチを扱っている。</p>
-
+Adaptive lockという言葉にははっきりした定義がなく、様々な「適応型」ロックアルゴリズムの総称としてそう言われることが多い。例えば、<a href="https://yanniss.github.io/al-transact09.pdf">Adaptive Locks: Combining Transactions and Locks for Efficient Concurrency</a> ではいわゆるミューテックスとSTMを組み合わせるアプローチを扱っている。</p>
 <p>Adaptive lockのパターンのひとつに、スピンとパーキングを組み合わせるものがある。とりあえず何度かスピンしてみて、それでもロックが取れなければスレッドをパーキングするというものだ。
 とりあえずスピンしてみることは、「今はロックが取れないけど、実際はすぐに - 具体的には、スレッドをパーキングしてから起こすのにかかる時間よりは短い間に - ロックは取れるようになる」といった場面で、スピンする間にロックが取れることを意図している。</p>
-
-<p>例えば、<a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62" target="_blank">WebKit</a>のソースコードを見てみると、40回スピンして、それでもだめならパーキングしているのがわかる。</p>
-
-<h2 id="go1-8のsync-mutexのアルゴリズム">Go1.8のsync.Mutexのアルゴリズム</h2>
-
-<p>話をGoに戻そう。Go1.8までのミューテックスは、上記のBargingとAdaptive lockを組み合わせていた。ロック済みのミューテックスに対してロックを獲得しようとした時、まず<a href="https://github.com/golang/go/blob/go1.8/src/sync/mutex.go#L61-L72" target="_blank">mutex.Lock()</a>の中で呼び出す<a href="https://github.com/golang/go/blob/go1.8/src/runtime/proc.go#L4477-L4490" target="_blank">sync_runtime_canSpin</a>でスピンするかを判定している。それによれば、Goのミューテックスはまず<a href="https://github.com/golang/go/blob/go1.8/src/runtime/lock_futex.go#L30" target="_blank">4回</a>だけスピンする。</p>
-
+<p>例えば、<a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62">WebKit</a>のソースコードを見てみると、40回スピンして、それでもだめならパーキングしているのがわかる。</p>
+<h2>Go1.8のsync.Mutexのアルゴリズム</h2>
+<p>話をGoに戻そう。Go1.8までのミューテックスは、上記のBargingとAdaptive lockを組み合わせていた。ロック済みのミューテックスに対してロックを獲得しようとした時、まず<a href="https://github.com/golang/go/blob/go1.8/src/sync/mutex.go#L61-L72">mutex.Lock()</a>の中で呼び出す<a href="https://github.com/golang/go/blob/go1.8/src/runtime/proc.go#L4477-L4490">sync_runtime_canSpin</a>でスピンするかを判定している。それによれば、Goのミューテックスはまず<a href="https://github.com/golang/go/blob/go1.8/src/runtime/lock_futex.go#L30">4回</a>だけスピンする。</p>
 <p>このアルゴリズムは特定のgoroutineがスタベーションに陥っていたとしてもそれを考慮せずに動く。このため、先のプログラムは期待通り動かなかった。これが1.9でどう変わったのかを説明する。</p>
-
-<h2 id="go1-9のsync-mutexのアルゴリズム">Go1.9のsync.Mutexのアルゴリズム</h2>
-
-<p>修正のコミットは<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149" target="_blank">これ</a>である。</p>
-
+<h2>Go1.9のsync.Mutexのアルゴリズム</h2>
+<p>修正のコミットは<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149">これ</a>である。</p>
 <p>1.9のsync/mutex.goでは、新たにスタベーションモード (starvation mode、飢餓モード) という概念が導入された。</p>
-
-<p>1.9では、<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R43-R67" target="_blank">1e6ns (= 1ms)</a> の間ロックを獲得できなかったgoroutineは<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R136" target="_blank">スタベーションモード</a>に入っていると判定される。以下のようなコードだ。</p>
-
-<pre><code class="language-go">	starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs
+<p>1.9では、<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R43-R67">1e6ns (= 1ms)</a> の間ロックを獲得できなかったgoroutineは<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R136">スタベーションモード</a>に入っていると判定される。以下のようなコードだ。</p>
+<pre><code class="language-go">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs
 </code></pre>
-
-<p>スタベーションモードに入ったgoroutineは、自身が1ms以上待ち続けていることを検知すると、ミューテックスが内部で使用しているセマフォの獲得に <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R130-R135" target="_blank"><code>lifo=true</code> を併せて渡すようになる</a>。</p>
-
-<pre><code class="language-go">	// If we were already waiting before, queue at the front of the queue.
-	queueLifo := waitStartTime != 0
-	if waitStartTime == 0 {
-		waitStartTime = runtime_nanotime()
-	}
-	runtime_SemacquireMutex(&amp;m.sema, queueLifo)
+<p>スタベーションモードに入ったgoroutineは、自身が1ms以上待ち続けていることを検知すると、ミューテックスが内部で使用しているセマフォの獲得に <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R130-R135"><code>lifo=true</code> を併せて渡すようになる</a>。</p>
+<pre><code class="language-go">    // If we were already waiting before, queue at the front of the queue.
+    queueLifo := waitStartTime != 0
+    if waitStartTime == 0 {
+        waitStartTime = runtime_nanotime()
+    }
+    runtime_SemacquireMutex(&amp;m.sema, queueLifo)
 </code></pre>
-
 <p>セマフォ (runtimeパッケージ内) 側では <code>lifo=true</code> の場合、待ち状態のgoroutineを格納しているTreap (キューの実体となるデータ構造) で、そのgoroutineをキューの先頭に配置する。これによってほかに待っているgoroutineをごぼう抜きすることができる。</p>
-
-<p>また、ミューテックスの解放時にはセマフォのリリースに<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R208-R212" target="_blank">handoff=true</a>を併せて渡すようになった。
-セマフォ側ではリリース時に待ち状態のgoroutineのキューからあるgoroutineをdequeueするが、 <code>handoff=true</code> の場合はデキューしたgoroutineの <code>ticket</code> を直接 <code>1</code> に、すなわち<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-bb07e8d113e0257192c87f8b6153be1bcb547aa7826db102178ce2e6b7fd98d8R178-R195" target="_blank">キューから出る権利を与えられる</a>。これによって、ミューテックスのアンロックの際に新たにやってきたgoroutineにロックをstealされることなく、直接そのオーナーシップをキューの中のgoroutineに渡すようになったことを意味する。</p>
-
-<pre><code class="language-go">	s, t0 := root.dequeue(addr)
-	if s != nil {
-		atomic.Xadd(&amp;root.nwait, -1)
-	}
-	unlock(&amp;root.lock)
-	if s != nil { // May be slow, so unlock first
-		// ...
-		if handoff &amp;&amp; cansemacquire(addr) { // here
-			s.ticket = 1
-		}
-		// ...
-	}
+<p>また、ミューテックスの解放時にはセマフォのリリースに<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R208-R212">handoff=true</a>を併せて渡すようになった。
+セマフォ側ではリリース時に待ち状態のgoroutineのキューからあるgoroutineをdequeueするが、 <code>handoff=true</code> の場合はデキューしたgoroutineの <code>ticket</code> を直接 <code>1</code> に、すなわち<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-bb07e8d113e0257192c87f8b6153be1bcb547aa7826db102178ce2e6b7fd98d8R178-R195">キューから出る権利を与えられる</a>。これによって、ミューテックスのアンロックの際に新たにやってきたgoroutineにロックをstealされることなく、直接そのオーナーシップをキューの中のgoroutineに渡すようになったことを意味する。</p>
+<pre><code class="language-go">    s, t0 := root.dequeue(addr)
+    if s != nil {
+        atomic.Xadd(&amp;root.nwait, -1)
+    }
+    unlock(&amp;root.lock)
+    if s != nil { // May be slow, so unlock first
+        // ...
+        if handoff &amp;&amp; cansemacquire(addr) { // here
+            s.ticket = 1
+        }
+        // ...
+    }
 </code></pre>
-
 <p>これらの変更によって、スタベーションモードに入ったgoroutineは速やかにかつ明示的に、ロックを横取りされることなく渡してもらえるようになったことになる。</p>
-
-<h2 id="終わりに">終わりに</h2>
-
+<h2>終わりに</h2>
 <p>Go1.8までに潜在的に存在したミューテックスのスタベーションの問題について見てきた。コードのコメントなどにもある通り、HandoffはBargingと比較するとパフォーマンスで劣るがより高い公平性をもたらす。
-<a href="https://github.com/golang/go/issues/13086" target="_blank">大本となったissue</a> では <code>sync.FairMutex</code> みたいなのがあったほうがいいのではみたいな話もあって面白いので、興味のある読者は読んでみてほしい。</p>
-
-<h2 id="参考">参考</h2>
-
+<a href="https://github.com/golang/go/issues/13086">大本となったissue</a> では <code>sync.FairMutex</code> みたいなのがあったほうがいいのではみたいな話もあって面白いので、興味のある読者は読んでみてほしい。</p>
+<h2>参考</h2>
 <ul>
-<li><a href="https://github.com/golang/go/issues/13086" target="_blank">runtime: fall back to fair locks after repeated sleep-acquire failures</a></li>
-<li><a href="https://golang.org/doc/go1.9#minor_library_changes" target="_blank">Go 1.9 Release Notes - Minor changes to the library</a></li>
-<li><a href="https://webkit.org/blog/6161/locking-in-webkit/" target="_blank">Locking in WebKit</a></li>
-<li><a href="http://www.filpizlo.com/papers/pizlo-pppj2011-fable.pdf" target="_blank">Fine-grained Adaptive Biased Locking</a></li>
-<li><a href="http://www.tsoftware.jp/nptl/" target="_blank">GNU/Linux でのスレッドプログラミング NPTL (Native POSIX Thread Library) Programming.</a></li>
+<li><a href="https://github.com/golang/go/issues/13086">runtime: fall back to fair locks after repeated sleep-acquire failures</a></li>
+<li><a href="https://golang.org/doc/go1.9#minor_library_changes">Go 1.9 Release Notes - Minor changes to the library</a></li>
+<li><a href="https://webkit.org/blog/6161/locking-in-webkit/">Locking in WebKit</a></li>
+<li><a href="http://www.filpizlo.com/papers/pizlo-pppj2011-fable.pdf">Fine-grained Adaptive Biased Locking</a></li>
+<li><a href="http://www.tsoftware.jp/nptl/">GNU/Linux でのスレッドプログラミング NPTL (Native POSIX Thread Library) Programming.</a></li>
 </ul>
-
-<h2 id="参考にしたソースコード">参考にしたソースコード</h2>
-
+<h2>参考にしたソースコード</h2>
 <ul>
-<li><a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c" target="_blank">https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c</a></li>
-<li><a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62" target="_blank">https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62</a></li>
-<li><a href="https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444" target="_blank">https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444</a></li>
-<li><a href="https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444" target="_blank">https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444</a></li>
-<li><a href="https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444" target="_blank">https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444</a></li>
+<li>https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c</li>
+<li>https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62</li>
+<li>https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444</li>
+<li>https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444</li>
+<li>https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444</li>
 </ul>
-
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-
-<script src="/syntax.js"></script>
+<script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
 </body>
 </html>
