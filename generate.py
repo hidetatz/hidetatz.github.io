@@ -192,14 +192,14 @@ class MarkdownArticle:
         return self.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
 
     def url_path(self, directory): 
-        return f"{directory}/{self.ts_display()}/{self.filename_no_ext}"
+        return f"/{directory}/{self.ts_display()}/{self.filename_no_ext}"
 
     def md_link(self, directory):
         if self.external_url != "":
             return f"[{self.title}]({self.external_url})"
 
         url_path = self.url_path(directory)
-        return f"/[{self.title}]({url_path})"
+        return f"[{self.title}]({url_path})"
 
     def as_html(self, x=True):
         if self.external_url != "":
