@@ -83,7 +83,7 @@ $articles_ja
 
 © 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
 
-diary_index_page_md = """日記です。
+diary_index_page_md = """日記です。  
 $diaries
 
 ---
