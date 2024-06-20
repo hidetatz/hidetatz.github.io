@@ -24,8 +24,8 @@ lang: ja/en
     return f"data/articles/{filename}.md"
 
 def new_diary(title, ts, body):
-    os.makedirs("data/diary", exist_ok=True)
-    filename = f"data/diary/{ts.strftime('%Y-%m-%d')}.md"
+    os.makedirs("data/diaries", exist_ok=True)
+    filename = f"data/diaries/{ts.strftime('%Y-%m-%d')}.md"
     with open(filename, "w") as f:
         f.write(f"""title: {title}
 timestamp: {ts.strftime('%Y-%m-%d %H:%M:%s')}
