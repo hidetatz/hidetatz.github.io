@@ -7,18 +7,13 @@ from github import Github, Auth
 
 import generate
 
-class dotdict(dict):
-    __getattr__ = dict.get
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
-
-ctx = dotdict(json.loads(os.environ.get("GITHUB_CONTEXT")))
+ctx = json.loads(os.environ.get("GITHUB_CONTEXT"))
 gh = Github(auth=Auth.Token(os.environ.get("GITHUB_TOKEN")))
 
 # closed: do publish
-if ctx.event.action == "closed":
+if ctx["event"]["action"] == "closed":
     repo = gh.get_repo("hidetatz/hidetatz.github.io")
-    issue = repo.get_issue(ctx.event.issue.number)
+    issue = repo.get_issue(ctx["event"]["issue"]["number"])
 
     ts = issue.closed_at
     pattern = "20\d{2}年\d{1,2}月\d{1,2}日"
