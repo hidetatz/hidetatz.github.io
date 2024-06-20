@@ -16,7 +16,7 @@ def new_article(filename):
     os.makedirs("data/articles", exist_ok=True)
     with open(f"data/articles/{filename}.md", "w") as f:
         f.write(f"""title: {filename}
-timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%s')}
+timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 url: necessary for external link
 lang: ja/en
 ---
@@ -28,7 +28,7 @@ def new_diary(title, ts, body):
     filename = f"data/diaries/{ts.strftime('%Y-%m-%d')}.md"
     with open(filename, "w") as f:
         f.write(f"""title: {title}
-timestamp: {ts.strftime('%Y-%m-%d %H:%M:%s')}
+timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}
 lang: ja
 ---
 {body}
