@@ -199,7 +199,7 @@ class MarkdownArticle:
             return f"[{self.title}]({self.external_url})"
 
         url_path = self.url_path(directory)
-        return f"[{self.title}]({url_path})"
+        return f"/[{self.title}]({url_path})"
 
     def as_html(self, x=True):
         if self.external_url != "":
