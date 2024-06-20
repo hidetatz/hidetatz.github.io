@@ -13,6 +13,7 @@ import template
 md = markdown.Markdown(extensions=["tables", "fenced_code"])
 
 def new_article(filename):
+    os.makedirs("data/articles", exist_ok=True)
     with open(f"data/articles/{filename}.md", "w") as f:
         f.write(f"""title: {filename}
 timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%s')}
@@ -23,6 +24,7 @@ lang: ja/en
     return f"data/articles/{filename}.md"
 
 def new_diary(title, ts, body):
+    os.makedirs("data/diary", exist_ok=True)
     filename = f"data/diary/{ts.strftime('%Y-%m-%d')}.md"
     with open(filename, "w") as f:
         f.write(f"""title: {title}
