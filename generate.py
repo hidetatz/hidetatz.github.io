@@ -32,7 +32,6 @@ timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}
 lang: ja
 ---
 {body}
----
 """)
     return filename
 
