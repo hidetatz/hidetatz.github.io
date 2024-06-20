@@ -25,9 +25,8 @@ if ctx.event.action == "closed":
     if result:
         ts = datetime.datetime.strptime(result.group(), "%Y年%m月%d日")
     generate.new_diary(issue.title, ts, issue.body)
-    gh.close()
     generate.generate()
-    return
+    gh.close()
 
 # # edited: if the issue is already closed, do publish
 # if ctx["event"]["action"] == "edited":
@@ -41,5 +40,6 @@ if ctx.event.action == "closed":
 #     gh.close()
 #     return
 
-print(f"event {ctx['event']['action']} is ok not to handle")
-gh.close()
+else:
+    print(f"event {ctx['event']['action']} is ok not to handle")
+    gh.close()
