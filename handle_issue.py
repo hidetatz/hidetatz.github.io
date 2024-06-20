@@ -15,7 +15,7 @@ ctx = dotdict(json.loads(os.environ.get("GITHUB_CONTEXT")))
 gh = Github(auth=Auth.Token(os.environ.get("GITHUB_TOKEN")))
 
 # closed: do publish
-if ctx.event.action == "closed".
+if ctx.event.action == "closed":
     repo = gh.get_repo("hidetatz/hidetatz.github.io")
     issue = repo.get_issue(ctx.event.issue.number)
 

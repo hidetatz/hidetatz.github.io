@@ -9,4 +9,4 @@ jobs:
       - uses: actions/setup-python@v5
       - env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: python handle_issue.py
+        run: pip install PyGithub markdown && python handle_issue.py
