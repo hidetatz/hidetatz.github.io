@@ -29,7 +29,9 @@ if ctx["event"]["action"] == "closed":
     subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
     subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
     subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
-    subprocess.run(["git", "commit", "-a", "-m", '"update diary"'])
+    subprocess.run(["git", "add", "docs"])
+    subprocess.run(["git", "add", "data"])
+    subprocess.run(["git", "commit", "-m", "update diary"])
     subprocess.run(["git", "push", "origin", "master"])
 
 # # edited: if the issue is already closed, do publish
