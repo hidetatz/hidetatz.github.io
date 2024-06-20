@@ -10,4 +10,4 @@ jobs:
       - env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pip install PyGithub markdown && python handle_issue.py
+        run: pip install PyGithub markdown gitpython && python handle_issue.py

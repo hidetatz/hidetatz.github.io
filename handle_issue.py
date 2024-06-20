@@ -3,6 +3,7 @@ import json
 import os
 import re
 
+import git
 from github import Github, Auth
 
 import generate
@@ -23,6 +24,11 @@ if ctx["event"]["action"] == "closed":
     generate.new_diary(issue.title, ts, issue.body)
     generate.generate()
     gh.close()
+
+    repo = git.Repo()
+    repo.git.commit(".", "-m", "update diary")
+    origin = repo.remote(name="origin")
+    origin.push()
 
 # # edited: if the issue is already closed, do publish
 # if ctx["event"]["action"] == "edited":
