@@ -12,6 +12,28 @@ import template
 
 md = markdown.Markdown(extensions=["tables", "fenced_code"])
 
+def new_article(filename):
+    with open(f"data/articles/{filename}.md", "w") as f:
+        f.write(f"""title: {filename}
+timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%s')}
+url: necessary for external link
+lang: ja/en
+---
+""")
+    return f"data/articles/{filename}.md"
+
+def new_diary(title, ts, body):
+    filename = f"data/diary/{ts.strftime('%Y-%m-%d')}.md"
+    with open(filename, "w") as f:
+        f.write(f"""title: {title}
+timestamp: {ts.strftime('%Y-%m-%d %H:%M:%s')}
+lang: ja
+---
+{body}
+---
+""")
+    return filename
+
 class Sitemap:
     def __init__(self, articles, diaries):
         self.articles = articles
@@ -266,11 +288,11 @@ def read_article_files(directory):
 
     return articles
 
-def main():
+def generate():
     articles = read_article_files("data/articles")
     diaries = read_article_files("data/diaries")
 
     BlogSite(articles, diaries).generate()
 
 if __name__ == "__main__":
-    main()
+    generate()
