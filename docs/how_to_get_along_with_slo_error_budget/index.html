@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>How to get along with SLO and Error budget</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+<h1>How to get along with SLO and Error budget</h1>
+<h4>2020/04/28</h4>
+<h2>Introduction</h2>
+<p>I get to know SLO and error budget when reading a book "Site Reliability Engineering"[1]. While I am building some microservices in my company, I found how SLO and error budget are such powerful tool and really help to develop and maintain services.
+In this article, I will try to describe how SLO and error budget should work and why they such matters. I hope this article can help readers who are trying to understand and build their own SLO strategy.</p>
+<h2>SLA</h2>
+<p>Before talking about SLO, let's understand what SLA is.
+SLA is an <strong>agreement</strong> of service level of a system. Usually, the agreement is made between service provider and service customer.
+Under SLA, service provider and customers agree on what service level <strong>must be</strong> provided. Basically, they also agree with what happens when agreed service level is not met.
+This helps how customers should choose services. If the customer has a requirement about service level, then they can compare some services on their SLA.</p>
+<p>If the SLA is not met, sometimes service provider gives a refund to the customers. They also can take other forms.
+For example, SLA of AWS compute service[2] is defined as Uptime. When Uptime is under 99.99% (and above 99.0%), 10% refund can be given.
+GCP[3], Azure[4], Datadog[5] and more cloud services have SLA.</p>
+<p>Developers or SRE don't have to get involved in defining SLA. Because SLA is more close to business and product side. Their target is usually SLO. The relation between SLO and SLA will be described later.</p>
+<h2>SLI</h2>
+<p>SLI is a service level <strong>indicator</strong>. SLI is a quantitative measure which is a part of the service level. There are some common indicators.</p>
+<ul>
+<li>Request latency - How long it takes to return a response</li>
+<li>Error Rate - How many 5xx response is responded as a fraction</li>
+<li>System throughput - Typically measured as RPS (requests per second)</li>
+<li>Availability - A fraction of the time that a service can be used.</li>
+<li>Durability - How it is likely that data will be retained over a long period (e.g. 1 year). This is especially used for storage system.</li>
+<li>Consistency - In Microsoft Azure Cosmos DB, users can choose which consistency model they need. They provide SLA for its violation rate.[6]</li>
+</ul>
+<p>Good SLI can measure what users are interested in the service directly.
+But sometimes it's difficult. In that case, using another proxy is also OK.</p>
+<h2>SLO</h2>
+<p>SLO represents service level <strong>objective</strong>.
+SLO usually includes SLI, which should be tracked.
+For example, when we are building Storage system, and we think we want to provide high durability to customers, we can have an SLO like "99.999999% of objects won't be lost or compromised in the event of a failure over 1 year".</p>
+<p>Do you wonder what's the difference between SLO and SLA? Actually, they are a kind of similar.
+First, as described above, there will be refund or some other penalties if SLA is not met.
+However, when SLO is not met, there should be no user complaints. SLA is more for users, but SLO is for developers and SREs.
+Services can have both SLO and SLA. When they have both, usually SLO is not opened to users while SLA is.
+For example, if they have a SLA that 99.9% availability must be kept, then they can have the same SLI for their SLO. But it will be more strict value (e.g. 99.95%). In this case, SLA is a promise with users, but SLO is a target for developers. When SLO is not met, there should be no user-impact, but SLO must be always met. That's why SLO must be more strict than SLA.</p>
+<p>The purpose is also different. SLA is for users; SLA should help users if they can choose to use the service. But SLO is for developers and SREs. SLO helps developers to prioritize their work around the service.
+Let's say we are operating a service. Recently our monitoring system shows there is some delay in the service, which originally was not found. If we don't have SLO about latency, we always have to decide if the delay must be investigated or fixed. What if the latency increased by 30ms when we released a new feature? Is it a problem to be fixed? What if it is 15ms?
+SLO helps this situation. We can decide what to do when we face a problem. Simply, if it violates the SLO, then stop feature development and work on fixing the problem. If SLO is still met, then keep working on feature development.
+Usually, the balance between feature development and site reliability is trade-off. Typical infrastructure engineers work on only site reliability, but from Site Reliability Engineering's perspective, they should also work on feature development.
+Pulling up the availability from 99.9% to 99.99% is super hard, while 99.9% can be sufficient in most cases. Having good SLO helps us to decide if we have to work on improving site reliability, or if we can keep working on feature development.</p>
+<h2>How to implement SLO</h2>
+<p>There are some ways how to implement SLO. Below is just one example.</p>
+<h3>Determine what kind of SLI is the best for the service</h3>
+<p>First, decide what should be the indicators of the level for the service.
+Because SLO includes SLI, it's also determined based on users' interests. Good SLI can be a measurement what users are interested in directly.
+Choosing good SLI requires us to understand which part users are the most interacted on the service. Choosing an SLI which users don't care about would not be making sense.</p>
+<p>Too many SLI makes it hard to track and keep paying attention. Too few is also not good because it usually cannot show system's health properly.</p>
+<p>Usually, the SLI which indicates about service's correctness is recommended. For distributed database, customers usually want to know if the latest data is always returned. Sometimes it's difficult to track correctness, but it's better to consider to provide it as SLO.</p>
+<p>In addition, there are some common patterns what to be chosen by the category of the service.</p>
+<ul>
+<li>When the service is serving something to users, usually <strong>availability</strong>, <strong>latency</strong>, and <strong>throughput</strong> are chosen.</li>
+<li>When the service is storage, <strong>latency</strong>, <strong>availability</strong>, <strong>durability</strong> are chosen.</li>
+<li>When the service is batch or big data analysis platform, <strong>throughput</strong> (how much data can be processed) is chosen.</li>
+</ul>
+<p>This part is very important and worth to spend time on discussion in deciding service's SLO. Without deep consideration, we tend to create SLO just following what other teams are doing; especially when the team is not familiar with working with SLO. However, it's not a good way.
+<strong>Potentially, SLO can decide your future tasks.</strong>
+You must be an expert of your service. Deciding SLO requires your domain knowledge.</p>
+<p>For example, your service has WRITE operations, you might have take care of data write latency, message queue delay, message durability, etc.
+If your service has only READ operations (such as master-data service), you may just take care of read latency.</p>
+<p>When your application is called "microservice", one common mistake is just preparing SLI about application's health.
+Popular ones would be "availability" and "latency". However, these SLIs are based on infrastructure's health.
+If your infrastructure gets down, can your monitoring system send alert? If no, you'd better to consider adding them as your SLI.</p>
+<h3>SLI Specification and implementation</h3>
+<p>SLI can be divided into 2 parts; <strong>specification</strong> and <strong>implementation</strong>.</p>
+<h4>SLI specification</h4>
+<p><strong>SLI specification</strong> is an indicator which represents what matters to users. It doesn't include how to be measured.
+e.g. <strong>The latency of an API is less than 150ms</strong></p>
+<h4>SLI implementation</h4>
+<p><strong>SLI implementation</strong> describes how to measure SLI specification.</p>
+<p>e.g.</p>
+<ul>
+<li>Latency of an API measured by load balancer's log.</li>
+<li>Latency of an API measured by server's log.</li>
+<li>Latency of an API measured by Datadog agent on server node.</li>
+<li>Latency of an API measured by Datadog synthetic monitoring.</li>
+</ul>
+<p>To define SLI specification/implementation, first we need to understand there should be multiple measure ways of the specification.
+Let's have a question like this: what's the <strong>latency</strong>? Should it be on server-side? On Internet-service-provider? On real user? Defining SLI implementation will help to answer the question.
+There are no answers which measurement is "correct". It should depend on what matters to your users.</p>
+<h3>Decide how to measure SLIs and measure them</h3>
+<p>After deciding SLI specification/implementation, now we want to talk about <strong>how to implement SLI implementation</strong>. If your team or company has already introduced any monitoring tool such as New Relic, Nagios, Datadog, Zabbix, etc, it's a good idea to use them for implementing SLI.
+For example, Datadog[7] has features for SLI/SLO measurement.
+It's of course OK to create a system to measure your SLI by yourself, but basically it's not recommended.
+If you prepare something, you need another monitoring - <strong>the your original monitoring system must be monitored</strong> .
+If you can use managed monitoring system, it will be better.</p>
+<p>For example, in Datadog, "95 percentile of sum of HTTP server's latency measured by Datadog agent on server node" can be written (as JSON) like this:</p>
+<pre><code class="language-json">{
+  &quot;q&quot;: &quot;sum:trace.http.server.duration.by.resource_service.95p{service:your_service_name,env:production} by {resource_name}&quot;
+}
+</code></pre>
+<p>More your SLI implementation is detailed, easier to implement it.</p>
+<h3>Decide SLO</h3>
+<p>Deciding SLO consists of 2 parts; deciding SLI and deciding what number to set, e.g. 99.9%. We already decided SLI in above section, so then let's talk about its number.</p>
+<p>Originally, traditional infrastructure engineers tried to keep 100% availability. Their responsibility was monitoring systems and whenever a problem happens, fixing it, despite of how important it is.
+However, from site reliability's perspective, it is not the right direction we should go.</p>
+<ul>
+<li>100% is TOO difficult as objective. Technically, multiple components simultaneous failure cannot be completely avoided. Design for failure, such as failover, server redundancy, is not a sliver bullet.</li>
+<li>Because whole system consists of multiple unreliable factors (e.g. load balancer, network, users' device), users won't experience 100% availability. Even if one subsystem's availability is 100%, another 99% subsystems makes whole system's availability under 100.</li>
+<li>If SLO is set 100%, then implementing new features, upgrading dependency versions, applying security patches... become very difficult. SLO is something which <strong>must</strong> be met. You cannot use time for product improvements; all you can do is always monitoring systems and being <strong>reactive</strong> - literally. Site reliability engineering targets the balance of continuous system improvement and system reliability. SLO should not be set as 100%.</li>
+</ul>
+<p>So, if you don't choose 100%, what number is good?
+One common way to decide it is using past data.
+Let's say we have below data collected in past 1 month:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">request count</th>
+<th style="text-align: left;">200 response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1,000,000</td>
+<td style="text-align: left;">978,857</td>
+</tr>
+</tbody>
+</table>
+<p>This data show us that past 1 month availability is 97.8857%.</p>
+<p>First, we set lower number than the data as SLO; e.g. 97.5%. Don't choose 98%! Too strict SLO is also bad; you can adjust them later on and if you announce your service's SLO to other teams, you basically cannot lower it.</p>
+<p>You might think like "97% is too low! Do we need to take any actions to pull up the availability?".
+Typically, it's very difficult to know what is desired number of SLO. Actually, <strong>nobody knows it</strong>. Product manager, data analyst, executives... won't know it. You will eventually know it after some time passed. If your SLO is too low, users may complain. If it's too high, your team members may get tired of daily operation.
+Finding good SLO is not easy.</p>
+<p>By the same method, you will be able to decide what latency you should target.</p>
+<h3>Decide time window</h3>
+<p>One thing we need to consider in addition is <strong>time window</strong> - SLO's time interval.
+What is time window?
+Let's say we have SLO "availability, 97%" with a <strong>2 weeks</strong> time window.
+This means, "if first 1 week's availability is under 97%, no immediate solution will be proposed. In latter 1 week, it the SLO is lifted up above 97%, it's totally fine."</p>
+<p>Longer time window gives the team more time - while users are seeing more unavailability.</p>
+<p>Shorter time window is more kind to users. However, you have to check SLO more often. You can make decisions more quickly.</p>
+<p>This might affect to your project work. Basically, your time window should be longer than your team's sprint iteration. Because, you have to take some actions and create tickets for it and add into backlog.
+Also, SLO can help to plan your team's headcount - you might need more experienced engineers to keep your SLO.
+Google[8] recommends "4 weeks" as general-purpose time window, but it's up to your team.</p>
+<h3>Calculate Error budgets</h3>
+<p>Finally, we are here to talk about error budget!
+SLO is target percentage; error budget is 100% - SLO.</p>
+<p>Let's use the previous data for a SLO "availability, 97%".
+If we have 10,000,000 requests in 4 weeks time window, <code>10,000,000 * 0.03 = 300,000</code> so 300,000 requests can fail. This is error budget for the SLO.</p>
+<p>After error budget calculation, monitor it. When monitoring system reports error budget getting empty, we need to take some actions; typically, like below.</p>
+<ul>
+<li>Developers must prioritize the highest to fix issues related to the SLO. If it's caused by logic bug, it must be resolved. If it's because of unstable infrastructure, they have to investigate the problem.</li>
+<li>Developers have to try to fix the problem until SLO is met and error budget gets surplus. During the time, no new feature requests should be accepted.</li>
+<li>(Optional) waiting for enough error budget are saved is good idea. If bug fix contains another problem, the SLO might get much lower.</li>
+</ul>
+<p>I believe this is the most essential part in SLO work. Just deciding SLO is not enough. Without error budget, we cannot balance site reliability and feature development.
+As long as SLO is met, it's not problem at all. What we want to focus on is not only keeping SLO met, but also doing what to do when SLO is not met. It's a part of <strong>design for failure</strong>.</p>
+<h3>After SLO is decided</h3>
+<p>Once we decided SLO by engineer side, we need more things to be done.</p>
+<h4>Stakeholders agreements</h4>
+<p>SLO is targeting better development cycle, but it should not be closed in only engineer team.
+Most product managers don't know what SLO is and tradeoff between site reliability and feature development.
+From error budget's perspective, if it is fully consumed, developers stop feature development. It should be agreed with product managers.
+Talk with them and get them understand why SLO/error budget is needed.</p>
+<p>After getting product managers' understanding, writing documents and visualizing SLO/error budget is important. They will be described later.</p>
+<h4>Documentation</h4>
+<p>After SLO is decided, they should be documented and able to be found easily from product managers and other teams.
+What to be documented is:</p>
+<ul>
+<li>Author, reviewers, approvers. Especially, who made the decision if it is fine from business perspective.</li>
+<li>Edit history. It's better to leave history how SLO has been changed.</li>
+<li>SLI implementation</li>
+<li>SLO</li>
+<li>Error budget calculation method and operation policy</li>
+<li>When to take actions</li>
+<li>What action the team will take</li>
+</ul>
+<p>An example of SLO document is available by Google[9].</p>
+<h4>Dashboards and alerts</h4>
+<p>After SLO is decided, it should be visualized in dashboard and always visible.
+What to be shown is:</p>
+<ul>
+<li>SLI timeseries graph. e.g. latency, throughput.</li>
+<li>SLO binary graph - OK or Not met.</li>
+<li>Remaining error budget time series graph.</li>
+</ul>
+<h4>Improve SLI/SLO</h4>
+<p>SLI/SLO can be improved after some actual operation.
+When and why we want to change them? There are some signs:</p>
+<ul>
+<li>If error budget is consumed very often, the SLO might be too tight. Is the SLO really necessary for users?</li>
+<li>If users complains about your service but no alerts are shown, the SLO might be too relaxed and need to be tighter. SLO which cannot represent users' interaction would be pointless.</li>
+</ul>
+<p>When relaxing a SLO, it has to get agreed with stakeholders - product managers might say it's too low and has some drawbacks to users.</p>
+<p>Chances to review past SLO should be held periodically. When time window is 4weeks, typically once a quarter is good to see past 12 weeks SLO.
+At the meeting, see past SLI graph and error budget consumption, then talk about making it better.</p>
+<h2>Summary</h2>
+<p>In this article, I tried to describe how to decide SLO and work with it.
+Deciding SLO is not goal; goal is <strong>doing both site reliability and feature development</strong>. SLO and error budget can be a game changer if you are tired of going endless journey to 100% reliability.
+I hope this article can help you to decide your own SLO.</p>
+<hr />
+<h2>References</h2>
+<ul>
+<li>[1]: Site Reliability Engineering <a href="https://landing.google.com/sre/books/">https://landing.google.com/sre/books/</a></li>
+<li>[2]: Amazon Compute Service Level Agreement <a href="https://aws.amazon.com/compute/sla">https://aws.amazon.com/compute/sla/</a></li>
+<li>[3]: Google Cloud Platform Service Level Agreements <a href="https://cloud.google.com/terms/sla/">https://cloud.google.com/terms/sla/</a></li>
+<li>[4]: Microsoft Azure Service Level Agreements <a href="https://azure.microsoft.com/en-us/support/legal/sla/">https://azure.microsoft.com/en-us/support/legal/sla/</a></li>
+<li>[5]: Datadog Service Terms and Agreement <a href="https://www.datadoghq.com/legal/terms/2014-12-31/">https://www.datadoghq.com/legal/terms/2014-12-31/</a></li>
+<li>[6]: SLA for Azure Cosmos DB <a href="https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/">https://azure.microsoft.com/en-us/support/legal/sla/cosmos-db/v1_3/</a></li>
+<li>[7]: Track SLIs and SLOs <a href="https://www.datadoghq.com/videos/track-sli-slo/">https://www.datadoghq.com/videos/track-sli-slo/</a></li>
+<li>[8]: Implementing SLOs <a href="https://landing.google.com/sre/workbook/chapters/implementing-slos/">https://landing.google.com/sre/workbook/chapters/implementing-slos/</a></li>
+<li>[9]: Example SLO document <a href="https://landing.google.com/sre/workbook/chapters/slo-document/">https://landing.google.com/sre/workbook/chapters/slo-document/</a></li>
+<li>https://landing.google.com/sre/sre-book/chapters/service-level-objectives/</li>
+<li>https://landing.google.com/sre/sre-book/chapters/embracing-risk/</li>
+<li>https://www.usenix.org/sites/default/files/conference/protected-files/sre19amer_slides__lawson.pdf</li>
+</ul>
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

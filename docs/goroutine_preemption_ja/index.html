@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Goroutineのプリエンプション</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/">&lt;- home</a></p>
+<h1>Goroutineのプリエンプション</h1>
+<h4>2021/03/28</h4>
+<p>Goにおけるgoroutineのプリエンプションについて調べていたのでメモ。間違いがあれば指摘いただけると助かります。</p>
+<p>Goにおけるプリエンプションは、Go1.14以前とそれ以降で挙動が異なる。Go1.14では、<a href="https://golang.org/doc/go1.14#runtime">リリースノート</a> にもある通り、goroutineは "asynchronously preemptible" になった。これは何を意味するのか？</p>
+<p>まず、簡単な例を見てみよう。
+次のようなGoプログラムを考える。</p>
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+)
+
+func main() {
+    go fmt.Println(&quot;hi&quot;)
+    for {
+    }
+}
+
+</code></pre>
+<p>main関数の中では "hi" と出力するだけのgoroutineをひとつ起動している。また、<code>for {}</code> で無限ループしている。</p>
+<p>このプログラムを <code>GOMAXPROCS=1</code> にして動かすとどうなるだろうか？感覚的には "hi" と出力され、その後何も起きない (無限ループがあるため) というような挙動をしそうだ。
+実際、このプログラムをGo1.14以降で (筆者が手元で動かしたときは Go1.16 (on Ubuntu on WSL2)で) 動かすと、その通り動く。
+このプログラムをその通り動かさないためには方法はふたつある。ひとつは1.14より前のバージョンのGoで実行すること。もうひとつは <code>GODEBUG=asyncpreemptoff=1</code> にして動かすことだ。</p>
+<p>筆者の手元で試してみると、以下のように動いた。</p>
+<pre><code>$ GOMAXPROCS=1 GODEBUG=asyncpreemptoff=1 go run main.go
+# ここで止まる
+</code></pre>
+<p>"hi"が出ない。なぜこうなるのか？を話す前に、このプログラムを期待通りの挙動にさせる方法もいくつかあるので説明しておく。</p>
+<p>ひとつは、ループの中に次のように処理を追加するやり方だ。</p>
+<pre><code>*** main.go.org 2021-03-26 20:03:16.840000000 +0900
+--- main2.go    2021-03-26 20:03:58.970000000 +0900
+*************** package main
+*** 2,11 ****
+--- 2,13 ----
+
+  import (
+    &quot;fmt&quot;
++   &quot;runtime&quot;
+  )
+
+  func main() {
+    go fmt.Println(&quot;hi&quot;)
+    for {
++       runtime.Gosched()
+    }
+  }
+
+</code></pre>
+<p><code>runtime.Gosched()</code> は、POSIXの <a href="https://man7.org/linux/man-pages/man2/sched_yield.2.html"><code>sched_yield</code></a> のようなもの (たぶん) だ。 <code>sched_yield</code> は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 <code>Gosched</code> という名前なのかと思われる (これは予想) 。
+すなわち、 <code>runtime.Gosched()</code> を明示的にコールすることで強制的にgoroutineの再スケジュールが行われ、別のgoroutineにスイッチされることを期待できる。</p>
+<p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
+<h2>GoにおけるCooperative vs. Preemptive スケジューリング</h2>
+<p>そもそも、マルチタスクのスケジューリングには大きく2つの方式がある。それは「Cooperative(協調的)」と「Preemptive(プリエンプティブ)」だ。協調的マルチタスクは「ノンプリエンプティブ」とも呼ばれる。
+協調的マルチタスクは、プログラムのスイッチがどのように行われるかは、そのプログラム自身に依存する。「協調型」と呼ばれるのは、プログラムが相互動作可能に設計されていることを意図した呼び方なのだと思われる。
+プリエンプティブ型のマルチタスクでは、プログラムのスイッチはOSに委ねられる。優先度を基にしたものや、FCSV・ラウンドロビンなど、なんらかのアルゴリズムに基づいてOSによってスイッチされるスケジューリング方式を言う。</p>
+<p>さて、Goにおけるgoroutineのスケジューリングは協調的か、それともプリエンプティブだろうか？</p>
+<p>こうと言い切るのはなかなか難しいが、少なくともGo1.13までは協調的だと言ってよいだろう。</p>
+<p>オフィシャルなドキュメントを見つけられなかったが、いろいろ調べたところgoroutineのスイッチは以下のようなときに起こるらしい(網羅的ではない。);</p>
+<ul>
+<li>バッファされていないチャネルへの読み書きによる待ち</li>
+<li>システムコールの呼び出しによる待ち</li>
+<li>time.Sleep()の呼び出し</li>
+<li>mutexの解放待ち</li>
+</ul>
+<p>また、Goでは「sysmon」という関数を実行し続けるコンポーネントが動いており、プリエンプション (以外にもネットワーク処理の待ち状態をノンブロッキングにしてあげるとか、いろいろ) をやっている。
+sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。MとかPとかは様々な解説記事 (<a href="https://developpaper.com/gmp-principle-and-scheduling-analysis-of-golang-scheduler/">これ</a>とか) を参照することをお薦めする。</p>
+<p>sysmonはMが同じG (Goroutine) を10ms以上実行し続けているのを見つけると、そのGの内部パラメータである <code>preempt</code> フラグをtrueにする。その後、そのGが関数コールした際のfunction prologueで、Gは自身の <code>preempt</code> フラグを確認し、trueだった場合は自身をMから切り離し、グローバルキューというキューにプッシュする。すなわち、無事プリエンプションが実行されたというわけだ。
+ちなみに、グローバルキューとはPが持つGのキュー (=ローカルキュー) とは異なるキューである。グローバルキューの目的はいくつかある。</p>
+<ul>
+<li>ローカルキューはキャパシティが256であり、それを超えるGを格納するため</li>
+<li>様々な要因で待ちになっているGを格納するため</li>
+<li>preemptフラグで切り離されたGを格納するため</li>
+</ul>
+<p>ここまでがGo1.13までの実装であるが、ここまでを理解すれば前述の無限ループするコードが何故期待通りに動かなかったのかがわかるだろう。 <code>for {}</code> は単なるビジーループなので、先に書いたようなgoroutineのスイッチの契機には特にならない。「10ms以上実行されているからsysmonによってpreemptフラグが立てられるのでは？」と思うが、 <strong>preemptフラグが立っても関数コールがなければそのフラグのチェックが発生しない</strong> のである。先に書いたように、preemptフラグのチェックはfunction prologueで起こるから、何の処理もしないビジーループではプリエンプションの実行まで到達できなかったのである。</p>
+<p>そして、Go1.14で導入された "non-cooperative preemption" (asynchronous preemption) によって、この挙動は変わった。</p>
+<h2>asynchronously preemptibleとはなにか？</h2>
+<p>ここまでを整理しよう。Goは10ms以上実行されているgoroutineをsysmonで監視し、適宜強制的にプリエンプションするよう計らう仕組みがそもそも存在した。しかし、その動作の仕組み上、 <code>for {}</code> のような場合は実際はプリエンプションが発生しなかった。</p>
+<p>Go1.14で導入されたnon-cooperative preemptionによって、Goroutineのスケジューラはプリエンプティブと呼んで差し支えないようになった。それは、シグナルを使ったシンプルながら効果的なアルゴリズムである。</p>
+<p>まず、sysmonは今まで通り、10ms以上動き続けているG (goroutine)を検知する。すると、sysmonはそのGを動かしているスレッド (P) にシグナル (SIGURG) を送信する。
+Goのsignal handlerはシグナルをハンドリングするためにそのPに対して <code>gsignal</code> という別のgoroutineを起動し、それまで実行していたGの代わりにMと対応付け、gsignalにシグナルを確認させる。gsignalはプリエンプションが命じられたことをわかり、それまで実行していたGを停止する。</p>
+<p>すなわち、Go1.13までは関数コールがないと仕組み上プリエンプションしなかったが、Go1.14では明示的なシグナルの送信によってプリエンプションが実行されるようになった。言い換えると、プリエンプションをgoroutine自身でなくシグナルを契機とした外的要因で実行できるようになったのだ。</p>
+<p>この、シグナルを用いた非同期のプリエンプションの仕組みによって、先述のコードは期待通り動くようになった。それでも、 <code>GODEBUG=asyncpreemptoff=1</code> にすることでasynchrnous preemptionはオフにすることが可能だ。</p>
+<p>ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations">参考</a>)</p>
+<h2>終わりに</h2>
+<p>何もしない無限ループが他のgoroutineに処理を渡さないからと言って、Go1.13までの仕組みがダメかというとそうでもないと思われる。 <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022">@davecheney氏</a>も発言しているように、通常これは特に問題にならないと考えられる。そもそもasynchronous preemptionはこの無限ループの問題を解決するために導入されたのではない。</p>
+<p>asynchronous preemptionの導入によってスケジューリングがプリエンプティブになったものの、GCの際の「アンセーフ・ポイント」の取り扱いにさらに注意が必要となった。この辺の実装の考慮が大変面白くて話したかったのだが、力尽きたのでここでこの記事は終わる。気になる読者は自分で<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a>を読んでほしい。</p>
+<h2>参考</h2>
+<ul>
+<li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a></li>
+<li><a href="https://github.com/golang/go/issues/24543">runtime: non-cooperative goroutine preemption</a></li>
+<li><a href="https://github.com/golang/go/issues/10958">runtime: tight loops should be preemptible</a></li>
+<li><a href="https://github.com/golang/go/issues/11462">runtime: golang scheduler is not preemptive - it's cooperative?</a></li>
+<li><a href="https://golang.org/src/runtime/preempt.go">Source file src/runtime/preempt.go</a></li>
+<li><a href="https://developpaper.com/goroutine-preemptive-scheduling-with-new-features-of-go-1-14/">Goroutine preemptive scheduling with new features of go 1.14</a></li>
+<li><a href="https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7">Go: Goroutine and Preemption</a></li>
+<li><a href="https://stackoverflow.com/questions/64113394/at-which-point-a-goroutine-can-yield">At which point a goroutine can yield?</a></li>
+<li><a href="https://medium.com/a-journey-with-go/go-asynchronous-preemption-b5194227371c">Go: Asynchronous Preemption</a></li>
+<li><a href="https://stackoverflow.com/questions/17953269/go-routine-blocking-the-others-one">go routine blocking the others one [duplicate]</a></li>
+<li><a href="https://qiita.com/takc923/items/de68671ea889d8df6904">Golangのスケジューラあたりの話</a></li>
+<li><a href="https://qiita.com/umisama/items/93333ffe4d9fc7e4ba1f">goroutineがスイッチされるタイミング</a></li>
+</ul>
+<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
