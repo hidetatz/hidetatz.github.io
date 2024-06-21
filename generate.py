@@ -295,10 +295,10 @@ class Blog:
         Sitemap(articles, diaries).save_xml(f"{self.root}/sitemap.xml")
         AtomFeed(articles, diaries).save_xml(f"{self.root}/feed.xml")
 
-    def generate_and_push(self, root):
+    def generate_and_push(self):
         self.generate_gh_pages()
 
-        shutil.move(f"./{root}", f"../{root}")
+        shutil.move(f"./{self.root}", f"../{self.root}")
 
         subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
         subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
@@ -307,7 +307,7 @@ class Blog:
         subprocess.run(["git", "checkout", "-b", "gh-pages"])
 
         shutil.rmtree("./")
-        shutil.move(f"../{root}/*", f"./")
+        shutil.move(f"../{self.root}/*", f"./")
 
         subprocess.run(["git", "add", "."])
         subprocess.run(["git", "commit", "-m", "update"])
