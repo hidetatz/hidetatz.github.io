@@ -300,7 +300,7 @@ class Blog:
 
         shutil.move(f"./{self.root}", f"../{self.root}")
 
-        subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
+        subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{self.gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
         subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
         subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
 
