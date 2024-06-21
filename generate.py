@@ -300,13 +300,21 @@ class Blog:
 
         shutil.move(f"./{self.root}", f"../{self.root}")
 
-        subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{self.gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
+        # subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{self.gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
         subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
         subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
 
         subprocess.run(["git", "checkout", "-b", "gh-pages"])
 
-        shutil.rmtree("./")
+        for item in os.listdir("."):
+            item_path = os.path.join(directory, item)
+            if item == '.git':
+                continue
+            if os.path.isfile(item_path):
+                os.remove(item_path)
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+
         shutil.move(f"../{self.root}/*", f"./")
 
         subprocess.run(["git", "add", "."])
