@@ -307,4 +307,4 @@ class Blog:
         subprocess.run(["git", "push", "origin", "master"])
 
 if __name__ == "__main__":
-    Blog("public", os.environ.get("GITHUB_TOKEN")).generate_and_push()
+    Blog("docs", os.environ.get("GITHUB_TOKEN")).generate_and_push()
