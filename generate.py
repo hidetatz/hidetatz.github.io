@@ -1,7 +1,10 @@
 import dataclasses
 import datetime
+import http.client
+import json
 import os
 import os.path
+import re
 import shutil
 import string
 import xml.etree.ElementTree as ET
@@ -17,35 +20,18 @@ def new_article(filename):
     with open(f"data/articles/{filename}.md", "w") as f:
         f.write(f"""title: {filename}
 timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-url: necessary for external link
 lang: ja/en
 ---
 """)
     return f"data/articles/{filename}.md"
-
-def new_diary(title, ts, body):
-    os.makedirs("data/diaries", exist_ok=True)
-    filename = f"data/diaries/{ts.strftime('%Y-%m-%d')}.md"
-    with open(filename, "w") as f:
-        f.write(f"""title: {title}
-timestamp: {ts.strftime('%Y-%m-%d %H:%M:%S')}
-lang: ja
----
-{body}
-""")
-    return filename
 
 class Sitemap:
     def __init__(self, articles, diaries):
         self.articles = articles
         self.diaries = diaries
 
-        if len(diaries) == 0:
-            self.latest_ts = articles[0].ts_atom()
-        elif articles[0].timestamp > diaries[0].timestamp:
-            self.latest_ts = articles[0].ts_atom()
-        else:
-            self.latest_ts = diaries[0].ts_atom()
+        # self.latest_ts = diaries[0].ts_iso8601()
+        self.latest_ts = articles[0].ts_iso8601()
 
     def save_xml(self, out):
         urlset = ET.Element("urlset")
@@ -57,22 +43,12 @@ class Sitemap:
         lastmod = ET.SubElement(url_elem, "lastmod")
         lastmod.text = self.latest_ts
 
-        for article in self.articles:
+        for entry in self.articles + self.diaries:
             url_elem = ET.SubElement(urlset, "url")
             loc = ET.SubElement(url_elem, "loc")
-            if article.external_url == "":
-                loc.text = f"https://hidetatz.github.io/{article.url_path('articles')}"
-            else:
-                loc.text = article.external_url
+            loc.text = f"https://hidetatz.github.io/{entry.url_path()}"
             lastmod = ET.SubElement(url_elem, "lastmod")
-            lastmod.text = article.ts_atom()
-
-        for diary in self.diaries:
-            url_elem = ET.SubElement(urlset, "url")
-            loc = ET.SubElement(url_elem, "loc")
-            loc.text = f"https://hidetatz.github.io/{diary.url_path('diary')}"
-            lastmod = ET.SubElement(url_elem, "lastmod")
-            lastmod.text = diary.ts_atom()
+            lastmod.text = entry.ts_iso8601()
         
         tree = ET.ElementTree(element=urlset)
         tree.write(out, encoding="utf-8", xml_declaration=True)
@@ -95,7 +71,7 @@ class AtomFeed:
         _id.text = "https://hidetatz.github.io"
 
         updated = ET.SubElement(feed, "updated")
-        updated.text = self.all_articles[0][1].ts_atom()
+        updated.text = self.all_articles[0][1].ts_iso8601()
 
         link = ET.SubElement(feed, "link")
         link.set("href", "https://hidetatz.github.io")
@@ -106,13 +82,11 @@ class AtomFeed:
         author_email = ET.SubElement(author, "email")
         author_email.text = "hidetatz@gmail.com"
         
-        for i in range(20):
+        for i in range(15):
             ent = self.all_articles[i]
             typ, article = ent[0], ent[1]
 
-            article_url = article.external_url
-            if article.external_url == "":
-                article_url = "https://hidetatz.github.io/" + article.url_path("articles" if typ == "article" else "diary")
+            article_url = f"https://hidetatz.github.io/{article.url_path()}"
 
             entry = ET.SubElement(feed, "entry")
 
@@ -120,7 +94,7 @@ class AtomFeed:
             entry_title.text = article.title
 
             entry_updated = ET.SubElement(entry, "updated")
-            entry_updated.text = article.ts_atom()
+            entry_updated.text = article.ts_iso8601()
 
             entry_id = ET.SubElement(entry, "id")
             entry_id.text = article_url
@@ -142,23 +116,31 @@ class AtomFeed:
         tree = ET.ElementTree(element=feed)
         tree.write(out, encoding='utf-8', xml_declaration=True)
 
-@dataclasses.dataclass
-class MarkdownArticle:
-    filename_no_ext: str
-    title: str
-    timestamp: datetime.time
-    content: list
-    external_url: str = ""
-    lang: str = "en"
+class Entry:
+    def __init__(self, title, timestamp, content):
+        self.title = title
+        self.timestamp = timestamp
+        self.content = content
 
-    def __init__(self, file):
-        self.filename_no_ext, _ = os.path.splitext(os.path.basename(file.name))
-        lines = file.read().splitlines()
+    def ts_display(self): 
+        return self.timestamp.strftime('%Y/%m/%d')
+
+    def ts_short(self): 
+        return self.timestamp.strftime('%Y%m%d')
+
+    def ts_iso8601(self): 
+        return self.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+class Article(Entry):
+    def __init__(self, filepath):
+        with open(filepath) as f:
+            self.filename_no_ext, _ = os.path.splitext(os.path.basename(f.name))
+            lines = f.read().splitlines()
+
         self.content = []
         in_front_matter = True
         for line in lines:
             if in_front_matter:
-                # assume every article must have yaml front matter finishing line
                 if line == "---":
                     in_front_matter = False
                     continue
@@ -166,55 +148,49 @@ class MarkdownArticle:
                 key, val = line.split(": ")
 
                 if key == "timestamp":
-                    self.timestamp = datetime.datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
-                    continue
+                    timestamp = datetime.datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
 
-                if key == "url":
-                    self.external_url = val
-                    continue
+                elif key == "title":
+                    title = val
 
-                if key == "lang":
+                elif key == "lang":
                     self.lang = val
-                    continue
-
-                if key == "title":
-                    self.title = val
-                    continue
 
             else:
                 self.content.append(line)
 
-    def ts_display(self): 
-        return self.timestamp.strftime('%Y/%m/%d')
+        super().__init__(title, timestamp, "\n".join(self.content))
 
-    def ts_atom(self): 
-        return self.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
+    def url_path(self): 
+        return f"/{self.filename_no_ext}"
 
-    def url_path(self, directory): 
-        return f"/{directory}/{self.ts_display()}/{self.filename_no_ext}"
-
-    def md_link(self, directory):
-        if self.external_url != "":
-            return f"[{self.title}]({self.external_url})"
-
-        url_path = self.url_path(directory)
-        return f"[{self.title}]({url_path})"
-
-    def as_html(self, x=True):
-        if self.external_url != "":
-            return
-
+    def to_html(self):
         t = string.Template(template.article_content)
-        content = t.substitute(title=self.title, timestamp=self.ts_display(), content='\n'.join(self.content))
-        content = md.convert(content)
-        if x:
-            content += '\n<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>'
-        return string.Template(template.html_page).substitute(title=self.title, body=content)
+        content = md.convert(t.substitute(title=self.title, timestamp=self.ts_display(), content=self.content))
+        content += '\n<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>'
+        return content
 
-@dataclasses.dataclass
-class BlogSite:
-    articles: list
-    diaries: list
+class Diary(Entry):
+    def __init__(self, issue):
+        ts = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+        pattern = "20\d{2}年\d{1,2}月\d{1,2}日"
+        result = re.search(pattern, issue["title"])
+        if result:
+            ts = datetime.datetime.strptime(result.group(), "%Y年%m月%d日")
+
+        super().__init__(issue["title"], ts, issue["body"])
+
+    def url_path(self): 
+        return f"/{self.ts_short()}"
+
+    def to_html(self):
+        t = string.Template(template.diary_content)
+        return md.convert(t.substitute(title=self.title, content=self.content))
+
+class Blog:
+    def __init__(self, root, gh_token):
+        self.root = root
+        self.gh_token = gh_token
 
     def save(self, location, content):
         os.makedirs(os.path.dirname(location), exist_ok=True)
@@ -222,78 +198,104 @@ class BlogSite:
             f.write(content)
 
     def copy(self, filename):
-        src = f"data/{filename}"
-        dst = f"docs/{filename}"
+        src = f"static/{filename}"
+        dst = f"{self.root}/{filename}"
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copyfile(src, dst)
 
-    def tmpl_md_as_html(self, title, tmpl, **kwargs):
-        tmpl = string.Template(tmpl)
-        body = tmpl.substitute(**kwargs)
-        body = md.convert(body)
+    def to_html(self, title, body):
         return string.Template(template.html_page).substitute(title=title, body=body)
 
-    def generate(self):
-        shutil.rmtree("docs")
-        os.mkdir("docs")
+    def tmpl_md_as_html(self, title, tmpl, **kwargs):
+        return self.to_html(title, md.convert(string.Template(tmpl).substitute(**kwargs)))
 
-        # Copy static files from data to docs
+    def create_articles(self):
+        articles = []
+        for file in os.listdir("articles"):
+            article = Article(f"articles/{file}")
+            self.save(f"{self.root}/{article.url_path()}/index.html", self.to_html(article.title, article.to_html()))
+            articles.append(article)
+
+        articles.sort(key=lambda article: article.timestamp, reverse=True)
+        return articles
+
+    def create_diaries(self):
+        def fetch_all_issues(gh_token):
+            issues = []
+            page=1
+            while True:
+                conn = http.client.HTTPSConnection("api.github.com")
+                headers = {
+                    "Accept": "application/vnd.github+json",
+                    "Authorization": f"Bearer {gh_token}",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                    "User-Agent": "hidetatz.github.io",
+                }
+                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=open&creator=hidetatz&per_page=100&page={page}", headers=headers)
+                resp = conn.getresponse()
+                body = json.loads(resp.read().decode("utf-8"))
+                issues += body
+
+                if "Link" not in resp.headers:
+                    break
+                
+                if 'relname="next"' not in resp.headers["Link"]:
+                    break
+
+                page += 1
+
+            return issues
+
+        
+        diaries = []
+        for issue in fetch_all_issues(self.gh_token):
+            diary = Diary(issue)
+            self.save(f"{self.root}/{diary.url_path()}/index.html", self.to_html(diary.title, diary.to_html()))
+            diaries.append(diary)
+
+        diaries.sort(key=lambda diary: diary.timestamp, reverse=True)
+        return diaries 
+
+    def generate_gh_pages(self):
+        shutil.rmtree(self.root, ignore_errors=True)
+
         self.copy("robots.txt")
         self.copy("markdown.css")
         self.copy("syntax.css")
         self.copy("highlight.pack.js")
         self.copy("favicon.ico")
 
-        # Create articles and article index. Article index is also the whole site index.
+        # Create each article/diary pages.
+
+        articles = self.create_articles()
+        diaries = self.create_diaries()
+
+        # Create index pages.
+
         article_links = []
-        article_ja_links = []
+        for article in articles:
+            article_links.append(f"{article.ts_display()} - [{article.title}]({article.url_path()})  ")
 
-        for article in self.articles:
-            target = article_ja_links if article.lang == "ja" else article_links
-            target.append(f"{article.ts_display()} - {article.md_link('articles')}  ")
+        index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links))
+        self.save(f"{self.root}/index.html", index)
 
-            if article.external_url == "":
-                self.save(f"docs/{article.url_path('articles')}/index.html", article.as_html())
-
-        index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links), articles_ja="\n".join(article_ja_links))
-        self.save(f"docs/index.html", index)
-
-        # Create diaries and diaries index.
         diary_links = []
-
-        for diary in self.diaries:
-            diary_links.append(f"{diary.md_link('diary')}  ")
-            self.save(f"docs/{diary.url_path('diary')}/index.html", diary.as_html(False))
+        for diary in diaries:
+            diary_links.append(f"[{diary.title}]({diary.url_path()})  ")
 
         diary_index = self.tmpl_md_as_html("diary | hidetatz.github.io", template.diary_index_page_md, diaries="\n".join(diary_links))
-        self.save(f"docs/diary/index.html", diary_index)
+        self.save(f"{self.root}/diary/index.html", diary_index)
 
         # Generate 404 page.
         not_found = self.tmpl_md_as_html("404 | hidetatz.github.io", template.not_found_page_md, recent_articles="\n".join(article_links[:5]))
-        self.save(f"docs/404.html", not_found)
+        self.save(f"{self.root}/404.html", not_found)
 
         # Generate sitemap and rss feed.
-        sitemap = Sitemap(self.articles, self.diaries)
-        sitemap.save_xml("docs/sitemap.xml")
+        Sitemap(articles, diaries).save_xml(f"{self.root}/sitemap.xml")
+        AtomFeed(articles, diaries).save_xml(f"{self.root}/feed.xml")
 
-        atomfeed = AtomFeed(self.articles, self.diaries)
-        atomfeed.save_xml("docs/feed.xml")
-
-def read_article_files(directory):
-    files = [f for f in os.listdir(directory) if os.path.isfile(f"{directory}/{f}")]
-    articles = []
-    for file in files:
-        with open(f"{directory}/{file}") as f:
-            articles.append(MarkdownArticle(f))
-
-    articles.sort(key=lambda article: article.timestamp, reverse=True)
-
-    return articles
-
-def generate():
-    articles = read_article_files("data/articles")
-    diaries = read_article_files("data/diaries")
-
-    BlogSite(articles, diaries).generate()
+    def generate_and_push(self):
+        self.generate_gh_pages()
 
 if __name__ == "__main__":
-    generate()
+    Blog("gh_pages", os.environ.get("GITHUB_TOKEN")).generate_and_push()
