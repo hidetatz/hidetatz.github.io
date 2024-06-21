@@ -307,13 +307,12 @@ class Blog:
         subprocess.run(["git", "checkout", "-b", "gh-pages"])
 
         for item in os.listdir("."):
-            item_path = os.path.join(directory, item)
             if item == '.git':
                 continue
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-            elif os.path.isdir(item_path):
-                shutil.rmtree(item_path)
+            if os.path.isfile(item):
+                os.remove(item)
+            elif os.path.isdir(item):
+                shutil.rmtree(item)
 
         shutil.move(f"../{self.root}/*", f"./")
 
