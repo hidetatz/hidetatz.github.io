@@ -299,29 +299,12 @@ class Blog:
     def generate_and_push(self):
         self.generate_gh_pages()
 
-        shutil.move(f"./{self.root}", f"../{self.root}")
-
-        # subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{self.gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
         subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
         subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
-
-        subprocess.run(["git", "checkout", "-b", "gh-pages"])
-
-        for item in os.listdir("."):
-            if item == '.git':
-                continue
-            if os.path.isfile(item):
-                os.remove(item)
-            elif os.path.isdir(item):
-                shutil.rmtree(item)
-
-        for file in glob.glob(f"../{self.root}/*"):
-            shutil.move(file, f"./")
-
-        subprocess.run(["git", "add", "."])
+        subprocess.run(["git", "add", self.root])
         subprocess.run(["git", "commit", "-m", "update"])
-        subprocess.run(["git", "push", "origin", "gh-pages"])
+        subprocess.run(["git", "push", "origin", "master"])
 
 
 if __name__ == "__main__":
-    Blog("gh_pages", os.environ.get("GITHUB_TOKEN")).generate_and_push()
+    Blog("public", os.environ.get("GITHUB_TOKEN")).generate_and_push()
