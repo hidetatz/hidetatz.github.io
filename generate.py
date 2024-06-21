@@ -17,16 +17,6 @@ import template
 
 md = markdown.Markdown(extensions=["tables", "fenced_code"])
 
-def new_article(filename):
-    os.makedirs("data/articles", exist_ok=True)
-    with open(f"data/articles/{filename}.md", "w") as f:
-        f.write(f"""title: {filename}
-timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-lang: ja/en
----
-""")
-    return f"data/articles/{filename}.md"
-
 class Sitemap:
     def __init__(self, articles, diaries):
         self.articles = articles
