@@ -314,7 +314,7 @@ class Blog:
             elif os.path.isdir(item):
                 shutil.rmtree(item)
 
-        for file in glob.glob(f"../{self.root}/*")
+        for file in glob.glob(f"../{self.root}/*"):
             shutil.move(file, f"./")
 
         subprocess.run(["git", "add", "."])
