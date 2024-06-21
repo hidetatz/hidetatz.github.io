@@ -7,6 +7,7 @@ import os.path
 import re
 import shutil
 import string
+import subprocess
 import xml.etree.ElementTree as ET
 
 import markdown
@@ -294,8 +295,24 @@ class Blog:
         Sitemap(articles, diaries).save_xml(f"{self.root}/sitemap.xml")
         AtomFeed(articles, diaries).save_xml(f"{self.root}/feed.xml")
 
-    def generate_and_push(self):
+    def generate_and_push(self, root):
         self.generate_gh_pages()
+
+        shutil.move(f"./{root}", f"../{root}")
+
+        subprocess.run(["git", "remote", "add", "origin" f"https://hidetatz:{gh_token}@github.com/hidetatz/hidetatz.github.io.git"])
+        subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
+        subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
+
+        subprocess.run(["git", "checkout", "-b", "gh-pages"])
+
+        shutil.rmtree("./")
+        shutil.move(f"../{root}/*", f"./")
+
+        subprocess.run(["git", "add", "."])
+        subprocess.run(["git", "commit", "-m", "update"])
+        subprocess.run(["git", "push", "origin", "gh-pages"])
+
 
 if __name__ == "__main__":
     Blog("gh_pages", os.environ.get("GITHUB_TOKEN")).generate_and_push()
