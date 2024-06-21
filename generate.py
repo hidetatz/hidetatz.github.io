@@ -303,8 +303,8 @@ class Blog:
         subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
         subprocess.run(["git", "add", self.root])
         subprocess.run(["git", "commit", "-m", "update"])
+        subprocess.run(["git", "pull", "--rebase", "origin", "master"])
         subprocess.run(["git", "push", "origin", "master"])
-
 
 if __name__ == "__main__":
     Blog("public", os.environ.get("GITHUB_TOKEN")).generate_and_push()
