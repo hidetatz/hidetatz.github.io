@@ -1,4 +1,4 @@
-article_content = """[<- home](/)
+article_content = """[<- 戻る](/)
     
 # $title
 
@@ -39,41 +39,39 @@ $body
 </body>
 </html>"""
 
-index_page_md = """I'm Hidetatz, a software and AI enthusiast.
-I'm currently developing [whale](https://github.com/hidetatz/whale), a deep learning framework inspired by PyTorch but entirely written in Go.
-Currently AI technology is for researchers rathar than for developers.
-As building AI into the systems becomes common, it must be changed. Building AI model must be more diverse, and that's why I develop whale.
+index_page_md = """## Hidetatz Web Page
 
-See some other open source software authored by me:
+Hidetatzは計算機、ソフトウェア、AI領域のエンジニアです。
 
-* [shiba](https://github.com/hidetatz/shiba)
+[GitHub](https://github.com/hidetatz)
 
-shiba is a programming language which is plain like Python, but modern like Go or Rust.
-Python is great, but some parts (e.g. package manager, code formatting) must be updated and that's why I create shiba.
+[Atom/RSSフィード](/feed.xml)
 
-* [kubecolor](https://github.com/hidetatz/kubecolor) (publicly archived)
+## プロジェクト
 
-kubecolor is a CLI tool which colorizes the kubectl output for readability.
-It's archived because I am not using Kubernetes for my work. I'll restart maitaining it if I have to run some containers on Kubernetes again (though I don't hope so).
-You can use the [community fork](https://github.com/kubecolor/kubecolor) if wanted.
+### [whale](https://github.com/hidetatz/whale)
 
-* [incdb](https://github.com/hidetatz/incdb)
+Goで書かれたディープラーニングフレームワーク。
 
-This is an incrementally developed RDBMS from scratch. This is work-in-progress project.
+### [shiba](https://github.com/hidetatz/shiba)
 
-* [rv](https://github.com/hidetatz/rv)
+Pythonのようにプレーンで、RustやGoのようにモダンなプログラミング言語。
 
-RISC-V software emulator. WIP.
+### [incdb](https://github.com/hidetatz/incdb)
 
-Visit my [GitHub](https://github.com/hidetatz) for more information.
+フルスクラッチで実装されたRDBMS。
 
-[Atom/RSS feed](/feed.xml)
+### [kubecolor](https://github.com/hidetatz/kubecolor) (アーカイブ)
+
+kubectlを100倍便利にするソフトウェア。
 
 ---
 
 ## 書いたもの
 
 $articles
+
+[日記](/diary)
 
 ---
 
@@ -86,6 +84,7 @@ diary_content = """[<- 戻る](/)
 $content"""
 
 diary_index_page_md = """日記です。  
+
 $diaries
 
 ---
@@ -95,7 +94,9 @@ $diaries
 not_found_page_md = """
 # 404: Page Not Found
 
-This page doesn't exist. Recent artices are below or go to the [top page](/).
+[トップに戻る](/)
+
+## 最近の記事
 
 $recent_articles
 """
