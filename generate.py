@@ -193,7 +193,7 @@ class Diary(Entry):
             while True:
                 # resize
                 img = Image.open(dst)
-                img = img.resize(int(img.width * 0.75), int(img.height * 0.75))
+                img = img.resize((int(img.width * 0.75), int(img.height * 0.75)))
                 img.save(dst)
                 if os.path.getsize(dst) < 200 * 1000 * 1000:
                     big = False
