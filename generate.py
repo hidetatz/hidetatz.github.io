@@ -195,7 +195,7 @@ class Diary(Entry):
                 img = Image.open(dst)
                 img = img.resize((int(img.width * 0.9), int(img.height * 0.9)))
                 img.save(dst)
-                if os.path.getsize(dst) < 200 * 1000 * 1000:
+                if os.path.getsize(dst) < 200 * 1000:
                     break
 
             self.content = self.content.replace(image.group(), f"![{alt}](./{i}.jpg)")
