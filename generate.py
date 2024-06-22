@@ -185,6 +185,7 @@ class Diary(Entry):
         images = re.finditer("!\[\S*\]\(\S+\)", self.content)
         for i, image in enumerate(images):
             alt, url = image.group().lstrip("![").rstrip(")").split("](")
+            os.makedirs(images_out, exist_ok=True)
             urllib.request.urlretrieve(url, f"{images_out}/{i}.jpg")
             replace = f"![{alt}](./{i}.jpg)"
             self.content = self.content.replace(image.group(), replace)
