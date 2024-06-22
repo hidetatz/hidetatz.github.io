@@ -9,6 +9,7 @@ import re
 import shutil
 import string
 import subprocess
+import urllib.request
 import xml.etree.ElementTree as ET
 
 import markdown
@@ -179,6 +180,15 @@ class Diary(Entry):
         t = string.Template(template.diary_content)
         return md.convert(t.substitute(title=self.title, content=self.content))
 
+    # extract images from issue body, save images locally, then replace the image in the markdown.
+    def optimize_images(self, images_out):
+        images = re.finditer("!\[\S*\]\(\S+\)", self.content)
+        for i, image in enumerate(images):
+            alt, url = image.group().lstrip("![").rstrip(")").split("](")
+            urllib.request.urlretrieve(url, f"{images_out}/{i}.jpg")
+            replace = f"![{alt}](./{i}.jpg)"
+            self.content = self.content.replace(image.group(), replace)
+
 class Blog:
     def __init__(self, root, gh_token):
         self.root = root
@@ -238,10 +248,10 @@ class Blog:
 
             return issues
 
-        
         diaries = []
         for issue in fetch_all_issues(self.gh_token):
             diary = Diary(issue)
+            diary.optimize_images(f"{self.root}/{diary.url_path()}")
             self.save(f"{self.root}/{diary.url_path()}/index.html", self.to_html(diary.title, diary.to_html()))
             diaries.append(diary)
 
