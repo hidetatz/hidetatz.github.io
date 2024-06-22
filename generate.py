@@ -244,7 +244,7 @@ class Blog:
                     "X-GitHub-Api-Version": "2022-11-28",
                     "User-Agent": "hidetatz.github.io",
                 }
-                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=open&creator=hidetatz&per_page=100&page={page}", headers=headers)
+                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=closed&creator=hidetatz&per_page=100&page={page}", headers=headers)
                 resp = conn.getresponse()
                 body = json.loads(resp.read().decode("utf-8"))
                 issues += body
