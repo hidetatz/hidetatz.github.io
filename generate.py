@@ -13,6 +13,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 import markdown
+from PIL import Image
 
 import template
 
@@ -184,11 +185,20 @@ class Diary(Entry):
     def optimize_images(self, images_out):
         images = re.finditer("!\[\S*\]\(\S+\)", self.content)
         for i, image in enumerate(images):
+            dst = f"{images_out}/{i}.jpg"
             alt, url = image.group().lstrip("![").rstrip(")").split("](")
             os.makedirs(images_out, exist_ok=True)
-            urllib.request.urlretrieve(url, f"{images_out}/{i}.jpg")
-            replace = f"![{alt}](./{i}.jpg)"
-            self.content = self.content.replace(image.group(), replace)
+            urllib.request.urlretrieve(url, dst)
+
+            while True:
+                # resize
+                img = Image.open(dst)
+                img = img.resize(int(img.width * 0.75), int(img.height * 0.75))
+                img.save(dst)
+                if os.path.getsize(dst) < 200 * 1000 * 1000:
+                    big = False
+
+            self.content = self.content.replace(image.group(), f"![{alt}](./{i}.jpg)")
 
 class Blog:
     def __init__(self, root, gh_token):
