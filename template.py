@@ -1,4 +1,4 @@
-article_content = """[<- 戻る](/)
+article_content = """[<- ホーム](/)
     
 # $title
 
@@ -77,13 +77,15 @@ $articles
 
 © 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
 
-diary_content = """[<- 戻る](/)
+diary_content = """[<- 日記](/diary)
     
 # $title
 
 $content"""
 
-diary_index_page_md = """日記です。  
+diary_index_page_md = """[<- ホーム](/)
+
+日記です。  
 
 $diaries
 
