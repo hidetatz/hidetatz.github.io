@@ -71,6 +71,12 @@ kubectlを100倍便利にするソフトウェア。
 
 $articles
 
+## 知識
+
+調べたことなど。継続的にアップデートされます。
+
+$knowledges
+
 [日記](/diary)
 
 ---
@@ -92,6 +98,14 @@ $diaries
 ---
 
 © 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
+
+knowledge_content = """[<- ホーム](/)
+    
+# $title
+
+#### 最終更新日: $timestamp
+
+$content"""
 
 not_found_page_md = """
 # 404: Page Not Found

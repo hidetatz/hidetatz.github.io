@@ -200,6 +200,38 @@ class Diary(Entry):
 
             self.content = self.content.replace(image.group(), f"![{alt}](./{i}.jpg)")
 
+class Knowledge(Entry):
+    def __init__(self, issue):
+        created = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+        self.updated = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+        super().__init__(issue["title"], ts, issue["body"])
+
+    def url_path(self): 
+        return f"/{self.ts_short()}"
+
+    def to_html(self):
+        t = string.Template(template.diary_content)
+        return md.convert(t.substitute(title=self.title, content=self.content, timestamp=self.updated.strftime('%Y/%m/%d')))
+
+    # extract images from issue body, save images locally, then replace the image in the markdown.
+    def optimize_images(self, images_out):
+        images = re.finditer("!\[\S*\]\(\S+\)", self.content)
+        for i, image in enumerate(images):
+            dst = f"{images_out}/{i}.jpg"
+            alt, url = image.group().lstrip("![").rstrip(")").split("](")
+            os.makedirs(images_out, exist_ok=True)
+            urllib.request.urlretrieve(url, dst)
+
+            while True:
+                # resize
+                img = Image.open(dst)
+                img = img.resize((int(img.width * 0.9), int(img.height * 0.9)))
+                img.save(dst)
+                if os.path.getsize(dst) < 200 * 1000:
+                    break
+
+            self.content = self.content.replace(image.group(), f"![{alt}](./{i}.jpg)")
+
 class Blog:
     def __init__(self, root, gh_token):
         self.root = root
@@ -269,6 +301,43 @@ class Blog:
         diaries.sort(key=lambda diary: diary.timestamp, reverse=True)
         return diaries 
 
+    def create_knowledges(self):
+        def fetch_all_issues(gh_token):
+            issues = []
+            page=1
+            while True:
+                conn = http.client.HTTPSConnection("api.github.com")
+                headers = {
+                    "Accept": "application/vnd.github+json",
+                    "Authorization": f"Bearer {gh_token}",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                    "User-Agent": "hidetatz.github.io",
+                }
+                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=open&creator=hidetatz&labels=knowledge&per_page=100&page={page}", headers=headers)
+                resp = conn.getresponse()
+                body = json.loads(resp.read().decode("utf-8"))
+                issues += body
+
+                if "Link" not in resp.headers:
+                    break
+                
+                if 'relname="next"' not in resp.headers["Link"]:
+                    break
+
+                page += 1
+
+            return issues
+
+        knowledges = []
+        for issue in fetch_all_issues(self.gh_token):
+            knowledge = Knowledge(issue)
+            knowledge.optimize_images(f"{self.root}/{knowledge.url_path()}")
+            self.save(f"{self.root}/{knowledge.url_path()}/index.html", self.to_html(knowledge.title, knowledge.to_html()))
+            knowledges.append(knowledge)
+
+        knowledges.sort(key=lambda knowledge: knowledge.updated, reverse=True)
+        return knowledges
+
     def generate_gh_pages(self):
         shutil.rmtree(self.root, ignore_errors=True)
 
@@ -282,6 +351,7 @@ class Blog:
 
         articles = self.create_articles()
         diaries = self.create_diaries()
+        knowledges = self.create_knowledges()
 
         # Create index pages.
 
@@ -289,7 +359,11 @@ class Blog:
         for article in articles:
             article_links.append(f"{article.ts_display()} - [{article.title}]({article.url_path()})  ")
 
-        index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links))
+        knowledge_links = []
+        for knowledge in knowledges:
+            knowledge_links.append(f"[{knowledge.title}]({knowledge.url_path()})  ")
+
+        index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links), knowledges="\n".join(knowledge_links))
         self.save(f"{self.root}/index.html", index)
 
         diary_links = []
