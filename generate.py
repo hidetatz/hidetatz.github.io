@@ -204,7 +204,7 @@ class Knowledge(Entry):
     def __init__(self, issue):
         created = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
         self.updated = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
-        super().__init__(issue["title"], ts, issue["body"])
+        super().__init__(issue["title"], created, issue["body"])
 
     def url_path(self): 
         return f"/{self.ts_short()}"
