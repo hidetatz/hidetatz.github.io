@@ -210,7 +210,7 @@ class Knowledge(Entry):
         return f"/{self.path}"
 
     def to_html(self):
-        t = string.Template(template.diary_content)
+        t = string.Template(template.knowledge_content)
         return md.convert(t.substitute(title=self.title, content=self.content, timestamp=self.ts_display()))
 
     # extract images from issue body, save images locally, then replace the image in the markdown.
