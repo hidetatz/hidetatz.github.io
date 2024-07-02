@@ -203,8 +203,9 @@ class Diary(Entry):
 class Knowledge(Entry):
     def __init__(self, issue):
         updated = datetime.datetime.strptime(issue["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
-        self.path = issue["body"].splitlines()[0]
-        super().__init__(issue["title"], updated, issue["body"])
+        lines = issue["body"].splitlines()
+        self.path = lines[0]
+        super().__init__(issue["title"], updated, "\n".join(lines[1:]))
 
     def url_path(self): 
         return f"/{self.path}"
