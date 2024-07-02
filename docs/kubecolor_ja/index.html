@@ -24,56 +24,56 @@
   </script>
 </head>
 <body class="markdown-body">
-<p><a href="/">&lt;- ホーム</a></p>
+<p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>kubecolorでkubectlの出力に色を付ける</h1>
 <h4>2020/10/14</h4>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png"></p>
 <h1>1. はじめに</h1>
 <p>kubectlはKubernetesクラスタを操作するためのCLIクライアントです。
 筆者は仕事でほぼ毎日kubectlを使用しますが、その使い勝手に対して一点改善したい点がありました。それは、 <em>出力が一色のみで見辛い</em>　という点です。
-この記事では、筆者が開発したkubectlの出力に色を付けるためのOSS "<a href="https://github.com/hidetatz/kubecolor">kubecolor</a>" について紹介します。筆者はkubecolorは非常に便利で、もっと多くの人に使ってもらいたいと考えているため、この記事を書くことにしました。
+この記事では、筆者が開発したkubectlの出力に色を付けるためのOSS "<a href="https://github.com/hidetatz/kubecolor" rel="nofollow">kubecolor</a>" について紹介します。筆者はkubecolorは非常に便利で、もっと多くの人に使ってもらいたいと考えているため、この記事を書くことにしました。
 次章からは、既存のkubectlに対して筆者が改善したいと感じていた点についてもう具体例を上げながら説明し、その後kubecolorではそれをどう改善できているのかを解説します。そして、kubecolorの使い方について説明します。</p>
 <p>また本記事では、「見やすい」「見辛い」「わかりやすい」などの表現を使用しますが、筆者は色彩学やデザインの専門家では一切なく、単なる主観であることをご了承ください。</p>
 <h1>2. kubectlを改善したかった点</h1>
 <p>初めに、素のkubectlの出力を見てみます。（画像内で使用しているクラスタはテスト用のものです）</p>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*Kb6T3-K6__x31zjVq_xvDQ.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*Kb6T3-K6__x31zjVq_xvDQ.png"></p>
 <p>kubectlは出力に色を一切つけません。上の画像はまだ出力結果が十分に短いため視認性に大きな問題はありませんが、　"kubectl describe" や "kubectl get -o json" など、大きめの出力を行うコマンドは、次のように見えます。</p>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*CYNZMsuAyiCMeIx10VjfiQ.png" /></p>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*IwXwh_PVpC2hN6-lQn4jLg.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*CYNZMsuAyiCMeIx10VjfiQ.png"></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*IwXwh_PVpC2hN6-lQn4jLg.png"></p>
 <p>出力が大きくなると、先程よりも「見辛く」感じないでしょうか。もちろん個人差があるとは思うのですが、筆者は欲しいデータがどこにあるかを瞬時に認識することが難しいなと以前から感じていました。これが、筆者がkubecolorを開発した理由です。
 次章では、kubecolorがどのようなアプローチで「見やすさ」に貢献できるかを解説します。</p>
 <h1>3. kubecolorを使うと何が変わるか</h1>
 <p>kubecolorは筆者が開発したOSSで、以下のGitHubリポジトリで開発しています。</p>
-<p>https://github.com/hidetatz/kubecolor</p>
+<p><a href="https://github.com/hidetatz/kubecolor" rel="nofollow">https://github.com/hidetatz/kubecolor</a></p>
 <p>ライセンスはMITです。</p>
 <p>さて、冒頭の画像で既にお見せしてしまっていましたが改めて、kubecolorを使うとkubectlの出力は以下のように見えます。</p>
 <ul>
 <li>kubectl get pods</li>
 </ul>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png"></p>
 <ul>
 <li>kubectl describe pod</li>
 </ul>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*HFm_-f6yw8XGbNJ5sEGc-Q.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*HFm_-f6yw8XGbNJ5sEGc-Q.png"></p>
 <ul>
 <li>kubectl get pods -o json</li>
 </ul>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*KCKUa18M2foTxQvRTeayBA.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*KCKUa18M2foTxQvRTeayBA.png"></p>
 <ul>
 <li>kubectl get pods -o yaml</li>
 </ul>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*RVeL4fdxX4WRxKcrdQqqPw.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*RVeL4fdxX4WRxKcrdQqqPw.png"></p>
 <p>また、コマンドがエラーを出力した場合、kubecolorはそれを赤で出力することでエラーが起きたことをユーザーにわかりやすく伝えることもできます。</p>
-<p><img alt="" src="https://miro.medium.com/max/1304/1*Wp7OBW1cwy5CKCX-j0ZkFw.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1304/1*Wp7OBW1cwy5CKCX-j0ZkFw.png"></p>
 <p>色がつくことで、かなり見やすくなったのではないでしょうか。筆者は元々の一色のみの出力よりも、目的のものが見つけやすくなったなと感じます。
 次章では、kubecolorのインストール方法及び使い方などについて解説します。</p>
 <h1>4. kubecolorの使い方</h1>
 <p>本章の内容は、kubecolorの開発が進むにつれ最新の情報でなくなる可能性があります。</p>
 <h2>kubecolorは何をするのか</h2>
 <p>kubecolorはkubectlコマンドに渡すべきコマンドラインオプションを受け取り、内部でkubectlコマンドを実行し、帰ってきた出力に色付けしてその後出力します。色付け以外のことは何もしません。
-kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコマンドの出力に対して色付けをサポートしているわけではありません。また、出力に用いる色が今後変更される可能性もあります。サポートされている機能や今後実装されるものについて、<a href="https://github.com/hidetatz/kubecolor">README</a>をご覧ください。</p>
+kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコマンドの出力に対して色付けをサポートしているわけではありません。また、出力に用いる色が今後変更される可能性もあります。サポートされている機能や今後実装されるものについて、<a href="https://github.com/hidetatz/kubecolor" rel="nofollow">README</a>をご覧ください。</p>
 <h2>インストール</h2>
-<p>kubecolorはGoで実装されており、インストールにはgoコマンドを使用します。goコマンドがインストールされていない場合はまず<a href="https://golang.org/doc/install">公式ドキュメント</a>などを参考にインストールする必要があります。</p>
+<p>kubecolorはGoで実装されており、インストールにはgoコマンドを使用します。goコマンドがインストールされていない場合はまず<a href="https://golang.org/doc/install" rel="nofollow">公式ドキュメント</a>などを参考にインストールする必要があります。</p>
 <p>インストールは次のコマンドで行うことができます。</p>
 <pre><code class="language-shell">go get github.com/hidetatz/kubecolor/cmd/kubecolor
 </code></pre>
@@ -98,9 +98,9 @@ kubecolor exec -it pod-a bash
 <h3>--light-backgroundで使用する色を設定する</h3>
 <p>kubecolorが色付けに使用する色のプリセットは、デフォルトでは「背景が暗い色に設定してあるターミナルエミュレータ」上で見やすくなるように設定されています。これは逆に言えば、ターミナルの背景を白などの明るい色に設定している環境では、kubecolorの使う色が見えにくいと感じる可能性があります。 <code>--light-background</code> フラグをkubecolorに渡すことで、明るい背景に最適な色のプリセットを使って出力に色付けを行うようになります。
 実際に背景色を白に設定したターミナルで、kubecolor describe podコマンドを実行します。 <code>--light-background</code> なしでは次のように見えます。</p>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*yO-CZlwmbWr6tXn6j6YoQA.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*yO-CZlwmbWr6tXn6j6YoQA.png"></p>
 <p><code>--light-background</code> をつけると、次のように見えます。</p>
-<p><img alt="" src="https://miro.medium.com/max/1400/1*HrIyZChtuLD5FGjLcJjHzA.png" /></p>
+<p><img alt="" src="https://miro.medium.com/max/1400/1*HrIyZChtuLD5FGjLcJjHzA.png"></p>
 <p>白 -&gt; 黒に、シアン -&gt; 濃い青にそれぞれ変わったことで、読みやすくなります。</p>
 <h2>kubectlの自動補完機能と組み合わせる</h2>
 <p>kubectlにはネイティブに自動補完機能があります。これは、kubectlコマンドに対して補完を効かせるようになっているため、kubecolorコマンドでも同様に補完を効かせるためには次の設定が必要です。</p>

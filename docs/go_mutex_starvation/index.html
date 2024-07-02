@@ -24,7 +24,7 @@
   </script>
 </head>
 <body class="markdown-body">
-<p><a href="/">&lt;- ホーム</a></p>
+<p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>Mutex starvation in Go</h1>
 <h4>2021/04/07</h4>
 <h2>Introduction</h2>
@@ -32,7 +32,7 @@
 <p>Since mutex is a very simple locking mechanism, there are many variations in its algorithm. However, if the algorithm is not carefully chosen, it can sometimes cause "starvation", resulting in reduced throughput and even system stop.
 In this article, we will discuss the mutex algorithm that causes starvation in certain situations that existed up to Go 1.8. We will use actual programs as examples to gain a better understanding of the mutex behavior, starvation, and locking algorithms. Then, we will look at the changes that Go has made in 1.9 to make situation better.</p>
 <h2>Mutex "unfairness" in Go1.8</h2>
-<p>The <code>sync</code> section in the <code>Minor changes to the library</code> of the <a href="https://golang.org/doc/go1.9#minor_library_changes">release notes</a> for Go1.9 says <code>Mutex is now more fair</code> .</p>
+<p>The <code>sync</code> section in the <code>Minor changes to the library</code> of the <a href="https://golang.org/doc/go1.9#minor_library_changes" rel="nofollow">release notes</a> for Go1.9 says <code>Mutex is now more fair</code> .</p>
 <p>First, let's look at a problem that existed in the mutex up to Go1.8. This happens in a situation like: "two goroutines are fighting for a lock, one holds it for a long time and releases it for a short time, the other holds it for a short time and releases it for a long time. The code just looks like this:</p>
 <pre><code class="language-go">package main
 
@@ -102,23 +102,23 @@ The disadvantages of Barging are that it can lose the fairness of lock acquisiti
 <h2>Locking Algorithm #3: Handoff</h2>
 <p>Handoff pops a thread from the queue when the mutex is released, and wakes it up. It does not pass the lock to a new lock acquisition request as in Barging, and the thread at the top of the lock queue always gets the next lock. In other words, Handoff lock is a strict FIFO lock.</p>
 <p>Handoff generally cannot achieve high throughput because the thread at the head of the queue must always be woken up to acquire the lock, even if there are threads which can immediately get the lock outside the queue. The thread that wants to acquire the lock must enter the queue and wait for its turn.
-A patch that implements a Handoff-like mutex in the Linux kernel is <a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545">here</a> c4296e812c70493bfdc999b5c1c).</p>
+A patch that implements a Handoff-like mutex in the Linux kernel is <a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545" rel="nofollow">here</a> c4296e812c70493bfdc999b5c1c).</p>
 <h2>Adaptive lock and spin</h2>
 <p>Now that we have briefly looked at some locking algorithms, they are sometimes used in combination with something else, which is often called adaptive locking.
-The term "adaptive lock" has no clear definition, and is often used as a generic term for various "combined" locking algorithms. For example, <a href="https://yanniss.github.io/al-transact09.pdf">Adaptive Locks: Combining Transactions and Locks for Efficient Concurrency</a> deals with an approach that combines mutexes and STM.</p>
+The term "adaptive lock" has no clear definition, and is often used as a generic term for various "combined" locking algorithms. For example, <a href="https://yanniss.github.io/al-transact09.pdf" rel="nofollow">Adaptive Locks: Combining Transactions and Locks for Efficient Concurrency</a> deals with an approach that combines mutexes and STM.</p>
 <p>One of the common patterns of adaptive locks is to combine spinning and parking, where the thread spins a few times, and if the lock is still not obtained, the thread is parked.
 Short spinning is intended to get the lock while spinning in situations like a thread can't get the lock now, but I'll get it soon - specifically, in less time than it takes to park and wake the thread.</p>
-<p>For example, from <a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h# L57-L62">WebKit source code</a>, you can see that it spins 40 times, and if the lock can't be acquired, it perks up.</p>
+<p>For example, from <a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h# L57-L62" rel="nofollow">WebKit source code</a>, you can see that it spins 40 times, and if the lock can't be acquired, it perks up.</p>
 <h2>Algorithm of sync.Mutex in Go1.8</h2>
-<p>Let's go back to Go. Mutex up to Go1.8 was a combination of the above Barging and Adaptive lock. When it tries to acquire a lock on a locked mutex, it first call <a href="https://github.com/golang/go/blob/go1.8/src/runtime/proc.go#L4477-L4490">sync_runtime_canSpin</a> in <a href="https://github.com/golang/go/blob/go1.8/src/sync/mutex.go#L61-L72">mutex.Lock()</a> to determine if it should spin. According to it, the mutex of Go spins only <a href="https://github.com/golang/go/blob/go1.8/src/runtime/lock_futex.go#L30">4 times</a> first.</p>
+<p>Let's go back to Go. Mutex up to Go1.8 was a combination of the above Barging and Adaptive lock. When it tries to acquire a lock on a locked mutex, it first call <a href="https://github.com/golang/go/blob/go1.8/src/runtime/proc.go#L4477-L4490" rel="nofollow">sync_runtime_canSpin</a> in <a href="https://github.com/golang/go/blob/go1.8/src/sync/mutex.go#L61-L72" rel="nofollow">mutex.Lock()</a> to determine if it should spin. According to it, the mutex of Go spins only <a href="https://github.com/golang/go/blob/go1.8/src/runtime/lock_futex.go#L30" rel="nofollow">4 times</a> first.</p>
 <p>The algorithm works without taking care of starving goroutines. Because of this implementation, the previous program did not work as expected. I will explain how this has been changed in 1.9.</p>
 <h2>Algorithm of sync.Mutex in Go1.9</h2>
-<p>The commit for the fix is <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149">this</a>.</p>
+<p>The commit for the fix is <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149" rel="nofollow">this</a>.</p>
 <p>In sync/mutex.go in Go1.9, a new concept called "starvation mode" was introduced.</p>
-<p>In Go1.9, if a gouroutine was unable to acquire a lock for <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R43-R67">1e6ns (= 1ms)</a>, it gets <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R136">starvation mode</a>. The code looks like the following.</p>
+<p>In Go1.9, if a gouroutine was unable to acquire a lock for <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R43-R67" rel="nofollow">1e6ns (= 1ms)</a>, it gets <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R136" rel="nofollow">starvation mode</a>. The code looks like the following.</p>
 <pre><code class="language-go">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs
 </code></pre>
-<p>A goroutine in starvation mode will pass <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R130-R135"><code>lifo=true</code></a> to call a function to acquire the semaphore that the mutex is using internally.</p>
+<p>A goroutine in starvation mode will pass <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R130-R135" rel="nofollow"><code>lifo=true</code></a> to call a function to acquire the semaphore that the mutex is using internally.</p>
 <pre><code class="language-go">    // If we were already waiting before, queue at the front of the queue.
     queueLifo := waitStartTime != 0
     if waitStartTime == 0 {
@@ -127,8 +127,8 @@ Short spinning is intended to get the lock while spinning in situations like a t
     runtime_SemacquireMutex(&amp;m.sema, queueLifo)
 </code></pre>
 <p>On the semaphore (in the runtime package) side, if <code>lifo=true</code> is passed, the Treap (the data structure that is the substance of the queue) that stores the waiting goroutine places the goroutine at the head of the queue. It means this goroutine overtakes all other goroutines in the queue.</p>
-<p>Also, when the mutex is released, the semaphore is released passing <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R208-R212">handoff=true</a>.
-On the semaphore side, a goroutine is dequeued from the queue of waiting goroutines at the time of release, and if <code>handoff=true</code>, the <code>ticket</code> of the dequeued goroutine is directly set to <code>1</code>, which means it is [given the right to leave the queue] (https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-bb07e8d113e0257192c87f8b6153be1bcb547aa7826db102178ce2e6b7fd98d8R178-R195). This means that the goroutine now passes its ownership directly to the goroutine in the queue, without getting the lock stolen by the newly arrived goroutine.</p>
+<p>Also, when the mutex is released, the semaphore is released passing <a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-f6dc3e83d9b4548fbba149aca4d4307b8d4551951978fd9c1b98dff9c1ada149R208-R212" rel="nofollow">handoff=true</a>.
+On the semaphore side, a goroutine is dequeued from the queue of waiting goroutines at the time of release, and if <code>handoff=true</code>, the <code>ticket</code> of the dequeued goroutine is directly set to <code>1</code>, which means it is [given the right to leave the queue] (<a href="https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-bb07e8d113e0257192c87f8b6153be1bcb547aa7826db102178ce2e6b7fd98d8R178-R195" rel="nofollow">https://github.com/golang/go/commit/0556e26273f704db73df9e7c4c3d2e8434dec7be#diff-bb07e8d113e0257192c87f8b6153be1bcb547aa7826db102178ce2e6b7fd98d8R178-R195</a>). This means that the goroutine now passes its ownership directly to the goroutine in the queue, without getting the lock stolen by the newly arrived goroutine.</p>
 <pre><code class="language-go">    s, t0 := root.dequeue(addr)
     if s != nil {
         atomic.Xadd(&amp;root.nwait, -1)
@@ -145,22 +145,22 @@ On the semaphore side, a goroutine is dequeued from the queue of waiting gorouti
 <p>These changes mean that goroutines that enter starvation mode can now have their locks passed to them promptly and explicitly, without being intercepted.</p>
 <h2>Summary</h2>
 <p>We have looked at the potential problems of mutex stabalization that existed up to Go1.8. As you can see from the comments in the code, Handoff is not as good as Barging in terms of performance, but it provides more fairness.
-In <a href="https://github.com/golang/go/issues/13086">the original issue</a>, there is an interesting discussion about whether something like <code>sync.FairMutex</code> would be better, so I'd recommend readers who are interested to read it.</p>
+In <a href="https://github.com/golang/go/issues/13086" rel="nofollow">the original issue</a>, there is an interesting discussion about whether something like <code>sync.FairMutex</code> would be better, so I'd recommend readers who are interested to read it.</p>
 <h2>Reference (articles/papers)</h2>
 <ul>
-<li><a href="https://github.com/golang/go/issues/13086">runtime: fall back to fair locks after repeated sleep-acquire failures</a></li>
-<li><a href="https://golang.org/doc/go1.9#minor_library_changes">Go 1.9 Release Notes - Minor changes to the library</a></li>
-<li><a href="https://webkit.org/blog/6161/locking-in-webkit/">Locking in WebKit</a></li>
-<li><a href="http://www.filpizlo.com/papers/pizlo-pppj2011-fable.pdf">Fine-grained Adaptive Biased Locking</a></li>
-<li><a href="http://www.tsoftware.jp/nptl/">(ja) GNU/Linux でのスレッドプログラミング NPTL (Native POSIX Thread Library) Programming.</a></li>
+<li><a href="https://github.com/golang/go/issues/13086" rel="nofollow">runtime: fall back to fair locks after repeated sleep-acquire failures</a></li>
+<li><a href="https://golang.org/doc/go1.9#minor_library_changes" rel="nofollow">Go 1.9 Release Notes - Minor changes to the library</a></li>
+<li><a href="https://webkit.org/blog/6161/locking-in-webkit/" rel="nofollow">Locking in WebKit</a></li>
+<li><a href="http://www.filpizlo.com/papers/pizlo-pppj2011-fable.pdf" rel="nofollow">Fine-grained Adaptive Biased Locking</a></li>
+<li><a href="http://www.tsoftware.jp/nptl/" rel="nofollow">(ja) GNU/Linux でのスレッドプログラミング NPTL (Native POSIX Thread Library) Programming.</a></li>
 </ul>
 <h2>References (source code)</h2>
 <ul>
-<li>https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c</li>
-<li>https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62</li>
-<li>https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444</li>
-<li>https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444</li>
-<li>https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444</li>
+<li><a href="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c" rel="nofollow">https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9d659ae14b545c4296e812c70493bfdc999b5c1c</a></li>
+<li><a href="https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62" rel="nofollow">https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WTF/wtf/LockAlgorithmInlines.h#L57-L62</a></li>
+<li><a href="https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444" rel="nofollow">https://trac.webkit.org/browser/trunk/Source/WTF/benchmarks/LockSpeedTest.cpp?rev=200444</a></li>
+<li><a href="https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444" rel="nofollow">https://trac.webkit.org/browser/webkit/trunk/Source/WTF/wtf/ParkingLot.cpp?rev=200444</a></li>
+<li><a href="https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444" rel="nofollow">https://trac.webkit.org/browser/trunk/Source/WTF/wtf/Lock.cpp?rev=200444</a></li>
 </ul>
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 

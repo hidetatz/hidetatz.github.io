@@ -24,7 +24,7 @@
   </script>
 </head>
 <body class="markdown-body">
-<p><a href="/">&lt;- ホーム</a></p>
+<p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>CPU・最適化など</h1>
 <h4>最終更新日: 2024/07/02</h4>
 <h1>最適化</h1>
@@ -32,7 +32,7 @@
 <p>現代のIntelプロセッサの理論FLOPSを計算するにあたっては、次のような前提知識が必要になる。</p>
 <h3>Intel プロセッサにおけるスループットとレイテンシ</h3>
 <p>Intelの仕様書には、命令のスループットとレイテンシが載っている。</p>
-<p>https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html</p>
+<p><a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html" rel="nofollow">https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html</a></p>
 <p>このスループットとレイテンシは、アプリケーションとかの文脈と微妙に意味が異なる。</p>
 <p>まず、Intelのプロセッサにおけるスループットの定義は、「同じ命令を続けて発効するときに何クロックサイクル待つか」である。例えばスループットが1なら、1クロックサイクルで1回その命令が実行できる。0.5なら、1クロックサイクルで2回その命令が実行できる。</p>
 <p>つまり、数字が小さいほうが発行できる命令数が多いのだ。これは割と直感的ではないと思う。通常スループットと言うと、「単位時間あたりの処理できる量」を言い、数字が大きいほうが性能が高い。したがって、意味合いが逆になっている印象を受ける。このため、StackoverflowやAgner fogさんのブログなどでは、Intelプロセッサのスループットは「Reciprocal throughput（逆数スループット）」と言われていたりする。</p>

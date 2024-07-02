@@ -24,11 +24,11 @@
   </script>
 </head>
 <body class="markdown-body">
-<p><a href="/">&lt;- ホーム</a></p>
+<p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>Goroutineのプリエンプション</h1>
 <h4>2021/03/28</h4>
 <p>Goにおけるgoroutineのプリエンプションについて調べていたのでメモ。間違いがあれば指摘いただけると助かります。</p>
-<p>Goにおけるプリエンプションは、Go1.14以前とそれ以降で挙動が異なる。Go1.14では、<a href="https://golang.org/doc/go1.14#runtime">リリースノート</a> にもある通り、goroutineは "asynchronously preemptible" になった。これは何を意味するのか？</p>
+<p>Goにおけるプリエンプションは、Go1.14以前とそれ以降で挙動が異なる。Go1.14では、<a href="https://golang.org/doc/go1.14#runtime" rel="nofollow">リリースノート</a> にもある通り、goroutineは "asynchronously preemptible" になった。これは何を意味するのか？</p>
 <p>まず、簡単な例を見てみよう。
 次のようなGoプログラムを考える。</p>
 <pre><code>package main
@@ -73,9 +73,9 @@ func main() {
   }
 
 </code></pre>
-<p><code>runtime.Gosched()</code> は、POSIXの <a href="https://man7.org/linux/man-pages/man2/sched_yield.2.html"><code>sched_yield</code></a> のようなもの (たぶん) だ。 <code>sched_yield</code> は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 <code>Gosched</code> という名前なのかと思われる (これは予想) 。
+<p><code>runtime.Gosched()</code> は、POSIXの <a href="https://man7.org/linux/man-pages/man2/sched_yield.2.html" rel="nofollow"><code>sched_yield</code></a> のようなもの (たぶん) だ。 <code>sched_yield</code> は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 <code>Gosched</code> という名前なのかと思われる (これは予想) 。
 すなわち、 <code>runtime.Gosched()</code> を明示的にコールすることで強制的にgoroutineの再スケジュールが行われ、別のgoroutineにスイッチされることを期待できる。</p>
-<p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
+<p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257" rel="nofollow">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
 <h2>GoにおけるCooperative vs. Preemptive スケジューリング</h2>
 <p>そもそも、マルチタスクのスケジューリングには大きく2つの方式がある。それは「Cooperative(協調的)」と「Preemptive(プリエンプティブ)」だ。協調的マルチタスクは「ノンプリエンプティブ」とも呼ばれる。
 協調的マルチタスクは、プログラムのスイッチがどのように行われるかは、そのプログラム自身に依存する。「協調型」と呼ばれるのは、プログラムが相互動作可能に設計されていることを意図した呼び方なのだと思われる。
@@ -90,7 +90,7 @@ func main() {
 <li>mutexの解放待ち</li>
 </ul>
 <p>また、Goでは「sysmon」という関数を実行し続けるコンポーネントが動いており、プリエンプション (以外にもネットワーク処理の待ち状態をノンブロッキングにしてあげるとか、いろいろ) をやっている。
-sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。MとかPとかは様々な解説記事 (<a href="https://developpaper.com/gmp-principle-and-scheduling-analysis-of-golang-scheduler/">これ</a>とか) を参照することをお薦めする。</p>
+sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。MとかPとかは様々な解説記事 (<a href="https://developpaper.com/gmp-principle-and-scheduling-analysis-of-golang-scheduler/" rel="nofollow">これ</a>とか) を参照することをお薦めする。</p>
 <p>sysmonはMが同じG (Goroutine) を10ms以上実行し続けているのを見つけると、そのGの内部パラメータである <code>preempt</code> フラグをtrueにする。その後、そのGが関数コールした際のfunction prologueで、Gは自身の <code>preempt</code> フラグを確認し、trueだった場合は自身をMから切り離し、グローバルキューというキューにプッシュする。すなわち、無事プリエンプションが実行されたというわけだ。
 ちなみに、グローバルキューとはPが持つGのキュー (=ローカルキュー) とは異なるキューである。グローバルキューの目的はいくつかある。</p>
 <ul>
@@ -107,24 +107,24 @@ sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。
 Goのsignal handlerはシグナルをハンドリングするためにそのPに対して <code>gsignal</code> という別のgoroutineを起動し、それまで実行していたGの代わりにMと対応付け、gsignalにシグナルを確認させる。gsignalはプリエンプションが命じられたことをわかり、それまで実行していたGを停止する。</p>
 <p>すなわち、Go1.13までは関数コールがないと仕組み上プリエンプションしなかったが、Go1.14では明示的なシグナルの送信によってプリエンプションが実行されるようになった。言い換えると、プリエンプションをgoroutine自身でなくシグナルを契機とした外的要因で実行できるようになったのだ。</p>
 <p>この、シグナルを用いた非同期のプリエンプションの仕組みによって、先述のコードは期待通り動くようになった。それでも、 <code>GODEBUG=asyncpreemptoff=1</code> にすることでasynchrnous preemptionはオフにすることが可能だ。</p>
-<p>ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations">参考</a>)</p>
+<p>ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations" rel="nofollow">参考</a>)</p>
 <h2>終わりに</h2>
-<p>何もしない無限ループが他のgoroutineに処理を渡さないからと言って、Go1.13までの仕組みがダメかというとそうでもないと思われる。 <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022">@davecheney氏</a>も発言しているように、通常これは特に問題にならないと考えられる。そもそもasynchronous preemptionはこの無限ループの問題を解決するために導入されたのではない。</p>
-<p>asynchronous preemptionの導入によってスケジューリングがプリエンプティブになったものの、GCの際の「アンセーフ・ポイント」の取り扱いにさらに注意が必要となった。この辺の実装の考慮が大変面白くて話したかったのだが、力尽きたのでここでこの記事は終わる。気になる読者は自分で<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a>を読んでほしい。</p>
+<p>何もしない無限ループが他のgoroutineに処理を渡さないからと言って、Go1.13までの仕組みがダメかというとそうでもないと思われる。 <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022" rel="nofollow">@davecheney氏</a>も発言しているように、通常これは特に問題にならないと考えられる。そもそもasynchronous preemptionはこの無限ループの問題を解決するために導入されたのではない。</p>
+<p>asynchronous preemptionの導入によってスケジューリングがプリエンプティブになったものの、GCの際の「アンセーフ・ポイント」の取り扱いにさらに注意が必要となった。この辺の実装の考慮が大変面白くて話したかったのだが、力尽きたのでここでこの記事は終わる。気になる読者は自分で<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md" rel="nofollow">Proposal: Non-cooperative goroutine preemption</a>を読んでほしい。</p>
 <h2>参考</h2>
 <ul>
-<li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md">Proposal: Non-cooperative goroutine preemption</a></li>
-<li><a href="https://github.com/golang/go/issues/24543">runtime: non-cooperative goroutine preemption</a></li>
-<li><a href="https://github.com/golang/go/issues/10958">runtime: tight loops should be preemptible</a></li>
-<li><a href="https://github.com/golang/go/issues/11462">runtime: golang scheduler is not preemptive - it's cooperative?</a></li>
-<li><a href="https://golang.org/src/runtime/preempt.go">Source file src/runtime/preempt.go</a></li>
-<li><a href="https://developpaper.com/goroutine-preemptive-scheduling-with-new-features-of-go-1-14/">Goroutine preemptive scheduling with new features of go 1.14</a></li>
-<li><a href="https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7">Go: Goroutine and Preemption</a></li>
-<li><a href="https://stackoverflow.com/questions/64113394/at-which-point-a-goroutine-can-yield">At which point a goroutine can yield?</a></li>
-<li><a href="https://medium.com/a-journey-with-go/go-asynchronous-preemption-b5194227371c">Go: Asynchronous Preemption</a></li>
-<li><a href="https://stackoverflow.com/questions/17953269/go-routine-blocking-the-others-one">go routine blocking the others one [duplicate]</a></li>
-<li><a href="https://qiita.com/takc923/items/de68671ea889d8df6904">Golangのスケジューラあたりの話</a></li>
-<li><a href="https://qiita.com/umisama/items/93333ffe4d9fc7e4ba1f">goroutineがスイッチされるタイミング</a></li>
+<li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md" rel="nofollow">Proposal: Non-cooperative goroutine preemption</a></li>
+<li><a href="https://github.com/golang/go/issues/24543" rel="nofollow">runtime: non-cooperative goroutine preemption</a></li>
+<li><a href="https://github.com/golang/go/issues/10958" rel="nofollow">runtime: tight loops should be preemptible</a></li>
+<li><a href="https://github.com/golang/go/issues/11462" rel="nofollow">runtime: golang scheduler is not preemptive - it's cooperative?</a></li>
+<li><a href="https://golang.org/src/runtime/preempt.go" rel="nofollow">Source file src/runtime/preempt.go</a></li>
+<li><a href="https://developpaper.com/goroutine-preemptive-scheduling-with-new-features-of-go-1-14/" rel="nofollow">Goroutine preemptive scheduling with new features of go 1.14</a></li>
+<li><a href="https://medium.com/a-journey-with-go/go-goroutine-and-preemption-d6bc2aa2f4b7" rel="nofollow">Go: Goroutine and Preemption</a></li>
+<li><a href="https://stackoverflow.com/questions/64113394/at-which-point-a-goroutine-can-yield" rel="nofollow">At which point a goroutine can yield?</a></li>
+<li><a href="https://medium.com/a-journey-with-go/go-asynchronous-preemption-b5194227371c" rel="nofollow">Go: Asynchronous Preemption</a></li>
+<li><a href="https://stackoverflow.com/questions/17953269/go-routine-blocking-the-others-one" rel="nofollow">go routine blocking the others one [duplicate]</a></li>
+<li><a href="https://qiita.com/takc923/items/de68671ea889d8df6904" rel="nofollow">Golangのスケジューラあたりの話</a></li>
+<li><a href="https://qiita.com/umisama/items/93333ffe4d9fc7e4ba1f" rel="nofollow">goroutineがスイッチされるタイミング</a></li>
 </ul>
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 

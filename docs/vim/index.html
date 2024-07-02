@@ -24,11 +24,11 @@
   </script>
 </head>
 <body class="markdown-body">
-<p><a href="/">&lt;- ホーム</a></p>
+<p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>なるべくプラグインを使わずにどうvimでプログラミングしているか</h1>
 <h4>2023/01/02</h4>
 <p>筆者はvimを使い始めて10年弱くらい経ちますが、未だにvimへの習熟度は、感覚的には50%くらいではないかなと思っています。もしかしたらもっと低いのかもしれない。使い始めた頃は、インターネット上のvimrcをコピペし、プラグインマネージャーの使い方を頑張って読んだりしていましたが、最近はvim本来のパワフルな機能をもっと活用することに興味があります。プラグインが良いものであることは知っていますが、ラップトップのvim周辺をシンプルに保つことは私の嗜好に合っていると感じています。
-筆者のvimrcは<a href="https://gist.github.com/hidetatz/32fba337b62e81953056da6a028bd919#file-vimrc">こんな感じ</a>です。</p>
+筆者のvimrcは<a href="https://gist.github.com/hidetatz/32fba337b62e81953056da6a028bd919#file-vimrc" rel="nofollow">こんな感じ</a>です。</p>
 <pre><code class="language-vimscript">filetype plugin indent on
 set autowrite
 set belloff=all
@@ -64,7 +64,7 @@ set incsearch
 <pre><code>:ls
   1 %a   &quot;main.py&quot;              line 1
 </code></pre>
-<p>ちなみに、 <code>%a</code> はアクティブバッファであることを示します。他にもいろいろ種類があり、<a href="https://vim-jp.org/vimdoc-ja/windows.html#:ls">ドキュメント</a>を見ると意味がわかります。</p>
+<p>ちなみに、 <code>%a</code> はアクティブバッファであることを示します。他にもいろいろ種類があり、<a href="https://vim-jp.org/vimdoc-ja/windows.html#:ls" rel="nofollow">ドキュメント</a>を見ると意味がわかります。</p>
 <p>vimを開いた状態で別のファイルをバッファとしてオープンするには、 <code>:e main.py</code> とか、 <code>:e test/tests.py</code> のように実行します。ただし、ファイル名やディレクトリ名はたいてい正確に記憶していないので、実際はvimに補完してもらいます。どうやって補完するかというと、 <code>:e</code> まで打って、ここでTabキーを打ちます。vimrcに <code>:set wildmenu</code> があると、保管候補の一覧が表示されるようになり見やすいのでオススメです。Tabキーを押すとこんな感じになります。</p>
 <pre><code>a.py  b.py  c.py  dir2/
 :e dir/a.py
@@ -81,8 +81,8 @@ set incsearch
 <p>なぜこうなるかというと、まず <code>fin</code> というのはfindの意味です。 <code>e</code> は引数として渡されたファイルを開くときに使うのですが、 <code>fin</code> はpathオプションに指定されているディレクトリからファイルを探してきてそれを開きます。pathオプションというのは実際のところただの文字列のリストです。これは <code>find</code> 系のコマンド ( <code>:sfind</code> や <code>:tabfind</code> など) でファイルの検索パスとして機能します。デフォルトでは何が入っているか見てみましょう。 <code>:set path?</code> すると、次のように表示されます。</p>
 <pre><code>path=.,/usr/include,,
 </code></pre>
-<p><code>/usr/include</code> が入っているようですね。これはCプログラマのために設定されています。Cでは <code>/usr/include/</code> ディレクトリの配下にあるファイルはプログラムからインクルードして標準ライブラリとして使えます。なので、例えばCのコードを読んでいるときに <code>#include &lt;stdio.h&gt;</code> などとインクルードが書いてあって、このヘッダファイルの中身が読みたい!というときは、 <code>:fin stdio.h</code> って実行すれば、 <code>/usr/include/stdio.h</code> をvimが開いてくれます。これが便利だという話です。なので、デフォルトのオプションはCプログラマ以外にはあまり役に立ちません。また、最近は <a href="https://qiita.com/yoya/items/c0b26cba3c040c581643">macOSだとそもそも <code>/usr/include</code> がなかったりする</a> らしいです。
-pathはただのオプションなので、ユーザーが適当に設定することができます。例えばGoプログラマはローカルマシンにGoが入っていると思います。<a href="https://go.dev/doc/install">Goのオフィシャルなインストール方法</a> でインストールしている場合、Goのソースコードは <code>/usr/local/go/src</code> に置かれているはずです。なので、vimrcに <code>path+=/usr/local/go/src/*</code> などと書けば、Goのソースコードも <code>:fin</code> できるわけです。これがpathオプションの使い方のひとつです。</p>
+<p><code>/usr/include</code> が入っているようですね。これはCプログラマのために設定されています。Cでは <code>/usr/include/</code> ディレクトリの配下にあるファイルはプログラムからインクルードして標準ライブラリとして使えます。なので、例えばCのコードを読んでいるときに <code>#include &amp;lt;stdio.h&amp;gt;</code> などとインクルードが書いてあって、このヘッダファイルの中身が読みたい!というときは、 <code>:fin stdio.h</code> って実行すれば、 <code>/usr/include/stdio.h</code> をvimが開いてくれます。これが便利だという話です。なので、デフォルトのオプションはCプログラマ以外にはあまり役に立ちません。また、最近は <a href="https://qiita.com/yoya/items/c0b26cba3c040c581643" rel="nofollow">macOSだとそもそも <code>/usr/include</code> がなかったりする</a> らしいです。
+pathはただのオプションなので、ユーザーが適当に設定することができます。例えばGoプログラマはローカルマシンにGoが入っていると思います。<a href="https://go.dev/doc/install" rel="nofollow">Goのオフィシャルなインストール方法</a> でインストールしている場合、Goのソースコードは <code>/usr/local/go/src</code> に置かれているはずです。なので、vimrcに <code>path+=/usr/local/go/src/*</code> などと書けば、Goのソースコードも <code>:fin</code> できるわけです。これがpathオプションの使い方のひとつです。</p>
 <p>話を戻すと、我々はvimrcに <code>set path+=**</code> と書きました。 <code>+=</code> はpathにアペンドする演算子です。 <code>**</code> は、ディレクトリの区切りを無視してカレントディレクトリ配下全てにマッチするような動きになります。そのため、dirやdir2を入力しなくても <code>f.py</code> の補完ができたわけです。</p>
 <h2>ファイルエクスプローラを使う</h2>
 <p>netrwとはvimにビルトインのファイルエクスプローラです。というか、名前の通り本来はリモートのファイルをネットワーク越しに編集するための機能だと思います (筆者はこの用途でnetrwを使ったことがない) 。ファイルエクスプローラとしてはnerdtreeなどのプラグインが有名かなと思うのですが、個人的にはnetrwでも十分です。netrwは、ファイル名でなくディレクトリ名 (あるいは <code>.</code> など) をオープンしようとすると開きます。例えば <code>vim .</code> としたり、 <code>:e dir</code> など。</p>
@@ -112,7 +112,7 @@ main.py
 <p>外部のプログラムを使ったコードフォーマットをvimからかけたい、みたいなのはどうするか。一つのやり方としては、 <code>formatprg</code> や <code>equalprg</code> が使えます。例えばC++を書いていて、コードフォーマッターにclang-formatを使いたいとしましょう。このとき、vimrc (またはvimのコマンドラインで) <code>set formatprg=clang-format</code> とします。で、 <code>gg</code> で一番上に移動、 <code>gq</code> を押し、 <code>G</code> で一番下に移動します。これで、clang-formatがかかります。 <code>formatprg</code> ではなく <code>equalprg</code> を使えば <code>gq</code> ではなく <code>=</code> でおなじことができます。</p>
 <p>これは何が起きているのか。まず、gqコマンドと=コマンドですが、これらはvimで編集している文章の見栄えを調整するものです。微妙に用途が異なっていて、gqは <code>textwidth</code> というオプションに設定された各行の最大文字数に合わせて調整を行うコマンドです。長すぎる行は分割し、短すぎる行はマージします。=は、これはコードにフィルタをかけるコマンドです。ただし、デフォルトではC言語用のフォーマッタとして機能します。おそらく新しいプログラミング言語とかではちゃんと動かないのだろうと思います。</p>
 <p>で、gqと=は、それぞれ <code>formatprg</code> と <code>equalprg</code> を設定することで、外部のプログラムを起動することができます。上記でclang-formatを設定したような感じです。
-実際のところどう動くかですが、まず前提としてgqも=も<a href="https://vim-jp.org/vimdoc-ja/motion.html#operator">オペレーターコマンド</a>です。オペレーターコマンドについて説明していると記事がもう1本書けてしまうので省略しますが、これは移動コマンドを引数のような形で受け取り、移動コマンドで示した範囲のテキストになんらかの処理を施すものです。例えば、ノーマルモードで <code>diw</code> と打つとカーソルが載っている単語を削除しますが、これは <code>d</code> が「削除」のオペレーターコマンドで、 <code>iw</code> が「単語 (inner word)」を意味する移動コマンドだからです。移動コマンドのことはモーションとも言います。ちなみにオペレーターを2回続ける (モーションを受け取らずに) と、「カーソルのある1行」がオペレーターの対象となります。 <code>dd</code> で1行削除できるのはvimの基本ですが、裏側の理屈はこの削除オペレータが効いているわけです。</p>
+実際のところどう動くかですが、まず前提としてgqも=も<a href="https://vim-jp.org/vimdoc-ja/motion.html#operator" rel="nofollow">オペレーターコマンド</a>です。オペレーターコマンドについて説明していると記事がもう1本書けてしまうので省略しますが、これは移動コマンドを引数のような形で受け取り、移動コマンドで示した範囲のテキストになんらかの処理を施すものです。例えば、ノーマルモードで <code>diw</code> と打つとカーソルが載っている単語を削除しますが、これは <code>d</code> が「削除」のオペレーターコマンドで、 <code>iw</code> が「単語 (inner word)」を意味する移動コマンドだからです。移動コマンドのことはモーションとも言います。ちなみにオペレーターを2回続ける (モーションを受け取らずに) と、「カーソルのある1行」がオペレーターの対象となります。 <code>dd</code> で1行削除できるのはvimの基本ですが、裏側の理屈はこの削除オペレータが効いているわけです。</p>
 <p>で、話を戻します。formatprgとequalprgはどちらもオペレーターコマンドなので、モーションを受け取ります。ggで先頭に移動後 gq/= してGで一番下に移動することで、formatprg/equalprgの処理対象はバッファ全体になります。ここからの動きですが、次のようになります。</p>
 <ul>
 <li>formatprg/equalprgに移動コマンドの示すテキストが標準入力として渡る</li>
@@ -291,8 +291,8 @@ main.c|4 col 5| error: expected ‘;’ before ‘return’
 <p>外部grepも内部grepも、実行したあとはその結果を見たいわけですが、これには先程も登場したQuickfixを使います。Quickfixは本来エラーメッセージを表示する機能なのだと思うのですが、grepの結果を表示してそこにジャンプするのにも使えます。 <code>:grep</code> や <code>:vim</code> した後に <code>:cw</code> するとQuickfixリストを開けます。</p>
 <p>また、grepコマンドには、ackやag、あるいはgit grepなどいろいろAlternativeがありますが、それらは <code>grepprg</code> を設定することで使えるようです (筆者はGNU grepしか使っていないです) 。</p>
 <h2>タグジャンプ</h2>
-<p>関数を呼び出している箇所にカーソルを合わせ、その関数の定義元に飛ぶのも、実はプラグイン無しでできるっちゃできます。これには <code>ctags</code> という外部コマンドが必要です。ctagsはUbuntuには確かプリインストールされておらず、 <code>apt-get install universal-ctags</code> でインストールします。ctagsはもともとExuberant Ctagsというプロジェクトだったのですが、こちらは開発が停止しているので、 <a href="https://github.com/universal-ctags/ctags">Universal Ctags</a>を使うほうがよいです (自分のctagsがどちらなのかは <code>ctags --version</code> でわかります) 。</p>
-<p>vimで適当なファイルを開き、 <code>:!ctags -R</code> と実行します。 <code>:!</code> は外部コマンドの実行です。これをすると <code>tags</code> ファイルができます。git管理しているプロジェクトであればこれは管理対象にしなくて良いので、 <code>echo tags &gt;&gt; .git/info/exclude</code> などしてignoreしましょう。
+<p>関数を呼び出している箇所にカーソルを合わせ、その関数の定義元に飛ぶのも、実はプラグイン無しでできるっちゃできます。これには <code>ctags</code> という外部コマンドが必要です。ctagsはUbuntuには確かプリインストールされておらず、 <code>apt-get install universal-ctags</code> でインストールします。ctagsはもともとExuberant Ctagsというプロジェクトだったのですが、こちらは開発が停止しているので、 <a href="https://github.com/universal-ctags/ctags" rel="nofollow">Universal Ctags</a>を使うほうがよいです (自分のctagsがどちらなのかは <code>ctags --version</code> でわかります) 。</p>
+<p>vimで適当なファイルを開き、 <code>:!ctags -R</code> と実行します。 <code>:!</code> は外部コマンドの実行です。これをすると <code>tags</code> ファイルができます。git管理しているプロジェクトであればこれは管理対象にしなくて良いので、 <code>echo tags &amp;gt;&amp;gt; .git/info/exclude</code> などしてignoreしましょう。
 vimは標準でこのtagsファイルを読んでジャンプができます。ジャンプしたいシンボルにカーソルを合わせ <code>Ctrl-]</code> するとジャンプできます。</p>
 <p>注意点としては、ctagsを使ったジャンプはIDEやLSPのようにコンテキストを正しく理解した賢いものではありません。例えば <code>get()</code> という関数呼び出しにカーソルを合わせ <code>Ctrl-]</code> した時に、importなどで呼び出されるはずのない <code>get()</code> 関数もジャンプの対象になります。また、 <code>get</code> という名前の変数があったとしてもジャンプの対象になるようです。 <code>Ctrl-]</code> の代わりに <code>gCtrl-]</code> とすると候補をリストアップしてくれます。
 IDEやLSPのように賢くないとは書きましたが、実際それが問題になることは筆者としてはほぼない印象です。ただ、クリーンアーキテクチャ的なことをしていると、同じような名前のシンボルをいろんなところで作ることがあると思うのでそれはちょっと相性が悪いかもしれないです。</p>
@@ -326,8 +326,8 @@ int main() {
 最後まで読んでいただきありがとうございました!</p>
 <h2>参考</h2>
 <ul>
-<li><a href="https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim">How to Do 90% of What Plugins Do (With Just Vim)</a></li>
-<li><a href="https://tatsu-zine.com/books/practical-vim">実践Vim</a></li>
+<li><a href="https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim" rel="nofollow">How to Do 90% of What Plugins Do (With Just Vim)</a></li>
+<li><a href="https://tatsu-zine.com/books/practical-vim" rel="nofollow">実践Vim</a></li>
 </ul>
 <p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
