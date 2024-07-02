@@ -17,7 +17,7 @@ from PIL import Image
 
 import template
 
-md = markdown.Markdown(extensions=["tables", "fenced_code"])
+md = markdown.Markdown(extensions=["tables", "fenced_code", "mdx_linkify"])
 
 class Sitemap:
     def __init__(self, articles, diaries):
