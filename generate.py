@@ -202,16 +202,16 @@ class Diary(Entry):
 
 class Knowledge(Entry):
     def __init__(self, issue):
-        created = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
-        self.updated = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
-        super().__init__(issue["title"], created, issue["body"])
+        updated = datetime.datetime.strptime(issue["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
+        self.path = issue["body"].splitlines()[0]
+        super().__init__(issue["title"], updated, issue["body"])
 
     def url_path(self): 
-        return f"/{self.ts_short()}"
+        return f"/{self.path}"
 
     def to_html(self):
         t = string.Template(template.diary_content)
-        return md.convert(t.substitute(title=self.title, content=self.content, timestamp=self.updated.strftime('%Y/%m/%d')))
+        return md.convert(t.substitute(title=self.title, content=self.content, timestamp=self.ts_display()))
 
     # extract images from issue body, save images locally, then replace the image in the markdown.
     def optimize_images(self, images_out):
