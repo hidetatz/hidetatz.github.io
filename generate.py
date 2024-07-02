@@ -335,7 +335,7 @@ class Blog:
             self.save(f"{self.root}/{knowledge.url_path()}/index.html", self.to_html(knowledge.title, knowledge.to_html()))
             knowledges.append(knowledge)
 
-        knowledges.sort(key=lambda knowledge: knowledge.updated, reverse=True)
+        knowledges.sort(key=lambda knowledge: knowledge.timestamp, reverse=True)
         return knowledges
 
     def generate_gh_pages(self):
