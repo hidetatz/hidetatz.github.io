@@ -26,11 +26,64 @@
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
 <h1>CPU・最適化など</h1>
-<h4>最終更新日: 2024/07/04</h4>
+<h4>最終更新日: 2024/07/05</h4>
 <h1>最適化</h1>
 <h2>ループアンローリング</h2>
 <p>ループアンローリングは高級言語のレイヤで手軽にできる最適化だ。
-<a href="https://github.com/hidetatz/whale/tree/master/experiment/loopunroll" rel="nofollow">https://github.com/hidetatz/whale/tree/master/experiment/loopunroll</a></p>
+ループアンローリングは、ループに関するオーバーヘッドを削減することを目的として、わざとループ内で実行したい処理をループ内に展開する。</p>
+<p>次のようなループを考える。</p>
+<pre><code class="language-c++">int i;
+for (i = 0; i &lt; 10; i++) {
+    std::cout &lt;&lt; i &lt;&lt; std::endl;
+}
+</code></pre>
+<p>このコードは、以下と同じことをする。</p>
+<pre><code class="language-c++">std::cout &lt;&lt; 0 &lt;&lt; std::endl;
+std::cout &lt;&lt; 1 &lt;&lt; std::endl;
+std::cout &lt;&lt; 2 &lt;&lt; std::endl;
+std::cout &lt;&lt; 3 &lt;&lt; std::endl;
+std::cout &lt;&lt; 4 &lt;&lt; std::endl;
+std::cout &lt;&lt; 5 &lt;&lt; std::endl;
+std::cout &lt;&lt; 6 &lt;&lt; std::endl;
+std::cout &lt;&lt; 7 &lt;&lt; std::endl;
+std::cout &lt;&lt; 8 &lt;&lt; std::endl;
+std::cout &lt;&lt; 9 &lt;&lt; std::endl;
+</code></pre>
+<p>この2つは、最適化を無視して考えると、下のほうが高速に動作する。
+何故か? まず、ループ処理は次のように動作する。</p>
+<ul>
+<li>iのメモリを確保する</li>
+<li>iを0にする</li>
+<li>iが10よりも小さいかチェックする ... ①</li>
+<li>小さいので、print命令にジャンプ ... ②</li>
+<li>printする ... ③</li>
+<li>iをインクリメントする ...④</li>
+<li>① ~ ④を残り9回繰り替えす</li>
+</ul>
+<p>このうち、①、②、④は本来やりたい処理に無関係な、単なるオーバーヘッドである。後者のコードではこれがないので早くなる。</p>
+<p>ループアンローリングは、この事実をヒントに、プログラマが前者のコードを次のように書き換えるものだ。</p>
+<pre><code class="language-c++">int i;
+for (i = 0; i &lt; 10; i+=5) {
+    std::cout &lt;&lt; i &lt;&lt; std::endl;
+    std::cout &lt;&lt; +1 &lt;&lt; std::endl;
+    std::cout &lt;&lt; i+2 &lt;&lt; std::endl;
+    std::cout &lt;&lt; i+3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; i+4 &lt;&lt; std::endl;
+}
+</code></pre>
+<p>これをすると、ループ回数は2回になり、ジャンプ・分岐命令のオーバーヘッドが1/5になる。ループの中身を展開すればするほど、効果が大きくなる。これが基本的なループアンローリングのアイディアだ。</p>
+<p>プログラマがループを書き換えることを静的ループアンローリング、コンパイラが自動で展開することを動的ループアンローリングと呼ぶらしい。</p>
+<p>また、上記でループを完全に削除した例と、5つずつの処理を2回ループする例を出したが、前者を完全ループアンローリング、後者を部分ループアンローリングと呼ぶらしい。</p>
+<h3>ループアンローリングのメリット</h3>
+<p>オーバーヘッドが削減されるだけでなく、ループアンローリングによってベクトル化が可能になる。上記の例ではprintしているだけなので関係ないが、ループ内の処理によっては、展開した処理の数 (アンローリングファクターというらしい？上記の例では5) が、ベクトル命令用レジスタに配置できる数と一致していれば、ベクトル命令でループ内の処理をいっぺんに終わらせることができるかもしれない。</p>
+<h3>ループアンローリングのデメリット</h3>
+<p>ループアンローリングすると命令の数が増えるため、命令キャッシュでのミスが発生しやすくなる。特に完全ループアンローリングの場合より発生しやすいので、命令サイズと命令キャッシュのサイズに注意してループアンローリングファクターを決めるのが良さそう。</p>
+<h3>ループ回数が動的な場合のアンローリング</h3>
+<p>上記例では10回ループするとわかっていたので5*2に分けることができたが、これがわかっていない場合どうするか？というテクニックが発見されているらしい。これは<a href="https://ja.wikipedia.org/wiki/Duff%27s_device" rel="nofollow">Duff's Device</a>と呼ばれる (Duffさんが発見したから) 。</p>
+<p>Duff's deviceはCのswitch-caseをハックしているので、ちゃんと理解するのはかなり難しい。</p>
+<h3>サンプルコード</h3>
+<p><a href="https://github.com/hidetatz/whale/tree/master/experiment/loopunroll" rel="nofollow">https://github.com/hidetatz/whale/tree/master/experiment/loopunroll</a></p>
+<p>このコードで実験してみた。C++の場合は、コンパイラの最適化が効いてるようで若干の改善程度。Goでもやってみたが、Goはコンパイラがあまりアグレッシブに最適化しないので効果がかなり大きかった (それでも遅い) 。</p>
 <h2>理論FLOPSの導出方法</h2>
 <p>現代のIntelプロセッサの理論FLOPSを計算するにあたっては、次のような前提知識が必要になる。</p>
 <h3>Intel プロセッサにおけるスループットとレイテンシ</h3>
