@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2024年10月27日 初心者注意</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/diary" rel="nofollow">&lt;- 日記</a></p>
+<h1>2024年10月27日 初心者注意</h1>
+<p>SQLを雰囲気で書いているのだが、最近仕事でよく書くのでちゃんと勉強しようと「達人に学ぶSQL徹底指南書 第2版 初級者で終わりたくないあなたへ」を買ってみた。</p>
+<p>この本はかなり良くて、SQLはやりたいことに対してサンプルを示す形で解説されることが多い。この本は章にもよるが定義に割とフォーカスしていて、例えばウインドウ関数はそもそも何ができるもので、それは具体的にはどうするのか、ということが書いてあるので理解しやすく、私には合っていた。</p>
+<p>RDBは昔作ってみたことがあって、すべての機能とはいかないが、テーブルを作ってデータを入れて、それを簡単に検索できるところまでは確か作ったんだよな。RDBは適当に作るとでかいデータに対して全くパフォーマンスが出ないことがもうわかっていて、それに対してB+木とかバッファプールとかWALとかで対抗するのだが、それ故に作り方がかなり重要というか、作り方を知っているかのゲームになってしまうところがあり、車輪の再発明としてあまりおもしろくないのではないかと思っている。</p>
+<p>RDBもブレイクスルーが来るべきだと思っているのは、やはりインデックスの存在だ。RDBのユーザがインデックスに気をつけて慎重にクエリを書かなければいけないのは、どう考えても抽象化に失敗している。全てのカラムにインデックスを付けるのはアンチパターンとして知られているし実際そうなのだが、この辺ってなんかもっとやりようあるのでは、と思っている。</p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
