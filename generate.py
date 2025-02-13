@@ -277,7 +277,7 @@ class Blog:
                     "X-GitHub-Api-Version": "2022-11-28",
                     "User-Agent": "hidetatz.github.io",
                 }
-                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=closed&creator=hidetatz&per_page=100&page={page}", headers=headers)
+                conn.request("GET", f"/repos/hidetatz/hidetatz.github.io/issues?state=closed&creator=hidetatz&per_page=100&page={page}", headers=headers)
                 resp = conn.getresponse()
                 body = json.loads(resp.read().decode("utf-8"))
                 issues += body
@@ -315,15 +315,16 @@ class Blog:
                     "X-GitHub-Api-Version": "2022-11-28",
                     "User-Agent": "hidetatz.github.io",
                 }
-                conn.request("GET", "/repos/hidetatz/hidetatz.github.io/issues?state=open&creator=hidetatz&labels=knowledge&per_page=100&page={page}", headers=headers)
+                conn.request("GET", f"/repos/hidetatz/hidetatz.github.io/issues?state=open&creator=hidetatz&labels=knowledge&per_page=100&page={page}", headers=headers)
                 resp = conn.getresponse()
                 body = json.loads(resp.read().decode("utf-8"))
                 issues += body
 
-                if "Link" not in resp.headers:
+                link = resp.headers.get("link")
+                if link is None:
                     break
                 
-                if 'relname="next"' not in resp.headers["Link"]:
+                if 'rel="next"' not in str(link):
                     break
 
                 page += 1
