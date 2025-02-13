@@ -282,10 +282,11 @@ class Blog:
                 body = json.loads(resp.read().decode("utf-8"))
                 issues += body
 
-                if "Link" not in resp.headers:
+                link = resp.headers.get("link")
+                if link is None:
                     break
                 
-                if 'relname="next"' not in resp.headers["Link"]:
+                if 'rel="next"' not in str(link):
                     break
 
                 page += 1
