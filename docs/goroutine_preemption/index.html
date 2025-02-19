@@ -15,6 +15,14 @@
       margin: 0 auto;
       padding: 45px;
     }
+
+    h1, h2 {
+      cursor: pointer;
+    }
+
+    h1:hover, h2:hover {
+      color: #0969da;
+    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -25,8 +33,8 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1>Preemption in Go</h1>
-<h4>2021/03/29</h4>
+<h1 id="preemption-in-go">Preemption in Go</h1>
+<h4 id="20210329">2021/03/29</h4>
 <p>I was looking into the preemption of goroutine in Go. It would be appreciatee if you could point out any mistakes and tell me it.</p>
 <p>The behavior of preemption in Go changed at Go1.14 release.
 On Go1.14, goroutine is "asynchronously preemptible" as described in <a href="https://golang.org/doc/go1.14#runtime" rel="nofollow">Release Notes</a>. What does this mean?</p>
@@ -78,7 +86,7 @@ In fact, when I run this program on Go1.14 or later (I ran it on Go1.16 (on Ubun
 It is named <code>Gosched</code> because Go is a goroutine, not a thread (this is a guess).
 In other words, explicitly calling <code>runtime.Gosched()</code> will force the goroutines to be rescheduled, and we can expect the current-running-goroutine is switched to another one.</p>
 <p>Another way is using <a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257" rel="nofollow">GOEXPERIMENT=preemptibleloops</a>. It forces the Go runtime to do the preemption on the "loop". The way doesn't require the code change.</p>
-<h2>Cooperative vs. Preemptive scheduling in Go</h2>
+<h2 id="cooperative-vs-preemptive-scheduling-in-go">Cooperative vs. Preemptive scheduling in Go</h2>
 <p>To begin with, there are two main methods for scheduling multitasking; "Cooperative" and "Preemptive". Cooperative multitasking is also called "non-preemptive".
 In cooperative multitasking, how the program switches depends on the program itself. It seems that the term "cooperative" is intended to refer to the fact that the programs should be designed to be interoperable and they must "cooperate" each other.
 In preemptive multitasking, the switch of the program is left to the OS. The scheduling method is based on some algorithm, such as priority-based, FCSV, round-robin, etc.</p>
@@ -102,7 +110,7 @@ By the way, the global queue is a different queue from the "local queue", a queu
 </ul>
 <p>This is the implementation up to Go1.13. Now, you'll understand why the infinite looping code above did not work as expected. The <code>for {}</code> is just a busy loop, so it does not trigger the goroutine switch as described earlier. You may think, "Isn't the preempt flag set by sysmon because it has been running for more than 10ms?" However, <strong>if there is no function call, even if the preempt flag is set, the check of the flag does not occur</strong>. As I mentioned earlier, the check of the preempt flag occurs in function prologue, so a busy loop with doing nothing could not reach the execution of preemption.</p>
 <p>And yes, this behavior has changed with the introduction of "non-cooperative preemption" (asynchronous preemption) in Go1.14.</p>
-<h2>What does "asynchronously preemptible" mean?</h2>
+<h2 id="what-does-asynchronously-preemptible-mean">What does "asynchronously preemptible" mean?</h2>
 <p>Let's summarize the points so far; Go has a mechanism, called "sysmon", to monitor goroutines running for more than 10ms and force preemption when necessary. However, due to the way it worked, preemption did not occur in cases like <code>for {}</code>.</p>
 <p>With the non-cooperative preemption introduced in Go1.14, the scheduler in Goroutine can now be called preemptive. It is a simple but effective algorithm that uses signals.</p>
 <p>First, sysmon still detects a G (goroutine) that has been moving for more than 10ms. Then, sysmon sends a signal ( <code>SIGURG</code> ) to the thread (P) that is running that G.
@@ -110,10 +118,10 @@ Go's signal handler invokes another goroutine called <code>gsignal</code> on P t
 <p>Because this mechanism explicitly emits a signal, don't need to call a function in other words, just a goroutine which is running busy loop can be switched to another goroutine.</p>
 <p>With this asynchronous preemption mechanism using signals, the above code now works as expected. <code>GODEBUG=asyncpreemptoff=1</code> can be used to disable the asynchronous preemption.</p>
 <p>Incidentally, they chose to use SIGURG because SIGURG does not interfere with the use of existing debuggers and other signals, and because it is not used in libc. (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations" rel="nofollow">Reference</a>)</p>
-<h2>Summary</h2>
+<h2 id="summary">Summary</h2>
 <p>Just because an infinite loop that doesn't do anything doesn't pass holding CPU to other goroutines, it doesn't mean that the mechanism up to Go1.13 is bad. As <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022" rel="nofollow">@davecheney</a> has said, this is usually not considered a particular problem. In the first place, asynchronous preemption was not introduced to solve this infinite loop problem.</p>
 <p>Although the introduction of asynchronous preemption made scheduling more preemptive, it also made it necessary to be more careful in handling "unsafe points" during GC. The implementation considerations in this area are also very interesting. Readers who are interested can read it themselves <a href="https://github.com/golang/proposal/blob/master/design/24543-non- cooperative-preemption.md" rel="nofollow">Proposition: Non-cooperative goroutine preemption</a>.</p>
-<h2>References</h2>
+<h2 id="references">References</h2>
 <ul>
 <li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md" rel="nofollow">Proposal: Non-cooperative goroutine preemption</a></li>
 <li><a href="https://github.com/golang/go/issues/24543" rel="nofollow">runtime: non-cooperative goroutine preemption</a></li>
@@ -132,5 +140,12 @@ Go's signal handler invokes another goroutine called <code>gsignal</code> on P t
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
+<script>
+document.querySelectorAll('h1, h2').forEach(heading => {
+  heading.addEventListener('click', () => {
+    window.location.hash = heading.id;
+  });
+});
+</script>
 </body>
 </html>
