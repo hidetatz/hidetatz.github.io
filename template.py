@@ -23,6 +23,14 @@ html_page = """<!doctype html>
       margin: 0 auto;
       padding: 45px;
     }
+
+    h1, h2 {
+      cursor: pointer;
+    }
+
+    h1:hover, h2:hover {
+      color: #0969da;
+    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -36,6 +44,13 @@ $body
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
+<script>
+document.querySelectorAll('h1, h2').forEach(heading => {
+  heading.addEventListener('click', () => {
+    window.location.hash = heading.id;
+  });
+});
+</script>
 </body>
 </html>"""
 

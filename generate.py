@@ -1,4 +1,3 @@
-import dataclasses
 import datetime
 import http.client
 import glob
@@ -17,12 +16,11 @@ from PIL import Image
 
 import template
 
-md = markdown.Markdown(extensions=["tables", "fenced_code", "mdx_linkify"])
+md = markdown.Markdown(extensions=["tables", "fenced_code", "mdx_linkify", "toc"])
 
 class Sitemap:
-    def __init__(self, articles, diaries):
+    def __init__(self, articles):
         self.articles = articles
-        self.diaries = diaries
 
         # self.latest_ts = diaries[0].ts_iso8601()
         self.latest_ts = articles[0].ts_iso8601()
@@ -37,7 +35,7 @@ class Sitemap:
         lastmod = ET.SubElement(url_elem, "lastmod")
         lastmod.text = self.latest_ts
 
-        for entry in self.articles + self.diaries:
+        for entry in self.articles:
             url_elem = ET.SubElement(urlset, "url")
             loc = ET.SubElement(url_elem, "loc")
             loc.text = f"https://hidetatz.github.io/{entry.url_path()}"
@@ -48,11 +46,10 @@ class Sitemap:
         tree.write(out, encoding="utf-8", xml_declaration=True)
 
 class AtomFeed:
-    def __init__(self, articles, diaries):
+    def __init__(self, articles):
         articles_tup = [("article", article) for article in articles]
-        diaries_tup = [("diary", diary) for diary in diaries]
 
-        self.all_articles = articles_tup + diaries_tup
+        self.all_articles = articles_tup
         self.all_articles.sort(key=lambda a: a[1].timestamp, reverse=True)
 
     def save_xml(self, out):
@@ -164,42 +161,6 @@ class Article(Entry):
         content += '\n<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>'
         return content
 
-class Diary(Entry):
-    def __init__(self, issue):
-        ts = datetime.datetime.strptime(issue["created_at"], "%Y-%m-%dT%H:%M:%SZ")
-        pattern = "20\d{2}年\d{1,2}月\d{1,2}日"
-        result = re.search(pattern, issue["title"])
-        if result:
-            ts = datetime.datetime.strptime(result.group(), "%Y年%m月%d日")
-
-        super().__init__(issue["title"], ts, issue["body"])
-
-    def url_path(self): 
-        return f"/{self.ts_short()}"
-
-    def to_html(self):
-        t = string.Template(template.diary_content)
-        return md.convert(t.substitute(title=self.title, content=self.content))
-
-    # extract images from issue body, save images locally, then replace the image in the markdown.
-    def optimize_images(self, images_out):
-        images = re.finditer("!\[\S*\]\(\S+\)", self.content)
-        for i, image in enumerate(images):
-            dst = f"{images_out}/{i}.jpg"
-            alt, url = image.group().lstrip("![").rstrip(")").split("](")
-            os.makedirs(images_out, exist_ok=True)
-            urllib.request.urlretrieve(url, dst)
-
-            while True:
-                # resize
-                img = Image.open(dst)
-                img = img.resize((int(img.width * 0.9), int(img.height * 0.9)))
-                img.save(dst)
-                if os.path.getsize(dst) < 200 * 1000:
-                    break
-
-            self.content = self.content.replace(image.group(), f"![{alt}](./{i}.jpg)")
-
 class Knowledge(Entry):
     def __init__(self, issue):
         updated = datetime.datetime.strptime(issue["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
@@ -252,6 +213,9 @@ class Blog:
     def to_html(self, title, body):
         return string.Template(template.html_page).substitute(title=title, body=body)
 
+    def md_as_html(self, title, content, **kwargs):
+        return self.to_html(title, md.convert(content))
+
     def tmpl_md_as_html(self, title, tmpl, **kwargs):
         return self.to_html(title, md.convert(string.Template(tmpl).substitute(**kwargs)))
 
@@ -264,44 +228,6 @@ class Blog:
 
         articles.sort(key=lambda article: article.timestamp, reverse=True)
         return articles
-
-    def create_diaries(self):
-        def fetch_all_issues(gh_token):
-            issues = []
-            page=1
-            while True:
-                conn = http.client.HTTPSConnection("api.github.com")
-                headers = {
-                    "Accept": "application/vnd.github+json",
-                    "Authorization": f"Bearer {gh_token}",
-                    "X-GitHub-Api-Version": "2022-11-28",
-                    "User-Agent": "hidetatz.github.io",
-                }
-                conn.request("GET", f"/repos/hidetatz/hidetatz.github.io/issues?state=closed&creator=hidetatz&per_page=100&page={page}", headers=headers)
-                resp = conn.getresponse()
-                body = json.loads(resp.read().decode("utf-8"))
-                issues += body
-
-                link = resp.headers.get("link")
-                if link is None:
-                    break
-                
-                if 'rel="next"' not in str(link):
-                    break
-
-                page += 1
-
-            return issues
-
-        diaries = []
-        for issue in fetch_all_issues(self.gh_token):
-            diary = Diary(issue)
-            diary.optimize_images(f"{self.root}/{diary.url_path()}")
-            self.save(f"{self.root}/{diary.url_path()}/index.html", self.to_html(diary.title, diary.to_html()))
-            diaries.append(diary)
-
-        diaries.sort(key=lambda diary: diary.timestamp, reverse=True)
-        return diaries 
 
     def create_knowledges(self):
         def fetch_all_issues(gh_token):
@@ -353,8 +279,12 @@ class Blog:
         # Create each article/diary pages.
 
         articles = self.create_articles()
-        diaries = self.create_diaries()
         knowledges = self.create_knowledges()
+
+        with open("diary.md") as f:
+            diary = f.read()
+
+        self.save(f"{self.root}/diary/index.html", self.md_as_html("diary | hidetatz.github.io", diary))
 
         # Create index pages.
 
@@ -369,20 +299,13 @@ class Blog:
         index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links), knowledges="\n".join(knowledge_links))
         self.save(f"{self.root}/index.html", index)
 
-        diary_links = []
-        for diary in diaries:
-            diary_links.append(f"[{diary.title}]({diary.url_path()})  ")
-
-        diary_index = self.tmpl_md_as_html("diary | hidetatz.github.io", template.diary_index_page_md, diaries="\n".join(diary_links))
-        self.save(f"{self.root}/diary/index.html", diary_index)
-
         # Generate 404 page.
         not_found = self.tmpl_md_as_html("404 | hidetatz.github.io", template.not_found_page_md, recent_articles="\n".join(article_links[:5]))
         self.save(f"{self.root}/404.html", not_found)
 
         # Generate sitemap and rss feed.
-        Sitemap(articles, diaries).save_xml(f"{self.root}/sitemap.xml")
-        AtomFeed(articles, diaries).save_xml(f"{self.root}/feed.xml")
+        Sitemap(articles).save_xml(f"{self.root}/sitemap.xml")
+        AtomFeed(articles).save_xml(f"{self.root}/feed.xml")
 
     def generate_and_push(self):
         self.generate_gh_pages()
