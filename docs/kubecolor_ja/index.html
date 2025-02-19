@@ -15,6 +15,14 @@
       margin: 0 auto;
       padding: 45px;
     }
+
+    h1, h2 {
+      cursor: pointer;
+    }
+
+    h1:hover, h2:hover {
+      color: #0969da;
+    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -25,16 +33,16 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1>kubecolorでkubectlの出力に色を付ける</h1>
-<h4>2020/10/14</h4>
+<h1 id="kubecolorkubectl">kubecolorでkubectlの出力に色を付ける</h1>
+<h4 id="20201014">2020/10/14</h4>
 <p><img alt="" src="https://miro.medium.com/max/1400/1*B2jbWgC25V4u60aYmUewRQ.png"></p>
-<h1>1. はじめに</h1>
+<h1 id="1">1. はじめに</h1>
 <p>kubectlはKubernetesクラスタを操作するためのCLIクライアントです。
 筆者は仕事でほぼ毎日kubectlを使用しますが、その使い勝手に対して一点改善したい点がありました。それは、 <em>出力が一色のみで見辛い</em>　という点です。
 この記事では、筆者が開発したkubectlの出力に色を付けるためのOSS "<a href="https://github.com/hidetatz/kubecolor" rel="nofollow">kubecolor</a>" について紹介します。筆者はkubecolorは非常に便利で、もっと多くの人に使ってもらいたいと考えているため、この記事を書くことにしました。
 次章からは、既存のkubectlに対して筆者が改善したいと感じていた点についてもう具体例を上げながら説明し、その後kubecolorではそれをどう改善できているのかを解説します。そして、kubecolorの使い方について説明します。</p>
 <p>また本記事では、「見やすい」「見辛い」「わかりやすい」などの表現を使用しますが、筆者は色彩学やデザインの専門家では一切なく、単なる主観であることをご了承ください。</p>
-<h1>2. kubectlを改善したかった点</h1>
+<h1 id="2-kubectl">2. kubectlを改善したかった点</h1>
 <p>初めに、素のkubectlの出力を見てみます。（画像内で使用しているクラスタはテスト用のものです）</p>
 <p><img alt="" src="https://miro.medium.com/max/1400/1*Kb6T3-K6__x31zjVq_xvDQ.png"></p>
 <p>kubectlは出力に色を一切つけません。上の画像はまだ出力結果が十分に短いため視認性に大きな問題はありませんが、　"kubectl describe" や "kubectl get -o json" など、大きめの出力を行うコマンドは、次のように見えます。</p>
@@ -42,7 +50,7 @@
 <p><img alt="" src="https://miro.medium.com/max/1400/1*IwXwh_PVpC2hN6-lQn4jLg.png"></p>
 <p>出力が大きくなると、先程よりも「見辛く」感じないでしょうか。もちろん個人差があるとは思うのですが、筆者は欲しいデータがどこにあるかを瞬時に認識することが難しいなと以前から感じていました。これが、筆者がkubecolorを開発した理由です。
 次章では、kubecolorがどのようなアプローチで「見やすさ」に貢献できるかを解説します。</p>
-<h1>3. kubecolorを使うと何が変わるか</h1>
+<h1 id="3-kubecolor">3. kubecolorを使うと何が変わるか</h1>
 <p>kubecolorは筆者が開発したOSSで、以下のGitHubリポジトリで開発しています。</p>
 <p><a href="https://github.com/hidetatz/kubecolor" rel="nofollow">https://github.com/hidetatz/kubecolor</a></p>
 <p>ライセンスはMITです。</p>
@@ -67,12 +75,12 @@
 <p><img alt="" src="https://miro.medium.com/max/1304/1*Wp7OBW1cwy5CKCX-j0ZkFw.png"></p>
 <p>色がつくことで、かなり見やすくなったのではないでしょうか。筆者は元々の一色のみの出力よりも、目的のものが見つけやすくなったなと感じます。
 次章では、kubecolorのインストール方法及び使い方などについて解説します。</p>
-<h1>4. kubecolorの使い方</h1>
+<h1 id="4-kubecolor">4. kubecolorの使い方</h1>
 <p>本章の内容は、kubecolorの開発が進むにつれ最新の情報でなくなる可能性があります。</p>
-<h2>kubecolorは何をするのか</h2>
+<h2 id="kubecolor">kubecolorは何をするのか</h2>
 <p>kubecolorはkubectlコマンドに渡すべきコマンドラインオプションを受け取り、内部でkubectlコマンドを実行し、帰ってきた出力に色付けしてその後出力します。色付け以外のことは何もしません。
 kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコマンドの出力に対して色付けをサポートしているわけではありません。また、出力に用いる色が今後変更される可能性もあります。サポートされている機能や今後実装されるものについて、<a href="https://github.com/hidetatz/kubecolor" rel="nofollow">README</a>をご覧ください。</p>
-<h2>インストール</h2>
+<h2 id="_1">インストール</h2>
 <p>kubecolorはGoで実装されており、インストールにはgoコマンドを使用します。goコマンドがインストールされていない場合はまず<a href="https://golang.org/doc/install" rel="nofollow">公式ドキュメント</a>などを参考にインストールする必要があります。</p>
 <p>インストールは次のコマンドで行うことができます。</p>
 <pre><code class="language-shell">go get github.com/hidetatz/kubecolor/cmd/kubecolor
@@ -81,7 +89,7 @@ kubecolorコマンドはまだ開発中であり、kubectlの全てのサブコ�
 <pre><code class="language-shell">go get -u  github.com/hidetatz/kubecolor/cmd/kubecolor
 </code></pre>
 <p>(上記コマンドを実行してもkubecolorコマンドが実行できない場合、 <code>$GOPATH/bin</code> が <code>$PATH</code> に入っていない、<code>Go modules</code>が有効になっていて <code>$GOPATH/bin</code> にバイナリができていないなどの原因が考えられます。)</p>
-<h2>使い方</h2>
+<h2 id="_2">使い方</h2>
 <p>kubectlコマンドに渡したいコマンドをそのままkubecolorに渡すことで、出力が色付けされます。例えば、次のようなコマンドが考えられます。</p>
 <pre><code class="language-shell">kubecolor --context my-context get pods
 kubecolor edit deployment
@@ -92,17 +100,17 @@ kubecolor exec -it pod-a bash
 <pre><code class="language-shell">alias kubectl=kubecolor
 </code></pre>
 <p>しかし、単にこれを設定するとkubectlのネイティブの補完機能が動作しなくなります。対処法は後述します。</p>
-<h2>有効なコマンドラインオプション</h2>
-<h3>--plainで色をつけなくする</h3>
+<h2 id="_3">有効なコマンドラインオプション</h2>
+<h3 id="-plain">--plainで色をつけなくする</h3>
 <p><code>--plain</code> フラグをkubecolorに渡すと、kubecolorは色をつけずに出力します。結果をファイルに書き込みたい時などに便利です。</p>
-<h3>--light-backgroundで使用する色を設定する</h3>
+<h3 id="-light-background">--light-backgroundで使用する色を設定する</h3>
 <p>kubecolorが色付けに使用する色のプリセットは、デフォルトでは「背景が暗い色に設定してあるターミナルエミュレータ」上で見やすくなるように設定されています。これは逆に言えば、ターミナルの背景を白などの明るい色に設定している環境では、kubecolorの使う色が見えにくいと感じる可能性があります。 <code>--light-background</code> フラグをkubecolorに渡すことで、明るい背景に最適な色のプリセットを使って出力に色付けを行うようになります。
 実際に背景色を白に設定したターミナルで、kubecolor describe podコマンドを実行します。 <code>--light-background</code> なしでは次のように見えます。</p>
 <p><img alt="" src="https://miro.medium.com/max/1400/1*yO-CZlwmbWr6tXn6j6YoQA.png"></p>
 <p><code>--light-background</code> をつけると、次のように見えます。</p>
 <p><img alt="" src="https://miro.medium.com/max/1400/1*HrIyZChtuLD5FGjLcJjHzA.png"></p>
 <p>白 -&gt; 黒に、シアン -&gt; 濃い青にそれぞれ変わったことで、読みやすくなります。</p>
-<h2>kubectlの自動補完機能と組み合わせる</h2>
+<h2 id="kubectl">kubectlの自動補完機能と組み合わせる</h2>
 <p>kubectlにはネイティブに自動補完機能があります。これは、kubectlコマンドに対して補完を効かせるようになっているため、kubecolorコマンドでも同様に補完を効かせるためには次の設定が必要です。</p>
 <pre><code class="language-shell">complete -o default -F __start_kubectl kubecolor
 </code></pre>
@@ -110,12 +118,12 @@ kubecolor exec -it pod-a bash
 <pre><code class="language-shell">complete -o default -F __start_kubectl k
 </code></pre>
 <p>なお、この設定はbash上で期待通りに動作することを確認済みですが、fishなどでは事情が違います。kubectlの補完機能はfishをオフィシャルにサポートしていないためです。fish上での自動補完動作は調査中のステータスです。（fishに詳しい方がいれば、どうすれば補完可能か情報提供いただけると助かります！）</p>
-<h2>kubectlコマンドを指定する</h2>
+<h2 id="kubectl_1">kubectlコマンドを指定する</h2>
 <p>kubecolorは内部でkubectlコマンドを実行しますが、そこで利用するコマンドを変更したいことがたまにあります。例えば、gcloudを使えばkubectlをバージョン違いでインストールできますが、(kubectl.1.18など) これをkubecolorに使わせたいときは、次のようにします。</p>
 <pre><code class="language-shell">KUBECTL_COMMAND=&quot;kubectl.1.18&quot; kubecolor get pods
 </code></pre>
 <p><code>KUBECTL_COMMAND</code> に何もセットしていない場合、kubecolorはデフォルトで <code>kubectl</code> を使用します。</p>
-<h1>おわりに</h1>
+<h1 id="_4">おわりに</h1>
 <p>筆者が開発したOSS kubecolorについて紹介しました。色がつくとkubectlライフがより便利で、そして楽しくなりますね！ぜひ使ってみてください。
 良さそうだなと思ってもらえたら、GitHub上でスターを付けてもらえると嬉しいです！また、issueやプルリクエストも歓迎です。
 最後までお読みいただきありがとうございました。</p>
@@ -123,5 +131,12 @@ kubecolor exec -it pod-a bash
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
+<script>
+document.querySelectorAll('h1, h2').forEach(heading => {
+  heading.addEventListener('click', () => {
+    window.location.hash = heading.id;
+  });
+});
+</script>
 </body>
 </html>

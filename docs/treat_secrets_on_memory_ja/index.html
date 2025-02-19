@@ -15,6 +15,14 @@
       margin: 0 auto;
       padding: 45px;
     }
+
+    h1, h2 {
+      cursor: pointer;
+    }
+
+    h1:hover, h2:hover {
+      color: #0969da;
+    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -25,8 +33,8 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1>秘匿情報をメモリ上でどう扱うか</h1>
-<h4>2021/04/23</h4>
+<h1 id="_1">秘匿情報をメモリ上でどう扱うか</h1>
+<h4 id="20210423">2021/04/23</h4>
 <p><strong>この記事はメモ書きに近いです。この記事に書かれたような内容を実装する際はセキュリティエンジニアと相談の上行うことをおすすめいたします</strong></p>
 <hr>
 <p>パスワード・暗号化に使用する鍵などの秘匿情報は、ディスクに書き残すべきでないだけでなく、メモリにもなるべく残さないことが望ましい。理由は:</p>
@@ -43,7 +51,7 @@
 <li>機密情報は必要な時以外暗号化しておき、使い終わったらメモリをクリーンアップ (e.g. 0で埋める) する。または即GCさせる</li>
 </ul>
 <p>以上が基本的なテクニックだが、これをどう実現するか。</p>
-<h3>コアダンプの無効</h3>
+<h3 id="_2">コアダンプの無効</h3>
 <p>コアダンプの無効はLinuxやBSDではsetrlimitを使ってRLIMIT_COREに対しsoft limit、hard limit共に0を指定する。これは正確に言えばコアダンプの最大サイズをセットする機能だが、これにゼロを設定することで事実上コアダンプ自体の無効化ができる。</p>
 <p>Goだと、次のようなコードになる。 ( <code>x/sys/unix</code> を使っているが、もちろんcgoを使っても良いだろう)</p>
 <pre><code class="language-go">import &quot;golang.org/x/sys/unix&quot;
@@ -55,21 +63,21 @@ err := unix.Setrlimit(unix.RLIMIT_CORE, &amp;unix.Rlimit{Cur: 0, Max: 0})
 </code></pre>
 <p>注意すべきは、<a href="https://linux.die.net/man/2/madvise" rel="nofollow">madvise(2) - Linux man page</a> にあるように、 <code>The kernel is free to ignore the advice.</code> すなわち、カーネルはこのアドバイスを無視することもあるらしい。</p>
 <p>また、そもそもコアダンプはアプリケーションからでなくOS自体に設定も可能である。</p>
-<h3>スワップの抑止</h3>
+<h3 id="_3">スワップの抑止</h3>
 <p><code>mlock</code> を使えばメモリをロックできるので、メモリがスワップアウト (ページアウト) されるのを防ぐことができる。Goでは次のようなコードだ。</p>
 <pre><code class="language-go">unix.Mlock(some_secret_var)
 </code></pre>
 <p>また、<a href="https://github.com/hashicorp/vault/blob/c44f1c9817955d4c7cd5822a19fb492e1c2d0c54/helper/mlock/mlock_unix.go#L15-L17" rel="nofollow">hashicorp/vault</a>のように <code>mlockall</code> を使ってプロセス上のすべてのメモリをロックする方法もある。この辺はアプリケーションの性質にもよるだろう。</p>
 <p><code>Mlock</code> があるということは <code>Munlock</code> もあるのか？というと、ある。mlockには <code>RLIMIT_MEMLOCK</code> というロック可能なメモリの制限があり、それを超えると追加でのmlockができなくなってしまう。したがって、ロックの必要がなくなったメモリは速やかにアンロックすることが望ましい。</p>
 <p>コアダンプ同様、スワップも <code>swapoff</code> コマンドでカーネルの設定から無効にすることができる。</p>
-<h3>メモリ上での秘匿情報の扱い</h3>
+<h3 id="_4">メモリ上での秘匿情報の扱い</h3>
 <p>HeartbleedやCold Boot Attackなどによる不正なメモリ読み取りから秘匿情報を守る方法のひとつに、秘匿情報をメモリ上で扱う際暗号化したままにしておき、必要な時だけ複合化することが挙げられる。しかしこれは、使用するキーの扱いなどで複雑性を生みやすく、個人的にはあまり採用されないように思われる。</p>
 <p>これに対し、使い終わった秘匿情報をGCを待たずに、明示的にゼロで埋めるなどしてパージするのはまだ見る実装だろう。例えばJavaの<a href="https://www.oracle.com/java/technologies/javase/seccodeguide.html" rel="nofollow">Secure Coding Guidelines for Java SE
 </a>の <code>Guideline 2-3 / CONFIDENTIAL-3: Consider purging highly sensitive from memory after use</code> にも同様の手法が紹介されている。</p>
 <p>Cではメモリの扱いが良くも悪くも直感的なので、単純に0を書き込むなり、 <code>free</code> してしまえばよい。しかし、Goにおいてはこれはそう単純な話ではないようである。例えば、Goの言語仕様によれば、Goのガベージコレクタはメモリのフラグメンテーションを回避するためにメモリを動かしたりコピーしたりすることを禁止していない。Goのランタイムが管理するメモリは、Goのランタイムが自由に操作することができるので、その場合単純な <code>mlock</code> は不十分である。例えば変数がランタイムによってコピーされたとき、コピー後のメモリは <code>mlock</code> のロック対象にならない。</p>
 <p>この場合どうすればよいか。Goでこれをやるには、 <code>mmap</code> や <code>munmap</code> で自前でメモリを管理する必要がある。これで確保したメモリはガベージコレクタの観測範囲外になるので、これに対して <code>mlock</code> を行ったり、使い終わった後のゼロ埋めを行えばよい。また言うまでもないが、使った後は自分でメモリを解放する必要がある。</p>
 <p>余談だが、自前でメモリを管理するにあたっては解放を忘れないことだけでなく、 <code>mprotect</code> を使ったガードページの実装や、カナリア領域の確保など、バッファオーバーフロー・アンダーランを防ぐ機構もおそらく必要になるだろう。</p>
-<h4>メモリのクリーンアップ</h4>
+<h4 id="_5">メモリのクリーンアップ</h4>
 <p>上述したメモリのゼロ埋めをメモリのクリーンアップ、「ワイプ(Wipe)」などと呼ぶが、これはどう実装するか？すぐに思いつくのは、次のようなやり方ではないか。</p>
 <pre><code class="language-go">func Wipe(b []byte) {
     for i := range b {
@@ -91,9 +99,9 @@ err := unix.Setrlimit(unix.RLIMIT_CORE, &amp;unix.Rlimit{Cur: 0, Max: 0})
 }
 </code></pre>
 <p>筆者の理解では、 <code>runtime.KeepAlive</code> があると、コンパイラはその箇所にその部分のメモリを使用するようなコードを挿入し、結果的に書き込みが "Dead store" であると判断されることを防ぐ。メモリのワイプ時にはこういった考慮も必要になる。</p>
-<h2>終わりに</h2>
+<h2 id="_6">終わりに</h2>
 <p>メモリ上の秘匿情報の保護は煩雑で、コードを複雑化する。パブリッククラウドでアプリケーションを構築することの多い現代では、きちんとTLS化やストレージ暗号化、ネットワークの設定などでなるべく安全性を保つことがアプリをシンプルにするコツだと思う。それでも、セキュリティ要件によってはこういったテクニックが必要になることもあるので、覚えておくと役に立つことがあるかもしれない。</p>
-<h2>参考</h2>
+<h2 id="_7">参考</h2>
 <ul>
 <li><a href="https://spacetime.dev/memory-security-go" rel="nofollow">memory security in go</a></li>
 <li><a href="https://www.oracle.com/java/technologies/javase/seccodeguide.html" rel="nofollow">Secure Coding Guidelines for Java SE</a></li>
@@ -109,5 +117,12 @@ err := unix.Setrlimit(unix.RLIMIT_CORE, &amp;unix.Rlimit{Cur: 0, Max: 0})
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
+<script>
+document.querySelectorAll('h1, h2').forEach(heading => {
+  heading.addEventListener('click', () => {
+    window.location.hash = heading.id;
+  });
+});
+</script>
 </body>
 </html>
