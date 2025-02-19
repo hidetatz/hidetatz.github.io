@@ -15,14 +15,6 @@
       margin: 0 auto;
       padding: 45px;
     }
-
-    h1, h2 {
-      cursor: pointer;
-    }
-
-    h1:hover, h2:hover {
-      color: #0969da;
-    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -33,8 +25,8 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1 id="vim">なるべくプラグインを使わずにどうvimでプログラミングしているか</h1>
-<h4 id="20230102">2023/01/02</h4>
+<h1>なるべくプラグインを使わずにどうvimでプログラミングしているか</h1>
+<h4>2023/01/02</h4>
 <p>筆者はvimを使い始めて10年弱くらい経ちますが、未だにvimへの習熟度は、感覚的には50%くらいではないかなと思っています。もしかしたらもっと低いのかもしれない。使い始めた頃は、インターネット上のvimrcをコピペし、プラグインマネージャーの使い方を頑張って読んだりしていましたが、最近はvim本来のパワフルな機能をもっと活用することに興味があります。プラグインが良いものであることは知っていますが、ラップトップのvim周辺をシンプルに保つことは私の嗜好に合っていると感じています。
 筆者のvimrcは<a href="https://gist.github.com/hidetatz/32fba337b62e81953056da6a028bd919#file-vimrc" rel="nofollow">こんな感じ</a>です。</p>
 <pre><code class="language-vimscript">filetype plugin indent on
@@ -67,7 +59,7 @@ set incsearch
 3 directories, 8 files
 
 </code></pre>
-<h2 id="_1">ファイル (バッファ) を開く / 閉じる</h2>
+<h2>ファイル (バッファ) を開く / 閉じる</h2>
 <p>vimにおけるバッファとは、オープンしてメモリに載っているファイルのことです。例えば、 <code>vim main.py</code> などとコマンドを実行すると、main.pyはメモリに展開され、 <code>main.py</code> のバッファが開かれます。ここで <code>:ls</code> すると、下の方にバッファリストが表示され、バッファ <code>main.py</code> が、おそらくバッファ番号1として表示されると思います。</p>
 <pre><code>:ls
   1 %a   &quot;main.py&quot;              line 1
@@ -79,9 +71,9 @@ set incsearch
 </code></pre>
 <p>ここでTab / Shift-Tabや、← / →で候補を移動し、Enterで選択してバッファをオープンできます。候補に出てくるディレクトリ内のファイル名を補完したいときは、ディレクトリを選択して矢印下を押すことでディレクトリが掘れます。</p>
 <p>ここで、 <code>:bd 1</code> とかすると、バッファ番号1のバッファ ( <code>main.py</code> ) がメモリからパージされ、バッファリストから削除されます。 <code>:bd</code> は <code>:bdelete</code> でも大丈夫。バッファリストが0件になると、ウインドウは空となり無が表示されます。</p>
-<h2 id="_2">バッファ間を移動する</h2>
+<h2>バッファ間を移動する</h2>
 <p>複数のバッファを開いているときにバッファ間を移動するのは、 <code>:b main.py</code> でできます。ただ、これも <code>:b</code> してTabを押すと補完が効きます。ちなみに実は、 <code>:b m</code> だけ打ってTabを押しても <code>main.py</code> のバッファが開きます。ただし、mで始まるファイルが他にもバッファに載っていると失敗します。ファイルがひとつに特定できるまでは入力が必要です。まあ、Tabを使うのが大抵の場面で無難かなという印象です。</p>
-<h2 id="fuzzy-find">簡易Fuzzy-Find (あいまい検索) する</h2>
+<h2>簡易Fuzzy-Find (あいまい検索) する</h2>
 <p>ディレクトリをいくつも下に降りていったところにあるファイルを開くときはどうするか？上記で言う <code>f.py</code> のような。Tab補完で頑張るのもいいですが、一つの方法としては <code>path</code> をいじるというのがあります。vimrcに以下のように書きます。</p>
 <pre><code>set path+=**
 </code></pre>
@@ -92,7 +84,7 @@ set incsearch
 <p><code>/usr/include</code> が入っているようですね。これはCプログラマのために設定されています。Cでは <code>/usr/include/</code> ディレクトリの配下にあるファイルはプログラムからインクルードして標準ライブラリとして使えます。なので、例えばCのコードを読んでいるときに <code>#include &amp;lt;stdio.h&amp;gt;</code> などとインクルードが書いてあって、このヘッダファイルの中身が読みたい!というときは、 <code>:fin stdio.h</code> って実行すれば、 <code>/usr/include/stdio.h</code> をvimが開いてくれます。これが便利だという話です。なので、デフォルトのオプションはCプログラマ以外にはあまり役に立ちません。また、最近は <a href="https://qiita.com/yoya/items/c0b26cba3c040c581643" rel="nofollow">macOSだとそもそも <code>/usr/include</code> がなかったりする</a> らしいです。
 pathはただのオプションなので、ユーザーが適当に設定することができます。例えばGoプログラマはローカルマシンにGoが入っていると思います。<a href="https://go.dev/doc/install" rel="nofollow">Goのオフィシャルなインストール方法</a> でインストールしている場合、Goのソースコードは <code>/usr/local/go/src</code> に置かれているはずです。なので、vimrcに <code>path+=/usr/local/go/src/*</code> などと書けば、Goのソースコードも <code>:fin</code> できるわけです。これがpathオプションの使い方のひとつです。</p>
 <p>話を戻すと、我々はvimrcに <code>set path+=**</code> と書きました。 <code>+=</code> はpathにアペンドする演算子です。 <code>**</code> は、ディレクトリの区切りを無視してカレントディレクトリ配下全てにマッチするような動きになります。そのため、dirやdir2を入力しなくても <code>f.py</code> の補完ができたわけです。</p>
-<h2 id="_3">ファイルエクスプローラを使う</h2>
+<h2>ファイルエクスプローラを使う</h2>
 <p>netrwとはvimにビルトインのファイルエクスプローラです。というか、名前の通り本来はリモートのファイルをネットワーク越しに編集するための機能だと思います (筆者はこの用途でnetrwを使ったことがない) 。ファイルエクスプローラとしてはnerdtreeなどのプラグインが有名かなと思うのですが、個人的にはnetrwでも十分です。netrwは、ファイル名でなくディレクトリ名 (あるいは <code>.</code> など) をオープンしようとすると開きます。例えば <code>vim .</code> としたり、 <code>:e dir</code> など。</p>
 <pre><code>&quot; ============================================================================
 &quot; Netrw Directory Listing                                        (netrw v165)
@@ -108,7 +100,7 @@ test/
 main.py
 </code></pre>
 <p>netrwもvimのウインドウの中なので、j/kで移動できます。 <code>D</code> で削除、 <code>R</code> でリネームなども可能です。 <code>-</code> を押すとひとつ上のディレクトリに飛べます。 <code>/</code> での検索も可能です。Enterでファイルを開けますが、 <code>v</code> や <code>o</code> で開けばウインドウを分割して開くことができます。</p>
-<h2 id="_4">行内検索</h2>
+<h2>行内検索</h2>
 <p>ノーマルモードで <code>f</code> すると、カーソルのある行内で飛びたい場所にジャンプできます。具体的に言うと、</p>
 <pre><code>Netrw Directory Listing
 </code></pre>
@@ -116,7 +108,7 @@ main.py
 <code>f</code> のポイントは、なるべく一発で行ける文字を選ぶことです。例えば上記だと、 <code>i</code> は3回登場しているので、一番右のiに飛びたい場合は、 <code>fi;;</code> と押す必要があります。それよりは、 <code>fn</code> でnに飛び、hでiに移動することでキーを1回分節約できるわけです。
 確か英語では <code>e</code> <code>t</code> <code>a</code> <code>n</code> あたりが登場しやすかったはずなので、これらはfの入力として意識的に避けることが多いです。 <code>z</code> や <code>x</code> がジャンプしたい文字の近くにあると嬉しくて笑顔になります。
 注意点としては、fはカーソルのある行の中でしか移動できません。</p>
-<h2 id="_5">コードフォーマット</h2>
+<h2>コードフォーマット</h2>
 <p>外部のプログラムを使ったコードフォーマットをvimからかけたい、みたいなのはどうするか。一つのやり方としては、 <code>formatprg</code> や <code>equalprg</code> が使えます。例えばC++を書いていて、コードフォーマッターにclang-formatを使いたいとしましょう。このとき、vimrc (またはvimのコマンドラインで) <code>set formatprg=clang-format</code> とします。で、 <code>gg</code> で一番上に移動、 <code>gq</code> を押し、 <code>G</code> で一番下に移動します。これで、clang-formatがかかります。 <code>formatprg</code> ではなく <code>equalprg</code> を使えば <code>gq</code> ではなく <code>=</code> でおなじことができます。</p>
 <p>これは何が起きているのか。まず、gqコマンドと=コマンドですが、これらはvimで編集している文章の見栄えを調整するものです。微妙に用途が異なっていて、gqは <code>textwidth</code> というオプションに設定された各行の最大文字数に合わせて調整を行うコマンドです。長すぎる行は分割し、短すぎる行はマージします。=は、これはコードにフィルタをかけるコマンドです。ただし、デフォルトではC言語用のフォーマッタとして機能します。おそらく新しいプログラミング言語とかではちゃんと動かないのだろうと思います。</p>
 <p>で、gqと=は、それぞれ <code>formatprg</code> と <code>equalprg</code> を設定することで、外部のプログラムを起動することができます。上記でclang-formatを設定したような感じです。
@@ -134,7 +126,7 @@ main.py
 また、エラーメッセージなどが出ずフォーマットに成功したときも、 <code>G</code> を押しているのでカーソルは一番下に移動します。 Ctrl-oで元の場所に戻れますが、これもやや面倒です。</p>
 <p>ちなみに、formatprgとequalprgはどちらを使うのか。これは筆者の結論としてはどっちでもいいです。formatprgという名前なのだからフォーマット用であるわけなので、formatprgを使っておくと間違いないのかなとは思います。equalprgは本来フィルタ用途なのになぜこの話題に出てくるかというと、=コマンドがなぜかデフォルトではインデントを整えてくれるので、なんとなくフォーマッタに使うのが良さそうに思えてしまうからです。</p>
 <p>さらに余談ですが、 gqではなくgwというコマンドもあります。これはgqと何が違うかというと、gwはカーソルの位置がもとに戻ります。gqではGで一番下に移動してしまったのですが、gwはggした一番上に戻ってくれます。しかし、gwはformatprgを見てくれないので、フォーマット用途では使えません。なぜ、、</p>
-<h2 id="make">makeとエラー修正</h2>
+<h2>makeとエラー修正</h2>
 <p>コードを書いているとき、少し書いては <code>make</code> を実行しビルドが通ることを確かめ、通らなければ修正する、通ればさらにコードを書く、というようなやり方を取る人も多いと思います。vimには組み込みの <code>:make</code> コマンドがあり、これはそのまま、makeコマンドを実行するのと同じことをしてくれます。引数も、 <code>:make build</code> のように書けばそのとおり実行できます。
 vimのmakeコマンドの利点は、その出力をvimが解釈し、エラーがある箇所に簡単にジャンプができることです。
 例えば、次のようなmain.cを書いてみます。</p>
@@ -286,7 +278,7 @@ main.c|4 col 5| error: expected ‘;’ before ‘return’
 </code></pre>
 <p>例えば、 <code>/usr/share/vim/vim81/compiler/perl.vim</code> を見てみるとperl用のmakeprgとerrorformatの設定をしています。</p>
 <p>筆者はこの <code>:make</code> はかなり多用しています。プログラミング言語によっては設定しないと動かないですが、C++やGoを書くときにはよく使います。Makefileの中でdockerを起動したりといった複雑なことをやり始めるとこのへんのインテグレーションがやりにくくなるので注意です。</p>
-<h2 id="grep">grep</h2>
+<h2>grep</h2>
 <p>コードを書いているとgrepしたくなることは多いですよね。vimにおけるgrepは内部grepと外部grepがあります。内部grepはvimに組み込まれたgrepの処理を実施し、外部grepは外部grep (GNU grepコマンド) を実行します。後者は外部grepの結果をvimにロードするのですが、前者はファイルをバッファにロードするので、外部grepよりも遅いです。じゃあ内部grepの利点はなんなのかという話なのですが、プラットフォーム依存がなく、vimさえあれば動くことが利点です。ただ、筆者は基本常に外部grepを使っています。</p>
 <p>内部grepは、細かいオプションを除けば次のような感じで動きます。</p>
 <pre><code>:vimgrep keyword **
@@ -298,13 +290,13 @@ main.c|4 col 5| error: expected ‘;’ before ‘return’
 <p>例えば拡張子を絞りたいとかも、 <code>man grep</code> を見て必要なオプションを渡せばOKです。</p>
 <p>外部grepも内部grepも、実行したあとはその結果を見たいわけですが、これには先程も登場したQuickfixを使います。Quickfixは本来エラーメッセージを表示する機能なのだと思うのですが、grepの結果を表示してそこにジャンプするのにも使えます。 <code>:grep</code> や <code>:vim</code> した後に <code>:cw</code> するとQuickfixリストを開けます。</p>
 <p>また、grepコマンドには、ackやag、あるいはgit grepなどいろいろAlternativeがありますが、それらは <code>grepprg</code> を設定することで使えるようです (筆者はGNU grepしか使っていないです) 。</p>
-<h2 id="_6">タグジャンプ</h2>
+<h2>タグジャンプ</h2>
 <p>関数を呼び出している箇所にカーソルを合わせ、その関数の定義元に飛ぶのも、実はプラグイン無しでできるっちゃできます。これには <code>ctags</code> という外部コマンドが必要です。ctagsはUbuntuには確かプリインストールされておらず、 <code>apt-get install universal-ctags</code> でインストールします。ctagsはもともとExuberant Ctagsというプロジェクトだったのですが、こちらは開発が停止しているので、 <a href="https://github.com/universal-ctags/ctags" rel="nofollow">Universal Ctags</a>を使うほうがよいです (自分のctagsがどちらなのかは <code>ctags --version</code> でわかります) 。</p>
 <p>vimで適当なファイルを開き、 <code>:!ctags -R</code> と実行します。 <code>:!</code> は外部コマンドの実行です。これをすると <code>tags</code> ファイルができます。git管理しているプロジェクトであればこれは管理対象にしなくて良いので、 <code>echo tags &amp;gt;&amp;gt; .git/info/exclude</code> などしてignoreしましょう。
 vimは標準でこのtagsファイルを読んでジャンプができます。ジャンプしたいシンボルにカーソルを合わせ <code>Ctrl-]</code> するとジャンプできます。</p>
 <p>注意点としては、ctagsを使ったジャンプはIDEやLSPのようにコンテキストを正しく理解した賢いものではありません。例えば <code>get()</code> という関数呼び出しにカーソルを合わせ <code>Ctrl-]</code> した時に、importなどで呼び出されるはずのない <code>get()</code> 関数もジャンプの対象になります。また、 <code>get</code> という名前の変数があったとしてもジャンプの対象になるようです。 <code>Ctrl-]</code> の代わりに <code>gCtrl-]</code> とすると候補をリストアップしてくれます。
 IDEやLSPのように賢くないとは書きましたが、実際それが問題になることは筆者としてはほぼない印象です。ただ、クリーンアーキテクチャ的なことをしていると、同じような名前のシンボルをいろんなところで作ることがあると思うのでそれはちょっと相性が悪いかもしれないです。</p>
-<h2 id="_7">補完</h2>
+<h2>補完</h2>
 <p>最後は補完です。前提として、これもctagsのジャンプと同様、importしているライブラリの関数名だけを補完するような「賢い」補完はvimだけではできません。そういうのが必要ならIDEやLSPを使いましょう。</p>
 <p>vimの補完は Ctrl-xでトリガーできます。Ctrl-xしたあと、どのタイプの補完をしたいのかをさらに入力します。例えば、次のようなコードを考えます。</p>
 <pre><code>bool long_func_name() {
@@ -326,13 +318,13 @@ int main() {
 </ul>
 <p>などです。これらはすべて、 Ctrl-xに続けて入力する必要があります。また、Ctrl-nは実際はカレントファイルだけではなく別のバッファ、タグファイル、インクルードファイルなどからも補完対象を検索してくれます。</p>
 <p>Ctrl-lの行補完はけっこう便利です。Goプログラマの人は <code>if err != nil</code> を何度も書くことになると思うのですが、これは行補完すれば <code>i</code> と入力し、 <code>Ctrl-x Ctrl-l</code> で補完する、という感じで瞬時に入力できます。</p>
-<h2 id="_8">まとめ</h2>
+<h2>まとめ</h2>
 <p>長々と書いてきましたが、細かいことはまだ書けてないことも多いと思います。ここで紹介したのは、筆者が実際にプログラミングのときに使っているテクニックです。</p>
 <p>筆者がvimを使うときは、大体シェルから <code>vi main.py</code> などとファイルを開いて、 <code>:e</code> か <code>:fin</code> でバッファを開き、開きすぎたなと思ったら <code>:bd</code> で消します。バッファ間の移動は <code>:b</code> にTabキーでなんとかしてます。検索したいときは <code>:grep -ir xxx *</code> と打ちます。補完は Ctrl-x Ctrl-nでなんとかなります。 <code>:!ctags -R</code> さえ実行しておけば、ジャンプもできます。コードが書けたら <code>:make</code> します。 <code>:make test</code> もします。</p>
 <p>筆者は以前はLSPを使っていたのですが、補完とジャンプくらいしか使っていないことに気付き、vim本来の機能でそれらを達成できないかいろいろ試した結果、今のスタイルに落ち着きました。IDEやプラグインでもっと便利になることはもちろんあると思うのですが、シンプルさやポータビリティが筆者にとってはとても大きなメリットなので、今の形をとりあえず今後も続けていく予定です。
 またこの記事は、IDEやプラグインを使っている人に、IDEやプラグインは使わないほうがいいよ、と主張するための記事ではありません。こういうのは大前提として、好みとか慣れの問題だと思っています。他人がどんな風にコードを書いているのかはけっこう面白い話だと思っていて、それを自分も書いてみたくなったので書きました。
 最後まで読んでいただきありがとうございました!</p>
-<h2 id="_9">参考</h2>
+<h2>参考</h2>
 <ul>
 <li><a href="https://thoughtbot.com/blog/how-to-do-90-of-what-plugins-do-with-just-vim" rel="nofollow">How to Do 90% of What Plugins Do (With Just Vim)</a></li>
 <li><a href="https://tatsu-zine.com/books/practical-vim" rel="nofollow">実践Vim</a></li>
@@ -341,12 +333,5 @@ int main() {
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
-<script>
-document.querySelectorAll('h1, h2').forEach(heading => {
-  heading.addEventListener('click', () => {
-    window.location.hash = heading.id;
-  });
-});
-</script>
 </body>
 </html>

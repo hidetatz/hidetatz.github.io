@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2024年11月8日 インフェ</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/diary" rel="nofollow">&lt;- 日記</a></p>
+<h1>2024年11月8日 インフェ</h1>
+<p>Goというプログラミング言語にはunion的な、異なる型を同じものとして受け渡したりする機能がない。最近は型パラメータを使ってそれっぽくできたりするのだがあまりやられないようだ。
+これに対し、「インタフェースを使えばいい」という言説がある。ただ、私はこの案はだめだと思う。なぜか。</p>
+<p>インタフェースはポリモーフィズムを実現するための機能だ。ポリモーフィズムとは、「具体的には異なるが、抽象的には同じ」ものを、まとめて一つのコードで扱えたら便利じゃん？というものである。
+よくある意味不明な例では、犬クラスと猫クラスがあり、これらはまとめて動物クラスとして抽象化できるよね、というものがある。犬と猫はたしかに異なるが、動物という点では同じである。このように、「犬と猫の違いは置いといて、動物としてひとまとめに扱いたい場面」というのが存在し、そういうときに具体的な型ではなく、一段抽象的な型としてプログラムから扱うための言語機能が多くのプログラミング言語には存在する。こういった概念をポリモーフィズムとか言うのだと思う。</p>
+<p>ポリモーフィズムでは、抽象化して扱いたいからこそ、犬と猫の固有の部分は捨て去って、それらに共通する部分だけを考えなければならない。Goではこれらは型に対するメソッドで表現される。例えばAnimalインタフェースにwalkメソッドを設定して良い。しかし、bark（ほえる）メソッドは設定してはいけない（すべての動物が吠えるわけではないから。猫は吠えない）。</p>
+<p>インタフェースはこのように、異なるものを同じものとして扱うためのものだ。unionはこれとは異なる。unionは異なるものなんだけどなんとかして同じような「感じ」に扱いたいだけだ。結果的にインタフェースで代用できることもあるかもしれないが、unionはもっと使い方が広い。そのようなunionの使い方は良くないから、APIを見直した方が良い、ということならまだわかるが、インタフェースで代用はできないのだ。</p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -15,14 +15,6 @@
       margin: 0 auto;
       padding: 45px;
     }
-
-    h1, h2 {
-      cursor: pointer;
-    }
-
-    h1:hover, h2:hover {
-      color: #0969da;
-    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -33,8 +25,8 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1 id="goroutine">Goroutineのプリエンプション</h1>
-<h4 id="20210328">2021/03/28</h4>
+<h1>Goroutineのプリエンプション</h1>
+<h4>2021/03/28</h4>
 <p>Goにおけるgoroutineのプリエンプションについて調べていたのでメモ。間違いがあれば指摘いただけると助かります。</p>
 <p>Goにおけるプリエンプションは、Go1.14以前とそれ以降で挙動が異なる。Go1.14では、<a href="https://golang.org/doc/go1.14#runtime" rel="nofollow">リリースノート</a> にもある通り、goroutineは "asynchronously preemptible" になった。これは何を意味するのか？</p>
 <p>まず、簡単な例を見てみよう。
@@ -84,7 +76,7 @@ func main() {
 <p><code>runtime.Gosched()</code> は、POSIXの <a href="https://man7.org/linux/man-pages/man2/sched_yield.2.html" rel="nofollow"><code>sched_yield</code></a> のようなもの (たぶん) だ。 <code>sched_yield</code> は、他のスレッドが動けるように当該スレッドにCPUを手放させる。Goの場合はスレッドではなくgoroutineなため、 <code>Gosched</code> という名前なのかと思われる (これは予想) 。
 すなわち、 <code>runtime.Gosched()</code> を明示的にコールすることで強制的にgoroutineの再スケジュールが行われ、別のgoroutineにスイッチされることを期待できる。</p>
 <p>また、<a href="https://github.com/golang/go/blob/87a3ac5f5328ea0a6169cfc44bdb081014fcd3ec/src/cmd/internal/objabi/util.go#L257" rel="nofollow">GOEXPERIMENT=preemptibleloops</a>を使う方法もある。これは「ループ」の際にプリエンプションさせるためのものだ。これを使えばコードの変更は不要となる。</p>
-<h2 id="gocooperative-vs-preemptive">GoにおけるCooperative vs. Preemptive スケジューリング</h2>
+<h2>GoにおけるCooperative vs. Preemptive スケジューリング</h2>
 <p>そもそも、マルチタスクのスケジューリングには大きく2つの方式がある。それは「Cooperative(協調的)」と「Preemptive(プリエンプティブ)」だ。協調的マルチタスクは「ノンプリエンプティブ」とも呼ばれる。
 協調的マルチタスクは、プログラムのスイッチがどのように行われるかは、そのプログラム自身に依存する。「協調型」と呼ばれるのは、プログラムが相互動作可能に設計されていることを意図した呼び方なのだと思われる。
 プリエンプティブ型のマルチタスクでは、プログラムのスイッチはOSに委ねられる。優先度を基にしたものや、FCSV・ラウンドロビンなど、なんらかのアルゴリズムに基づいてOSによってスイッチされるスケジューリング方式を言う。</p>
@@ -108,7 +100,7 @@ sysmonの実体としてはM (Machine) だが、P (Processor) 無しで動く。
 </ul>
 <p>ここまでがGo1.13までの実装であるが、ここまでを理解すれば前述の無限ループするコードが何故期待通りに動かなかったのかがわかるだろう。 <code>for {}</code> は単なるビジーループなので、先に書いたようなgoroutineのスイッチの契機には特にならない。「10ms以上実行されているからsysmonによってpreemptフラグが立てられるのでは？」と思うが、 <strong>preemptフラグが立っても関数コールがなければそのフラグのチェックが発生しない</strong> のである。先に書いたように、preemptフラグのチェックはfunction prologueで起こるから、何の処理もしないビジーループではプリエンプションの実行まで到達できなかったのである。</p>
 <p>そして、Go1.14で導入された "non-cooperative preemption" (asynchronous preemption) によって、この挙動は変わった。</p>
-<h2 id="asynchronously-preemptible">asynchronously preemptibleとはなにか？</h2>
+<h2>asynchronously preemptibleとはなにか？</h2>
 <p>ここまでを整理しよう。Goは10ms以上実行されているgoroutineをsysmonで監視し、適宜強制的にプリエンプションするよう計らう仕組みがそもそも存在した。しかし、その動作の仕組み上、 <code>for {}</code> のような場合は実際はプリエンプションが発生しなかった。</p>
 <p>Go1.14で導入されたnon-cooperative preemptionによって、Goroutineのスケジューラはプリエンプティブと呼んで差し支えないようになった。それは、シグナルを使ったシンプルながら効果的なアルゴリズムである。</p>
 <p>まず、sysmonは今まで通り、10ms以上動き続けているG (goroutine)を検知する。すると、sysmonはそのGを動かしているスレッド (P) にシグナル (SIGURG) を送信する。
@@ -116,10 +108,10 @@ Goのsignal handlerはシグナルをハンドリングするためにそのPに
 <p>すなわち、Go1.13までは関数コールがないと仕組み上プリエンプションしなかったが、Go1.14では明示的なシグナルの送信によってプリエンプションが実行されるようになった。言い換えると、プリエンプションをgoroutine自身でなくシグナルを契機とした外的要因で実行できるようになったのだ。</p>
 <p>この、シグナルを用いた非同期のプリエンプションの仕組みによって、先述のコードは期待通り動くようになった。それでも、 <code>GODEBUG=asyncpreemptoff=1</code> にすることでasynchrnous preemptionはオフにすることが可能だ。</p>
 <p>ちなみに、SIGURGを使う理由は、SIGURGが既存のデバッガなどのシグナルの使用を妨げないことや、libcで使われていないことなどから選んだらしい。 (<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md#other-considerations" rel="nofollow">参考</a>)</p>
-<h2 id="_1">終わりに</h2>
+<h2>終わりに</h2>
 <p>何もしない無限ループが他のgoroutineに処理を渡さないからと言って、Go1.13までの仕組みがダメかというとそうでもないと思われる。 <a href="https://github.com/golang/go/issues/11462#issuecomment-116616022" rel="nofollow">@davecheney氏</a>も発言しているように、通常これは特に問題にならないと考えられる。そもそもasynchronous preemptionはこの無限ループの問題を解決するために導入されたのではない。</p>
 <p>asynchronous preemptionの導入によってスケジューリングがプリエンプティブになったものの、GCの際の「アンセーフ・ポイント」の取り扱いにさらに注意が必要となった。この辺の実装の考慮が大変面白くて話したかったのだが、力尽きたのでここでこの記事は終わる。気になる読者は自分で<a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md" rel="nofollow">Proposal: Non-cooperative goroutine preemption</a>を読んでほしい。</p>
-<h2 id="_2">参考</h2>
+<h2>参考</h2>
 <ul>
 <li><a href="https://github.com/golang/proposal/blob/master/design/24543-non-cooperative-preemption.md" rel="nofollow">Proposal: Non-cooperative goroutine preemption</a></li>
 <li><a href="https://github.com/golang/go/issues/24543" rel="nofollow">runtime: non-cooperative goroutine preemption</a></li>
@@ -138,12 +130,5 @@ Goのsignal handlerはシグナルをハンドリングするためにそのPに
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
-<script>
-document.querySelectorAll('h1, h2').forEach(heading => {
-  heading.addEventListener('click', () => {
-    window.location.hash = heading.id;
-  });
-});
-</script>
 </body>
 </html>

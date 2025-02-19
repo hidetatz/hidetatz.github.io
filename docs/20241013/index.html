@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2024年10月13日 最近のプログラミング</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/diary" rel="nofollow">&lt;- 日記</a></p>
+<h1>2024年10月13日 最近のプログラミング</h1>
+<p>Helix Editorを使い始めたよという話をしておくか。</p>
+<p><a href="https://helix-editor.com/" rel="nofollow">https://helix-editor.com/</a></p>
+<p>10年以上使っていたvimを辞めてHelix Editorに移行してから3ヶ月ほどになる。すこぶる快適で、もうvimに戻ることはないだろう。</p>
+<p>vimは好きだけど、使ってる人がいっぱいいるし、日本人のvim界隈の内輪ノリ（に私から見えているもの）もあまり好きじゃないので辞めてみた感じ。Helix Editorは前から気になっていた。</p>
+<p>Helix Editorはvimのようにモードがあるエディタなんだが、一言でいうとエディタの操作がかなり体系付けられている。操作はselectionと、selectionに対するactionで構成される。これはkakouneエディタにインスパイアされているらしい。</p>
+<p>例えば、vimで1行を削除するときはddコマンドを実行するのだが、Helixではxdだ。これは、xというセレクションと、dというアクションを組み合わせたものになる。xはカーソルの当たっている行を選択するセレクションで、dは削除のアクションだ。
+このセレクション-アクションというパラダイムの優れている点は、覚えることを減らせることと、一貫性のある操作が可能なことだ。プログラマは1行を選択するセレクション（x）を覚えれば、例えば削除だけじゃなくヤンク、サラウンド、置換などその選択した行に対して様々なアクションを適用できる。つまり、ものすごく雑に言ってしまえば、10個のセレクションと10個のアクションを覚えると、覚えることは20個でも、できることは掛け算で100個になる。実際はここまでエディタの操作は抽象化できないものだろうし、実際完璧にそうなっているわけでもないが、Helixやkakouneが実現したいのはそういうことだ。</p>
+<p>vimではどうだろうか？vimは長い歴史で積み重ねられてきた巨大なソフトウェアなので、どうしても何故？という点があると思う。例えばxで1文字削除なのを覚えたとしても、1行削除のddは全く異なるコンテキストで、ただ単純に覚えるしかない。Helixのように整理された、体系立てられたインタフェースを提供できるのは後発ソフトウェアの強みと言えるだろう。</p>
+<p>また、LSPやファジーサーチ、サラウンド、easymotionなどの機能はビルトインされている。これはおそらく、vimを使う多くの人が使っているプラグインは、最初から入れてしまったほうが効率が良い的な思想だと思われる。逆に、vimに一応あるけどみんな使わないだろ的な機能は消えている。このへんの設計思想が秀逸だなと感じることが多い。</p>
+<p>Helixにはプラグインがないのもよい。私はプラグインを面倒くさがって使わないのでなくてよいのだ。
+思うのは、エディタがプログラミング的な生産性にどれだけ寄与するのかということだ。プログラミングは頭の中でやることで、プログラムはその成果物でしかない。脳からテキストファイルにプログラムを直接出力できるようになると、誰もエディタのキーバインドを覚えることをしなくなるだろう。</p>
+<p>解くべき課題が難しくなればなるほど、この傾向は顕著になる。自明なものを作っているうちは、エディタからプログラムが出てくる速度が律速だ。解くべき課題が難しいとき、人の頭がボトルネックになる。エディタをカスタマイズしない理由はこれだ。プログラミングという作業で一番時間がかかるのは何をプログラムするか考えることであり、エディタを便利にしても全体は速くならないのだ。</p>
+<p>あとキーボードの話。エレコムのレジェロを使っている。</p>
+<p><a href="https://www.amazon.co.jp/dp/B0CJTG5VDS" rel="nofollow">https://www.amazon.co.jp/dp/B0CJTG5VDS</a></p>
+<p>レジェロは知名度が全くなく、おそらくこの世に使っている人は私しかいない。大抵10000円しないで買えるけど、私には高級なキーボードとの違いがわからない。</p>
+<p>これはWindows、Mac、Ubuntu全てで使えるのが良い。</p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

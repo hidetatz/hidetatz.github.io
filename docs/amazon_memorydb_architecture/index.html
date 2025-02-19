@@ -15,14 +15,6 @@
       margin: 0 auto;
       padding: 45px;
     }
-
-    h1, h2 {
-      cursor: pointer;
-    }
-
-    h1:hover, h2:hover {
-      color: #0969da;
-    }
   </style>
 
   <link href="/markdown.css" rel="stylesheet"></link>
@@ -33,15 +25,15 @@
 </head>
 <body class="markdown-body">
 <p><a href="/" rel="nofollow">&lt;- ホーム</a></p>
-<h1 id="how-amazon-memorydb-for-redis-guarantees-the-data-durability">How Amazon MemoryDB for Redis guarantees the data durability</h1>
-<h4 id="20211119">2021/11/19</h4>
+<h1>How Amazon MemoryDB for Redis guarantees the data durability</h1>
+<h4>2021/11/19</h4>
 <p>Note: This article is available in <a href="https://hidetatz.github.io/articles/2021/11/19/amazon_memorydb_architecture_ja/" rel="nofollow">Japanese</a> also.</p>
-<h2 id="introduction">Introduction</h2>
+<h2>Introduction</h2>
 <p><a href="https://aws.amazon.com/memorydb/" rel="nofollow">Amazon MemoryDB for Redis</a> is a distributed managed database compatible with Redis interface, announced by AWS in 2021.
 So far, AWS has been providing Amazon Elasticache as their managed Redis. However in Amazon MemoryDB, the data consistency/durability in distributed environment is achieved as a feature.
 In this article, I'll talk about the current view of Redis's consistency/durability and how Amazon MemoryDB approaches to guarantee them. I'll explain them based on currently opened information around the MemoryDB and I'll leave all of them at the bottom of this article.</p>
 <p>In this article, I'll talk about "master-replica" model in replication, but I'll call them "primary" "replica".</p>
-<h2 id="data-consistency-in-redis-cluster">Data consistency in Redis Cluster</h2>
+<h2>Data consistency in Redis Cluster</h2>
 <p>OK then, let's start with a generic Redis cluster, not Amazon MemoryDB.</p>
 <p>First of all, <a href="https://redis.io/topics/cluster-tutorial#redis-cluster-consistency-guarantees" rel="nofollow">Redis cluster never guarantees the strong consistency</a>。.
 In Redis, the replicated data will be <a href="http://antirez.com/news/36" rel="nofollow">eventually consistent</a>.
@@ -52,7 +44,7 @@ This is by design of Redis; Redis is designed to get better performance rather t
 <blockquote>
 <p>From <a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html" rel="nofollow"><em>Amazon MemoryDB for Redis – Where speed meets consistency</em></a></p>
 </blockquote>
-<h3 id="data-durability-in-redis">Data durability in Redis</h3>
+<h3>Data durability in Redis</h3>
 <p>In Redis, it natively supports some durability mechanisms such as <a href="https://redis.io/topics/persistence" rel="nofollow">RDB or AOF</a>, but none of them guarantees the strong consistency.
 RDB is just a periodical snapshot. So, writes between the latest snapshot and current time are not persisted.</p>
 <p>AOF, <em>Append Only File</em>, is a transaction log in Redis.
@@ -75,7 +67,7 @@ AOF guarantees the data durability, but it might affect to its availability.</p>
 <p>Historically, these drawbacks of Redis have been accepted because Redis is usually used just as cache store.
 Redis just contains the cache of data, and the real data usually can be recovered from the original datastore.</p>
 <p>Next then, let's talk about how Amazon MemoryDB gives us availability and consistency/durability.</p>
-<h2 id="amazon-memorydb-architecture">Amazon MemoryDB Architecture</h2>
+<h2>Amazon MemoryDB Architecture</h2>
 <p><img width="1097" alt="3" src="https://user-images.githubusercontent.com/60682957/142567327-26d34c4f-2495-4b0e-a422-baac5ba90863.png"></p>
 <blockquote>
 <p>From <a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks" rel="nofollow"><em>Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</em></a></p>
@@ -85,7 +77,7 @@ What is Multi-AZ Transaction Log? It is not described well in official documenta
 Because it is multi-AZ replicated and written synchronously, the data on memory and the content of Multi-AZ Transaction Log are consistent, while it can guarantee the strong durability.</p>
 <p>The writes to the replica are, as well as the normal Redis cluster, done asynchronously.
 Internally, it looks like they are triggered by write to the Multi-AZ Transaction Log.</p>
-<h3 id="failover">Failover</h3>
+<h3>Failover</h3>
 <p><img width="1094" alt="4" src="https://user-images.githubusercontent.com/60682957/142567334-559b4050-7b93-4837-8369-305ae902b149.png">
 <img width="1093" alt="5" src="https://user-images.githubusercontent.com/60682957/142567342-cb3bb220-1066-4fbe-a621-c276cdabf2f2.png"></p>
 <blockquote>
@@ -103,18 +95,18 @@ The detailed process is not described, but we can come up with below simple algo
 <p>In AOF, we needed to re-apply every line in the file from head to bottom to reproduce the complete data.
 In above approach, only non-replicated operations can be the target of re-apply, so it must require less time to recover the data.
 Because of this, Amazon MemoryDB can guarantee high availability AND consistency/durability.</p>
-<h2 id="this-looks-like-mysql-cluster-no">This looks like MySQL cluster, no?</h2>
+<h2>This looks like MySQL cluster, no?</h2>
 <p>By the way, this kind of technology is not particularly new.
 For example, In MySQL cluster failover, almost the same thing happens; because MySQL replication is done asynchronously using Binlog, there might be some differences between the primary ("source" in MySQL world) and the replica.
 Relational Databases are usually more serious about consistency than cache stores. In case of failover, it is necessary to copy the difference data to the replica.
 This is done automatically by <a href="https://github.com/yoshinorim/mha4mysql-manager/wiki" rel="nofollow">MHA</a> or <a href="https ://www.percona.com/blog/2014/07/03/failover-mysql-utilities-part-2-mysqlfailover/" rel="nofollow">mysqlfailover</a>. (<a href="https://github.com/openark/orchestrator" rel="nofollow">orchestrator</a> is probably the same?)
 This is exactly what Amazon MemoryDB achieves.</p>
-<h2 id="summary">Summary</h2>
+<h2>Summary</h2>
 <p>Because AOF is persisted locally on the node, the probability of write failures must be quite low as it does not require the remote communication. Multi-AZ Transaction Log should have a relatively high probability of write failures even though it is held on the AWS network, but it will be solved by retry.
 I have read <a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb- for-redis-speed-consistency.html" rel="nofollow">Amazon MemoryDB for Redis - Where speed meets consistency</a> and learned about the MemoryDB architecture. 
 I at first thought "This is the same as what MySQL failover automation does?". Also, I feel this kind of work, such as "using" the existing mechanisms to make something more useful, without any innovative inspirations, is really cool.
 Although MemoryDB seems to cost more than Elasticache, but I think it would be a good idea to use MemoryDB when using Redis on AWS rather than Elasticache.</p>
-<h2 id="reference">Reference</h2>
+<h2>Reference</h2>
 <ul>
 <li><a href="https://www.allthingsdistributed.com/2021/11/amazon-memorydb-for-redis-speed-consistency.html" rel="nofollow">Amazon MemoryDB for Redis – Where speed meets consistency</a></li>
 <li><a href="https://www.youtube.com/watch?v=Jbq_XZMZEKY&amp;ab_channel=AWSOnlineTechTalks" rel="nofollow">Getting Started with Amazon MemoryDB for Redis - AWS Online Tech Talks - YouTube</a></li>
@@ -131,12 +123,5 @@ Although MemoryDB seems to cost more than Elasticache, but I think it would be a
 
 <script src="/highlight.pack.js"></script>
 <script>hljs.highlightAll();</script>
-<script>
-document.querySelectorAll('h1, h2').forEach(heading => {
-  heading.addEventListener('click', () => {
-    window.location.hash = heading.id;
-  });
-});
-</script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2024年9月18日 ストップ！Docker</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/diary" rel="nofollow">&lt;- 日記</a></p>
+<h1>2024年9月18日 ストップ！Docker</h1>
+<p>この日記にはソフトウェアやプログラミング、AIのことは書かないというルールがなんとなくあったのだが、このルール要らないのでは？と思ったので、そういうこともたまに書くことにしよう（そうしないと、ただ仕事して寝た。みたいな日に書くことがない）。</p>
+<p>久しぶりに「CPU Utilization is Wrong」という記事を読んだ。</p>
+<p><a href="https://www.brendangregg.com/blog/2017-05-09/cpu-utilization-is-wrong.html" rel="nofollow">https://www.brendangregg.com/blog/2017-05-09/cpu-utilization-is-wrong.html</a></p>
+<p>この記事は、昔読んだら意味がよくわからなかったんだが、今読んだらわかった。</p>
+<p>この記事が主張している点は以下だ。</p>
+<ul>
+<li>「CPU使用率」とは「CPUがアイドルでない時間」のことであり、「CPUが実際になんかの命令を実行している時間」ではない</li>
+<li>「CPUがアイドルでない時間」は、メモリアクセス待ちでCPUが遊んでいる時間も多い</li>
+<li>なので、CPUの稼働率をちゃんと上げるにはInstruction per cycleを計測して、低い場合はCPUキャッシュのチューニングをすると良い</li>
+</ul>
+<p>何故メモリアクセス待ちの時間が多く含まれてしまうかというと、CPUが進化したことによるものらしい。昔はプロセッサの性能が今ほど良くなく、キャッシュの階層も少ないし容量も小さかったため、メモリを待つ時間というのは微々たるものだった。これがCPUの進化により変わったということらしい。</p>
+<p>一方、これは現代の多くのプログラ厶には当てはまらない話だ。なぜかというと、現代の多くのアプリケーションはWebをはじめとした（クライアント・サーバシステムやデータベースも含めた）分散システムとして動くので、基本的にネットワークIOが支配的になる。またプログラミング言語がより高級になってきているので、キャッシュメモリのチューニングと言われても多くのプログラムでは特にできることはない。こういった話は暗号に関する処理やヘビーな機械学習など一部のワークロードに限られるだろう。</p>
+<p>そもそも現代はパブリッククラウドやコンテナ、サーバレスのせいで、Linuxのリソース管理は過度に抽象化され意味不明になりがちである。物理サーバにSSHしてロードアベレージを見るのが一番わかりやすくて良い。コンテナを辞めよう。</p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

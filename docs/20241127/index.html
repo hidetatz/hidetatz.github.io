@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>2024年11月27日 イテレーション</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="author" content="Hidetatz Yaginuma">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+
+  <style>
+    body {
+      box-sizing: border-box;
+      min-width: 200px;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+  </style>
+
+  <link href="/markdown.css" rel="stylesheet"></link>
+  <link href="/syntax.css" rel="stylesheet"></link>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>
+</head>
+<body class="markdown-body">
+<p><a href="/diary" rel="nofollow">&lt;- 日記</a></p>
+<h1>2024年11月27日 イテレーション</h1>
+<p>「開発イテレーション偏重」というすごく好きなブログが有る。</p>
+<p><a href="https://shinh.hatenablog.com/entry/2019/09/12/201335" rel="nofollow">https://shinh.hatenablog.com/entry/2019/09/12/201335</a></p>
+<p>開発イテレーションは単なるプログラミングの速さではない。プログラミングして、ビルドして、テストして、実行して、またプログラミングする、という一連のサイクルのことだ。</p>
+<p>この、サイクルを速く回すための設計とか工夫ってあまり言語化されてないというか、なんならわりと過小評価されてる印象がある。</p>
+<p>例えばプログラミングするときに、なんとか原則とかモジュールがどうこうとかはもちろん大事だし、そこは勝手に議論が始まるくらいの感じだと思う。でも、「どんなコードを書けばイテレーションが速くなるか」、逆に言うと「この書き方だとイテレーション速度が下がっちゃうから辞めよう」みたいな議論はあまりされてない気がする。されてないけどいちばん大事なのはここだよね、とけっこう本気で思っている。</p>
+<p>よくあるのはコード書いたらリモートにプッシュして、CICDが終わるまで実行できないとか、実行結果がわかりません、みたいなやつ。これってすごく無駄で、生産性に大ダメージを与える。こういうのを積極的に避けるような設計とかはすごく大事だと思う。</p>
+<p>プログラマはシステムの正しさについて考えるのが得意なことが多いが、正しさよりも大事なことはけっこうあると思われる。</p>
+
+<script src="/highlight.pack.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
