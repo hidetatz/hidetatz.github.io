@@ -267,7 +267,7 @@ class Blog:
         knowledges.sort(key=lambda knowledge: knowledge.timestamp, reverse=True)
         return knowledges
 
-    def generate_gh_pages(self):
+    def generate_docs(self):
         shutil.rmtree(self.root, ignore_errors=True)
 
         self.copy("robots.txt")
@@ -307,15 +307,5 @@ class Blog:
         Sitemap(articles).save_xml(f"{self.root}/sitemap.xml")
         AtomFeed(articles).save_xml(f"{self.root}/feed.xml")
 
-    def generate_and_push(self):
-        self.generate_gh_pages()
-
-        subprocess.run(["git", "config", "--global", "user.email", "hidetatz@gmail.com"])
-        subprocess.run(["git", "config", "--global", "user.name", "Hidetatz Yaginuma in CI"])
-        subprocess.run(["git", "add", self.root])
-        subprocess.run(["git", "commit", "-m", "update"])
-        subprocess.run(["git", "pull", "--rebase", "origin", "master"])
-        subprocess.run(["git", "push", "origin", "master"])
-
 if __name__ == "__main__":
-    Blog("docs", os.environ.get("GITHUB_TOKEN")).generate_and_push()
+    Blog("docs", os.environ.get("GITHUB_TOKEN")).generate_docs()
