@@ -1,3 +1,36 @@
+## 2025/03/18
+
+「How a Software Architect Uses Artificial Intelligence in His Daily Work」を読んだ。
+
+https://www.infoq.com/news/2025/02/software-architect-AI-LLM/
+
+ソフトウェアアーキテクトがAIを仕事でどう使っているか自体にはそんなに興味はないんだけど、次の部分に結構感銘を受けた。Poupkoというのは喋ってる人の名前。
+
+> Humans do not really have a language model, they have a world model, Poupko said. Humans have an understanding of the world that consists of an understanding of how the objects in the world behave, and how they interact with each other. That world model is the result of many experiences and interactions, Poupko explained:
+
+> When we use spoken and written language to communicate about the world, that is only one representation of the world model and a very limited representation at that.
+
+> While it is true that a great deal of world knowledge can be captured in texts and in words, other parts of our world knowledge and world understanding are based on experience and cannot be properly captured in words, Poupko said. This is particularly true with situations that are highly contextual and where the person present is aware of the context, but where not all the context is verbal, he added.
+
+人間は五感で世界を捉えるが、AIの世界はベクトルがすべてであって、この違いはもはや定義の問題に近い。LLMは賢く見えるけどやってることはトークンの予測でしかないというのは言うまでもなく真実だ。
+
+最近読んだ「Our interfaces have lost their senses」にも似たような印象を受けることが書いてあった。
+
+https://wattenberger.com/thoughts/our-interfaces-have-lost-their-senses
+
+というわけで、これからは五感の時代になる。スマホを捨てて、旅に出る時間だ。
+
+## 2025/03/17
+
+GitHubのweb版で日記がかけないのマジで困るのでサポートに問い合わせた。
+ブラウザ変えてもだめなんだよな。困った。サポートはいい人っぽい。
+
+NVIDIAのGPUのハードウェア的な構造についてまとめていて、だいぶまとまってきた感じがある。もう少しで公開できるはずだ、、
+ただワープスケジューラのあたりは調べてもちゃんとした情報が出てこないんだよな。
+ただ考えてみると、スレッドスケジューリングってGPUのパフォーマンスに直結する超大事な部分だからおいそれと公開しないのかもしれない。
+GPUをちゃんと勉強するとCPUとかマジでシンプルだなという気持ちになると同時に、これはスループット出るわけないよなとも思ってしまう。
+CPUが速いのはやっていることが少ないからで、GPUは色々やってる。
+
 ## 2025/03/16
 
 また急に寒くなって体調を崩しかける。
