@@ -16,7 +16,10 @@ from PIL import Image
 
 import template
 
-md = markdown.Markdown(extensions=["tables", "fenced_code", "mdx_linkify", "toc"])
+md = markdown.Markdown(
+                       extensions=["tables", "fenced_code", "mdx_linkify", "mdx_math", "toc"],
+                       extension_configs={"mdx_math": {"enable_dollar_delimiter":True}},
+                   )
 
 class Sitemap:
     def __init__(self, articles):
@@ -158,7 +161,6 @@ class Article(Entry):
     def to_html(self):
         t = string.Template(template.article_content)
         content = md.convert(t.substitute(title=self.title, timestamp=self.ts_display(), content=self.content))
-        content += '\n<p><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-via="hidetatz" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>'
         return content
 
 class Knowledge(Entry):

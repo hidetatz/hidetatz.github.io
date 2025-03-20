@@ -35,9 +35,7 @@ html_page = """<!doctype html>
 
   <link href="/markdown.css" rel="stylesheet"></link>
   <link href="/syntax.css" rel="stylesheet"></link>
-  <script type="text/javascript" async
-    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 </head>
 <body class="markdown-body">
 $body
