@@ -232,6 +232,9 @@ class Blog:
         return articles
 
     def create_knowledges(self):
+        if self.gh_token is None:
+            return []
+
         def fetch_all_issues(gh_token):
             issues = []
             page=1

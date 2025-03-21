@@ -28,13 +28,13 @@ READMEでも触れられているが、用途としてはDeepSeek-V3やR1など�
 これだけだとまあどうってことはないのだが、これをシンプルにC言語で実装しようとすると下記のようになる。
 
 ```c
-    for (int i = 0; i < M; i++) {       // Cの行
-        for (int j = 0; j < N; j++) {   // Cの列
-            for (int k = 0; k < K; k++) {  // 実際の各要素の計算
-                C[i][j] += A[i][k] * B[k][j];
-            }
+for (int i = 0; i < M; i++) {       // Cの行
+    for (int j = 0; j < N; j++) {   // Cの列
+        for (int k = 0; k < K; k++) {  // 実際の各要素の計算
+            C[i][j] += A[i][k] * B[k][j];
         }
     }
+}
 ```
 
 見ての通りの三重ループで、計算量は $O(n^3)$ (正方行列だとすると) の計算量になる。これが行列積はナイーブに実装すると計算量が多いと言われる理由だ。
@@ -63,13 +63,13 @@ CPU向けの行列積演算最適化の基本的な戦略としては、シン�
 コードを再掲する。
 
 ```c
-    for (int i = 0; i < M; i++) {       // 行列Cの行
-        for (int j = 0; j < N; j++) {   // 行列Cの列
-            for (int k = 0; k < K; k++) {  // 実際の各要素の計算
-                C[i][j] += A[i][k] * B[k][j];
-            }
+for (int i = 0; i < M; i++) {       // 行列Cの行
+    for (int j = 0; j < N; j++) {   // 行列Cの列
+        for (int k = 0; k < K; k++) {  // 実際の各要素の計算
+            C[i][j] += A[i][k] * B[k][j];
         }
     }
+}
 ```
 
 ループがi -> j -> kという順番になっている。一番内側がkのループになっていて、これは行列Aのi行目の列数であり、行列Bのj列目の行数である。当然だが、Cにセットする値を計算するとき、Aの各行・Bの各列はこのようにkに依存する形になる。
@@ -96,13 +96,13 @@ CPUでの行列積の最適化は基本的にこのような、メモリアク�
 この場合は、ループ交換で次のように最適化できる:
 
 ```c
-    for (int i = 0; i < M; i++) {       // 行列Cの行
-        for (int k = 0; k < K; k++) {  // 実際の各要素の計算
-            for (int j = 0; j < N; j++) {   // 行列Cの列
-                C[i][j] += A[i][k] * B[k][j];
-            }
+for (int i = 0; i < M; i++) {       // 行列Cの行
+    for (int k = 0; k < K; k++) {  // 実際の各要素の計算
+        for (int j = 0; j < N; j++) {   // 行列Cの列
+            C[i][j] += A[i][k] * B[k][j];
         }
     }
+}
 ```
 
 こうすると、Aは固定値なのでレジスタアクセス、B・Cについてキャッシュラインアクセスになる。
@@ -114,33 +114,33 @@ CPUでの行列積の最適化は基本的にこのような、メモリアク�
 例えば次のようなコードになる。
 
 ```
-    // 行のループ
-    for (int i = 0; i < M; ++i) {
+// 行のループ
+for (int i = 0; i < M; ++i) {
+    // 列のループ
+    for (int k = 0; k < K; k += 4) {
+        // Aの連続する4つの要素をレジスタに保持 これがレジスタブロッキング
+        // 4で割り切れない次元数を考慮している
+        float a0 = (k < K) ? A[i*K + k] : 0.0f;
+        float a1 = (k+1 < K) ? A[i*K + k+1] : 0.0f;
+        float a2 = (k+2 < K) ? A[i*K + k+2] : 0.0f;
+        float a3 = (k+3 < K) ? A[i*K + k+3] : 0.0f;
+        
         // 列のループ
-        for (int k = 0; k < K; k += 4) {
-            // Aの連続する4つの要素をレジスタに保持 これがレジスタブロッキング
-            // 4で割り切れない次元数を考慮している
-            float a0 = (k < K) ? A[i*K + k] : 0.0f;
-            float a1 = (k+1 < K) ? A[i*K + k+1] : 0.0f;
-            float a2 = (k+2 < K) ? A[i*K + k+2] : 0.0f;
-            float a3 = (k+3 < K) ? A[i*K + k+3] : 0.0f;
+        for (int j = 0; j < N; ++j) {
+            // Bへのアクセス
+            float b0 = (k < K) ? B[k*N + j] : 0.0f;
+            float b1 = (k+1 < K) ? B[(k+1)*N + j] : 0.0f;
+            float b2 = (k+2 < K) ? B[(k+2)*N + j] : 0.0f;
+            float b3 = (k+3 < K) ? B[(k+3)*N + j] : 0.0f;
             
-            // 列のループ
-            for (int j = 0; j < N; ++j) {
-                // Bへのアクセス
-                float b0 = (k < K) ? B[k*N + j] : 0.0f;
-                float b1 = (k+1 < K) ? B[(k+1)*N + j] : 0.0f;
-                float b2 = (k+2 < K) ? B[(k+2)*N + j] : 0.0f;
-                float b3 = (k+3 < K) ? B[(k+3)*N + j] : 0.0f;
-                
-                // Cにセット
-                C[i*N + j] += a0 * b0;
-                C[i*N + j] += a1 * b1;
-                C[i*N + j] += a2 * b2;
-                C[i*N + j] += a3 * b3;
-            }
+            // Cにセット
+            C[i*N + j] += a0 * b0;
+            C[i*N + j] += a1 * b1;
+            C[i*N + j] += a2 * b2;
+            C[i*N + j] += a3 * b3;
         }
     }
+}
 ```
 
 ループを4つずつにアンロールしながら、Aをレジスタブロッキングしつつ処理している。これはCの各行を左から右へ処理しているが、元のコードとは異なりAの各要素を保持するメモリ/キャッシュ参照が不要で、レジスタ参照ができるようになっているイメージ。
@@ -153,69 +153,67 @@ CPUでの行列積の最適化は基本的にこのような、メモリアク�
 ブロッキングサイズは、演算対象のデータの大きさと、使いたいCPUのキャッシュメモリのサイズ、そして計算したい行列の大きさによって決めることになる。具体的なコードはこんな感じになる。
 
 ```c
-    // L3キャッシュブロッキング
-    const int BL3_M = 128;
-    const int BL3_K = 128;
-    const int BL3_N = 256;
-    
-    // L2キャッシュブロッキング
-    const int BL2_M = 64; 
-    const int BL2_K = 64; 
-    const int BL2_N = 128;
-    
-    // L1キャッシュブロッキング
-    const int BL1_M = 16;
-    const int BL1_K = 16;
-    const int BL1_N = 32;
-    
-    // レジスタブロッキング
-    const int REG_K = 4;
+// L3キャッシュブロッキング
+const int BL3_M = 128;
+const int BL3_K = 128;
+const int BL3_N = 256;
 
-    // L3キャッシュブロッキング
-    for (int i3 = 0; i3 < M; i3 += BL3_M) {
-        for (int k3 = 0; k3 < K; k3 += BL3_K) {
-            for (int j3 = 0; j3 < N; j3 += BL3_N) {
-                // L3ブロックのサイズ制限
-                int i3_end = std::min(i3 + BL3_M, M);
-                int k3_end = std::min(k3 + BL3_K, K);
-                int j3_end = std::min(j3 + BL3_N, N);
-                
-                // L2キャッシュブロッキング
-                for (int i2 = i3; i2 < i3_end; i2 += BL2_M) {
-                    for (int k2 = k3; k2 < k3_end; k2 += BL2_K) {
-                        for (int j2 = j3; j2 < j3_end; j2 += BL2_N) {
-                            // L2ブロックのサイズ制限
-                            int i2_end = std::min(i2 + BL2_M, i3_end);
-                            int k2_end = std::min(k2 + BL2_K, k3_end);
-                            int j2_end = std::min(j2 + BL2_N, j3_end);
-                            
-                            // L1キャッシュブロッキング
-                            for (int i1 = i2; i1 < i2_end; i1 += BL1_M) {
-                                for (int k1 = k2; k1 < k2_end; k1 += BL1_K) {
-                                    for (int j1 = j2; j1 < j2_end; j1 += BL1_N) {
-                                        // L1ブロックのサイズ制限
-                                        int i1_end = std::min(i1 + BL1_M, i2_end);
-                                        int k1_end = std::min(k1 + BL1_K, k2_end);
-                                        int j1_end = std::min(j1 + BL1_N, j2_end);
-                                        
-                                        // 実際の計算
-                                        for (int i = i1; i < i1_end; ++i) {
-                                            // k方向のレジスタブロッキング
-                                            for (int k = k1; k < k1_end; k += REG_K) {
-                                                int k_limit = std::min(k + REG_K, k1_end);
-                                                
-                                                // Aをレジスタに保持
-                                                float a_reg[REG_K];
+// L2キャッシュブロッキング
+const int BL2_M = 64;
+const int BL2_K = 64;
+const int BL2_N = 128;
+
+// L1キャッシュブロッキング
+const int BL1_M = 16;
+const int BL1_K = 16;
+const int BL1_N = 32;
+
+// レジスタブロッキング
+const int REG_K = 4;
+// L3キャッシュブロッキング
+for (int i3 = 0; i3 < M; i3 += BL3_M) {
+    for (int k3 = 0; k3 < K; k3 += BL3_K) {
+        for (int j3 = 0; j3 < N; j3 += BL3_N) {
+            // L3ブロックのサイズ制限
+            int i3_end = std::min(i3 + BL3_M, M);
+            int k3_end = std::min(k3 + BL3_K, K);
+            int j3_end = std::min(j3 + BL3_N, N);
+
+            // L2キャッシュブロッキング
+            for (int i2 = i3; i2 < i3_end; i2 += BL2_M) {
+                for (int k2 = k3; k2 < k3_end; k2 += BL2_K) {
+                    for (int j2 = j3; j2 < j3_end; j2 += BL2_N) {
+                        // L2ブロックのサイズ制限
+                        int i2_end = std::min(i2 + BL2_M, i3_end);
+                        int k2_end = std::min(k2 + BL2_K, k3_end);
+                        int j2_end = std::min(j2 + BL2_N, j3_end);
+
+                        // L1キャッシュブロッキング
+                        for (int i1 = i2; i1 < i2_end; i1 += BL1_M) {
+                            for (int k1 = k2; k1 < k2_end; k1 += BL1_K) {
+                                for (int j1 = j2; j1 < j2_end; j1 += BL1_N) {
+                                    // L1ブロックのサイズ制限
+                                    int i1_end = std::min(i1 + BL1_M, i2_end);
+                                    int k1_end = std::min(k1 + BL1_K, k2_end);
+                                    int j1_end = std::min(j1 + BL1_N, j2_end);
+
+                                    // 実際の計算
+                                    for (int i = i1; i < i1_end; ++i) {
+                                        // k方向のレジスタブロッキング
+                                        for (int k = k1; k < k1_end; k += REG_K) {
+                                            int k_limit = std::min(k + REG_K, k1_end);
+
+                                            // Aをレジスタに保持
+                                            float a_reg[REG_K];
+                                            for (int kr = 0; kr < REG_K && k + kr < k_limit; ++kr) {
+                                                a_reg[kr] = A[i*K + (k + kr)];
+                                            }
+
+                                            // B, Cにアクセスするループ
+                                            for (int j = j1; j < j1_end; ++j) {
+                                                // 4つの乗算を同時に行い、結果を累積
                                                 for (int kr = 0; kr < REG_K && k + kr < k_limit; ++kr) {
-                                                    a_reg[kr] = A[i*K + (k + kr)];
-                                                }
-                                                
-                                                // B, Cにアクセスするループ
-                                                for (int j = j1; j < j1_end; ++j) {
-                                                    // 4つの乗算を同時に行い、結果を累積
-                                                    for (int kr = 0; kr < REG_K && k + kr < k_limit; ++kr) {
-                                                        C[i*N + j] += a_reg[kr] * B[(k + kr)*N + j];
-                                                    }
+                                                    C[i*N + j] += a_reg[kr] * B[(k + kr)*N + j];
                                                 }
                                             }
                                         }
@@ -228,6 +226,7 @@ CPUでの行列積の最適化は基本的にこのような、メモリアク�
             }
         }
     }
+}
 ```
 
 i3, k3, j3のループがL3キャッシュのブロッキング、i2, k2, j2のループがL2キャッシュのブロッキング、i1, j1, k1のループがL1キャッシュのブロッキングをそれぞれするためのストリップマイニングになる。だいぶややこしいコードになっているが行列積だと割とよく見る見た目のコードではある。
@@ -333,7 +332,7 @@ GPUはSIMT (Single Instruction, Multiple Threads) と言って、同じ命令を
 
 つまり、GPUは「同じ関数を複数のスレッドで動かすもの」であり、この点は単なるマルチコアCPUと大きく異なる。実際はパラメータを変えながらマルチスレッドしたいわけだが、この辺は、各スレッドで、自分自身のスレッド全体の中でのインデックスが取得できるので、それを使って処理を分ける感じになる。
 
-例えば、長さ3のベクトル $A = (a_1, a_2, a_3)$ と $B = (b_1, b_2, b_3)$を足したいとき、CPUでは
+例えば、長さ3のベクトル $A = (a_1, a_2, a_3)$ と $B = (b_1, b_2, b_3)$ を足したいとき、CPUでは
 
 ```c
 void func(int* c) {
@@ -755,12 +754,12 @@ __global__ void matmul(float *A, float *B, float *C) {
 このカーネルは、無関係な部分を省くと次のように呼び出す。
 
 ```c
-    // ブロックとグリッドの次元を設定
-    dim3 threadsPerBlock(16, 16);
-    dim3 numBlocks(64, 64);
-    
-    // カーネルの実行
-    matmul<<<numBlocks, threadsPerBlock>>>(A, B, C);
+// ブロックとグリッドの次元を設定
+dim3 threadsPerBlock(16, 16);
+dim3 numBlocks(64, 64);
+
+// カーネルの実行
+matmul<<<numBlocks, threadsPerBlock>>>(A, B, C);
 ```
 
 行列の次元数は1024の平方行列を想定していると思って見てほしい。このカーネルの方針は、1024 x 1024の行列Cの各要素を、1つのスレッドが担当して計算する、というものだ。
@@ -770,8 +769,8 @@ matmulがカーネルだ。関数定義に `__global__` とついているが、
 今回、呼び出し時にはブロックを (x=64、y=64) 、スレッドを (x=16、y=16) で指定している。
 このように、スレッドやブロックはx, yが指定でき、zまでの最大3次元で指定が可能。
 
-このとき、スレッドは $(x=0, y=0), (x=0, y=1), ... (x=0, y=15), (x=1, y=0), (x=1, y=1), ... (x=15, y=15)$ のような形で、合計が256スレッドになる。
-これを (x=256) と、yを指定しない形で呼び出した場合、 $(x=0), (x=1), ... (x=255)$ のようにスレッドが作られる。
+このとき、スレッドは $$(x=0, y=0), (x=0, y=1), ... (x=0, y=15), (x=1, y=0), (x=1, y=1), ... (x=15, y=15)$$ のような形で、合計が256スレッドになる。
+これを (x=256) と、yを指定しない形で呼び出した場合、 $$(x=0), (x=1), ... (x=255)$$ のようにスレッドが作られる。
 
 この256スレッドが、同様の計算で64 * 64の合計4096ブロック分作られる。
 
@@ -779,8 +778,8 @@ matmulがカーネルだ。関数定義に `__global__` とついているが、
 その処理が以下の部分だ。
 
 ```c
-    int row = blockIdx.y * blockDim.y + threadIdx.y;
-    int col = blockIdx.x * blockDim.x + threadIdx.x;
+int row = blockIdx.y * blockDim.y + threadIdx.y;
+int col = blockIdx.x * blockDim.x + threadIdx.x;
 ```
 
 `blockIdx` はブロックのインデックス、 `blockDim` はブロックの次元数、 `threadIdx` はブロックの中におけるスレッドのインデックスだ。今回は2次元で指定しているので、インデックスも2次元になる。
@@ -986,71 +985,65 @@ READMEにもあるのだが、パイプライン化のイメージはこんな�
 実際には、[ここ](https://github.com/deepseek-ai/DeepGEMM/blob/main/deep_gemm/include/deep_gemm/fp8_gemm.cuh#L151)にあるifの中身がロード担当のワープ、elseの中身が計算担当のワープのパスだ。
 
 ```c
-    if (threadIdx.x >= kNumMathThreads) {
-        // TMA warp-group for loading data
-        cutlass::arch::warpgroup_reg_dealloc<kNumTMARegisters>();
-
-        // NOTES: only one thread (or warp) will be used
-        if (threadIdx.x == kNumMathThreads) {
-            // Persistently schedule over blocks
-            while (scheduler.get_next_block(m_block_idx, n_block_idx)) {
-                launch_k_iterations([&](int k_iter, auto type) {
-                    constexpr bool kHasDivisibleStages = std::is_same_v<decltype(type), DivisibleK>;
-                    constexpr int kNumInnerStages = kHasDivisibleStages ? kNumStages : (SHAPE_K % kFullKOfAllStages) / BLOCK_K;
-                    DG_STATIC_ASSERT(kNumInnerStages != 0, "Invalid number of inner stages");
-
-                    // NOTES: unrolling and `kNumInnerStages` are vital for performance, NVCC will try to eliminate all
-                    // shared memory pointers, e.g. `full_barriers` registers, if all the access indices are constant
-                    #pragma unroll
-                    for (uint32_t s = 0; s < kNumInnerStages; ++ s) {
-                        // Wait consumer release
-                        empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + k_iter + 1) & 1);
-
-                        // Issue TMA A with broadcasting
-                        auto& full_barrier = *full_barriers[s];
-                        int k_idx = k_iter * kFullKOfAllStages + s * BLOCK_K;
-                        tma_copy<kNumTMAMulticast>(&tensor_map_a, reinterpret_cast<uint64_t*>(&full_barrier),
-                                                   smem_a[s], k_idx, scheduler.get_global_idx(shape_m, BLOCK_M, m_block_idx));
-                        tma_copy<kNumTMAMulticast>(&tensor_map_scales_a, reinterpret_cast<uint64_t*>(&full_barrier),
-                                                   smem_scales_a[s], m_block_idx * BLOCK_M,
-                                                   scheduler.get_global_idx(SHAPE_K_SCALES, 1, k_idx / BLOCK_K));
-
-                        // Issue TMA B without broadcasting
-                        tma_copy(&tensor_map_b, reinterpret_cast<uint64_t*>(&full_barrier),
-                                 smem_b[s], k_idx, scheduler.get_global_idx<false>(SHAPE_N, BLOCK_N, n_block_idx, m_block_idx));
-                        full_barrier.arrive_and_expect_tx(SMEM_A_SIZE_PER_STAGE + SMEM_B_SIZE_PER_STAGE + SMEM_SCALES_A_SIZE_PER_STAGE);
-                    }
-
-                    // Wait unaligned cases
-                    #pragma unroll
-                    for (uint32_t s = kNumInnerStages; s < kNumStages; ++ s) {
-                        empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + k_iter + 1) & 1);
-                        full_barriers[s]->arrive();
-                    }
-                });
-            }
-
-            // To safely deconstruct distributed shared barriers, we need another round of empty waits
-            if constexpr (kNumTMAMulticast > 1) {
+if (threadIdx.x >= kNumMathThreads) {
+    // TMA warp-group for loading data
+    cutlass::arch::warpgroup_reg_dealloc<kNumTMARegisters>();
+    // NOTES: only one thread (or warp) will be used
+    if (threadIdx.x == kNumMathThreads) {
+        // Persistently schedule over blocks
+        while (scheduler.get_next_block(m_block_idx, n_block_idx)) {
+            launch_k_iterations([&](int k_iter, auto type) {
+                constexpr bool kHasDivisibleStages = std::is_same_v<decltype(type), DivisibleK>;
+                constexpr int kNumInnerStages = kHasDivisibleStages ? kNumStages : (SHAPE_K % kFullKOfAllStages) / BLOCK_K;
+                DG_STATIC_ASSERT(kNumInnerStages != 0, "Invalid number of inner stages");
+                // NOTES: unrolling and `kNumInnerStages` are vital for performance, NVCC will try to eliminate all
+                // shared memory pointers, e.g. `full_barriers` registers, if all the access indices are constant
                 #pragma unroll
-                for (uint32_t s = 0; s < kNumStages; ++ s)
-                    empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + 1) & 1);
-            }
+                for (uint32_t s = 0; s < kNumInnerStages; ++ s) {
+                    // Wait consumer release
+                    empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + k_iter + 1) & 1);
+                    // Issue TMA A with broadcasting
+                    auto& full_barrier = *full_barriers[s];
+                    int k_idx = k_iter * kFullKOfAllStages + s * BLOCK_K;
+                    tma_copy<kNumTMAMulticast>(&tensor_map_a, reinterpret_cast<uint64_t*>(&full_barrier),
+                                               smem_a[s], k_idx, scheduler.get_global_idx(shape_m, BLOCK_M, m_block_idx));
+                    tma_copy<kNumTMAMulticast>(&tensor_map_scales_a, reinterpret_cast<uint64_t*>(&full_barrier),
+                                               smem_scales_a[s], m_block_idx * BLOCK_M,
+                                               scheduler.get_global_idx(SHAPE_K_SCALES, 1, k_idx / BLOCK_K));
+                    // Issue TMA B without broadcasting
+                    tma_copy(&tensor_map_b, reinterpret_cast<uint64_t*>(&full_barrier),
+                             smem_b[s], k_idx, scheduler.get_global_idx<false>(SHAPE_N, BLOCK_N, n_block_idx, m_block_idx));
+                    full_barrier.arrive_and_expect_tx(SMEM_A_SIZE_PER_STAGE + SMEM_B_SIZE_PER_STAGE + SMEM_SCALES_A_SIZE_PER_STAGE);
+                }
+                // Wait unaligned cases
+                #pragma unroll
+                for (uint32_t s = kNumInnerStages; s < kNumStages; ++ s) {
+                    empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + k_iter + 1) & 1);
+                    full_barriers[s]->arrive();
+                }
+            });
         }
-    } else {
-        ...
+        // To safely deconstruct distributed shared barriers, we need another round of empty waits
+        if constexpr (kNumTMAMulticast > 1) {
+            #pragma unroll
+            for (uint32_t s = 0; s < kNumStages; ++ s)
+                empty_barriers[s]->wait((scheduler.current_iter * kNumIterations + 1) & 1);
+        }
+    }
+} else {
+    ...
 ```
 
 `tma_copy` を使ってTMAでグローバルメモリから、確保済みの共有メモリにデータをロードしている。このとき、 `tensor_map_` とつく変数を渡しているのだが、これは確保済みのTMAディスクリプタだ。
 
 ```c
-    // Prefetch TMA descriptors at very beginning
-    if (threadIdx.x == kNumMathThreads) {
-        cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_a));
-        cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_b));
-        cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_scales_a));
-        cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_d));
-    }
+// Prefetch TMA descriptors at very beginning
+if (threadIdx.x == kNumMathThreads) {
+    cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_a));
+    cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_b));
+    cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_scales_a));
+    cute::prefetch_tma_descriptor(reinterpret_cast<cute::TmaDescriptor const*>(&tensor_map_d));
+}
 ```
 
 TMAディスクリプタはデータレイアウトなどテンソルの情報を記述するデータ構造なのだが、これは上の方で既にL1キャッシュにプリフェッチされている。
@@ -1072,16 +1065,16 @@ full_barrierと、少し下にempty_barrierがある。これはキューみた�
 まず以下のコード:
 
 ```c
-            // Load B scales with math warp-groups
-            // NOTES: except the first warp, we want to overlap loading B scales with TMA stores between tasks
-            if (threadIdx.x >= 32) {
-                auto num_previous_lines = scheduler.get_global_idx<false>(ceil_div(SHAPE_N, BLOCK_K), 0, 0, m_block_idx);
-                auto local_scales_b = scales_b + (num_previous_lines + ((n_block_idx * BLOCK_N) / BLOCK_K)) * SHAPE_K_SCALES;
-                #pragma unroll
-                for (uint32_t i = threadIdx.x - 32; i < num_scales_b; i += kNumMathThreads - 32)
-                    st_shared(smem_scales_b + i, __ldg(local_scales_b + i));
-            }
-            cutlass::arch::NamedBarrier(kNumMathThreads).sync();
+// Load B scales with math warp-groups
+// NOTES: except the first warp, we want to overlap loading B scales with TMA stores between tasks
+if (threadIdx.x >= 32) {
+    auto num_previous_lines = scheduler.get_global_idx<false>(ceil_div(SHAPE_N, BLOCK_K), 0, 0, m_block_idx);
+    auto local_scales_b = scales_b + (num_previous_lines + ((n_block_idx * BLOCK_N) / BLOCK_K)) * SHAPE_K_SCALES;
+    #pragma unroll
+    for (uint32_t i = threadIdx.x - 32; i < num_scales_b; i += kNumMathThreads - 32)
+        st_shared(smem_scales_b + i, __ldg(local_scales_b + i));
+}
+cutlass::arch::NamedBarrier(kNumMathThreads).sync();
 ```
 
 上で少し触れたが、Bのスケーリング係数はTMAでロードせずに、計算担当のワープが自前で共有メモリから取り出している。
@@ -1108,36 +1101,35 @@ wmmaという、テンソルコアを直接使うAPIがあるのだが、wgmma�
 その後、以下で共有メモリに書き戻し、その後TMAでグローバルメモリに書き戻す、という流れだ。
 
 ```c
-            // Write back to shared memory using STSM
-            DG_STATIC_ASSERT(WGMMA::kNumAccum % 4 == 0, "Invalid STSM x2 vectorization");
-            #pragma unroll
-            for (auto i = 0; i < WGMMA::kNumAccum / 8; ++ i) {
-                SM90_U32x4_STSM_N<nv_bfloat162>::copy(
-                    __float22bfloat162_rn({final_accum[i * 8 + 0], final_accum[i * 8 + 1]}),
-                    __float22bfloat162_rn({final_accum[i * 8 + 2], final_accum[i * 8 + 3]}),
-                    __float22bfloat162_rn({final_accum[i * 8 + 4], final_accum[i * 8 + 5]}),
-                    __float22bfloat162_rn({final_accum[i * 8 + 6], final_accum[i * 8 + 7]}),
-                    smem_d + (warp_idx * 16 + lane_idx % 16) * BLOCK_N + i * 16 + 8 * (lane_idx / 16)
-                );
-            }
-            if constexpr (WGMMA::kNumAccum % 8 != 0) {
-                SM90_U32x2_STSM_N<nv_bfloat162>::copy(
-                    __float22bfloat162_rn({final_accum[WGMMA::kNumAccum / 8 * 8 + 0], final_accum[WGMMA::kNumAccum / 8 * 8 + 1]}),
-                    __float22bfloat162_rn({final_accum[WGMMA::kNumAccum / 8 * 8 + 2], final_accum[WGMMA::kNumAccum / 8 * 8 + 3]}),
-                    smem_d + (warp_idx * 16 + lane_idx % 16) * BLOCK_N + WGMMA::kNumAccum / 8 * 16
-                );
-            }
-            cute::tma_store_fence();
-            cutlass::arch::NamedBarrier(kNumMathThreads).sync();
-
-            // Use TMA store to write back to global memory
-            if (threadIdx.x == 0) {
-                cute::SM90_TMA_STORE_2D::copy(&tensor_map_d, smem_d, n_block_idx * BLOCK_N,
-                                              scheduler.get_global_idx(shape_m, BLOCK_M, m_block_idx));
-                cute::tma_store_arrive();
-                cute::tma_store_wait<0>();
-            }
-            __syncwarp();
+// Write back to shared memory using STSM
+DG_STATIC_ASSERT(WGMMA::kNumAccum % 4 == 0, "Invalid STSM x2 vectorization");
+#pragma unroll
+for (auto i = 0; i < WGMMA::kNumAccum / 8; ++ i) {
+    SM90_U32x4_STSM_N<nv_bfloat162>::copy(
+        __float22bfloat162_rn({final_accum[i * 8 + 0], final_accum[i * 8 + 1]}),
+        __float22bfloat162_rn({final_accum[i * 8 + 2], final_accum[i * 8 + 3]}),
+        __float22bfloat162_rn({final_accum[i * 8 + 4], final_accum[i * 8 + 5]}),
+        __float22bfloat162_rn({final_accum[i * 8 + 6], final_accum[i * 8 + 7]}),
+        smem_d + (warp_idx * 16 + lane_idx % 16) * BLOCK_N + i * 16 + 8 * (lane_idx / 16)
+    );
+}
+if constexpr (WGMMA::kNumAccum % 8 != 0) {
+    SM90_U32x2_STSM_N<nv_bfloat162>::copy(
+        __float22bfloat162_rn({final_accum[WGMMA::kNumAccum / 8 * 8 + 0], final_accum[WGMMA::kNumAccum / 8 * 8 + 1]}),
+        __float22bfloat162_rn({final_accum[WGMMA::kNumAccum / 8 * 8 + 2], final_accum[WGMMA::kNumAccum / 8 * 8 + 3]}),
+        smem_d + (warp_idx * 16 + lane_idx % 16) * BLOCK_N + WGMMA::kNumAccum / 8 * 16
+    );
+}
+cute::tma_store_fence();
+cutlass::arch::NamedBarrier(kNumMathThreads).sync();
+// Use TMA store to write back to global memory
+if (threadIdx.x == 0) {
+    cute::SM90_TMA_STORE_2D::copy(&tensor_map_d, smem_d, n_block_idx * BLOCK_N,
+                                  scheduler.get_global_idx(shape_m, BLOCK_M, m_block_idx));
+    cute::tma_store_arrive();
+    cute::tma_store_wait<0>();
+}
+__syncwarp();
 ```
 
 このように、パイプラインを組んでTMAするワープグループと計算するワープグループに分かれることで、CPUのようなオーバーラッピングを実現している。
@@ -1154,18 +1146,17 @@ wmmaという、テンソルコアを直接使うAPIがあるのだが、wgmma�
 これは結局は[get_swizzled_block_idx](https://github.com/deepseek-ai/DeepGEMM/blob/main/deep_gemm/include/deep_gemm/scheduler.cuh#L45-L56)を呼び出してそれを返している。
 
 ```c
-    __device__ __forceinline__ void get_swizzled_block_idx(const uint32_t num_m_blocks, int block_idx, uint32_t& m_block_idx, uint32_t& n_block_idx) {
-        DG_STATIC_ASSERT(kNumNBlocksPerGroup % kNumTMAMulticast == 0, "Invalid group size");
-
-        // Swizzle for better L2 usages
-        auto num_blocks_per_group = num_m_blocks * kNumNBlocksPerGroup;
-        auto group_idx = block_idx / num_blocks_per_group;
-        auto first_n_block_idx = group_idx * kNumNBlocksPerGroup;
-        auto num_n_blocks_in_group = min(kNumNBlocksPerGroup, kNumNBlocks - first_n_block_idx);
-        auto in_group_idx = block_idx % num_blocks_per_group;
-        m_block_idx = in_group_idx / num_n_blocks_in_group;
-        n_block_idx = first_n_block_idx + in_group_idx % num_n_blocks_in_group;
-    }
+__device__ __forceinline__ void get_swizzled_block_idx(const uint32_t num_m_blocks, int block_idx, uint32_t& m_block_idx, uint32_t& n_block_idx) {
+    DG_STATIC_ASSERT(kNumNBlocksPerGroup % kNumTMAMulticast == 0, "Invalid group size");
+    // Swizzle for better L2 usages
+    auto num_blocks_per_group = num_m_blocks * kNumNBlocksPerGroup;
+    auto group_idx = block_idx / num_blocks_per_group;
+    auto first_n_block_idx = group_idx * kNumNBlocksPerGroup;
+    auto num_n_blocks_in_group = min(kNumNBlocksPerGroup, kNumNBlocks - first_n_block_idx);
+    auto in_group_idx = block_idx % num_blocks_per_group;
+    m_block_idx = in_group_idx / num_n_blocks_in_group;
+    n_block_idx = first_n_block_idx + in_group_idx % num_n_blocks_in_group;
+}
 ```
 
 ここでは、m_block_idxとn_block_idxのポインタに適切な値をセットするのが目的なのだが、block_idxを受け取ってそれで行列上のどのブロックを計算させたいかを決定している。このとき、近いブロックが近いメモリになるようにしつつ、mとnからなる行列が、縦長でも横長でもなくいい感じの二次元になるようにしている。これをすると、近いブロックが近いデータを扱うようになるので、L2キャッシュにデータが残っている確率が高くなる。つまり空間的局所性を向上している。
