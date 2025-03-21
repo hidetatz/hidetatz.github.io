@@ -131,6 +131,8 @@ class Article(Entry):
             self.filename_no_ext, _ = os.path.splitext(os.path.basename(f.name))
             lines = f.read().splitlines()
 
+        self.url = None
+
         self.content = []
         in_front_matter = True
         for line in lines:
@@ -150,12 +152,17 @@ class Article(Entry):
                 elif key == "lang":
                     self.lang = val
 
+                elif key == "url":
+                    self.url = val
+
             else:
                 self.content.append(line)
 
         super().__init__(title, timestamp, "\n".join(self.content))
 
     def url_path(self): 
+        if self.url is not None:
+            return self.url
         return f"/{self.filename_no_ext}"
 
     def to_html(self):
