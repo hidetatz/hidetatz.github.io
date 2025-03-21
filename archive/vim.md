@@ -4,7 +4,7 @@ lang: ja
 ---
 
 筆者はvimを使い始めて10年弱くらい経ちますが、未だにvimへの習熟度は、感覚的には50%くらいではないかなと思っています。もしかしたらもっと低いのかもしれない。使い始めた頃は、インターネット上のvimrcをコピペし、プラグインマネージャーの使い方を頑張って読んだりしていましたが、最近はvim本来のパワフルな機能をもっと活用することに興味があります。プラグインが良いものであることは知っていますが、ラップトップのvim周辺をシンプルに保つことは私の嗜好に合っていると感じています。
-筆者のvimrcは[こんな感じ](https://gist.github.com/hidetatz/32fba337b62e81953056da6a028bd919#file-vimrc)です。
+筆者のvimrcは[こんな感じ](https://gist.github.com/hidetatz/32fba337b62e81953056da6a028bd919/revisions#diff-7b703895bd6083d95820fd09acf991e47e2a9dc7822d0dbfdb54d7f4486eb1af)です。
 
 ```vimscript
 filetype plugin indent on
