@@ -394,7 +394,7 @@ NVIDIAのGPUはこの、ブランド、アーキテクチャ、そしてその�
 
 次に、NVIDIAのGPUの基本構造と概念について見ていく。コンピュータの仕組みを知らないとCがわからないのと同じで、GPUハードウェアのことを知らないとGPUプログラミングのことはちゃんとわからないと思っている。
 
-![Image](https://github.com/user-attachments/assets/d4c14b6c-2ad1-44f8-a5c7-3e6a0d2a4099)
+![Image](https://github.com/user-attachments/assets/164f1b87-ed53-4596-aab1-2ec3944147ab)
 
 _図1: NVIDIA GPUの基本構造_
 
