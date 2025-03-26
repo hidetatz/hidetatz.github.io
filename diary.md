@@ -1,6 +1,6 @@
 ## 2025/03/26
 
-https://huggingface.co/spaces/nanotron/ultrascale-playbook?section=high_level_overview
+https://huggingface.co/spaces/nanotron/ultrascale-playbook
 
 huggingfaceのLLM学習のドキュメント、長すぎて笑った。京極夏彦か？
 
