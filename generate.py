@@ -288,17 +288,11 @@ class Blog:
         self.copy("highlight.pack.js")
         self.copy("favicon.ico")
 
-        # Create each article/diary pages.
+        # Create each article page
 
         articles = self.create_articles()
         knowledges = self.create_knowledges()
 
-        with open("diary.md") as f:
-            diary = f.read()
-
-        self.save(f"{self.root}/diary/index.html", self.md_as_html("diary | hidetatz.github.io", diary))
-
-        # Create index pages.
 
         article_links = []
         for article in articles:
@@ -307,6 +301,18 @@ class Blog:
         knowledge_links = []
         for knowledge in knowledges:
             knowledge_links.append(f"[{knowledge.title}]({knowledge.url_path()})  ")
+
+        # diary page
+        with open("diary.md") as f:
+            diary = f.read()
+        self.save(f"{self.root}/diary/index.html", self.tmpl_md_as_html("diary | hidetatz.github.io", template.diary_index_page_md, content=diary))
+
+        # ramen page
+        with open("ramen.md") as f:
+            ramen = f.read()
+        self.save(f"{self.root}/ramen/index.html", self.tmpl_md_as_html("ramen | hidetatz.github.io", template.ramen_index_page_md, content=ramen))
+
+        # Create index pages.
 
         index = self.tmpl_md_as_html("hidetatz.github.io", template.index_page_md, articles="\n".join(article_links), knowledges="\n".join(knowledge_links))
         self.save(f"{self.root}/index.html", index)

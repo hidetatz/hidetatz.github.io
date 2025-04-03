@@ -90,27 +90,23 @@ $articles
 
 $knowledges
 
+## 趣味
+
 [日記](/diary)
+
+[ひでたつのインスタントラーメンブログ](/ramen)
 
 ---
 
-© 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
-
-diary_content = """[<- 日記](/diary)
-    
-# $title
-
-$content"""
+© 2025 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
 
 diary_index_page_md = """[<- ホーム](/)
 
-日記です。  
+$content"""
 
-$diaries
+ramen_index_page_md = """[<- ホーム](/)
 
----
-
-© 2024 Hidetatz Yaginuma. Unless otherwise noted, these posts are made available under a [Creative Commons Attribution License](https://creativecommons.org/licenses/by/4.0/)."""
+$content"""
 
 knowledge_content = """[<- ホーム](/)
     
