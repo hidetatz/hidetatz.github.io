@@ -1,3 +1,22 @@
+## 2025/04/05
+
+![1743818277459](https://github.com/user-attachments/assets/b3f10f30-9bb8-436e-9511-2c02e2c0ee72)
+
+絢爛と咲く桜。家の近く。
+
+久しぶりに「このテープ持ってないですか」を見て、やはり秀逸だなと思った。映像が怖すぎ。
+
+今更CUDAがPythonをサポートするというのを知った。
+
+https://thenewstack.io/nvidia-finally-adds-native-python-support-to-cuda/
+
+実際はこの辺っぽい。
+
+https://github.com/NVIDIA/cuda-python?tab=readme-ov-file
+https://docs.nvidia.com/cuda/nvmath-python/latest/
+
+これでPyTorchのコードとかも大きく変わるのだろうか。
+
 ## 2025/04/04
 
 銭湯に行ったんだが、帰りに暗くて見えないところで段差を踏み外して足首を痛めてしまった。痛かった。湿布貼ってる。悲しすぎるミス。何も書く気にならない。
