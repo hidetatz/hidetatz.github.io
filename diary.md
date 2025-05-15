@@ -1,3 +1,10 @@
+## 2025/05/15
+
+![PXL_20250515_012925415](https://github.com/user-attachments/assets/4206b0e3-c04a-4785-ba56-8c6a69610b92)
+
+おしゃれなラーメン食べた。
+トマトのラーメンって、食べるとすごい美味しいんだけどなかなか自分では店で頼みにくい。頼みにくいというかそもそも店を選択しにくい。昼飯をトマトラーメン屋に費やす勇気があれば。
+
 ## 2025/05/14
 
 テキストエディタがだんだん複雑になってきており、「A complex system that works is invariably found to have evolved from a simple system that worked.」を感じている。
