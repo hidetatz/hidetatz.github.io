@@ -308,9 +308,13 @@ class Blog:
         self.save(f"{self.root}/diary/index.html", self.tmpl_md_as_html("diary | hidetatz.github.io", template.diary_index_page_md, content=diary))
 
         # ramen page
-        with open("ramen.md") as f:
-            ramen = f.read()
-        self.save(f"{self.root}/ramen/index.html", self.tmpl_md_as_html("ramen | hidetatz.github.io", template.ramen_index_page_md, content=ramen))
+        # with open("ramen.md") as f:
+        #     ramen = f.read()
+        # self.save(f"{self.root}/ramen/index.html", self.tmpl_md_as_html("ramen | hidetatz.github.io", template.ramen_index_page_md, content=ramen))
+
+        with open("static/putt.html") as f:
+            putt = f.read()
+        self.save(f"{self.root}/putt/index.html", putt)
 
         # Create index pages.
 

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>パットシミュレーター</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green-dark: #1b5e22;
+    --green-mid:  #236b2b;
+    --page-bg:    #edeae4;
+    --card-bg:    #fff;
+    --text:       #1a1a1a;
+    --muted:      #777;
+    --border:     rgba(0,0,0,0.09);
+    --ruler-bg:   #f5f0e8;
+    --ruler-text: #5a4e38;
+  }
+  body {
+    background: var(--page-bg);
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--text);
+    padding: 2.5rem 2rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header { text-align: center; margin-bottom: 2rem; }
+  header h1 { font-size: 1.8rem; font-weight: 500; letter-spacing: 0.03em; }
+  header p  { font-size: 0.85rem; color: var(--muted); margin-top: 5px; font-family: 'DM Mono', monospace; }
+
+  /* ボタンエリア */
+  .btn-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    width: 100%;
+    max-width: 1000px;
+  }
+  .btn-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .group-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    min-width: 90px;
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .dist-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    padding: 6px 13px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--card-bg);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .dist-btn:hover { background: #ece8e1; color: var(--text); }
+  .dist-btn.active {
+    background: var(--green-dark);
+    color: #fff;
+    border-color: var(--green-dark);
+  }
+
+  /* カード */
+  .card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.8rem;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  /* キャンバスエリア */
+  .canvas-area {
+    width: 100%;
+    background: var(--green-dark);
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 60px;
+  }
+  canvas { display: block; }
+
+  /* コントロール */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 1.2rem;
+  }
+  .play-btn {
+    padding: 9px 30px;
+    font-size: 0.9rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: none;
+    border-radius: 8px;
+    background: var(--green-dark);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .play-btn:hover { background: var(--green-mid); }
+  .play-btn:active { transform: scale(0.98); }
+  .reset-btn {
+    padding: 9px 20px;
+    font-size: 0.9rem;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .reset-btn:hover { background: var(--page-bg); }
+  .time-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* 凡例 */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 1.2rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-line { width: 18px; height: 2px; flex-shrink: 0; }
+
+  /* 表 */
+  .table-wrap { margin-top: 1.6rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    font-family: 'DM Mono', monospace;
+  }
+  th {
+    text-align: center;
+    padding: 8px 14px;
+    background: var(--ruler-bg);
+    color: var(--ruler-text);
+    font-weight: 500;
+    border-bottom: 1px solid rgba(90,78,56,0.15);
+    white-space: nowrap;
+  }
+  td {
+    text-align: center;
+    padding: 7px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr.hl td { background: rgba(217,119,6,0.08); color: #92400e; font-weight: 500; }
+  .code-section {
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 2.5rem;
+  }
+  .code-section h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    font-family: 'DM Mono', monospace;
+  }
+  .code-section pre {
+    background: #1e1e1e;
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    overflow-x: auto;
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+  .code-section code {
+    font-family: 'DM Mono', monospace;
+    color: #d4d4d4;
+    white-space: pre;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>パットシミュレーター</h1>
+  <p>stimpmeter 9 ft — 俯瞰図（真上から）</p>
+</header>
+
+<div class="btn-area" id="btnArea"></div>
+
+<div class="card">
+  <div class="canvas-area" id="canvasArea">
+    <canvas id="c"></canvas>
+  </div>
+
+  <div class="controls">
+    <button class="play-btn" id="playBtn">再生</button>
+    <button class="reset-btn" id="resetBtn">リセット</button>
+    <span class="time-display" id="timeDisp">t = 0.00 s</span>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#f5f5f0;border:1px solid #aaa;"></div>
+      ボール（直径 42.67 mm）
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#111;border:1px solid #666;"></div>
+      カップ（直径 108 mm）
+    </div>
+    <div class="legend-item">
+      <div class="legend-line" style="background:#d97706;"></div>
+      各秒の位置
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>時刻 (s)</th><th>位置 (m)</th></tr></thead>
+      <tbody id="tblBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const STIMP = 9, G = 9.8;
+const A = (() => {
+  const sm = STIMP * 0.3048;
+  const sv = Math.sqrt(2 * G * 0.1715);
+  return sv * sv / (2 * G * sm) * G;
+})();
+
+const BALL_R_M  = 0.04267 / 2;
+const CUP_R_M   = 0.108   / 2;
+const PERSON_H_M = 1.75;
+
+// グループ定義
+const GROUPS = [
+  { label: 'ショートパット', distances: [0.5, 1, 1.5, 2],              rangeM: 2  },
+  { label: 'ミドルパット',   distances: [3, 4, 5, 6, 7, 8],            rangeM: 8  },
+  { label: 'ロングパット',   distances: [9,10,11,12,13,14,15,16,17,18,19,20], rangeM: 20 },
+];
+
+function calcV0(d)    { return Math.sqrt(2 * A * d); }
+function calcTStop(v0){ return v0 / A; }
+function posAt(v0, t) {
+  const e = Math.min(t, calcTStop(v0));
+  return v0 * e - 0.5 * A * e * e;
+}
+
+let currentDist = 5;
+let animId = null, startTime = null, isPlaying = false;
+
+const canvas   = document.getElementById('c');
+const ctx      = canvas.getContext('2d');
+const playBtn  = document.getElementById('playBtn');
+const resetBtn = document.getElementById('resetBtn');
+const timeDisp = document.getElementById('timeDisp');
+const btnArea  = document.getElementById('btnArea');
+const canvasArea = document.getElementById('canvasArea');
+
+// ---- ボタン生成 ----
+GROUPS.forEach(group => {
+  const row = document.createElement('div');
+  row.className = 'btn-group';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'group-label';
+  lbl.textContent = group.label;
+  row.appendChild(lbl);
+
+  group.distances.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'dist-btn' + (d === currentDist ? ' active' : '');
+    btn.textContent = d + 'm';
+    btn.dataset.dist = d;
+    btn.addEventListener('click', () => {
+      if (isPlaying) stopAnim();
+      currentDist = d;
+      document.querySelectorAll('.dist-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      resetView();
+    });
+    row.appendChild(btn);
+  });
+
+  btnArea.appendChild(row);
+});
+
+// ---- 表生成 ----
+function buildTable(d) {
+  const v0    = calcV0(d);
+  const tStop = calcTStop(v0);
+  const tbody = document.getElementById('tblBody');
+  tbody.innerHTML = '';
+  const n = Math.ceil(tStop);
+  for (let s = 1; s <= n; s++) {
+    const t   = Math.min(s, tStop);
+    const pos = posAt(v0, t);
+    const tr  = document.createElement('tr');
+    tr.innerHTML = `<td>${t.toFixed(2)}</td><td>${pos.toFixed(2)}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+// ---- 描画 ----
+function draw(progress) {
+  const d     = currentDist;
+  const v0    = calcV0(d);
+  const tStop = calcTStop(v0);
+  const t     = progress * tStop;
+  const bm    = posAt(v0, t);
+
+  const dpr    = window.devicePixelRatio || 1;
+  const areaW  = canvasArea.clientWidth;
+
+  // グループに応じた基準距離でpxPerMを決める
+  // グリーンは「カップ + 右余白（カップの2.5倍）」まで表示
+  const group  = GROUPS.find(g => g.distances.includes(d));
+  const rangeM = group ? group.rangeM : d;
+
+  const PAD_L  = 24;
+  const PAD_R  = 24;
+  const trackW = areaW - PAD_L - PAD_R;
+  // pxPerMはグループの最大距離がtrackWに収まるよう決定
+  const pxPerM = trackW / rangeM;
+
+  // キャンバス幅: 左パッド + カップ右2.5倍の余白まで
+  const rightExtM = d * 0.18; // カップより右に18%分の余白
+  const cssW = Math.min(areaW, PAD_L + Math.ceil((d + rightExtM) * pxPerM) + PAD_R);
+
+  // 実寸比でサイズ決定
+  const ballR   = Math.max(BALL_R_M   * pxPerM, 3);
+  const cupR    = Math.max(CUP_R_M    * pxPerM, 4);
+  const personH = PERSON_H_M * pxPerM;
+
+  const RULER_H = 32;
+  const greenH  = Math.max(personH * 1.7, cupR * 3.5, 80);
+  const cssH    = greenH + RULER_H;
+
+  canvas.width        = cssW * dpr;
+  canvas.height       = cssH * dpr;
+  canvas.style.width  = cssW + 'px';
+  canvas.style.height = cssH + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const cy   = greenH / 2;
+  const mapX = xm => PAD_L + xm * pxPerM;
+
+  // ---- グリーン（キャンバス全体 + カード幅いっぱいにしましまを描画） ----
+  // まずキャンバス全体をベース色で塗りつぶし
+  const totalW = areaW; // カード幅いっぱい描画するためareaWを使う
+  canvas.width        = totalW * dpr;
+  canvas.style.width  = totalW + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const sw = 34;
+  ctx.fillStyle = '#1b5e22';
+  ctx.fillRect(0, 0, totalW, greenH);
+  for (let x = 0; x < totalW; x += sw * 2) {
+    ctx.fillStyle = '#236b2b';
+    ctx.fillRect(x, 0, sw, greenH);
+  }
+
+  // ---- 各秒マーカー ----
+  const nMarkers = Math.floor(tStop);
+  for (let s = 1; s <= nMarkers; s++) {
+    const px = mapX(posAt(v0, Math.min(s, tStop)));
+    if (px > cssW) continue;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(217,119,6,0.8)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(px, 8); ctx.lineTo(px, greenH - 8); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(217,119,6,1)';
+    ctx.font = `500 11px "DM Mono", monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText(s + 's', px, 18);
+    ctx.restore();
+  }
+
+  // ---- カップ ----
+  const cupX = mapX(d);
+  ctx.beginPath();
+  ctx.arc(cupX, cy, cupR, 0, Math.PI * 2);
+  ctx.fillStyle = '#080808';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // ---- ボール ----
+  const bpx = mapX(bm);
+  ctx.beginPath();
+  ctx.arc(bpx, cy, ballR, 0, Math.PI * 2);
+  ctx.fillStyle = '#f5f5f0';
+  ctx.fill();
+  ctx.strokeStyle = '#ccc';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // ---- 人（スタート位置固定） ----
+  drawGolfer(ctx, mapX(0), cy, personH);
+
+  // ---- ボール位置ラベル ----
+  if (progress > 0 && progress < 1) {
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = `500 12px "DM Mono", monospace`;
+    ctx.textAlign = 'left';
+    const lx = Math.min(bpx + ballR + 6, cssW - 60);
+    ctx.fillText(bm.toFixed(2) + 'm', lx, cy + ballR + 14);
+  }
+
+  timeDisp.textContent = 't = ' + t.toFixed(2) + ' s';
+
+  // ---- 定規 ----
+  const ry = greenH;
+  ctx.fillStyle = '#f5f0e8';
+  ctx.fillRect(0, ry, totalW, RULER_H);
+  ctx.strokeStyle = 'rgba(90,78,56,0.18)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, ry); ctx.lineTo(totalW, ry); ctx.stroke();
+
+  ctx.fillStyle = '#5a4e38';
+  ctx.strokeStyle = '#7a6a50';
+  const pxPer05  = pxPerM * 0.5;
+  const showHalf = pxPer05 >= 14;
+  const totalRulerM = (cssW - PAD_L - PAD_R) / pxPerM;
+  const steps = Math.ceil(totalRulerM / 0.5);
+  for (let i = 0; i <= steps; i++) {
+    const xm = i * 0.5;
+    const px = mapX(xm);
+    if (px > cssW) break;
+    const isMeter = (Math.round(xm * 10) % 10 === 0);
+    if (!isMeter && !showHalf) continue;
+    const tickH = isMeter ? 10 : 5;
+    ctx.lineWidth = isMeter ? 1.2 : 0.7;
+    ctx.beginPath(); ctx.moveTo(px, ry); ctx.lineTo(px, ry + tickH); ctx.stroke();
+    if (isMeter) {
+      ctx.font = '11px "DM Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(xm + 'm', px, ry + RULER_H - 6);
+    }
+  }
+
+  highlightTableRow(t, tStop);
+}
+
+// ---- 棒人間（直立、パターなし） ----
+function drawGolfer(ctx, footX, groundY, height) {
+  const h  = height;
+  const hw = h * 0.18;
+  ctx.save();
+  ctx.strokeStyle = '#ffffff';
+  ctx.fillStyle   = '#ffffff';
+  ctx.lineWidth   = Math.max(h * 0.055, 1.5);
+  ctx.lineCap  = 'round';
+  ctx.lineJoin = 'round';
+
+  const headR  = h * 0.1;
+  const headY  = groundY - h + headR;
+  const neckY  = headY + headR;
+  const hipY   = groundY - h * 0.42;
+  const shouldY= neckY + h * 0.08;
+
+  // 頭
+  ctx.beginPath(); ctx.arc(footX, headY, headR, 0, Math.PI * 2); ctx.fill();
+  // 胴体
+  ctx.beginPath(); ctx.moveTo(footX, neckY); ctx.lineTo(footX, hipY); ctx.stroke();
+  // 左腕（自然に下げた位置）
+  ctx.beginPath(); ctx.moveTo(footX, shouldY); ctx.lineTo(footX - hw * 0.8, hipY + h * 0.08); ctx.stroke();
+  // 右腕
+  ctx.beginPath(); ctx.moveTo(footX, shouldY); ctx.lineTo(footX + hw * 0.8, hipY + h * 0.08); ctx.stroke();
+  // 左脚
+  ctx.beginPath(); ctx.moveTo(footX, hipY); ctx.lineTo(footX - hw * 0.4, groundY); ctx.stroke();
+  // 右脚
+  ctx.beginPath(); ctx.moveTo(footX, hipY); ctx.lineTo(footX + hw * 0.4, groundY); ctx.stroke();
+  ctx.restore();
+}
+
+// ---- 表ハイライト ----
+function highlightTableRow(t, tStop) {
+  document.querySelectorAll('#tblBody tr').forEach((tr, i) => {
+    const s    = i + 1;
+    const rowT = Math.min(s, tStop);
+    const last = i === document.querySelectorAll('#tblBody tr').length - 1;
+    tr.classList.toggle('hl', (t >= rowT - 0.01 && t < rowT + 1 - 0.01) || (last && t >= tStop - 0.01));
+  });
+}
+
+function stopAnim() {
+  cancelAnimationFrame(animId);
+  isPlaying = false;
+  playBtn.textContent = '再生';
+}
+
+function resetView() {
+  stopAnim();
+  startTime = null;
+  timeDisp.textContent = 't = 0.00 s';
+  buildTable(currentDist);
+  draw(0);
+}
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const v0    = calcV0(currentDist);
+  const tStop = calcTStop(v0);
+  const prog  = Math.min((ts - startTime) / 1000 / tStop, 1);
+  draw(prog);
+  if (prog < 1) {
+    animId = requestAnimationFrame(animate);
+  } else {
+    isPlaying = false;
+    playBtn.textContent = '再生';
+  }
+}
+
+playBtn.addEventListener('click', () => {
+  if (isPlaying) { stopAnim(); return; }
+  isPlaying = true;
+  startTime = null;
+  playBtn.textContent = '一時停止';
+  animId = requestAnimationFrame(animate);
+});
+
+resetBtn.addEventListener('click', resetView);
+window.addEventListener('resize', () => { if (!isPlaying) draw(0); });
+
+resetView();
+</script>
+
+<div class="code-section">
+  <h2>計算方法（Python）</h2>
+  <pre><code>import math
+
+# ボールがカップで止まるような速度で転がり始めた場合の、n秒後のボールの位置を計算する。
+# 空気抵抗は考慮しない。
+# 
+# stimpmeter_feet: ゴルフ場に書いてあるスティンプメーター値
+# distance_to_cup_meter: カップまでの距離
+#
+# 戻り値は
+# ([1秒ごとのボールの位置(m)]、ボールが止まるまでの秒数)
+def ball_at(stimpmeter_feet: float, distance_to_cup_meter: float):
+    g = 9.8
+
+    # フィート -&gt; メートルに変換
+    stimpmeter_meter = stimpmeter_feet * 0.3048
+
+    # スティンプメーターから転がした球の初速
+    stimpmeter_initial_v = math.sqrt(2 * g * 0.1715) # 0.1715はスティンプメーターの高さ (m)
+
+    # スティンプメーターの計測値を使った転がり抵抗係数の計算
+    rolling_resistance_factor = (stimpmeter_initial_v ** 2) / (2 * g * stimpmeter_meter)
+
+    # グリーン上のボール減速度 (m/s^2)
+    a = rolling_resistance_factor * g
+
+    # カップまでの距離をDとすると、
+    # カップで止まらなければいけないので、Dm地点での速度が0になるから、
+    # v(T) = v0 - a * T = 0
+    # -&gt; T = v0 / a
+    # また、D = v0 * T + 1/2 * a * T^2 なので、
+    # D = v0 * (v0 / a) + 1/2 * a * (v0 / a)^2
+    #   = (v0^2 / a) + (v0^2 / 2a)
+    #   = v0^2 / 2a
+    # 求めたいのはv0なので、
+    # v0 = sqrt(2a * D)
+    v0 = math.sqrt(2 * a * distance_to_cup_meter)
+
+    def x(t):
+        # T秒後のボールの位置は
+        # D = v0 * T + 1/2 * a * T^2
+        # ただし減速なので
+        xT = (v0 * t) - ((1/2) * a * (t ** 2))
+        return xT
+
+    xts = []
+    T_stop = v0 / a
+    for T in range(0, int(T_stop)):
+        # ボールが1秒以内に止まるケースを考慮する
+        # ボールが止まるまでの時間は
+        # v(T) = v0 - a * T
+        # このときの速度が0なので
+        # v0 - a * T_stop = 0
+        xT = x(T+1)
+        xts.append(xT)
+    return (xts, T_stop)
+
+stimpmeter_feet = 9
+meters = [0.5] + list(range(1, 21))
+print(f&quot;{stimpmeter_feet}フィートグリーンの場合:&quot;)
+for m in meters:
+    ball_positions_m, total_s = ball_at(9, m)
+    print(f&quot;  カップまで{m}m: 止まるまでの時間: {total_s:.2f}秒&quot;)
+    print(&quot;\n&quot;.join([f&quot;    {i+1}秒後のボール位置: {pos:.5f}m\t&quot; for i, pos in enumerate(ball_positions_m)]))</code></pre>
+</div>
+</body>
+</html>
