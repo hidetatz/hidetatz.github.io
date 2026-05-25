@@ -219,6 +219,12 @@ class Blog:
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copyfile(src, dst)
 
+    def copy_images(self):
+        for filename in glob.glob(os.path.join("images/", '*.*')):
+            dst = f"{self.root}/{filename}"
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copy(filename, dst)
+
     def to_html(self, title, body):
         return string.Template(template.html_page).substitute(title=title, body=body)
 
@@ -287,6 +293,8 @@ class Blog:
         self.copy("syntax.css")
         self.copy("highlight.pack.js")
         self.copy("favicon.ico")
+
+        self.copy_images()
 
         # Create each article page
 
