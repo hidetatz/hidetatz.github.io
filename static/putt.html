@@ -57,7 +57,7 @@
     font-family: 'DM Mono', monospace;
     letter-spacing: 0.04em;
   }
-  .dist-btn {
+  .dist-btn, .speed-btn, .slope-btn {
     font-family: 'DM Mono', monospace;
     font-size: 0.82rem;
     padding: 6px 13px;
@@ -68,8 +68,8 @@
     cursor: pointer;
     transition: all 0.12s;
   }
-  .dist-btn:hover { background: #ece8e1; color: var(--text); }
-  .dist-btn.active {
+  .dist-btn:hover, .speed-btn:hover, .slope-btn:hover { background: #ece8e1; color: var(--text); }
+  .dist-btn.active, .speed-btn.active, .slope-btn.active {
     background: var(--green-dark);
     color: #fff;
     border-color: var(--green-dark);
@@ -84,6 +84,19 @@
     width: 100%;
     max-width: 1000px;
   }
+
+  /* 傾斜が急すぎる場合の警告 */
+  .slope-warning {
+    display: none;
+    background: #fdecea;
+    color: #b3261e;
+    border: 1px solid rgba(179,38,30,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+  }
+  .slope-warning.show { display: block; }
 
   /* キャンバスエリア */
   .canvas-area {
@@ -202,12 +215,15 @@
 
 <header>
   <h1>パットシミュレーター</h1>
-  <p>stimpmeter 9 ft — 俯瞰図（真上から）</p>
+  <p id="subtitle">stimpmeter 9 ft — 俯瞰図（真上から）</p>
 </header>
 
+<div class="btn-area" id="speedArea"></div>
+<div class="btn-area" id="slopeArea"></div>
 <div class="btn-area" id="btnArea"></div>
 
 <div class="card">
+  <div class="slope-warning" id="slopeWarning"></div>
   <div class="canvas-area" id="canvasArea">
     <canvas id="c"></canvas>
   </div>
@@ -242,12 +258,22 @@
 </div>
 
 <script>
-const STIMP = 9, G = 9.8;
-const A = (() => {
-  const sm = STIMP * 0.3048;
+const G = 9.8;
+const SPEEDS = [8.5, 9, 9.5, 10, 10.5];
+const SLOPES = [-2, -1, 0, 1, 2]; // 正が上り、負が下り
+let STIMP = 9;
+let SLOPE = 0;
+
+// 傾斜を考慮した実効減速度 (m/s^2)。上りは減速が強まり、下りは弱まる。
+function calcA(stimp, slopePercent) {
+  const sm = stimp * 0.3048;
   const sv = Math.sqrt(2 * G * 0.1715);
-  return sv * sv / (2 * G * sm) * G;
-})();
+  const aFlat  = sv * sv / (2 * G * sm) * G;
+  const aSlope = G * (slopePercent / 100);
+  return aFlat + aSlope;
+}
+
+let A = calcA(STIMP, SLOPE);
 
 const BALL_R_M  = 0.04267 / 2;
 const CUP_R_M   = 0.108   / 2;
@@ -276,7 +302,80 @@ const playBtn  = document.getElementById('playBtn');
 const resetBtn = document.getElementById('resetBtn');
 const timeDisp = document.getElementById('timeDisp');
 const btnArea  = document.getElementById('btnArea');
+const speedArea = document.getElementById('speedArea');
+const slopeArea = document.getElementById('slopeArea');
+const subtitle = document.getElementById('subtitle');
+const slopeWarning = document.getElementById('slopeWarning');
 const canvasArea = document.getElementById('canvasArea');
+
+function slopeLabel(s) {
+  if (s === 0) return '平坦';
+  return (s > 0 ? '上り ' : '下り ') + Math.abs(s) + '%';
+}
+
+function updateSubtitle() {
+  subtitle.textContent = `stimpmeter ${STIMP} ft, ${slopeLabel(SLOPE)} — 俯瞰図（真上から）`;
+}
+
+// ---- グリーンの速さボタン生成 ----
+{
+  const row = document.createElement('div');
+  row.className = 'btn-group';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'group-label';
+  lbl.textContent = 'グリーンの速さ';
+  row.appendChild(lbl);
+
+  SPEEDS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'speed-btn' + (s === STIMP ? ' active' : '');
+    btn.textContent = s + 'ft';
+    btn.dataset.speed = s;
+    btn.addEventListener('click', () => {
+      if (isPlaying) stopAnim();
+      STIMP = s;
+      A = calcA(STIMP, SLOPE);
+      speedArea.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateSubtitle();
+      resetView();
+    });
+    row.appendChild(btn);
+  });
+
+  speedArea.appendChild(row);
+}
+
+// ---- 傾斜ボタン生成 ----
+{
+  const row = document.createElement('div');
+  row.className = 'btn-group';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'group-label';
+  lbl.textContent = '傾斜';
+  row.appendChild(lbl);
+
+  SLOPES.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'slope-btn' + (s === SLOPE ? ' active' : '');
+    btn.textContent = slopeLabel(s);
+    btn.dataset.slope = s;
+    btn.addEventListener('click', () => {
+      if (isPlaying) stopAnim();
+      SLOPE = s;
+      A = calcA(STIMP, SLOPE);
+      slopeArea.querySelectorAll('.slope-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateSubtitle();
+      resetView();
+    });
+    row.appendChild(btn);
+  });
+
+  slopeArea.appendChild(row);
+}
 
 // ---- ボタン生成 ----
 GROUPS.forEach(group => {
@@ -514,10 +613,33 @@ function stopAnim() {
   playBtn.textContent = '再生';
 }
 
+function showSlopeError() {
+  slopeWarning.textContent =
+    `傾斜が急すぎて、転がり抵抗だけではボールが止まりません（stimp=${STIMP}ft, ${slopeLabel(SLOPE)}）。傾斜かグリーンの速さを変更してください。`;
+  slopeWarning.classList.add('show');
+  canvasArea.style.display = 'none';
+  document.querySelector('.controls').style.display = 'none';
+  document.querySelector('.table-wrap').style.display = 'none';
+  playBtn.disabled = true;
+}
+
+function hideSlopeError() {
+  slopeWarning.classList.remove('show');
+  canvasArea.style.display = '';
+  document.querySelector('.controls').style.display = '';
+  document.querySelector('.table-wrap').style.display = '';
+  playBtn.disabled = false;
+}
+
 function resetView() {
   stopAnim();
   startTime = null;
   timeDisp.textContent = 't = 0.00 s';
+  if (A <= 0) {
+    showSlopeError();
+    return;
+  }
+  hideSlopeError();
   buildTable(currentDist);
   draw(0);
 }
@@ -547,6 +669,7 @@ playBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', resetView);
 window.addEventListener('resize', () => { if (!isPlaying) draw(0); });
 
+updateSubtitle();
 resetView();
 </script>
 
@@ -556,13 +679,13 @@ resetView();
 
 # ボールがカップで止まるような速度で転がり始めた場合の、n秒後のボールの位置を計算する。
 # 空気抵抗は考慮しない。
-# 
+#
 # stimpmeter_feet: ゴルフ場に書いてあるスティンプメーター値
 # distance_to_cup_meter: カップまでの距離
 #
 # 戻り値は
 # ([1秒ごとのボールの位置(m)]、ボールが止まるまでの秒数)
-def ball_at(stimpmeter_feet: float, distance_to_cup_meter: float):
+def ball_at(stimpmeter_feet: float, distance_to_cup_meter: float, slope_percent: float = 0.0):
     g = 9.8
 
     # フィート -&gt; メートルに変換
@@ -574,8 +697,26 @@ def ball_at(stimpmeter_feet: float, distance_to_cup_meter: float):
     # スティンプメーターの計測値を使った転がり抵抗係数の計算
     rolling_resistance_factor = (stimpmeter_initial_v ** 2) / (2 * g * stimpmeter_meter)
 
-    # グリーン上のボール減速度 (m/s^2)
-    a = rolling_resistance_factor * g
+    # 平坦なグリーン上のボール減速度 (m/s^2)
+    a_flat = rolling_resistance_factor * g
+
+    # 傾斜による加速度の補正。斜面に沿った重力 g*sin(theta) の近似。
+    # 上り(正)なら減速方向、下り(負)なら加速方向に働くので、
+    # 「減速度」に対しては符号そのまま加算すればよい:
+    #   上り: 重力が逆向きに働く -&gt; 減速が強まる -&gt; a_slope は正
+    #   下り: 重力が進行方向に働く -&gt; 減速が弱まる -&gt; a_slope は負
+    a_slope = g * (slope_percent / 100.0)
+
+    # 傾斜を考慮した実効減速度
+    a = a_flat + a_slope
+
+    if a &lt;= 0:
+        # 下りが急すぎて転がり抵抗だけでは減速しきれず、止まらないケース
+        raise ValueError(
+            f"傾斜が急すぎてボールが止まりません "
+            f"(stimp={stimpmeter_feet}ft, slope={slope_percent}%, a_eff={a:.4f})"
+        )
+
 
     # カップまでの距離をDとすると、
     # カップで止まらなければいけないので、Dm地点での速度が0になるから、
@@ -608,13 +749,19 @@ def ball_at(stimpmeter_feet: float, distance_to_cup_meter: float):
         xts.append(xT)
     return (xts, T_stop)
 
-stimpmeter_feet = 9
-meters = [0.5] + list(range(1, 21))
-print(f&quot;{stimpmeter_feet}フィートグリーンの場合:&quot;)
-for m in meters:
-    ball_positions_m, total_s = ball_at(9, m)
-    print(f&quot;  カップまで{m}m: 止まるまでの時間: {total_s:.2f}秒&quot;)
-    print(&quot;\n&quot;.join([f&quot;    {i+1}秒後のボール位置: {pos:.5f}m\t&quot; for i, pos in enumerate(ball_positions_m)]))</code></pre>
+stimpmeter_feet = [8.5, 9.0, 9.5, 10.0, 10.5]
+meters = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0, 12.5, 13.0, 13.5, 14.0, 14.5, 15.0, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0, 18.5, 19.0, 19.5, 20.0]
+# 正が上り、負が下り
+slope_percents = [-2.0, -1.0, 0.0, 1.0, 2.0]
+
+for f in stimpmeter_feet:
+    print(f&quot;{f}フィートグリーンの場合:&quot;)
+    for s in slope_percents:
+        print(f&quot;  傾斜{s}%の場合:&quot;)
+        for m in meters:
+            ball_positions_m, total_s = ball_at(f, m, s)
+            print(f&quot;    カップまで{m}m: 止まるまでの時間: {total_s:.2f}秒&quot;)
+            print(&quot;\n&quot;.join([f&quot;      {i+1}秒後のボール位置: {pos:.5f}m\t&quot; for i, pos in enumerate(ball_positions_m)]))</code></pre>
 </div>
 </body>
 </html>
