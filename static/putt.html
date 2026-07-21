@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>パットシミュレーター</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -209,6 +210,7 @@
     color: #d4d4d4;
     white-space: pre;
   }
+  .code-section code.hljs { background: transparent; padding: 0; }
 </style>
 </head>
 <body>
@@ -675,7 +677,7 @@ resetView();
 
 <div class="code-section">
   <h2>計算方法（Python）</h2>
-  <pre><code>import math
+  <pre><code class="language-python">import math
 
 # ボールがカップで止まるような速度で転がり始めた場合の、n秒後のボールの位置を計算する。
 # 空気抵抗は考慮しない。
@@ -763,5 +765,9 @@ for f in stimpmeter_feet:
             print(f&quot;    カップまで{m}m: 止まるまでの時間: {total_s:.2f}秒&quot;)
             print(&quot;\n&quot;.join([f&quot;      {i+1}秒後のボール位置: {pos:.5f}m\t&quot; for i, pos in enumerate(ball_positions_m)]))</code></pre>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script>hljs.highlightAll();</script>
 </body>
 </html>
