@@ -1,3 +1,7 @@
+## 2026/07/29
+
+熊本で地震があったようだ。恐ろしい。
+
 ## 2026/07/28
 
 https://github.com/nisbenz/TensorLib/blob/main/src/tensor/tensor_matmul.c
