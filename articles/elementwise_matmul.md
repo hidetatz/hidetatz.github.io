@@ -189,7 +189,7 @@ t2についても同じshapeにしたいので、これはreshape -> 転置 -> �
 ```python
 [
   [ai+bl+co+dr, aj+bm+cp+ds, ak+bn+cq+dt],
-  [ai+bl+co+dr, aj+bm+cp+ds, ak+bn+cq+dt],
+  [ei+fl+go+hr, ej+fm+gp+hs, ek+fn+gq+ht],
 ],
 ```
 
