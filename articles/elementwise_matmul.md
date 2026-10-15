@@ -72,7 +72,7 @@ t1.dot(t2)
 例えばこう言うことがしたいとする (結果のshapeは2 x 3になる) 。
 まず普通にやると、結果は次のようになる。
 
-```python
+```
 [
   [ai+bl+co+dr, aj+am+ap+as, ak+bn+cq+dt],
   [ei+fl+go+hr, ej+fm+gp+hs, ek+fn+gq+ht],
@@ -199,20 +199,20 @@ t2についても同じshapeにしたいので、これはreshape -> 転置 -> �
 
 変形後のt1', t2'について
 
-```python
+```
 t1'[i][j] = t1のi行 (4つの値)
 t2'[i][j] = t1のj列 (4つの値)
 ```
 
 である、これをelementwiseに掛け算すると、
 
-```python
+```
 result[i][j][k] = t1'[i][j][k] * t2'[i][j][k]
 ```
 
 これは、以下と同じであり、
 
-```python
+```
 result[i][j][k] = t1[i][k] * t2[k][j]
 ```
 
